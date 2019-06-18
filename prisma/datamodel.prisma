@@ -1,0 +1,20 @@
+enum Role {
+  USER
+  ADMIN
+}
+
+type User {
+  id: ID! @id
+  email: String! @unique @index
+  hash: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String
+  role: Role @default(value: USER)
+  appKey: String
+}
+
+type Repository {
+  id: ID! @id
+  name: String! @unique
+}

@@ -1,14 +1,18 @@
 {
-    "name": "aws-typescript",
-    "devDependencies": {
-        "@types/node": "latest"
-    },
-    "dependencies": {
-        "@pulumi/pulumi": "latest",
-        "@pulumi/aws": "latest",
-        "@pulumi/awsx": "latest"
-    },
-    "scripts": {
-        "go": "ts-node gog.ts"
-    }
+  "name": "aws-typescript",
+  "scripts": {
+    "go": "ts-node gog.ts"
+  },
+  "dependencies": {
+    "@pulumi/aws": "latest",
+    "@pulumi/awsx": "latest",
+    "@pulumi/pulumi": "latest",
+    "bcrypt": "^3.0.6",
+    "vuetify": "^1.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1"
+  }
 }
