@@ -1,30 +1,37 @@
-<template>
-    <div id="app">
-        <div id="nav">
-            <router-link to="/">Home</router-link>|
-            <router-link to="/about">About</router-link>
-            <router-link to="/repository/manager">Repository Manager</router-link>
-        </div>
-        <router-view/>
-    </div>
+<template lang="pug">
+    v-app(dark)
+        NavBar(:routes="routes")
+        v-content
+            router-view
 </template>
 
-<style lang="scss">
-#app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+
+import NavBar from '@/components/Navbar.vue';
+import { ROUTES } from '@/router/routes';
+import router from '@/router';
+import routeManager, { RouteManager } from '@/router/RouteManager';
+
+@Component({
+  components: {
+    NavBar
+  }
+})
+export default class App extends Vue {
+  // use prop values for initial data
+  //   helloMsg = 'Hello, ' + this.propMessage
+  //   private routes: IRoute = [];// = ROUTES;
+
+  private routeManager = routeManager;
+
+  get routes() {
+    return this.routeManager.myRoutes;
+  }
+
+  beforeMount() {
+    console.log(this.routeManager.myRoutes);
+  }
 }
-#nav {
-    padding: 30px;
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-        &.router-link-exact-active {
-            color: #42b983;
-        }
-    }
-}
-</style>
+</script>
