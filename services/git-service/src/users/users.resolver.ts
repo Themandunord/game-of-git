@@ -2,7 +2,7 @@ import { Query, Resolver, Args, Info, Mutation } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from '../graphql.schema';
 
-@Resolver()
+@Resolver('Users')
 export class UsersResolver {
   constructor(private readonly prisma: PrismaService) {}
 

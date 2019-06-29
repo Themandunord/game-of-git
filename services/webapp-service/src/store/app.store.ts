@@ -14,6 +14,8 @@ export interface IAppState {
 class AppState extends VuexModule implements IAppState {
   public navExpanded: boolean = false;
 
+  public user: any = {};
+
   @Mutation
   public setNavExpanded(navExpanded?: boolean) {
     if (navExpanded != null) {
@@ -21,6 +23,15 @@ class AppState extends VuexModule implements IAppState {
     } else {
       this.navExpanded = !this.navExpanded;
     }
+  }
+
+  @Mutation
+  public setUser(user: any) {
+    this.user = user;
+  }
+
+  get hasAppKey() {
+    return this.user.hasAppKey;
   }
 }
 

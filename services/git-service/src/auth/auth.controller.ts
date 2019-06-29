@@ -28,13 +28,15 @@ export class AuthController {
 
   @Get('token')
   async createToken(): Promise<any> {
-    return await this.authService.createToken('test@test.com');
+    console.log('get token call');
+    // return await this.authService.createToken();
   }
 
-  @Post('register')
-  async register(@Body() user: any): Promise<any> {
-    return this.authService.register(user);
-  }
+  //   @Post('register')
+  //   async register(@Body() user: any): Promise<any> {
+  //     return this.authService.register(user);
+  //   }
+
   @Post('login')
   async login(@Body('email') email, @Body('password') password: string) {
     console.log(`Trying to login for ${email} with ${password}`);
@@ -48,10 +50,7 @@ export class AuthController {
     console.log(user);
     console.log(`validating password(${password} with ${user.hash})`);
 
-    const passwordMatched = await this.authService.comparePassword(
-      password,
-      user.hash,
-    );
+    const passwordMatched = await this.authService.comparePassword(password, user.hash);
 
     console.log(`password match? ${passwordMatched}`);
 
@@ -63,6 +62,6 @@ export class AuthController {
     console.log(`Valid user ${email}, return authentication token.`);
 
     // authenticated, return jwt
-    return await this.authService.createToken(email);
+    return await this.authService.createToken(user);
   }
 }

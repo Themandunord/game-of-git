@@ -34,7 +34,8 @@
     "prisma-binding": "^2.3.13",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.5.2",
+    "type-graphql": "^0.17.4"
   },
   "devDependencies": {
     "@nestjs/testing": "^6.0.0",
