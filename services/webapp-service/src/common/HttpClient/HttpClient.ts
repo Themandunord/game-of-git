@@ -1,8 +1,8 @@
 import AppStateModule from '@/store/aspects/app';
 import { AxiosInstance } from 'axios';
 import AbstractHttpClient from './HttpClient.abstract';
-import { RepositoriesClient } from './repositories.client';
-import { UsersClient } from './users.client';
+import { RepositoriesClient } from './repositories/repositories.client';
+import { UsersClient } from './users/users.client';
 
 /**
  * Singleton Implementation of the `AbstractHttpClient`

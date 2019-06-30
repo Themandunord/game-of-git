@@ -1,8 +1,8 @@
 import AbstractHttpClient from './HttpClient.abstract';
 import { HttpClient } from './HttpClient';
 
-export * from './repositories.client';
-export * from './users.client';
+export * from './repositories/repositories.client';
+export * from './users/users.client';
 
 export { AbstractHttpClient };
 

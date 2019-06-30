@@ -1,4 +1,4 @@
-import AbstractHttpClient from './HttpClient.abstract';
+import AbstractHttpClient from '../HttpClient.abstract';
 
 /**
  * Repositories-specific domain of the HttpClient

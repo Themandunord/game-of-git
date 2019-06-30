@@ -1,6 +1,5 @@
 import { RepositoriesService } from './repositories.service';
 import { Controller, Param, Get, Post, Body } from '@nestjs/common';
-import { RepositoriesResolver } from './repositories.resolver';
 
 @Controller('repositories')
 export class RepositoriesController {

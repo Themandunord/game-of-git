@@ -54,9 +54,6 @@ export class AppKeyService {
   async storeKey(key: string, user: string, name: string, username: string) {
     const isValid = await this.validateKey(key, username);
     if (!isValid) {
-      // tslint:disable:no-console
-      console.error('Key was invalid, not storing');
-
       return;
     }
 
@@ -70,8 +67,6 @@ export class AppKeyService {
     );
 
     if (existing != null) {
-      console.error('Key already existed!');
-
       return;
     }
     const createPayload = {
