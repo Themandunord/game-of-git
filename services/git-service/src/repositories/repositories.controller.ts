@@ -32,10 +32,6 @@ export class RepositoriesController {
     @Param('id') idExternal: string,
     @Body('repository') repository: any,
   ) {
-    console.log(
-      `Toggle Repository Tracking for user ${user} on repository idExternal ${idExternal}`,
-    );
-    console.log(repository);
-    this.repositoriesService.toggleTracking(user, idExternal, repository);
+    return await this.repositoriesService.toggleTracking(user, idExternal, repository);
   }
 }

@@ -1,26 +1,8 @@
-import { GitClientService } from './../git-client/git-client.service';
-import { RepositoriesResolver } from './repositories.resolver';
 import { Injectable } from '@nestjs/common';
-import { gql } from 'apollo-server-core';
 import { Repository } from '../graphql.schema';
-
-export const GET_REPOSITORIES = gql`
-  query {
-    id
-    idExternal
-    name
-    owner
-    isTracked
-  }
-`;
-
-// export const GET_STORED_REPOSITORIES = gql`
-//     query {
-//     id
-//     name
-//     owner
-//     }
-// `;
+import { GitClientService } from './../git-client/git-client.service';
+import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
+import { RepositoriesResolver } from './repositories.resolver';
 
 @Injectable()
 export class RepositoriesService {
@@ -29,6 +11,11 @@ export class RepositoriesService {
     private readonly gitClient: GitClientService,
   ) {}
 
+  /**
+   * Retrieve the list of repositories currently being tracked and that can be tracked belon ging to a specific GitHub login
+   * @param user
+   * @param ownerUsername
+   */
   async selectionSet(user: string, ownerUsername: string) {
     const gitRepos = await this.gitClient.getRepositories(user, ownerUsername);
     const storedRepositories = await this.repositoriesResolver.getRepositories(
@@ -41,9 +28,6 @@ export class RepositoriesService {
       },
       GET_REPOSITORIES,
     );
-    // console.log('git repositories: ', gitRepos);
-    console.log('---------------------');
-    console.log('stored repositories', storedRepositories);
 
     const selectableRepos = gitRepos.map(val => {
       // find it in stored repos, if exists, and include stored repo data
@@ -65,10 +49,6 @@ export class RepositoriesService {
       const existingRepository = storedRepositories.find(stored => {
         return stored.idExternal === id;
       });
-      console.log(
-        `Handling ${name}, hasExistingRepository = `,
-        existingRepository != null ? existingRepository : false,
-      );
 
       return {
         createdAtExternal: createdAt,
@@ -86,8 +66,6 @@ export class RepositoriesService {
         appKey,
       };
     });
-
-    console.log(selectableRepos);
 
     return selectableRepos;
   }
@@ -116,14 +94,17 @@ export class RepositoriesService {
     // console.log('repositories are: ', repositories);
   }
 
+  /**
+   * Toggle whether a repository should be tracked or not by switching the `isTracked` boolean on the record
+   *
+   * **NOTE** This will create a new Repository record if the GitHub `id` (or `idExternal`, when stored internally)
+   * does not already exist in the Repositories db. Once created it will update the existing record.
+   *
+   * @param user
+   * @param id
+   * @param repository
+   */
   async toggleTracking(user: string, id: string, repository: Repository) {
-    console.log('toggling repository tracking for ', repository);
-    const previousRepositoryState = repository.isTracked;
-    console.log({
-      where: {
-        idExternal: id,
-      },
-    });
     const existingRepository = await this.repositoriesResolver.getRepository(
       {
         where: {
@@ -134,7 +115,6 @@ export class RepositoriesService {
     );
 
     if (!existingRepository) {
-      console.log('CREATING REPOSITORY');
       const { name, idExternal, createdAtExternal, updatedAtExternal, appKey } = repository;
       const owner = (repository.owner as any).login;
       const CREATE_PAYLOAD = {
@@ -164,7 +144,6 @@ export class RepositoriesService {
 
       return newRepoData;
     } else {
-      console.log('UPDATING REPOSITORY');
       const UPDATE_PAYLOAD = {
         where: {
           id: existingRepository.id,

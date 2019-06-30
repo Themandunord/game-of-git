@@ -20,30 +20,30 @@ import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
-import AppStateModule from '@/store/app.store';
+import AppStateModule from '@/store/aspects/app';
 
 @Component
 export default class NavBar extends Vue {
-  @Prop({
-    required: true
-  })
-  private routes!: RouteConfig[];
+    @Prop({
+        required: true
+    })
+    private routes!: RouteConfig[];
 
-  public routeTo(path: string) {
-    this.$router.push({
-      name: path
-    });
-  }
+    public routeTo(path: string) {
+        this.$router.push({
+            name: path
+        });
+    }
 
-  get drawer() {
-    return AppStateModule.navExpanded;
-  }
+    get drawer() {
+        return AppStateModule.navExpanded;
+    }
 
-  set drawer(val: boolean) {
-    AppStateModule.setNavExpanded(val);
-  }
+    set drawer(val: boolean) {
+        AppStateModule.setNavExpanded(val);
+    }
 
-  // use prop values for initial data
-  //   helloMsg = 'Hello, ' + this.propMessage
+    // use prop values for initial data
+    //   helloMsg = 'Hello, ' + this.propMessage
 }
 </script>

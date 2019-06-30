@@ -16,8 +16,8 @@ v-layout(row)
 
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
-import RepositoriesStateModule from '@/store/repositories.store';
-import AppStateModule from '@/store/app.store';
+import RepositoriesStateModule from '@/store/aspects/repositories';
+import AppStateModule from '@/store/aspects/app';
 import HttpClient from '../common/HttpClient';
 
 @Component
