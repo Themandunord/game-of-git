@@ -12,6 +12,11 @@ export class GitClientService {
     private readonly appKeyService: AppKeyService,
   ) {}
 
+  /**
+   * Test a given AppKey by using it in a GET_USER_DATA query against the GitHub GraphQL API
+   * @param key
+   * @param user
+   */
   async testAppKey(key: string, user: string): Promise<boolean> {
     try {
       const result = await axios.post(
@@ -36,13 +41,17 @@ export class GitClientService {
       return true;
     } catch (e) {
       console.error('Error testing the app key: ' + e + ' likely invalid.');
-
-      return false;
     }
 
     return false;
   }
 
+  /**
+   * Load Repositories from GitHub and attach the AppKey id used to retrieve them to each record.
+   *
+   * @param user
+   * @param owner
+   */
   async getRepositories(user: string, owner: string) {
     const appKeys = await this.appKeyService.get(user);
     const appKey = appKeys.length > 0 ? appKeys[0] : null;

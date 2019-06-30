@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   public async get(email: string) {
-    const user = this.usersResolver.getUser(
+    const user = await this.usersResolver.getUser(
       {
         where: {
           email,
@@ -40,39 +40,14 @@ export class UsersService {
       },
       GET_USERS,
     );
+    const result = {
+      email: user.email,
+      id: user.id,
+      hasAppKey: user.keys && user.keys.length > 0 ? true : false,
+      name: user.name,
+      gitLogin: user.gitLogin,
+    };
 
-    return user;
-  }
-
-  public async upsertRetrieval(email: string, password: string, appKey: string) {
-    const existingUser = await this.usersResolver.getUser(
-      {
-        where: {
-          email,
-        },
-      },
-      GET_USERS,
-    );
-    console.log('Retrieved user');
-
-    if (!existingUser) {
-      console.log('Trying to create user');
-      const hashedPassword = await this.authService.encryptPassword(password);
-      const user = await this.usersResolver.createUser(
-        {
-          data: {
-            email,
-            password: hashedPassword,
-          },
-        },
-        GET_USERS,
-      );
-      console.log('returining new user');
-
-      return user;
-    }
-    console.log('returning existing user');
-
-    return existingUser;
+    return result;
   }
 }

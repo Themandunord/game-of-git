@@ -1,4 +1,4 @@
-import AbstractHttpClient from './HttpClient.abstract';
+import AbstractHttpClient from '../HttpClient.abstract';
 
 /**
  * Users-specific domain of the HttpClient
@@ -42,6 +42,7 @@ export class UsersClient {
       });
 
       if (isValid.data == null) {
+        // tslint:disable:no-console
         console.error('Missing data property on app key validation response.');
 
         return false;

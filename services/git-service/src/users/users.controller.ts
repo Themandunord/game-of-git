@@ -9,7 +9,6 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly authService: AuthService,
     private readonly appKeyService: AppKeyService,
   ) {}
 
@@ -35,19 +34,6 @@ export class UsersController {
 
   @Post('/validate-key')
   async validateKey(@Body('key') key: string, @Body('username') user: string) {
-    console.log(`VALIDATE KEY:  ${key} ${user}`);
-
     return await this.appKeyService.validateKey(key, user);
-  }
-
-  @Put()
-  async upsertRetrieval(
-    @Body('email') email,
-    @Body('password') password: string,
-    @Body('appKey') appKey = null,
-  ) {
-    console.log('Trying to retrieve existing user ' + email + ' ' + password + ' ' + appKey);
-
-    return await this.usersService.upsertRetrieval(email, password, appKey);
   }
 }
