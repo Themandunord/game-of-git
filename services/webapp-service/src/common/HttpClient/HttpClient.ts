@@ -1,13 +1,15 @@
-import { UsersClient } from './users.client';
-import { RepositoriesClient } from './repositories.client';
+import AppStateModule from '@/store/aspects/app';
+import { AxiosInstance } from 'axios';
 import AbstractHttpClient from './HttpClient.abstract';
-import AppStateModule from '@/store/app.store';
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
-import VueRouter, { Route } from 'vue-router';
-import router from '@/router';
-import * as jwtClient from 'jsonwebtoken';
+import { RepositoriesClient } from './repositories.client';
+import { UsersClient } from './users.client';
 
-class HttpClient extends AbstractHttpClient {
+/**
+ * Singleton Implementation of the `AbstractHttpClient`
+ * Purpose-driven around
+ *   - dividing the various API domains into easily usably keys such as `repository` and `users`
+ */
+export class HttpClient extends AbstractHttpClient {
   public repositories!: RepositoriesClient;
   public users!: UsersClient;
 
@@ -33,5 +35,3 @@ class HttpClient extends AbstractHttpClient {
     });
   }
 }
-
-export default new HttpClient();

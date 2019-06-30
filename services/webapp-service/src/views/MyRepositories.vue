@@ -13,8 +13,8 @@ v-container(fluid)
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import RepositoriesStateModule from '@/store/repositories.store';
-import AppStateModule from '@/store/app.store';
+import RepositoriesStateModule from '@/store/aspects/repositories';
+import AppStateModule from '@/store/aspects/app';
 import AddAppKeyForm from '@/components/AddAppKeyForm.vue';
 import RepositoriesList from '@/components/RepositoriesList.vue';
 

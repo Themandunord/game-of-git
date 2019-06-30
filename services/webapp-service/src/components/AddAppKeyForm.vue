@@ -24,78 +24,78 @@ v-layout(row justify-center)
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import RepositoriesStateModule from '@/store/repositories.store';
-import AppStateModule from '@/store/app.store';
+import RepositoriesStateModule from '@/store/aspects/repositories';
+import AppStateModule from '@/store/aspects/app';
 import HttpClient from '@/common/HttpClient';
 
 @Component
 export default class AddAppKeyForm extends Vue {
-  private dialog = false;
-  private username: string | null = null;
-  private name: string | null = null;
-  private key: string | null = null;
-  private appKeyIsValid: boolean = false;
+    private dialog = false;
+    private username: string | null = null;
+    private name: string | null = null;
+    private key: string | null = null;
+    private appKeyIsValid: boolean = false;
 
-  @Watch('key')
-  private async validateKey() {
-    this.appKeyIsValid = await this.validateAppKey();
-  }
-
-  get repositories() {
-    return RepositoriesStateModule.repositories;
-  }
-
-  get hasAppKey() {
-    return AppStateModule.hasAppKey;
-  }
-
-  get hasRepositories() {
-    return this.repositories.length === 0;
-  }
-
-  get canSave() {
-    return this.key == null || this.key.length === 0;
-  }
-
-  private async validateAppKey() {
-    if (
-      this.username != null &&
-      this.username.length > 0 &&
-      this.name != null &&
-      this.name.length > 0 &&
-      this.key != null &&
-      this.key.length > 0
-    ) {
-      const isValid = await HttpClient.users.validateAppKey(this.username, this.key);
-
-      return isValid;
+    @Watch('key')
+    private async validateKey() {
+        this.appKeyIsValid = await this.validateAppKey();
     }
 
-    return false;
-  }
-
-  private async save() {
-    if (!this.appKeyIsValid) {
-      console.log('App key is not valid, cannot save');
-
-      return;
-    }
-    if (!this.appKeyIsValid) {
-      console.log(
-        `Missing data, cannot save ${this.username} ${this.name} ${this.key} ${this.appKeyIsValid}`
-      );
-
-      return;
+    get repositories() {
+        return RepositoriesStateModule.repositories;
     }
 
-    await HttpClient.users.addAppKey(
-      this.username!!,
-      this.name!!,
-      this.key!!,
-      AppStateModule.user.id
-    );
+    get hasAppKey() {
+        return AppStateModule.hasAppKey;
+    }
 
-    HttpClient.refreshUserData();
-  }
+    get hasRepositories() {
+        return this.repositories.length === 0;
+    }
+
+    get canSave() {
+        return this.key == null || this.key.length === 0;
+    }
+
+    private async validateAppKey() {
+        if (
+            this.username != null &&
+            this.username.length > 0 &&
+            this.name != null &&
+            this.name.length > 0 &&
+            this.key != null &&
+            this.key.length > 0
+        ) {
+            const isValid = await HttpClient.users.validateAppKey(this.username, this.key);
+
+            return isValid;
+        }
+
+        return false;
+    }
+
+    private async save() {
+        if (!this.appKeyIsValid) {
+            console.log('App key is not valid, cannot save');
+
+            return;
+        }
+        if (!this.appKeyIsValid) {
+            console.log(
+                `Missing data, cannot save ${this.username} ${this.name} ${this.key} ${this.appKeyIsValid}`
+            );
+
+            return;
+        }
+
+        await HttpClient.users.addAppKey(
+            this.username!!,
+            this.name!!,
+            this.key!!,
+            AppStateModule.user.id
+        );
+
+        HttpClient.refreshUserData();
+    }
 }
 </script>
