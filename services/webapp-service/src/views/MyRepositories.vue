@@ -1,17 +1,32 @@
 <template lang="pug">
 v-container(fluid)
     h2.display-3 My Repositories
-        
+
+    template(v-if="!hasAppKey")
+        v-alert(:value="true" type="info")
+            | No GitHub App Keys detected. Add an App Key in order to access repositories and begin your game.
+            br
+            AddAppKeyForm
+    template(v-else)
+        RepositoriesList
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import RepositoriesStateModule from '@/store/repositories.store';
+import AppStateModule from '@/store/app.store';
+import AddAppKeyForm from '@/components/AddAppKeyForm.vue';
+import RepositoriesList from '@/components/RepositoriesList.vue';
 
-@Component
+@Component({
+    components: {
+        AddAppKeyForm,
+        RepositoriesList
+    }
+})
 export default class MyRepositories extends Vue {
-  get repositories() {
-    return RepositoriesStateModule.repositories;
-  }
+    get hasAppKey() {
+        return AppStateModule.user.hasAppKey;
+    }
 }
 </script>

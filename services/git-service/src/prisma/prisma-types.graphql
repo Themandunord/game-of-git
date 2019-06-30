@@ -1,5 +1,9 @@
 # source: http://localhost:4466
-# timestamp: Fri Jun 21 2019 19:59:35 GMT-0400 (Eastern Daylight Time)
+# timestamp: Sun Jun 30 2019 11:44:33 GMT-0400 (Eastern Daylight Time)
+
+type AggregateAppKey {
+  count: Int!
+}
 
 type AggregateRepository {
   count: Int!
@@ -7,6 +11,442 @@ type AggregateRepository {
 
 type AggregateUser {
   count: Int!
+}
+
+type AppKey implements Node {
+  id: ID!
+  user: User!
+  key: String!
+  name: String
+}
+
+"""A connection to a list of items."""
+type AppKeyConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AppKeyEdge]!
+  aggregate: AggregateAppKey!
+}
+
+input AppKeyCreateInput {
+  id: ID
+  key: String!
+  name: String
+  user: UserCreateOneWithoutKeysInput!
+}
+
+input AppKeyCreateManyWithoutUserInput {
+  create: [AppKeyCreateWithoutUserInput!]
+  connect: [AppKeyWhereUniqueInput!]
+}
+
+input AppKeyCreateOneInput {
+  create: AppKeyCreateInput
+  connect: AppKeyWhereUniqueInput
+}
+
+input AppKeyCreateWithoutUserInput {
+  id: ID
+  key: String!
+  name: String
+}
+
+"""An edge in a connection."""
+type AppKeyEdge {
+  """The item at the end of the edge."""
+  node: AppKey!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum AppKeyOrderByInput {
+  id_ASC
+  id_DESC
+  key_ASC
+  key_DESC
+  name_ASC
+  name_DESC
+}
+
+type AppKeyPreviousValues {
+  id: ID!
+  key: String!
+  name: String
+}
+
+input AppKeyScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AppKeyScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AppKeyScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AppKeyScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  key: String
+
+  """All values that are not equal to given value."""
+  key_not: String
+
+  """All values that are contained in given list."""
+  key_in: [String!]
+
+  """All values that are not contained in given list."""
+  key_not_in: [String!]
+
+  """All values less than the given value."""
+  key_lt: String
+
+  """All values less than or equal the given value."""
+  key_lte: String
+
+  """All values greater than the given value."""
+  key_gt: String
+
+  """All values greater than or equal the given value."""
+  key_gte: String
+
+  """All values containing the given string."""
+  key_contains: String
+
+  """All values not containing the given string."""
+  key_not_contains: String
+
+  """All values starting with the given string."""
+  key_starts_with: String
+
+  """All values not starting with the given string."""
+  key_not_starts_with: String
+
+  """All values ending with the given string."""
+  key_ends_with: String
+
+  """All values not ending with the given string."""
+  key_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+}
+
+type AppKeySubscriptionPayload {
+  mutation: MutationType!
+  node: AppKey
+  updatedFields: [String!]
+  previousValues: AppKeyPreviousValues
+}
+
+input AppKeySubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AppKeySubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AppKeySubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AppKeySubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: AppKeyWhereInput
+}
+
+input AppKeyUpdateDataInput {
+  key: String
+  name: String
+  user: UserUpdateOneRequiredWithoutKeysInput
+}
+
+input AppKeyUpdateInput {
+  key: String
+  name: String
+  user: UserUpdateOneRequiredWithoutKeysInput
+}
+
+input AppKeyUpdateManyDataInput {
+  key: String
+  name: String
+}
+
+input AppKeyUpdateManyMutationInput {
+  key: String
+  name: String
+}
+
+input AppKeyUpdateManyWithoutUserInput {
+  create: [AppKeyCreateWithoutUserInput!]
+  connect: [AppKeyWhereUniqueInput!]
+  set: [AppKeyWhereUniqueInput!]
+  disconnect: [AppKeyWhereUniqueInput!]
+  delete: [AppKeyWhereUniqueInput!]
+  update: [AppKeyUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [AppKeyUpdateManyWithWhereNestedInput!]
+  deleteMany: [AppKeyScalarWhereInput!]
+  upsert: [AppKeyUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input AppKeyUpdateManyWithWhereNestedInput {
+  where: AppKeyScalarWhereInput!
+  data: AppKeyUpdateManyDataInput!
+}
+
+input AppKeyUpdateOneRequiredInput {
+  create: AppKeyCreateInput
+  connect: AppKeyWhereUniqueInput
+  update: AppKeyUpdateDataInput
+  upsert: AppKeyUpsertNestedInput
+}
+
+input AppKeyUpdateWithoutUserDataInput {
+  key: String
+  name: String
+}
+
+input AppKeyUpdateWithWhereUniqueWithoutUserInput {
+  where: AppKeyWhereUniqueInput!
+  data: AppKeyUpdateWithoutUserDataInput!
+}
+
+input AppKeyUpsertNestedInput {
+  update: AppKeyUpdateDataInput!
+  create: AppKeyCreateInput!
+}
+
+input AppKeyUpsertWithWhereUniqueWithoutUserInput {
+  where: AppKeyWhereUniqueInput!
+  update: AppKeyUpdateWithoutUserDataInput!
+  create: AppKeyCreateWithoutUserInput!
+}
+
+input AppKeyWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AppKeyWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AppKeyWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AppKeyWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  key: String
+
+  """All values that are not equal to given value."""
+  key_not: String
+
+  """All values that are contained in given list."""
+  key_in: [String!]
+
+  """All values that are not contained in given list."""
+  key_not_in: [String!]
+
+  """All values less than the given value."""
+  key_lt: String
+
+  """All values less than or equal the given value."""
+  key_lte: String
+
+  """All values greater than the given value."""
+  key_gt: String
+
+  """All values greater than or equal the given value."""
+  key_gte: String
+
+  """All values containing the given string."""
+  key_contains: String
+
+  """All values not containing the given string."""
+  key_not_contains: String
+
+  """All values starting with the given string."""
+  key_starts_with: String
+
+  """All values not starting with the given string."""
+  key_not_starts_with: String
+
+  """All values ending with the given string."""
+  key_ends_with: String
+
+  """All values not ending with the given string."""
+  key_not_ends_with: String
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  user: UserWhereInput
+}
+
+input AppKeyWhereUniqueInput {
+  id: ID
+  key: String
 }
 
 type BatchPayload {
@@ -28,16 +468,22 @@ scalar Long
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createRepository(data: RepositoryCreateInput!): Repository!
+  createAppKey(data: AppKeyCreateInput!): AppKey!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
+  updateAppKey(data: AppKeyUpdateInput!, where: AppKeyWhereUniqueInput!): AppKey
   deleteUser(where: UserWhereUniqueInput!): User
   deleteRepository(where: RepositoryWhereUniqueInput!): Repository
+  deleteAppKey(where: AppKeyWhereUniqueInput!): AppKey
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
+  upsertAppKey(where: AppKeyWhereUniqueInput!, create: AppKeyCreateInput!, update: AppKeyUpdateInput!): AppKey!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
+  updateManyAppKeys(data: AppKeyUpdateManyMutationInput!, where: AppKeyWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
+  deleteManyAppKeys(where: AppKeyWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -75,10 +521,13 @@ enum PrismaDatabase {
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
+  appKeys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey]!
   user(where: UserWhereUniqueInput!): User
   repository(where: RepositoryWhereUniqueInput!): Repository
+  appKey(where: AppKeyWhereUniqueInput!): AppKey
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
+  appKeysConnection(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppKeyConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -89,7 +538,14 @@ type Query {
 
 type Repository implements Node {
   id: ID!
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
   name: String!
+  owner: String!
+  user: User!
+  isTracked: Boolean!
+  appKey: AppKey!
 }
 
 """A connection to a list of items."""
@@ -104,7 +560,30 @@ type RepositoryConnection {
 
 input RepositoryCreateInput {
   id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
   name: String!
+  owner: String!
+  isTracked: Boolean!
+  user: UserCreateOneWithoutRepositoriesInput!
+  appKey: AppKeyCreateOneInput!
+}
+
+input RepositoryCreateManyWithoutUserInput {
+  create: [RepositoryCreateWithoutUserInput!]
+  connect: [RepositoryWhereUniqueInput!]
+}
+
+input RepositoryCreateWithoutUserInput {
+  id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  name: String!
+  owner: String!
+  isTracked: Boolean!
+  appKey: AppKeyCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -119,13 +598,247 @@ type RepositoryEdge {
 enum RepositoryOrderByInput {
   id_ASC
   id_DESC
+  idExternal_ASC
+  idExternal_DESC
+  createdAtExternal_ASC
+  createdAtExternal_DESC
+  updatedAtExternal_ASC
+  updatedAtExternal_DESC
   name_ASC
   name_DESC
+  owner_ASC
+  owner_DESC
+  isTracked_ASC
+  isTracked_DESC
 }
 
 type RepositoryPreviousValues {
   id: ID!
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
   name: String!
+  owner: String!
+  isTracked: Boolean!
+}
+
+input RepositoryScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RepositoryScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RepositoryScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RepositoryScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  idExternal: String
+
+  """All values that are not equal to given value."""
+  idExternal_not: String
+
+  """All values that are contained in given list."""
+  idExternal_in: [String!]
+
+  """All values that are not contained in given list."""
+  idExternal_not_in: [String!]
+
+  """All values less than the given value."""
+  idExternal_lt: String
+
+  """All values less than or equal the given value."""
+  idExternal_lte: String
+
+  """All values greater than the given value."""
+  idExternal_gt: String
+
+  """All values greater than or equal the given value."""
+  idExternal_gte: String
+
+  """All values containing the given string."""
+  idExternal_contains: String
+
+  """All values not containing the given string."""
+  idExternal_not_contains: String
+
+  """All values starting with the given string."""
+  idExternal_starts_with: String
+
+  """All values not starting with the given string."""
+  idExternal_not_starts_with: String
+
+  """All values ending with the given string."""
+  idExternal_ends_with: String
+
+  """All values not ending with the given string."""
+  idExternal_not_ends_with: String
+  createdAtExternal: DateTime
+
+  """All values that are not equal to given value."""
+  createdAtExternal_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAtExternal_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAtExternal_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAtExternal_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAtExternal_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAtExternal_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAtExternal_gte: DateTime
+  updatedAtExternal: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAtExternal_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAtExternal_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAtExternal_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAtExternal_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAtExternal_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAtExternal_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAtExternal_gte: DateTime
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  owner: String
+
+  """All values that are not equal to given value."""
+  owner_not: String
+
+  """All values that are contained in given list."""
+  owner_in: [String!]
+
+  """All values that are not contained in given list."""
+  owner_not_in: [String!]
+
+  """All values less than the given value."""
+  owner_lt: String
+
+  """All values less than or equal the given value."""
+  owner_lte: String
+
+  """All values greater than the given value."""
+  owner_gt: String
+
+  """All values greater than or equal the given value."""
+  owner_gte: String
+
+  """All values containing the given string."""
+  owner_contains: String
+
+  """All values not containing the given string."""
+  owner_not_contains: String
+
+  """All values starting with the given string."""
+  owner_starts_with: String
+
+  """All values not starting with the given string."""
+  owner_not_starts_with: String
+
+  """All values ending with the given string."""
+  owner_ends_with: String
+
+  """All values not ending with the given string."""
+  owner_not_ends_with: String
+  isTracked: Boolean
+
+  """All values that are not equal to given value."""
+  isTracked_not: Boolean
 }
 
 type RepositorySubscriptionPayload {
@@ -166,11 +879,70 @@ input RepositorySubscriptionWhereInput {
 }
 
 input RepositoryUpdateInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
   name: String
+  owner: String
+  isTracked: Boolean
+  user: UserUpdateOneRequiredWithoutRepositoriesInput
+  appKey: AppKeyUpdateOneRequiredInput
+}
+
+input RepositoryUpdateManyDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  owner: String
+  isTracked: Boolean
 }
 
 input RepositoryUpdateManyMutationInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
   name: String
+  owner: String
+  isTracked: Boolean
+}
+
+input RepositoryUpdateManyWithoutUserInput {
+  create: [RepositoryCreateWithoutUserInput!]
+  connect: [RepositoryWhereUniqueInput!]
+  set: [RepositoryWhereUniqueInput!]
+  disconnect: [RepositoryWhereUniqueInput!]
+  delete: [RepositoryWhereUniqueInput!]
+  update: [RepositoryUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
+  deleteMany: [RepositoryScalarWhereInput!]
+  upsert: [RepositoryUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input RepositoryUpdateManyWithWhereNestedInput {
+  where: RepositoryScalarWhereInput!
+  data: RepositoryUpdateManyDataInput!
+}
+
+input RepositoryUpdateWithoutUserDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  owner: String
+  isTracked: Boolean
+  appKey: AppKeyUpdateOneRequiredInput
+}
+
+input RepositoryUpdateWithWhereUniqueWithoutUserInput {
+  where: RepositoryWhereUniqueInput!
+  data: RepositoryUpdateWithoutUserDataInput!
+}
+
+input RepositoryUpsertWithWhereUniqueWithoutUserInput {
+  where: RepositoryWhereUniqueInput!
+  update: RepositoryUpdateWithoutUserDataInput!
+  create: RepositoryCreateWithoutUserInput!
 }
 
 input RepositoryWhereInput {
@@ -222,6 +994,90 @@ input RepositoryWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  idExternal: String
+
+  """All values that are not equal to given value."""
+  idExternal_not: String
+
+  """All values that are contained in given list."""
+  idExternal_in: [String!]
+
+  """All values that are not contained in given list."""
+  idExternal_not_in: [String!]
+
+  """All values less than the given value."""
+  idExternal_lt: String
+
+  """All values less than or equal the given value."""
+  idExternal_lte: String
+
+  """All values greater than the given value."""
+  idExternal_gt: String
+
+  """All values greater than or equal the given value."""
+  idExternal_gte: String
+
+  """All values containing the given string."""
+  idExternal_contains: String
+
+  """All values not containing the given string."""
+  idExternal_not_contains: String
+
+  """All values starting with the given string."""
+  idExternal_starts_with: String
+
+  """All values not starting with the given string."""
+  idExternal_not_starts_with: String
+
+  """All values ending with the given string."""
+  idExternal_ends_with: String
+
+  """All values not ending with the given string."""
+  idExternal_not_ends_with: String
+  createdAtExternal: DateTime
+
+  """All values that are not equal to given value."""
+  createdAtExternal_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAtExternal_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAtExternal_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAtExternal_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAtExternal_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAtExternal_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAtExternal_gte: DateTime
+  updatedAtExternal: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAtExternal_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAtExternal_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAtExternal_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAtExternal_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAtExternal_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAtExternal_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAtExternal_gte: DateTime
   name: String
 
   """All values that are not equal to given value."""
@@ -262,10 +1118,57 @@ input RepositoryWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  owner: String
+
+  """All values that are not equal to given value."""
+  owner_not: String
+
+  """All values that are contained in given list."""
+  owner_in: [String!]
+
+  """All values that are not contained in given list."""
+  owner_not_in: [String!]
+
+  """All values less than the given value."""
+  owner_lt: String
+
+  """All values less than or equal the given value."""
+  owner_lte: String
+
+  """All values greater than the given value."""
+  owner_gt: String
+
+  """All values greater than or equal the given value."""
+  owner_gte: String
+
+  """All values containing the given string."""
+  owner_contains: String
+
+  """All values not containing the given string."""
+  owner_not_contains: String
+
+  """All values starting with the given string."""
+  owner_starts_with: String
+
+  """All values not starting with the given string."""
+  owner_not_starts_with: String
+
+  """All values ending with the given string."""
+  owner_ends_with: String
+
+  """All values not ending with the given string."""
+  owner_not_ends_with: String
+  isTracked: Boolean
+
+  """All values that are not equal to given value."""
+  isTracked_not: Boolean
+  user: UserWhereInput
+  appKey: AppKeyWhereInput
 }
 
 input RepositoryWhereUniqueInput {
   id: ID
+  idExternal: String
   name: String
 }
 
@@ -277,6 +1180,7 @@ enum Role {
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
+  appKey(where: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload
 }
 
 type User implements Node {
@@ -287,7 +1191,9 @@ type User implements Node {
   updatedAt: DateTime!
   name: String
   role: Role
-  appKey: String
+  keys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey!]
+  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
+  gitLogin: String!
 }
 
 """A connection to a list of items."""
@@ -306,7 +1212,39 @@ input UserCreateInput {
   hash: String!
   name: String
   role: Role
-  appKey: String
+  gitLogin: String!
+  keys: AppKeyCreateManyWithoutUserInput
+  repositories: RepositoryCreateManyWithoutUserInput
+}
+
+input UserCreateOneWithoutKeysInput {
+  create: UserCreateWithoutKeysInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutRepositoriesInput {
+  create: UserCreateWithoutRepositoriesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutKeysInput {
+  id: ID
+  email: String!
+  hash: String!
+  name: String
+  role: Role
+  gitLogin: String!
+  repositories: RepositoryCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutRepositoriesInput {
+  id: ID
+  email: String!
+  hash: String!
+  name: String
+  role: Role
+  gitLogin: String!
+  keys: AppKeyCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -333,8 +1271,8 @@ enum UserOrderByInput {
   name_DESC
   role_ASC
   role_DESC
-  appKey_ASC
-  appKey_DESC
+  gitLogin_ASC
+  gitLogin_DESC
 }
 
 type UserPreviousValues {
@@ -345,7 +1283,7 @@ type UserPreviousValues {
   updatedAt: DateTime!
   name: String
   role: Role
-  appKey: String
+  gitLogin: String!
 }
 
 type UserSubscriptionPayload {
@@ -390,7 +1328,9 @@ input UserUpdateInput {
   hash: String
   name: String
   role: Role
-  appKey: String
+  gitLogin: String
+  keys: AppKeyUpdateManyWithoutUserInput
+  repositories: RepositoryUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -398,7 +1338,49 @@ input UserUpdateManyMutationInput {
   hash: String
   name: String
   role: Role
-  appKey: String
+  gitLogin: String
+}
+
+input UserUpdateOneRequiredWithoutKeysInput {
+  create: UserCreateWithoutKeysInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutKeysDataInput
+  upsert: UserUpsertWithoutKeysInput
+}
+
+input UserUpdateOneRequiredWithoutRepositoriesInput {
+  create: UserCreateWithoutRepositoriesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutRepositoriesDataInput
+  upsert: UserUpsertWithoutRepositoriesInput
+}
+
+input UserUpdateWithoutKeysDataInput {
+  email: String
+  hash: String
+  name: String
+  role: Role
+  gitLogin: String
+  repositories: RepositoryUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutRepositoriesDataInput {
+  email: String
+  hash: String
+  name: String
+  role: Role
+  gitLogin: String
+  keys: AppKeyUpdateManyWithoutUserInput
+}
+
+input UserUpsertWithoutKeysInput {
+  update: UserUpdateWithoutKeysDataInput!
+  create: UserCreateWithoutKeysInput!
+}
+
+input UserUpsertWithoutRepositoriesInput {
+  update: UserUpdateWithoutRepositoriesDataInput!
+  create: UserCreateWithoutRepositoriesInput!
 }
 
 input UserWhereInput {
@@ -624,46 +1606,52 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   role_not_in: [Role!]
-  appKey: String
+  gitLogin: String
 
   """All values that are not equal to given value."""
-  appKey_not: String
+  gitLogin_not: String
 
   """All values that are contained in given list."""
-  appKey_in: [String!]
+  gitLogin_in: [String!]
 
   """All values that are not contained in given list."""
-  appKey_not_in: [String!]
+  gitLogin_not_in: [String!]
 
   """All values less than the given value."""
-  appKey_lt: String
+  gitLogin_lt: String
 
   """All values less than or equal the given value."""
-  appKey_lte: String
+  gitLogin_lte: String
 
   """All values greater than the given value."""
-  appKey_gt: String
+  gitLogin_gt: String
 
   """All values greater than or equal the given value."""
-  appKey_gte: String
+  gitLogin_gte: String
 
   """All values containing the given string."""
-  appKey_contains: String
+  gitLogin_contains: String
 
   """All values not containing the given string."""
-  appKey_not_contains: String
+  gitLogin_not_contains: String
 
   """All values starting with the given string."""
-  appKey_starts_with: String
+  gitLogin_starts_with: String
 
   """All values not starting with the given string."""
-  appKey_not_starts_with: String
+  gitLogin_not_starts_with: String
 
   """All values ending with the given string."""
-  appKey_ends_with: String
+  gitLogin_ends_with: String
 
   """All values not ending with the given string."""
-  appKey_not_ends_with: String
+  gitLogin_not_ends_with: String
+  keys_every: AppKeyWhereInput
+  keys_some: AppKeyWhereInput
+  keys_none: AppKeyWhereInput
+  repositories_every: RepositoryWhereInput
+  repositories_some: RepositoryWhereInput
+  repositories_none: RepositoryWhereInput
 }
 
 input UserWhereUniqueInput {

@@ -11,10 +11,26 @@ type User {
   updatedAt: DateTime! @updatedAt
   name: String
   role: Role @default(value: USER)
-  appKey: String
+  keys: [AppKey!]!
+  repositories: [Repository!]!
+  gitLogin: String!
+}
+
+type AppKey {
+    id: ID! @id
+    user: User!
+    key: String! @unique
+    name: String
 }
 
 type Repository {
   id: ID! @id
+  idExternal: String! @unique
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
   name: String! @unique
+  owner: String!
+  user: User!
+  isTracked: Boolean!
+  appKey: AppKey!
 }

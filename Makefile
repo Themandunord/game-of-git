@@ -1,6 +1,6 @@
 NEST_PROJECT_FOLDER=services/git-service
 WEB_APP_PROJECT_FOLDER=services/webapp-service
-PRISMA_PROJECT_FOLDER=prisma
+PRISMA_PROJECT_FOLDER=prisma/
 
 up:
 	docker-compose up -d;
@@ -45,7 +45,7 @@ test_e2e:
 	cd ${NEST_PROJECT_FOLDER} && yarn test:e2e;
 
 build_schema:
-	cd ${NEST_PROJECT_FOLDER} \
+	cd ${PRISMA_PROJECT_FOLDER} \
 	&& graphql get-schema --project database \
 	&& graphql codegen --project database;
 

@@ -15,6 +15,7 @@ export class AppController {
   @Get('test')
   findAll() {
     console.log('test');
+
     return [];
   }
 }
