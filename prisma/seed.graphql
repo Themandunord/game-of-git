@@ -2,10 +2,13 @@ mutation {
   first: createUser(
     data: {
       email: "kingmi123@gmail.com",
-      hash: "$2b$10$DUwox2M33BHBo1jo0ektLOWZ1crZ.2v31UOiKXPfElEcUbJfA4mG2"
+      hash: "$2b$10$DUwox2M33BHBo1jo0ektLOWZ1crZ.2v31UOiKXPfElEcUbJfA4mG2",
+      gitLogin: "miking-the-viking"
     }
   ) {
     id
     hash
+    email
+    gitLogin
   }
 }
