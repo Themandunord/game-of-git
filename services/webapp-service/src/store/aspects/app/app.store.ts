@@ -1,10 +1,7 @@
+import { IAppState } from '.';
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
 
 import store from '@/store';
-
-export interface IAppState {
-  navExpanded: boolean;
-}
 
 @Module({
   dynamic: true,
