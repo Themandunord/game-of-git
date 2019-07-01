@@ -5,7 +5,7 @@ import { IRouteManagerContext } from '.';
  * RouteManager uses the users context to determine which routes should be shown to the end user at given times
  */
 export class RouteManager<T extends IRouteManagerContext> {
-    private addedRoutes: IRoute[] = [];
+    private addedRoutes: Array<Partial<IRoute>> = [];
 
     constructor(private readonly routes: IRoute[]) {}
 
@@ -31,11 +31,11 @@ export class RouteManager<T extends IRouteManagerContext> {
         };
     }
 
-    get customRoutes() {
+    get customRoutes(): Array<Partial<IRoute>> {
         return this.addedRoutes;
     }
 
-    set customRoutes(routes: IRoute[]) {
+    set customRoutes(routes: Array<Partial<IRoute>>) {
         this.addedRoutes = routes;
     }
 
@@ -43,7 +43,7 @@ export class RouteManager<T extends IRouteManagerContext> {
      * A User's currently accessible routes
      */
     get myRoutes() {
-        const routes = this.routes.filter(val => {
+        const routes: Array<Partial<IRoute>> = this.routes.filter(val => {
             if (val.meta.hideFromNav === true) {
                 return false;
             }
@@ -63,6 +63,9 @@ export class RouteManager<T extends IRouteManagerContext> {
         });
 
         const customRoutes = this.addedRoutes.filter(val => {
+            if (!val.meta) {
+                return true;
+            }
             if (val.meta.hideFromNav === true) {
                 return false;
             }

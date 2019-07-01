@@ -3,6 +3,7 @@ import { Repository } from '../graphql.schema';
 import { GitClientService } from './../git-client/git-client.service';
 import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
 import { RepositoriesResolver } from './repositories.resolver';
+import { runInThisContext } from 'vm';
 
 @Injectable()
 export class RepositoriesService {
@@ -10,6 +11,24 @@ export class RepositoriesService {
     private readonly repositoriesResolver: RepositoriesResolver,
     private readonly gitClient: GitClientService,
   ) {}
+
+  async getRepositoryFromGit(user: string, ownerUsername: string, repo: string) {
+    const detailsFromGit = await this.gitClient.getRepositoryDetails(user, repo, ownerUsername);
+
+    const storedRepositories = await this.repositoriesResolver.getRepositories(
+      {
+        where: {
+          name: repo,
+        },
+      },
+      GET_REPOSITORIES,
+    );
+
+    return {
+      ...detailsFromGit,
+      ...(storedRepositories.length > 0 ? storedRepositories[0] : {}),
+    };
+  }
 
   /**
    * Retrieve the list of repositories currently being tracked and that can be tracked belon ging to a specific GitHub login
@@ -104,7 +123,7 @@ export class RepositoriesService {
    * @param id
    * @param repository
    */
-  async toggleTracking(user: string, id: string, repository: Repository) {
+  async toggleTracking(user: string, ownerUsername: string, id: string, repository: Repository) {
     const existingRepository = await this.repositoriesResolver.getRepository(
       {
         where: {
@@ -114,8 +133,31 @@ export class RepositoriesService {
       GET_REPOSITORIES,
     );
 
+    console.log(`Existing Repository? ${existingRepository}`);
+
     if (!existingRepository) {
-      const { name, idExternal, createdAtExternal, updatedAtExternal, appKey } = repository;
+      // get repository details
+      const repoDetails = await this.gitClient.getRepositoryDetails(
+        user,
+        repository.name,
+        ownerUsername,
+      );
+
+      const {
+        name,
+        description,
+        homepageUrl,
+        url,
+        isFork,
+        isLocked,
+        isPrivate,
+        isArchived,
+        isDisabled,
+        sshUrl,
+      } = repoDetails;
+
+      const { idExternal, createdAtExternal, updatedAtExternal, appKey } = repository;
+
       const owner = (repository.owner as any).login;
       const CREATE_PAYLOAD = {
         data: {
@@ -130,13 +172,23 @@ export class RepositoriesService {
             },
           },
           name,
+          description,
+          homepageUrl,
+          url,
           owner,
           createdAtExternal,
           updatedAtExternal,
           idExternal,
           isTracked: true,
+          isFork,
+          isLocked,
+          isPrivate,
+          isArchived,
+          isDisabled,
+          sshUrl,
         },
       };
+      console.log('Create Payload: ', CREATE_PAYLOAD);
       const newRepoData = await this.repositoriesResolver.createRepository(
         CREATE_PAYLOAD,
         GET_REPOSITORIES,
@@ -157,13 +209,30 @@ export class RepositoriesService {
         GET_REPOSITORIES,
       );
 
-      await this.configureRepositoryWebhooks(repository);
+      //   await this.configureRepositoryWebhooks(repository);
 
       return updatedRepoData;
     }
   }
 
-  async configureRepositoryWebhooks(repository: Repository): Promise<boolean> {
-    console.log('configuring repository webhooks', repository);
+  /**
+   * Retrieve all stored repository data by user id
+   * @param user
+   */
+  async syncStore(user: string) {
+    return await this.repositoriesResolver.getRepositories(
+      {
+        where: {
+          user: {
+            id: user,
+          },
+        },
+      },
+      GET_REPOSITORIES,
+    );
   }
+
+  //   async configureRepositoryWebhooks(repository: Repository): Promise<boolean> {
+  //     console.log('configuring repository webhooks', repository);
+  //   }
 }

@@ -7,11 +7,9 @@ export class RepositoriesClient {
     constructor(private readonly client: AbstractHttpClient) {}
 
     public async retrieveUsersStoredRepositories() {
-        console.log('retrieveUsersStoredRepositories');
         const reposResponse = await this.client.get(
             `${AbstractHttpClient.apiUrl}/repositories/${this.client.user.id}/sync-store`
         );
-
         if (reposResponse.status === 200) {
             return reposResponse.data;
         }
@@ -45,12 +43,23 @@ export class RepositoriesClient {
      */
     public async toggleRepositoryTracking(repositoryData: any) {
         await this.client.post(
-            `${AbstractHttpClient.apiUrl}/repositories/${this.client.user.id}/toggle-tracking/${repositoryData.idExternal}`,
+            `${AbstractHttpClient.apiUrl}/repositories/${this.client.user.id}/toggle-tracking/${repositoryData.owner.login}/${repositoryData.idExternal}`,
             {
                 repository: repositoryData
             }
         );
 
         return true;
+    }
+
+    /**
+     * Retrieves an amalagamation of a large quantity of GitHub API information as well as internally stored data like `isTracked`
+     * @param owner
+     * @param repo
+     */
+    public async retrieveRepositoryWithGitData(owner: string, repo: string) {
+        return await this.client.get(
+            `${AbstractHttpClient.apiUrl}/repositories/${this.client.user.id}/git/${owner}/${repo}`
+        );
     }
 }

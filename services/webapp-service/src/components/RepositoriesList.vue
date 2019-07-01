@@ -1,6 +1,11 @@
 <template lang="pug">
 v-layout(row)
     v-flex(xs12 sm66)
+        v-form
+            v-container
+                v-layout
+                    v-flex(xs-12 md4)
+                        v-text-field(v-model="userOfInterest" label="GitHub User" :placeholder="myUsername")
         v-expansion-panel
             v-expansion-panel-content(v-for="repo in selectableRepositories" :key="repo.id")
                 template(v-slot:header)
@@ -64,10 +69,22 @@ import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
 import HttpClient from '../common/HttpClient';
+import { pluck, switchMap, debounceTime } from 'rxjs/operators';
 
-@Component
+@Component({
+    subscriptions() {
+        return {
+            userOfInterestObservable: this.$fromDOMEvent('input', 'keyup').pipe(
+                debounceTime(300),
+                pluck<Event, string>('target', 'value')
+            )
+        };
+    }
+})
 export default class RepositoriesControlList extends Vue {
     private selectableRepositories = [];
+    private userOfInterest: string = '';
+    private userOfInterestObservable: string = '';
 
     mounted() {
         this.loadSelectableRepositories();
@@ -82,8 +99,17 @@ export default class RepositoriesControlList extends Vue {
         this.loadSelectableRepositories();
     }
 
+    @Watch('userOfInterestObservable')
+    reloadRepos() {
+        this.loadSelectableRepositories();
+    }
+
     private getRepoTrackingColor(isTracking: boolean) {
         return isTracking ? 'blue' : 'white';
+    }
+
+    get myUsername() {
+        return AppStateModule.user.gitLogin;
     }
 
     private async loadSelectableRepositories() {
@@ -92,7 +118,9 @@ export default class RepositoriesControlList extends Vue {
                 `User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
             );
         }
-        const selectable = await HttpClient.repositories.loadSelectableRepositories();
+        const selectable = await HttpClient.repositories.loadSelectableRepositories(
+            this.userOfInterest
+        );
         this.selectableRepositories = selectable;
     }
 
@@ -100,6 +128,7 @@ export default class RepositoriesControlList extends Vue {
         console.log('toggleRepoTracking: ', repo);
         await HttpClient.repositories.toggleRepositoryTracking(repo);
         this.loadSelectableRepositories();
+        RepositoriesStateModule.syncStoredRepositories();
     }
 }
 </script>
