@@ -1,12 +1,7 @@
-import HttpClient from '@/common/HttpClient';
+import { IRepositoriesState } from './IRepositoriesState.interface';
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
 
 import store from '@/store';
-
-export interface IRepositoriesState {
-  //   repositories: IRepository;
-  repositories: any[];
-}
 
 @Module({
   dynamic: true,

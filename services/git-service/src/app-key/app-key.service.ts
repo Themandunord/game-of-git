@@ -3,20 +3,7 @@ import { UsersService } from './../users/users.service';
 import { GitClientService } from './../git-client/git-client.service';
 import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { gql } from 'apollo-server-core';
-
-export const GET_APP_KEY = gql`
-  query {
-    id
-    user {
-      id
-      email
-      name
-      role
-    }
-    key
-    name
-  }
-`;
+import GET_APP_KEY from './GET_APP_GEY.gql';
 
 @Injectable()
 export class AppKeyService {
@@ -27,6 +14,10 @@ export class AppKeyService {
     private readonly appKeyResolver: AppKeyResolver,
   ) {}
 
+  /**
+   * Get an AppKey by the user's id
+   * @param user
+   */
   async get(user: string) {
     const keys = await this.appKeyResolver.getAppKeys(
       {
@@ -42,22 +33,30 @@ export class AppKeyService {
     return keys;
   }
 
+  /**
+   * Validate a given key by checking a username
+   * @param key
+   * @param user
+   */
   async validateKey(key: string, user: string) {
     const valid = await this.gitClient.testAppKey(key, user);
 
     return valid;
   }
 
+  /**
+   * Store a GitHub App Key for a user
+   * @param key
+   * @param user
+   * @param name
+   * @param username
+   */
   async storeKey(key: string, user: string, name: string, username: string) {
-    console.log(`Store key ${key} ${user} ${name} ${username}`);
     const isValid = await this.validateKey(key, username);
     if (!isValid) {
-      console.log('invalid, not storing');
-
       return;
     }
-    console.log('valid, storing');
-    // this.usersService.
+
     const existing = await this.appKeyResolver.getAppKey(
       {
         where: {
@@ -68,11 +67,8 @@ export class AppKeyService {
     );
 
     if (existing != null) {
-      console.log('Key already existed!');
-
       return;
     }
-    console.log('key did not exist already, adding new key!');
     const createPayload = {
       data: {
         user: {
@@ -84,7 +80,6 @@ export class AppKeyService {
         key,
       },
     };
-    console.log('calling createAppKEy with ', createPayload, GET_APP_KEY);
     const result = await this.appKeyResolver.createAppKey(createPayload, GET_APP_KEY);
 
     return result;

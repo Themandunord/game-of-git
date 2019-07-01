@@ -1,18 +1,26 @@
-import AppStateModule from '@/store/app.store';
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
-import VueRouter, { Route } from 'vue-router';
 import router from '@/router';
+import AppStateModule from '@/store/aspects/app';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import * as jwtClient from 'jsonwebtoken';
+import config from '../../config';
 
-export const API_URL = process.env.VUE_APP_GIT_SERVICE_HOST;
-
+/**
+ * Abstract Http Client implementation safely wrapping auth, user context and the underlying implementation.
+ */
 export default class AbstractHttpClient {
-  public static apiUrl = API_URL;
+  /**
+   * Static reference to the API URL
+   */
+  public static apiUrl = config.API_URL;
   private jwt: string = '';
   private expiresIn: number = 0;
   private expiresAt: number = 0;
   private axiosOptions: AxiosRequestConfig = {};
   private axiosClient!: AxiosInstance;
+
+  /**
+   * Publically get/settable reference to the user object
+   */
   public user: any | null = {};
 
   constructor(client?: AxiosInstance) {
@@ -24,6 +32,14 @@ export default class AbstractHttpClient {
     this.initClient();
   }
 
+  /**
+   * Log the user in,
+   * store the jwt for reference and the encoded user object to the HttpClient and the App State Module,
+   * before redirecting the user to their intiially intended destination via the VueRouter's `push` function
+   * @param email Email for rthe user's login
+   * @param password Password for the user's login
+   * @param destination Desired route, likely before middleware redirection to the login page as an unauthenticated user
+   */
   public async login(email: string, password: string, destination: string) {
     const route = `${AbstractHttpClient.apiUrl}/auth/login`;
 
@@ -41,6 +57,9 @@ export default class AbstractHttpClient {
     router.push(destination);
   }
 
+  /**
+   * Checks if the jwt is set for local storage, indicating that the user "was" logged in
+   */
   public jwtIsSet() {
     return localStorage.getItem('jwt') != null;
   }
@@ -65,6 +84,7 @@ export default class AbstractHttpClient {
   }
 
   private setAutoTokenRefreshMiddleware() {
+    // tslint:disable:no-console
     console.log('setting auto token refresh middleware');
     this.axiosClient.interceptors.response.use(
       response => {
@@ -88,6 +108,12 @@ export default class AbstractHttpClient {
 
   private resetTokenAndReattemptRequest(error: any) {}
 
+  /**
+   * Stores a jwt to the HttpClient,
+   * local storage
+   * and configures the HttpClient's underlying Rest Client to use that jwt as the `Authorization: Bearer` token
+   * @param jwt
+   */
   public async setJwt(jwt: string) {
     this.jwt = jwt;
     localStorage.setItem('jwt', jwt);
@@ -100,19 +126,38 @@ export default class AbstractHttpClient {
     };
   }
 
+  /**
+   * Performs an HTTP GET request to the given url
+   * @param url
+   */
   public async get(url: string) {
     return axios.get(url);
   }
 
+  /**
+   * Performs an HTTP Post request to the given url with some data
+   * @param url
+   * @param data
+   */
   public async post(url: string, data: any) {
     return axios.post(url, data);
   }
 
+  /**
+   * Performs an HTTP Put request to the given url with some data
+   * @param url
+   * @param data
+   */
   public async put(url: string, data: any) {
     return axios.put(url, data);
   }
 }
 
+/**
+ * WIP checks if a Token is expired
+ * @param errorResponse
+ * @todo
+ */
 function isTokenExpiredError(errorResponse: any) {
   console.log(`isTokenExpiredError check: ${errorResponse}`);
 
