@@ -3,7 +3,7 @@ div
     v-navigation-drawer(v-model="drawer" clipped fixed app)
         v-list(dense)
             v-list-tile(
-                v-for="route in routes" :key="route.path" @click="routeTo(route.name)"
+                v-for="route in routes" :key="route.path" @click="routeTo(route.name, route.props)"
             )
                 v-list-tile-action
                     v-icon dashboard
@@ -17,7 +17,7 @@ div
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
 import AppStateModule from '@/store/aspects/app';
@@ -29,10 +29,12 @@ export default class NavBar extends Vue {
     })
     private routes!: RouteConfig[];
 
-    public routeTo(path: string) {
-        this.$router.push({
-            name: path
-        });
+    public routeTo(path: string, params?: any) {
+        const routeTo = {
+            name: path,
+            params: params ? { ...params } : {}
+        };
+        this.$router.push(routeTo);
     }
 
     get drawer() {

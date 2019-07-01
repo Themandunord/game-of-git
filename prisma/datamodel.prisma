@@ -4,7 +4,7 @@ enum Role {
 }
 
 type User {
-  id: ID! @id
+  id: ID! @unique @id
   email: String! @unique @index
   hash: String!
   createdAt: DateTime! @createdAt
@@ -17,20 +17,38 @@ type User {
 }
 
 type AppKey {
-    id: ID! @id
+    id: ID! @unique @id
     user: User!
     key: String! @unique
     name: String
 }
 
 type Repository {
-  id: ID! @id
+  id: ID! @unique @id
   idExternal: String! @unique
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
+  
   name: String! @unique
+  description: String! @default(value: "A neat repository")
+  homepageUrl: String
+  url: String!
+
   owner: String!
   user: User!
   isTracked: Boolean!
   appKey: AppKey!
+
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
 }

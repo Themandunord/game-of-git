@@ -1,3 +1,4 @@
+import HttpClient from '@/common/HttpClient';
 import { IRepositoriesState } from './IRepositoriesState.interface';
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
 
@@ -10,18 +11,6 @@ import store from '@/store';
 })
 class RepositoriesState extends VuexModule implements IRepositoriesState {
     public repositories: any[] = [];
-
-    //   @MutationAction({
-    //     mutate: ['repositories']
-    //   })
-    //   public async refreshRepositories() {
-    //     const repositories = await HttpClient.repositories.getAll();
-    //     console.log('got repositories: ', repositories);
-
-    //     return {
-    //       repositories: {}
-    //     };
-    //   }
 
     @Mutation
     public setRepositories(repositories?: any[]) {
@@ -36,11 +25,21 @@ class RepositoriesState extends VuexModule implements IRepositoriesState {
         mutate: ['repositories']
     })
     public async syncStoredRepositories() {
+        const repositories = await HttpClient.repositories.retrieveUsersStoredRepositories();
+
         return {
-            repositories: {
-                ...this.repositories
-            }
+            repositories
         };
+    }
+
+    @Mutation
+    setRepository(repository: any) {
+        this.repositories = this.repositories.map(val => {
+            return {
+                ...val,
+                ...(repository.idExternal === val.idExternal ? repository : {})
+            };
+        });
     }
 }
 

@@ -9465,7 +9465,7 @@ rxjs@^5.0.0-beta.11:
   dependencies:
     symbol-observable "1.0.1"
 
-rxjs@^6.3.3, rxjs@^6.4.0:
+rxjs@^6.3.3, rxjs@^6.4.0, rxjs@^6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.2.tgz#2e35ce815cd46d84d02a209fb4e5921e051dbec7"
   integrity sha512-HUb7j3kvb7p7eCUHE3FqjoDsC1xfZQ4AHFWfTKSpZ+sAhhz5X1WX0ZuUqWbzB2QhSLp3DoLUG+hMdEDKqWo2Zg==
@@ -10999,6 +10999,11 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-material-design-icons@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/vue-material-design-icons/-/vue-material-design-icons-3.3.1.tgz#d136131ff18de16e1495affe21e862ca2f4a94ec"
+  integrity sha512-ugIhVp1A/n+u4+hd4oXPSwpKmd1PemwhquQ/NwUt0/SRFGvA4gCC47e20ZZq/06Jp37mQ88p15tjBE20I+uAkw==
+
 vue-property-decorator@^8.1.0:
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.1.1.tgz#80dadbe5ffa0e7eb6a0ba0a07036365471a7d5ee"
@@ -11010,6 +11015,11 @@ vue-router@^3.0.3:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.6.tgz#2e4f0f9cbb0b96d0205ab2690cfe588935136ac3"
   integrity sha512-Ox0ciFLswtSGRTHYhGvx2L44sVbTPNS+uD2kRISuo8B39Y79rOo0Kw0hzupTmiVtftQYCZl87mwldhh2L9Aquw==
+
+vue-rx@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/vue-rx/-/vue-rx-6.2.0.tgz#c3b86462b252626edd16417385bb9054a3a23acb"
+  integrity sha512-tpKUcqS5IUYS+HsdbR5TlE5LL9PK4zwlplEtmMeydnbqaUTa9ciLMplJXAtFSiQw1vuURoyEJmCXqMxaVEIloQ==
 
 vue-style-loader@^4.1.0:
   version "4.1.2"
