@@ -6,8 +6,33 @@ import { GET_USERS } from './GET_USERS.gql';
 export class UsersService {
   constructor(private readonly usersResolver: UsersResolver) {}
 
+  public async getById(id: string) {
+    const whoami = await this.usersResolver.getUser(
+      {
+        where: {
+          id,
+        },
+      },
+      GET_USERS,
+    );
+
+    const result = {
+      email: whoami.email,
+      id: whoami.id,
+      hasAppKey: whoami.keys && whoami.keys.length > 0 ? true : false,
+      name: whoami.name,
+      gitLogin: whoami.gitLogin,
+    };
+
+    return result;
+  }
+
+  public async getAll() {
+    return await this.usersResolver.getUsers({}, GET_USERS);
+  }
+
   public async get(email: string) {
-    const user = this.usersResolver.getUser(
+    const user = await this.usersResolver.getUser(
       {
         where: {
           email,
@@ -16,6 +41,18 @@ export class UsersService {
       GET_USERS,
     );
 
-    return user;
+    const result = {
+      email: user.email,
+      id: user.id,
+      hash: user.hash,
+      hasAppKey: user.keys && user.keys.length > 0 ? true : false,
+      name: user.name,
+      gitLogin: user.gitLogin,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+    console.log('returning from get user: ', result);
+
+    return result;
   }
 }

@@ -11,11 +11,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @UseGuards(AuthGuard())
-  @Get('test')
-  findAll() {
-    console.log('test');
+  //   @UseGuards(AuthGuard())
+  //   @Get('test')
+  //   findAll() {
+  //     console.log('test');
 
-    return [];
-  }
+  //     return [];
+  //   }
 }

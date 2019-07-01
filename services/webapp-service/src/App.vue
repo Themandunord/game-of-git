@@ -13,25 +13,24 @@ import NavBar from '@/components/Navbar.vue';
 import { ROUTES } from '@/router/routes';
 import router from '@/router';
 import routeManager, { RouteManager } from '@/router/RouteManager';
+// import RepositoriesStateModule from '@/store/aspects/repositories';
 
 @Component({
-  components: {
-    NavBar
-  }
+    components: {
+        NavBar
+    }
 })
 export default class App extends Vue {
-  // use prop values for initial data
-  //   helloMsg = 'Hello, ' + this.propMessage
-  //   private routes: IRoute = [];// = ROUTES;
+    private routeManager = routeManager;
 
-  private routeManager = routeManager;
+    get routes() {
+        return this.routeManager.myRoutes;
+    }
 
-  get routes() {
-    return this.routeManager.myRoutes;
-  }
-
-  beforeMount() {
-    console.log(this.routeManager.myRoutes);
-  }
+    beforeMount() {
+        // tslint:disable-next-line:no-console
+        console.log(this.routeManager.myRoutes);
+        // RepositoriesStateModule.syncStoredRepositories();
+    }
 }
 </script>
