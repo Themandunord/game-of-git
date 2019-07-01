@@ -1,23 +1,25 @@
-import { PassportModule } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../graphql.schema';
 import { UsersService } from '../users/users.service';
 
+// tslint:disable-next-line:no-var-requires
 const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
 @Injectable()
 export class AuthService {
-  //   constructor(private readonly usersService: UsersService) {}
-
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
   ) {}
 
-  async createToken(userData: User) {
+  /**
+   * Create a jwt token with the given User data
+   * @param userData
+   */
+  async createToken(userData: Partial<User>) {
     const user: {
       email: string;
       id: string;
@@ -38,6 +40,7 @@ export class AuthService {
       accessToken,
     };
   }
+
   /**
    * Validate that the given user exists to authenticate
    * @param email
@@ -49,13 +52,25 @@ export class AuthService {
   //     return await this.jwtService.sign(payload, options);
   //   }
 
+  /**
+   * Encrypt the given password
+   * @param password
+   */
   public async encryptPassword(password: string) {
+    console.log('encrypting password: ' + password);
     const hashedPassword = bcrypt.hash(password, saltRounds);
 
     return hashedPassword;
   }
 
+  /**
+   * Compare a password against its hash
+   */
   public async comparePassword(password: string, hashedPassword: string) {
-    return await bcrypt.compare(password, hashedPassword);
+    console.log('comparing password: ' + password + ' against ' + hashedPassword);
+    const result = await bcrypt.compare(password, hashedPassword);
+    console.log('comparison result = ' + result);
+
+    return result;
   }
 }

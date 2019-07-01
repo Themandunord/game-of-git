@@ -1,112 +1,9 @@
-import { AppKeyService } from './../app-key/app-key.service';
-import { Injectable, forwardRef, Inject } from '@nestjs/common';
-import { gql } from 'apollo-server-core';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import axios from 'axios';
-import * as jwtClient from 'jsonwebtoken';
-
-const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
-
-const GET_REPOSITORIES = (owner: string, count: number) => `
-  query {
-      user(
-    login: "${owner}"
-  ){
-    repositories(first: ${count}) {
-      edges {
-        node {
-          createdAt
-          databaseId
-          description
-          homepageUrl
-          id
-          isFork
-          isPrivate
-          issues {
-            totalCount
-          }
-          name
-          owner {
-            avatarUrl
-            id
-            login
-            repositories {
-              totalCount
-            }
-            url
-          }
-          watchers {
-            totalCount
-          }
-          url
-          updatedAt
-          stargazers {
-            totalCount
-          }
-          pullRequests {
-            totalCount
-          }
-        }
-      }
-    }
-  }
-}
-`;
-
-const GET_USER_DATA = (user: string) => `
-query {
-  user(
-    login: "${user}"
-  ){
-    avatarUrl
-    createdAt
-    watching(first: 100){
-      nodes{
-        createdAt
-        description
-        homepageUrl
-        id
-      }
-    }
-    name
-    repositories(
-      first: 10
-    ) {
-      nodes{
-        id
-        name
-        createdAt
-        description
-        homepageUrl
-        updatedAt
-        createdAt
-        watchers{
-          totalCount
-        }
-        url
-        stargazers{
-          totalCount
-        }
-        pullRequests(first:100){
-          totalCount
-          nodes{
-            author{
-              login
-            }
-            id
-            title
-            url
-            updatedAt
-          }
-        }
-        url
-        stargazers{
-          totalCount
-        }
-      }
-    }
-  }
-}
-`;
+import config from '../config';
+import { AppKeyService } from './../app-key/app-key.service';
+import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
+import GET_USER_DATA from './GET_USER_DATA.gql';
 
 @Injectable()
 export class GitClientService {
@@ -115,11 +12,15 @@ export class GitClientService {
     private readonly appKeyService: AppKeyService,
   ) {}
 
+  /**
+   * Test a given AppKey by using it in a GET_USER_DATA query against the GitHub GraphQL API
+   * @param key
+   * @param user
+   */
   async testAppKey(key: string, user: string): Promise<boolean> {
-    console.log(`GitClientService testAppKey ${key} ${user}`);
     try {
       const result = await axios.post(
-        GITHUB_GRAPHQL_URL,
+        config.GITHUB_GRAPHQL_URL,
         {
           query: GET_USER_DATA(user),
         },
@@ -129,9 +30,9 @@ export class GitClientService {
           },
         },
       );
-      console.log(result.status, result.data);
 
       if (result.data == null || result.data.data == null || result.data.data.user == null) {
+        // tslint:disable:no-console
         console.error('Missing expected data to validate against in app key test.');
 
         return false;
@@ -140,22 +41,24 @@ export class GitClientService {
       return true;
     } catch (e) {
       console.error('Error testing the app key: ' + e + ' likely invalid.');
-
-      return false;
     }
 
     return false;
   }
 
+  /**
+   * Load Repositories from GitHub and attach the AppKey id used to retrieve them to each record.
+   *
+   * @param user
+   * @param owner
+   */
   async getRepositories(user: string, owner: string) {
-    console.log(`get repositories from GitHub ${owner}`);
-
     const appKeys = await this.appKeyService.get(user);
     const appKey = appKeys.length > 0 ? appKeys[0] : null;
     const key = appKey ? appKey.key : null;
 
     const result = await axios.post(
-      GITHUB_GRAPHQL_URL,
+      config.GITHUB_GRAPHQL_URL,
       {
         query: GET_REPOSITORIES(owner, 100),
       },
@@ -166,9 +69,6 @@ export class GitClientService {
       },
     );
 
-    // console.log('repositories query to GitHub returned status: ' + result.status);
-
-    // console.log('repositories returned from github:', result.data.data.user.repositories.edges);
     // add key id used to get these
     const repositoriesWithAppKeyId = result.data.data.user.repositories.edges.map(val => {
       const updated = {
@@ -178,8 +78,6 @@ export class GitClientService {
 
       return updated;
     });
-
-    console.log('returning from getRepositories with: ', repositoriesWithAppKeyId);
 
     return repositoriesWithAppKeyId;
   }
