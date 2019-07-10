@@ -3,13 +3,34 @@ import { Repository } from '../graphql.schema';
 import { GitClientService } from './../git-client/git-client.service';
 import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
 import { RepositoriesResolver } from './repositories.resolver';
+import { runInThisContext } from 'vm';
 
 @Injectable()
 export class RepositoriesService {
   constructor(
     private readonly repositoriesResolver: RepositoriesResolver,
-    private readonly gitClient: GitClientService,
+    private readonly gitClient: GitClientService
   ) {}
+
+  async getRepositoryFromGit(user: string, ownerUsername: string, repo: string) {
+
+    await this.syncRepositoryWithGitHub(repo, ownerUsername, user);
+
+    const storedRepository = await this.repositoriesResolver.getRepository(
+      {
+        where: {
+          name: repo,
+        },
+      },
+      GET_REPOSITORIES,
+    );
+    const detailsFromGit = await this.gitClient.getRepositoryDetails(user, repo, ownerUsername);
+
+    return {
+      ...detailsFromGit,
+      ...(storedRepository ? storedRepository : {}),
+    };
+  }
 
   /**
    * Retrieve the list of repositories currently being tracked and that can be tracked belon ging to a specific GitHub login
@@ -94,6 +115,99 @@ export class RepositoriesService {
     // console.log('repositories are: ', repositories);
   }
 
+  async createRepository(user: string, ownerUsername: string, name: string) {
+    console.log(`Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`);
+
+    const repoDetails = await this.gitClient.getRepositoryDetails(
+      user,
+      name,
+      ownerUsername,
+    );
+
+    const {
+      description,
+      homepageUrl,
+      url,
+      isFork,
+      isLocked,
+      isPrivate,
+      isArchived,
+      isDisabled,
+      sshUrl,
+    } = repoDetails;
+
+    const idExternal = repoDetails.id;
+    const createdAtExternal = repoDetails.createdAt;
+    const updatedAtExternal = repoDetails.updatedAt;
+    const appKey = repoDetails.appKey;
+    const owner = ownerUsername;
+
+    const CREATE_PAYLOAD = {
+      data: {
+        user: {
+          connect: {
+            id: user,
+          },
+        },
+        appKey: {
+          connect: {
+            id: appKey,
+          },
+        },
+        name,
+        description,
+        homepageUrl,
+        url,
+        owner,
+        createdAtExternal,
+        updatedAtExternal,
+        idExternal,
+        isTracked: true,
+        isFork,
+        isLocked,
+        isPrivate,
+        isArchived,
+        isDisabled,
+        sshUrl,
+      },
+    };
+
+    console.log('Create Payload: ', CREATE_PAYLOAD);
+
+    const newRepoData = await this.repositoriesResolver.createRepository(
+      CREATE_PAYLOAD,
+      GET_REPOSITORIES,
+    );
+
+    return newRepoData;
+  }
+
+  async updateRepository(id: string, data: any) {
+    const UPDATE_PAYLOAD = {
+      where: {
+        id,
+      },
+      data,
+    };
+    const updatedRepoData = await this.repositoriesResolver.updateRepository(
+      UPDATE_PAYLOAD,
+      GET_REPOSITORIES,
+    );
+
+    return updatedRepoData;
+  }
+
+  async getExistingRepository(id: string) {
+    return await this.repositoriesResolver.getRepository(
+      {
+        where: {
+          idExternal: id,
+        },
+      },
+      GET_REPOSITORIES,
+    );
+  }
+
   /**
    * Toggle whether a repository should be tracked or not by switching the `isTracked` boolean on the record
    *
@@ -104,60 +218,62 @@ export class RepositoriesService {
    * @param id
    * @param repository
    */
-  async toggleTracking(user: string, id: string, repository: Repository) {
-    const existingRepository = await this.repositoriesResolver.getRepository(
+  async toggleTracking(user: string, ownerUsername: string, id: string, name: string) {
+    console.log(`Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`);
+
+    const existingRepository = await this.getExistingRepository(id);
+
+    let repoData = null;
+    if (!existingRepository) {
+     repoData = await this.createRepository(user, ownerUsername, name);
+    } else {
+      const updatedRepoData = await this.updateRepository(existingRepository.id, {
+        isTracked: !existingRepository.isTracked,
+      });
+      repoData = updatedRepoData;
+    }
+    // toggle the github webhooks
+    await this.configureRepositoryWebhooks(repoData, user);
+
+    return repoData;
+  }
+
+  async configureRepositoryWebhooks(repository: Repository, user: string): Promise<void> {
+    console.log('configuring repository webhooks', repository);
+    if (repository.isTracked) {
+      await this.gitClient.webhooks.initializeRepositoryWebhooks(repository, user);
+    } else {
+      await this.gitClient.webhooks.destroyRepositoryWebhooks(repository, user);
+    }
+  }
+
+  /**
+   * Retrieve all stored repository data by user id
+   * @param user
+   */
+  async syncStore(user: string) {
+    return await this.repositoriesResolver.getRepositories(
       {
         where: {
-          idExternal: id,
+          user: {
+            id: user,
+          },
         },
       },
       GET_REPOSITORIES,
     );
-
-    if (!existingRepository) {
-      const { name, idExternal, createdAtExternal, updatedAtExternal, appKey } = repository;
-      const owner = (repository.owner as any).login;
-      const CREATE_PAYLOAD = {
-        data: {
-          user: {
-            connect: {
-              id: user,
-            },
-          },
-          appKey: {
-            connect: {
-              id: appKey,
-            },
-          },
-          name,
-          owner,
-          createdAtExternal,
-          updatedAtExternal,
-          idExternal,
-          isTracked: true,
-        },
-      };
-      const newRepoData = await this.repositoriesResolver.createRepository(
-        CREATE_PAYLOAD,
-        GET_REPOSITORIES,
-      );
-
-      return newRepoData;
-    } else {
-      const UPDATE_PAYLOAD = {
-        where: {
-          id: existingRepository.id,
-        },
-        data: {
-          isTracked: !existingRepository.isTracked,
-        },
-      };
-      const updatedRepoData = await this.repositoriesResolver.updateRepository(
-        UPDATE_PAYLOAD,
-        GET_REPOSITORIES,
-      );
-
-      return updatedRepoData;
-    }
   }
+
+  /**
+   * Sync the stored Repository with it's current GitHub state
+   * @param user 
+   * @param owner 
+   * @param id 
+   */
+  async syncRepositoryWithGitHub(name: string, owner: string, user: string) {
+    console.log('syncing repository: ' , name);
+    const detailsFromGit = await this.gitClient.getRepositoryDetails(user, name, owner);
+    console.log('sync details from git: ', detailsFromGit);
+  }
+
 }

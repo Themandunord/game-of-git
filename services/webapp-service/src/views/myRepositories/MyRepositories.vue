@@ -28,5 +28,8 @@ export default class MyRepositories extends Vue {
     get hasAppKey() {
         return AppStateModule.user.hasAppKey;
     }
+    beforeMount() {
+        RepositoriesStateModule.syncStoredRepositories();
+    }
 }
 </script>

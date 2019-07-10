@@ -3,6 +3,7 @@ import AppStateModule from '@/store/aspects/app';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import * as jwtClient from 'jsonwebtoken';
 import config from '../../config';
+import { LOGIN } from '@/router/routes';
 
 /**
  * Abstract Http Client implementation safely wrapping auth, user context and the underlying implementation.
@@ -51,10 +52,20 @@ export default class AbstractHttpClient {
     this.setJwt(result.data.accessToken);
 
     const user = jwtClient.decode(result.data.accessToken);
-    this.user = user;
-    AppStateModule.setUser(user);
+    const userData = user instanceof Object ? {...user, isAuthenticated: true} : {isAuthenticated: false};
+    this.user = userData;
+    AppStateModule.setUser({...AppStateModule.user, ...userData});
 
     router.push(destination);
+  }
+
+  public async logout() {
+    this.user = null;
+    AppStateModule.setUser({});
+    localStorage.setItem('jwt', '');
+    router.push({
+      name: LOGIN.name
+    });
   }
 
   /**
@@ -79,8 +90,35 @@ export default class AbstractHttpClient {
         this.user = user;
 
         AppStateModule.setUser(user);
+        if (user && !(this.user.isAuthenticated)) {
+          this.refreshToken(tryJwt);
+        }
       }
     }
+  }
+
+  private async refreshToken(jwt: string) {
+    const route = `${AbstractHttpClient.apiUrl}/auth/refresh`;
+
+    const result = await this.axiosClient.post(route, {
+      jwt
+    });
+
+    if (!result.data.accessToken) {
+      this.user = null;
+      this.setJwt('');
+
+      return;
+    }
+
+    this.setJwt(result.data.accessToken);
+
+    const user = jwtClient.decode(result.data.accessToken);
+
+    const userData = user instanceof Object ? { ...user, isAuthenticated: true } : { isAuthenticated: false };
+
+    this.user = userData;
+    AppStateModule.setUser({ ...AppStateModule.user, ...userData });
   }
 
   private setAutoTokenRefreshMiddleware() {
