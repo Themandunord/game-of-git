@@ -29,7 +29,7 @@ export class AuthService {
     } = {
       email: userData.email,
       id: userData.id,
-      hasAppKey: userData.keys != null && userData.keys.length > 0 ? true : false,
+      hasAppKey: (userData.keys != null && userData.keys.length > 0 || (userData as any).hasAppKey) ? true : false,
       name: userData.name ? userData.name : 'Disciple of Shrek',
       gitLogin: userData.gitLogin,
     };
@@ -39,6 +39,16 @@ export class AuthService {
       expiresIn: 3600,
       accessToken,
     };
+  }
+
+  async verifyToken(token: string) {
+    console.log('verifying token', token);
+
+    const result = await this.jwtService.verifyAsync(token);
+
+    console.log(result);
+
+    return false;
   }
 
   /**

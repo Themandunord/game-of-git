@@ -51,8 +51,9 @@ export default class AbstractHttpClient {
     this.setJwt(result.data.accessToken);
 
     const user = jwtClient.decode(result.data.accessToken);
-    this.user = user;
-    AppStateModule.setUser(user);
+    const userData = user instanceof Object ? {...user, isAuthenticated: true} : {isAuthenticated: false};
+    this.user = userData;
+    AppStateModule.setUser({...AppStateModule.user, ...userData});
 
     router.push(destination);
   }
@@ -79,8 +80,29 @@ export default class AbstractHttpClient {
         this.user = user;
 
         AppStateModule.setUser(user);
+        if (!(this.user.isAuthenticated)) {
+          this.refreshToken(tryJwt);
+        }
       }
     }
+  }
+
+  private async refreshToken(jwt: string) {
+    console.log('trying to get refresh token');
+    const route = `${AbstractHttpClient.apiUrl}/auth/refresh`;
+
+    const result = await this.axiosClient.post(route, {
+      jwt
+    });
+
+    console.log('result from refresh route: ', result.data);
+
+    this.setJwt(result.data.accessToken);
+
+    const user = jwtClient.decode(result.data.accessToken);
+    const userData = user instanceof Object ? { ...user, isAuthenticated: true } : { isAuthenticated: false };
+    this.user = userData;
+    AppStateModule.setUser({ ...AppStateModule.user, ...userData });
   }
 
   private setAutoTokenRefreshMiddleware() {
