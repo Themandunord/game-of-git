@@ -43,10 +43,9 @@ export class RepositoriesClient {
      */
     public async toggleRepositoryTracking(repositoryData: any) {
         await this.client.post(
-            `${AbstractHttpClient.apiUrl}/repositories/${this.client.user.id}/toggle-tracking/${repositoryData.owner.login}/${repositoryData.idExternal}`,
-            {
-                repository: repositoryData
-            }
+            `${AbstractHttpClient.apiUrl}/repositories/`
+            + `${this.client.user.id}/toggle-tracking/`
+            + `${repositoryData.owner.login}/${repositoryData.idExternal}/${repositoryData.name}`, {}
         );
 
         return true;

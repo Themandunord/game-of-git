@@ -41,13 +41,13 @@ export class RepositoriesController {
     return await this.repositoriesService.selectionSet(user, owner);
   }
 
-  @Post('/:user/toggle-tracking/:owner/:id')
+  @Post('/:user/toggle-tracking/:owner/:id/:name')
   public async toggleTracking(
     @Param('user') user: string,
     @Param('owner') owner: string,
     @Param('id') idExternal: string,
-    @Body('repository') repository: any,
+    @Param('name') name: string
   ) {
-    return await this.repositoriesService.toggleTracking(user, owner, idExternal, repository);
+    return await this.repositoriesService.toggleTracking(user, owner, idExternal, name);
   }
 }

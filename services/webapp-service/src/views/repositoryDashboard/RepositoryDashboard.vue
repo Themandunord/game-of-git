@@ -54,6 +54,7 @@ export default class RepositoryDashboard extends Vue {
             console.error(
                 `Did not return any repo data for ${this.repository.owner}'s ${this.repository.name}`
             );
+
             return;
         }
 
@@ -70,7 +71,10 @@ export default class RepositoryDashboard extends Vue {
         return new Date(this.repository.createdAtExternal).toLocaleString();
     }
     get updatedAt() {
-        return new Date(this.repository.createdAtExternal).toLocaleString();
+        return new Date(this.repository.updatedAtExternal).toLocaleString();
+    }
+    get lastUpdatedAt() {
+        return new Date(this.repository.updatedAt).toLocaleString();
     }
 }
 </script>

@@ -45,9 +45,6 @@ export default class App extends Vue {
         immediate: true
     })
     private async updateCustomRouteRepositories() {
-        console.log(
-            'Update custom routes for repositories: ' + RepositoriesStateModule.repositories.length
-        );
         const newCustomRoutes = this.trackedRepositories.map(repo => {
             return {
                 name: REPOSITORY_DASHBOARD.name,

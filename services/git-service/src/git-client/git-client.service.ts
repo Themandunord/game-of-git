@@ -5,13 +5,20 @@ import { AppKeyService } from './../app-key/app-key.service';
 import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
 import GET_USER_DATA from './GET_USER_DATA.gql';
 import GET_REPOSITORY_DETAILS from './GET_REPOSITORY_DETAILS.gql';
+import { WebhooksService } from './webhooks/webhooks.service';
 
 @Injectable()
 export class GitClientService {
   constructor(
     @Inject(forwardRef(() => AppKeyService))
     private readonly appKeyService: AppKeyService,
+    private readonly webhooksService: WebhooksService
   ) {}
+
+
+    get webhooks() {
+      return this.webhooksService;
+    }
 
   /**
    * Test a given AppKey by using it in a GET_USER_DATA query against the GitHub GraphQL API
@@ -91,9 +98,14 @@ export class GitClientService {
    * @param owner
    */
   async getRepositoryDetails(user: string, repo: string, owner: string) {
+
+    console.log(`Git Client getting Repo details for ${repo} belonging to ${owner}`);
+
     const appKeys = await this.appKeyService.get(user);
     const appKey = appKeys.length > 0 ? appKeys[0] : null;
     const key = appKey ? appKey.key : null;
+
+    console.log(`querying for ${repo} belonging to ${owner}`);
 
     const result = await axios.post(
       config.GITHUB_GRAPHQL_URL,
@@ -106,9 +118,12 @@ export class GitClientService {
         },
       },
     );
-    // console.log(GET_REPOSITORY_DETAILS(repo, owner));
-    console.log(`returning: `, result.data.data.repository);
 
-    return result.data.data.repository;
+    const repositoryData = {
+      ...result.data.data.repository,
+      appKey: appKey.id
+    };
+
+    return repositoryData;
   }
 }

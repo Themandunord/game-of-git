@@ -7,6 +7,7 @@ query {
     id
     description
     url
+    createdAt
     updatedAt
     isFork
     isLocked

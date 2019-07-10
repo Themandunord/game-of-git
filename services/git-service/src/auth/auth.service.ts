@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../graphql.schema';
 import { UsersService } from '../users/users.service';
+import * as jsonwebtoken from 'jsonwebtoken';
+
+// tslint:disable:no-console
 
 // tslint:disable-next-line:no-var-requires
 const bcrypt = require('bcrypt');
@@ -44,11 +47,44 @@ export class AuthService {
   async verifyToken(token: string) {
     console.log('verifying token', token);
 
-    const result = await this.jwtService.verifyAsync(token);
+    try {
+      const result = await this.jwtService.verifyAsync(token);
 
-    console.log(result);
+      return true;
+    } catch (e) {
+
+      return false;
+    }
 
     return false;
+  }
+
+  async refreshToken(jwt: string) {
+    const isValid = await this.verifyToken(jwt);
+
+    const userData = jsonwebtoken.decode(jwt);
+    const email = (userData as Partial<User>).email;
+    const user = await this.usersService.get(email);
+
+    let error = null;
+
+    if (!user) {
+      console.error(`user did not exist ${email} or jwt was invalid: ${isValid}`);
+      error = `User did not exist`;
+    }
+
+    if (!isValid) {
+      console.error(`Auth service could not verify the token ${jwt}`);
+      error = `invalid jwt`;
+    }
+
+    if (error) {
+      throw new HttpException(`Invalid jwt`, HttpStatus.UNAUTHORIZED);
+    }
+
+    console.log('Returning new jwt token');
+
+    return await this.createToken(user);
   }
 
   /**
