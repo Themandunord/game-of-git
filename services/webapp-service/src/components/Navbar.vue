@@ -9,6 +9,7 @@ div
                     v-icon dashboard
                 v-list-tile-content
                     v-list-tile-title {{route.displayName}}
+            v-list-tile(v-if="")
     v-toolbar(app fixed clipped-left)
         v-toolbar-side-icon(@click.stop="drawer = !drawer")
         v-toolbar-title Application
@@ -36,6 +37,10 @@ export default class NavBar extends Vue {
         };
         this.$router.push(routeTo);
     }
+
+    // get shouldShowLogout() {
+    //     const isAuthed = AppStateModule.user.
+    // }
 
     get drawer() {
         return AppStateModule.navExpanded;

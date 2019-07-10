@@ -38,7 +38,13 @@ export class AuthController {
     }
 
     console.log(`Auth Controller: Valid user ${email}, return authentication token.`);
-
+    console.log(user);
     return await this.authService.createToken(user);
+  }
+
+  @Post('refresh')
+  async refresh(@Body('jwt') jwt) {
+    console.log('Request to refresh jwt token, check if it is a valid token');
+    this.authService.verifyToken(jwt);
   }
 }

@@ -3,6 +3,17 @@ import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-mo
 
 import store from '@/store';
 
+interface IBaseUserData {
+    email: string;
+    exp: number;
+    gitLogin: string;
+    hasAppKey: boolean;
+    iat: number;
+    id: string;
+    name: string;
+    isAuthenticated: boolean;
+}
+
 @Module({
     dynamic: true,
     store,
@@ -11,7 +22,7 @@ import store from '@/store';
 class AppState extends VuexModule implements IAppState {
     public navExpanded: boolean = false;
 
-    public user: any = {};
+    public user: Partial<IBaseUserData> = {};
 
     @Mutation
     public setNavExpanded(navExpanded?: boolean) {
