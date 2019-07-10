@@ -9,7 +9,13 @@ div
                     v-icon dashboard
                 v-list-tile-content
                     v-list-tile-title {{route.displayName}}
-            v-list-tile(v-if="")
+        
+        v-list.logout(dense v-if="shouldShowLogout")
+            v-list-tile(@click="logout")
+                v-list-tile-action
+                    v-icon dashboard
+                v-list-tile-content
+                    v-list-tile-title Logout
     v-toolbar(app fixed clipped-left)
         v-toolbar-side-icon(@click.stop="drawer = !drawer")
         v-toolbar-title Application
@@ -22,6 +28,7 @@ import { Prop, Watch } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
 import AppStateModule from '@/store/aspects/app';
+import HttpClient from '@/common/HttpClient';
 
 @Component
 export default class NavBar extends Vue {
@@ -38,9 +45,13 @@ export default class NavBar extends Vue {
         this.$router.push(routeTo);
     }
 
-    // get shouldShowLogout() {
-    //     const isAuthed = AppStateModule.user.
-    // }
+    get shouldShowLogout() {
+        return AppStateModule.user.isAuthenticated;
+    }
+
+    logout() {
+        HttpClient.logout();
+    }
 
     get drawer() {
         return AppStateModule.navExpanded;
@@ -54,3 +65,11 @@ export default class NavBar extends Vue {
     //   helloMsg = 'Hello, ' + this.propMessage
 }
 </script>
+
+<style lang="scss" scoped>
+.logout {
+    position: absolute;
+    bottom:0;
+    width:100%;
+}
+</style>

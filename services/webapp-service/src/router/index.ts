@@ -3,6 +3,8 @@ import { ROUTES } from './routes';
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import * as jsonwebtoken from 'jsonwebtoken';
+
 Vue.use(Router);
 
 const router = new Router({
@@ -12,14 +14,22 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const hasJwt = localStorage.getItem('jwt') != null;
+  const jwt = localStorage.getItem('jwt');
+  const hasJwt = jwt != null;
+  let parsedJwt = null;
+
+  try {
+    parsedJwt = jsonwebtoken.decode(jwt as string);
+  } catch (e) {
+    parsedJwt = null;
+  }
 
   routeManager.context = {
     hasJwt
   };
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!hasJwt) {
+    if (!hasJwt || !parsedJwt) {
       next({
         name: 'login',
         params: { nextUrl: to.fullPath }

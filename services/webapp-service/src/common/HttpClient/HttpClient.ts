@@ -19,9 +19,9 @@ export class HttpClient extends AbstractHttpClient {
         super(client);
         this.repositories = new RepositoriesClient(this);
         this.users = new UsersClient(this);
-        console.log('HttpClient constructor', this.user);
+
         if (this.user) {
-            console.log('refreshing user data becauuse `user` is set');
+
             this.refreshUserData();
         } else {
             // login redirect due to no jwt set
@@ -29,9 +29,6 @@ export class HttpClient extends AbstractHttpClient {
                 'not refreshing user data because this.user is not set, redirecting to login'
             );
 
-            // this.$router.push({
-            //             name: path
-            //         });
             router.push({
                 name: LOGIN.name
             });
@@ -52,10 +49,9 @@ export class HttpClient extends AbstractHttpClient {
     }
 
     public async validateJwtToken() {
-        console.log('validating the jwt token');
+
         try {
             const userData = await this.users.loadUserData();
-            console.log('returned userData in jwtToken validation: ', userData);
 
             return true;
         } catch (e) {
