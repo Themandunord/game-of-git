@@ -83,7 +83,7 @@ export class WebhooksService {
     console.log(`Creating a webhook for ${repository.owner}'s repository ${repository.name}`);
     // throw new Error(`Net yet configured`);
     const route = `${config.GITHUB_REST_URL}repos/${repository.owner}/${repository.name}/hooks`;
-    const url = `${process.env.GIT_SERVICE_DOMAIN}/webhook`;
+    const url = `${process.env.GIT_SERVICE_DOMAIN}/webhook/${repository.id}`;
     console.log(`requesting from ${route} webhook url = ${url}`);
 
     const CREATE_WEBHOOK_PAYLOAD = {
