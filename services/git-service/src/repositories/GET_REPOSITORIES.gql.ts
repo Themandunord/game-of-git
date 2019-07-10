@@ -4,9 +4,21 @@ const GET_REPOSITORIES = gql`
   query {
     id
     idExternal
+    createdAtExternal
+    updatedAtExternal
     name
+    description
     owner
+    url
+    homepageUrl
+    sshUrl
+
     isTracked
+    isFork
+    isLocked
+    isArchived
+    isPrivate
+    isDisabled
   }
 `;
 

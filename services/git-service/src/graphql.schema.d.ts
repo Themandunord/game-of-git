@@ -35,10 +35,38 @@ export enum RepositoryOrderByInput {
     updatedAtExternal_DESC = "updatedAtExternal_DESC",
     name_ASC = "name_ASC",
     name_DESC = "name_DESC",
+    description_ASC = "description_ASC",
+    description_DESC = "description_DESC",
+    homepageUrl_ASC = "homepageUrl_ASC",
+    homepageUrl_DESC = "homepageUrl_DESC",
+    url_ASC = "url_ASC",
+    url_DESC = "url_DESC",
     owner_ASC = "owner_ASC",
     owner_DESC = "owner_DESC",
     isTracked_ASC = "isTracked_ASC",
-    isTracked_DESC = "isTracked_DESC"
+    isTracked_DESC = "isTracked_DESC",
+    isFork_ASC = "isFork_ASC",
+    isFork_DESC = "isFork_DESC",
+    isLocked_ASC = "isLocked_ASC",
+    isLocked_DESC = "isLocked_DESC",
+    isPrivate_ASC = "isPrivate_ASC",
+    isPrivate_DESC = "isPrivate_DESC",
+    isArchived_ASC = "isArchived_ASC",
+    isArchived_DESC = "isArchived_DESC",
+    isDisabled_ASC = "isDisabled_ASC",
+    isDisabled_DESC = "isDisabled_DESC",
+    sshUrl_ASC = "sshUrl_ASC",
+    sshUrl_DESC = "sshUrl_DESC",
+    stargazers_ASC = "stargazers_ASC",
+    stargazers_DESC = "stargazers_DESC",
+    collaborators_ASC = "collaborators_ASC",
+    collaborators_DESC = "collaborators_DESC",
+    watchers_ASC = "watchers_ASC",
+    watchers_DESC = "watchers_DESC",
+    issues_ASC = "issues_ASC",
+    issues_DESC = "issues_DESC",
+    pullRequests_ASC = "pullRequests_ASC",
+    pullRequests_DESC = "pullRequests_DESC"
 }
 
 export enum Role {
@@ -274,8 +302,22 @@ export class RepositoryCreateInput {
     createdAtExternal: DateTime;
     updatedAtExternal: DateTime;
     name: string;
+    description?: string;
+    homepageUrl?: string;
+    url: string;
     owner: string;
     isTracked: boolean;
+    isFork: boolean;
+    isLocked: boolean;
+    isPrivate: boolean;
+    isArchived: boolean;
+    isDisabled: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
     user: UserCreateOneWithoutRepositoriesInput;
     appKey: AppKeyCreateOneInput;
 }
@@ -291,8 +333,22 @@ export class RepositoryCreateWithoutUserInput {
     createdAtExternal: DateTime;
     updatedAtExternal: DateTime;
     name: string;
+    description?: string;
+    homepageUrl?: string;
+    url: string;
     owner: string;
     isTracked: boolean;
+    isFork: boolean;
+    isLocked: boolean;
+    isPrivate: boolean;
+    isArchived: boolean;
+    isDisabled: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
     appKey: AppKeyCreateOneInput;
 }
 
@@ -358,6 +414,48 @@ export class RepositoryScalarWhereInput {
     name_not_starts_with?: string;
     name_ends_with?: string;
     name_not_ends_with?: string;
+    description?: string;
+    description_not?: string;
+    description_in?: string[];
+    description_not_in?: string[];
+    description_lt?: string;
+    description_lte?: string;
+    description_gt?: string;
+    description_gte?: string;
+    description_contains?: string;
+    description_not_contains?: string;
+    description_starts_with?: string;
+    description_not_starts_with?: string;
+    description_ends_with?: string;
+    description_not_ends_with?: string;
+    homepageUrl?: string;
+    homepageUrl_not?: string;
+    homepageUrl_in?: string[];
+    homepageUrl_not_in?: string[];
+    homepageUrl_lt?: string;
+    homepageUrl_lte?: string;
+    homepageUrl_gt?: string;
+    homepageUrl_gte?: string;
+    homepageUrl_contains?: string;
+    homepageUrl_not_contains?: string;
+    homepageUrl_starts_with?: string;
+    homepageUrl_not_starts_with?: string;
+    homepageUrl_ends_with?: string;
+    homepageUrl_not_ends_with?: string;
+    url?: string;
+    url_not?: string;
+    url_in?: string[];
+    url_not_in?: string[];
+    url_lt?: string;
+    url_lte?: string;
+    url_gt?: string;
+    url_gte?: string;
+    url_contains?: string;
+    url_not_contains?: string;
+    url_starts_with?: string;
+    url_not_starts_with?: string;
+    url_ends_with?: string;
+    url_not_ends_with?: string;
     owner?: string;
     owner_not?: string;
     owner_in?: string[];
@@ -374,6 +472,70 @@ export class RepositoryScalarWhereInput {
     owner_not_ends_with?: string;
     isTracked?: boolean;
     isTracked_not?: boolean;
+    isFork?: boolean;
+    isFork_not?: boolean;
+    isLocked?: boolean;
+    isLocked_not?: boolean;
+    isPrivate?: boolean;
+    isPrivate_not?: boolean;
+    isArchived?: boolean;
+    isArchived_not?: boolean;
+    isDisabled?: boolean;
+    isDisabled_not?: boolean;
+    sshUrl?: string;
+    sshUrl_not?: string;
+    sshUrl_in?: string[];
+    sshUrl_not_in?: string[];
+    sshUrl_lt?: string;
+    sshUrl_lte?: string;
+    sshUrl_gt?: string;
+    sshUrl_gte?: string;
+    sshUrl_contains?: string;
+    sshUrl_not_contains?: string;
+    sshUrl_starts_with?: string;
+    sshUrl_not_starts_with?: string;
+    sshUrl_ends_with?: string;
+    sshUrl_not_ends_with?: string;
+    stargazers?: number;
+    stargazers_not?: number;
+    stargazers_in?: number[];
+    stargazers_not_in?: number[];
+    stargazers_lt?: number;
+    stargazers_lte?: number;
+    stargazers_gt?: number;
+    stargazers_gte?: number;
+    collaborators?: number;
+    collaborators_not?: number;
+    collaborators_in?: number[];
+    collaborators_not_in?: number[];
+    collaborators_lt?: number;
+    collaborators_lte?: number;
+    collaborators_gt?: number;
+    collaborators_gte?: number;
+    watchers?: number;
+    watchers_not?: number;
+    watchers_in?: number[];
+    watchers_not_in?: number[];
+    watchers_lt?: number;
+    watchers_lte?: number;
+    watchers_gt?: number;
+    watchers_gte?: number;
+    issues?: number;
+    issues_not?: number;
+    issues_in?: number[];
+    issues_not_in?: number[];
+    issues_lt?: number;
+    issues_lte?: number;
+    issues_gt?: number;
+    issues_gte?: number;
+    pullRequests?: number;
+    pullRequests_not?: number;
+    pullRequests_in?: number[];
+    pullRequests_not_in?: number[];
+    pullRequests_lt?: number;
+    pullRequests_lte?: number;
+    pullRequests_gt?: number;
+    pullRequests_gte?: number;
 }
 
 export class RepositorySubscriptionWhereInput {
@@ -392,8 +554,22 @@ export class RepositoryUpdateInput {
     createdAtExternal?: DateTime;
     updatedAtExternal?: DateTime;
     name?: string;
+    description?: string;
+    homepageUrl?: string;
+    url?: string;
     owner?: string;
     isTracked?: boolean;
+    isFork?: boolean;
+    isLocked?: boolean;
+    isPrivate?: boolean;
+    isArchived?: boolean;
+    isDisabled?: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
     user?: UserUpdateOneRequiredWithoutRepositoriesInput;
     appKey?: AppKeyUpdateOneRequiredInput;
 }
@@ -403,8 +579,22 @@ export class RepositoryUpdateManyDataInput {
     createdAtExternal?: DateTime;
     updatedAtExternal?: DateTime;
     name?: string;
+    description?: string;
+    homepageUrl?: string;
+    url?: string;
     owner?: string;
     isTracked?: boolean;
+    isFork?: boolean;
+    isLocked?: boolean;
+    isPrivate?: boolean;
+    isArchived?: boolean;
+    isDisabled?: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
 }
 
 export class RepositoryUpdateManyMutationInput {
@@ -412,8 +602,22 @@ export class RepositoryUpdateManyMutationInput {
     createdAtExternal?: DateTime;
     updatedAtExternal?: DateTime;
     name?: string;
+    description?: string;
+    homepageUrl?: string;
+    url?: string;
     owner?: string;
     isTracked?: boolean;
+    isFork?: boolean;
+    isLocked?: boolean;
+    isPrivate?: boolean;
+    isArchived?: boolean;
+    isDisabled?: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
 }
 
 export class RepositoryUpdateManyWithoutUserInput {
@@ -438,8 +642,22 @@ export class RepositoryUpdateWithoutUserDataInput {
     createdAtExternal?: DateTime;
     updatedAtExternal?: DateTime;
     name?: string;
+    description?: string;
+    homepageUrl?: string;
+    url?: string;
     owner?: string;
     isTracked?: boolean;
+    isFork?: boolean;
+    isLocked?: boolean;
+    isPrivate?: boolean;
+    isArchived?: boolean;
+    isDisabled?: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
     appKey?: AppKeyUpdateOneRequiredInput;
 }
 
@@ -516,6 +734,48 @@ export class RepositoryWhereInput {
     name_not_starts_with?: string;
     name_ends_with?: string;
     name_not_ends_with?: string;
+    description?: string;
+    description_not?: string;
+    description_in?: string[];
+    description_not_in?: string[];
+    description_lt?: string;
+    description_lte?: string;
+    description_gt?: string;
+    description_gte?: string;
+    description_contains?: string;
+    description_not_contains?: string;
+    description_starts_with?: string;
+    description_not_starts_with?: string;
+    description_ends_with?: string;
+    description_not_ends_with?: string;
+    homepageUrl?: string;
+    homepageUrl_not?: string;
+    homepageUrl_in?: string[];
+    homepageUrl_not_in?: string[];
+    homepageUrl_lt?: string;
+    homepageUrl_lte?: string;
+    homepageUrl_gt?: string;
+    homepageUrl_gte?: string;
+    homepageUrl_contains?: string;
+    homepageUrl_not_contains?: string;
+    homepageUrl_starts_with?: string;
+    homepageUrl_not_starts_with?: string;
+    homepageUrl_ends_with?: string;
+    homepageUrl_not_ends_with?: string;
+    url?: string;
+    url_not?: string;
+    url_in?: string[];
+    url_not_in?: string[];
+    url_lt?: string;
+    url_lte?: string;
+    url_gt?: string;
+    url_gte?: string;
+    url_contains?: string;
+    url_not_contains?: string;
+    url_starts_with?: string;
+    url_not_starts_with?: string;
+    url_ends_with?: string;
+    url_not_ends_with?: string;
     owner?: string;
     owner_not?: string;
     owner_in?: string[];
@@ -532,6 +792,70 @@ export class RepositoryWhereInput {
     owner_not_ends_with?: string;
     isTracked?: boolean;
     isTracked_not?: boolean;
+    isFork?: boolean;
+    isFork_not?: boolean;
+    isLocked?: boolean;
+    isLocked_not?: boolean;
+    isPrivate?: boolean;
+    isPrivate_not?: boolean;
+    isArchived?: boolean;
+    isArchived_not?: boolean;
+    isDisabled?: boolean;
+    isDisabled_not?: boolean;
+    sshUrl?: string;
+    sshUrl_not?: string;
+    sshUrl_in?: string[];
+    sshUrl_not_in?: string[];
+    sshUrl_lt?: string;
+    sshUrl_lte?: string;
+    sshUrl_gt?: string;
+    sshUrl_gte?: string;
+    sshUrl_contains?: string;
+    sshUrl_not_contains?: string;
+    sshUrl_starts_with?: string;
+    sshUrl_not_starts_with?: string;
+    sshUrl_ends_with?: string;
+    sshUrl_not_ends_with?: string;
+    stargazers?: number;
+    stargazers_not?: number;
+    stargazers_in?: number[];
+    stargazers_not_in?: number[];
+    stargazers_lt?: number;
+    stargazers_lte?: number;
+    stargazers_gt?: number;
+    stargazers_gte?: number;
+    collaborators?: number;
+    collaborators_not?: number;
+    collaborators_in?: number[];
+    collaborators_not_in?: number[];
+    collaborators_lt?: number;
+    collaborators_lte?: number;
+    collaborators_gt?: number;
+    collaborators_gte?: number;
+    watchers?: number;
+    watchers_not?: number;
+    watchers_in?: number[];
+    watchers_not_in?: number[];
+    watchers_lt?: number;
+    watchers_lte?: number;
+    watchers_gt?: number;
+    watchers_gte?: number;
+    issues?: number;
+    issues_not?: number;
+    issues_in?: number[];
+    issues_not_in?: number[];
+    issues_lt?: number;
+    issues_lte?: number;
+    issues_gt?: number;
+    issues_gte?: number;
+    pullRequests?: number;
+    pullRequests_not?: number;
+    pullRequests_in?: number[];
+    pullRequests_not_in?: number[];
+    pullRequests_lt?: number;
+    pullRequests_lte?: number;
+    pullRequests_gt?: number;
+    pullRequests_gte?: number;
     user?: UserWhereInput;
     appKey?: AppKeyWhereInput;
 }
@@ -860,10 +1184,24 @@ export class Repository implements Node {
     createdAtExternal: DateTime;
     updatedAtExternal: DateTime;
     name: string;
+    description: string;
+    homepageUrl?: string;
+    url: string;
     owner: string;
     user: User;
     isTracked: boolean;
     appKey: AppKey;
+    isFork: boolean;
+    isLocked: boolean;
+    isPrivate: boolean;
+    isArchived: boolean;
+    isDisabled: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
 }
 
 export class RepositoryConnection {
@@ -883,8 +1221,22 @@ export class RepositoryPreviousValues {
     createdAtExternal: DateTime;
     updatedAtExternal: DateTime;
     name: string;
+    description: string;
+    homepageUrl?: string;
+    url: string;
     owner: string;
     isTracked: boolean;
+    isFork: boolean;
+    isLocked: boolean;
+    isPrivate: boolean;
+    isArchived: boolean;
+    isDisabled: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
 }
 
 export class RepositorySubscriptionPayload {

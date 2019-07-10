@@ -40,13 +40,18 @@ export class UsersService {
       },
       GET_USERS,
     );
+
     const result = {
       email: user.email,
       id: user.id,
+      hash: user.hash,
       hasAppKey: user.keys && user.keys.length > 0 ? true : false,
       name: user.name,
       gitLogin: user.gitLogin,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
+    console.log('returning from get user: ', result);
 
     return result;
   }

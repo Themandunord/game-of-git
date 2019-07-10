@@ -34,6 +34,7 @@ export class UsersController {
 
   @Post('/validate-key')
   async validateKey(@Body('key') key: string, @Body('username') user: string) {
-    return await this.appKeyService.validateKey(key, user);
+    const isValid = await this.appKeyService.validateKey(key, user);
+    return isValid;
   }
 }

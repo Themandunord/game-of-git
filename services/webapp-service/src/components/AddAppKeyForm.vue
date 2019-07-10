@@ -19,7 +19,7 @@ v-layout(row justify-center)
         v-card-actions
           v-spacer
           v-btn(color="blue darken-1" flat @click="dialog = false") Close
-          v-btn(color="blue darken-1" flat @click="save" :disabled="canSave") Save
+          v-btn(color="blue darken-1" flat @click="save" :disabled="!appKeyIsValid") Save
 </template>
 
 <script lang="ts">
@@ -53,10 +53,6 @@ export default class AddAppKeyForm extends Vue {
         return this.repositories.length === 0;
     }
 
-    get canSave() {
-        return this.key == null || this.key.length === 0;
-    }
-
     private async validateAppKey() {
         if (
             this.username != null &&
@@ -67,9 +63,11 @@ export default class AddAppKeyForm extends Vue {
             this.key.length > 0
         ) {
             const isValid = await HttpClient.users.validateAppKey(this.username, this.key);
+            console.log(`server returned: ${isValid} which is a ${typeof isValid}`);
 
             return isValid;
         }
+        console.log('Missing param, definitely not valid.');
 
         return false;
     }

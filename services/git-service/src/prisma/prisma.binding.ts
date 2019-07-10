@@ -615,10 +615,24 @@ type Repository implements Node {
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
   name: String!
+  description: String!
+  homepageUrl: String
+  url: String!
   owner: String!
   user: User!
   isTracked: Boolean!
   appKey: AppKey!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
 }
 
 """A connection to a list of items."""
@@ -637,8 +651,22 @@ input RepositoryCreateInput {
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
   name: String!
+  description: String!
+  homepageUrl: String
+  url: String!
   owner: String!
   isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
   user: UserCreateOneWithoutRepositoriesInput!
   appKey: AppKeyCreateOneInput!
 }
@@ -654,8 +682,22 @@ input RepositoryCreateWithoutUserInput {
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
   name: String!
+  description: String!
+  homepageUrl: String
+  url: String!
   owner: String!
   isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
   appKey: AppKeyCreateOneInput!
 }
 
@@ -679,10 +721,38 @@ enum RepositoryOrderByInput {
   updatedAtExternal_DESC
   name_ASC
   name_DESC
+  description_ASC
+  description_DESC
+  homepageUrl_ASC
+  homepageUrl_DESC
+  url_ASC
+  url_DESC
   owner_ASC
   owner_DESC
   isTracked_ASC
   isTracked_DESC
+  isFork_ASC
+  isFork_DESC
+  isLocked_ASC
+  isLocked_DESC
+  isPrivate_ASC
+  isPrivate_DESC
+  isArchived_ASC
+  isArchived_DESC
+  isDisabled_ASC
+  isDisabled_DESC
+  sshUrl_ASC
+  sshUrl_DESC
+  stargazers_ASC
+  stargazers_DESC
+  collaborators_ASC
+  collaborators_DESC
+  watchers_ASC
+  watchers_DESC
+  issues_ASC
+  issues_DESC
+  pullRequests_ASC
+  pullRequests_DESC
 }
 
 type RepositoryPreviousValues {
@@ -691,8 +761,22 @@ type RepositoryPreviousValues {
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
   name: String!
+  description: String!
+  homepageUrl: String
+  url: String!
   owner: String!
   isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
 }
 
 input RepositoryScalarWhereInput {
@@ -868,6 +952,126 @@ input RepositoryScalarWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  homepageUrl: String
+
+  """All values that are not equal to given value."""
+  homepageUrl_not: String
+
+  """All values that are contained in given list."""
+  homepageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  homepageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  homepageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  homepageUrl_lte: String
+
+  """All values greater than the given value."""
+  homepageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  homepageUrl_gte: String
+
+  """All values containing the given string."""
+  homepageUrl_contains: String
+
+  """All values not containing the given string."""
+  homepageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  homepageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  homepageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  homepageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  homepageUrl_not_ends_with: String
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
   owner: String
 
   """All values that are not equal to given value."""
@@ -912,6 +1116,176 @@ input RepositoryScalarWhereInput {
 
   """All values that are not equal to given value."""
   isTracked_not: Boolean
+  isFork: Boolean
+
+  """All values that are not equal to given value."""
+  isFork_not: Boolean
+  isLocked: Boolean
+
+  """All values that are not equal to given value."""
+  isLocked_not: Boolean
+  isPrivate: Boolean
+
+  """All values that are not equal to given value."""
+  isPrivate_not: Boolean
+  isArchived: Boolean
+
+  """All values that are not equal to given value."""
+  isArchived_not: Boolean
+  isDisabled: Boolean
+
+  """All values that are not equal to given value."""
+  isDisabled_not: Boolean
+  sshUrl: String
+
+  """All values that are not equal to given value."""
+  sshUrl_not: String
+
+  """All values that are contained in given list."""
+  sshUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  sshUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  sshUrl_lt: String
+
+  """All values less than or equal the given value."""
+  sshUrl_lte: String
+
+  """All values greater than the given value."""
+  sshUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  sshUrl_gte: String
+
+  """All values containing the given string."""
+  sshUrl_contains: String
+
+  """All values not containing the given string."""
+  sshUrl_not_contains: String
+
+  """All values starting with the given string."""
+  sshUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  sshUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  sshUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  sshUrl_not_ends_with: String
+  stargazers: Int
+
+  """All values that are not equal to given value."""
+  stargazers_not: Int
+
+  """All values that are contained in given list."""
+  stargazers_in: [Int!]
+
+  """All values that are not contained in given list."""
+  stargazers_not_in: [Int!]
+
+  """All values less than the given value."""
+  stargazers_lt: Int
+
+  """All values less than or equal the given value."""
+  stargazers_lte: Int
+
+  """All values greater than the given value."""
+  stargazers_gt: Int
+
+  """All values greater than or equal the given value."""
+  stargazers_gte: Int
+  collaborators: Int
+
+  """All values that are not equal to given value."""
+  collaborators_not: Int
+
+  """All values that are contained in given list."""
+  collaborators_in: [Int!]
+
+  """All values that are not contained in given list."""
+  collaborators_not_in: [Int!]
+
+  """All values less than the given value."""
+  collaborators_lt: Int
+
+  """All values less than or equal the given value."""
+  collaborators_lte: Int
+
+  """All values greater than the given value."""
+  collaborators_gt: Int
+
+  """All values greater than or equal the given value."""
+  collaborators_gte: Int
+  watchers: Int
+
+  """All values that are not equal to given value."""
+  watchers_not: Int
+
+  """All values that are contained in given list."""
+  watchers_in: [Int!]
+
+  """All values that are not contained in given list."""
+  watchers_not_in: [Int!]
+
+  """All values less than the given value."""
+  watchers_lt: Int
+
+  """All values less than or equal the given value."""
+  watchers_lte: Int
+
+  """All values greater than the given value."""
+  watchers_gt: Int
+
+  """All values greater than or equal the given value."""
+  watchers_gte: Int
+  issues: Int
+
+  """All values that are not equal to given value."""
+  issues_not: Int
+
+  """All values that are contained in given list."""
+  issues_in: [Int!]
+
+  """All values that are not contained in given list."""
+  issues_not_in: [Int!]
+
+  """All values less than the given value."""
+  issues_lt: Int
+
+  """All values less than or equal the given value."""
+  issues_lte: Int
+
+  """All values greater than the given value."""
+  issues_gt: Int
+
+  """All values greater than or equal the given value."""
+  issues_gte: Int
+  pullRequests: Int
+
+  """All values that are not equal to given value."""
+  pullRequests_not: Int
+
+  """All values that are contained in given list."""
+  pullRequests_in: [Int!]
+
+  """All values that are not contained in given list."""
+  pullRequests_not_in: [Int!]
+
+  """All values less than the given value."""
+  pullRequests_lt: Int
+
+  """All values less than or equal the given value."""
+  pullRequests_lte: Int
+
+  """All values greater than the given value."""
+  pullRequests_gt: Int
+
+  """All values greater than or equal the given value."""
+  pullRequests_gte: Int
 }
 
 type RepositorySubscriptionPayload {
@@ -958,8 +1332,22 @@ input RepositoryUpdateInput {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl: String
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
   user: UserUpdateOneRequiredWithoutRepositoriesInput
   appKey: AppKeyUpdateOneRequiredInput
 }
@@ -969,8 +1357,22 @@ input RepositoryUpdateManyDataInput {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl: String
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
 }
 
 input RepositoryUpdateManyMutationInput {
@@ -978,8 +1380,22 @@ input RepositoryUpdateManyMutationInput {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl: String
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
 }
 
 input RepositoryUpdateManyWithoutUserInput {
@@ -1004,8 +1420,22 @@ input RepositoryUpdateWithoutUserDataInput {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl: String
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
   appKey: AppKeyUpdateOneRequiredInput
 }
 
@@ -1193,6 +1623,126 @@ input RepositoryWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  homepageUrl: String
+
+  """All values that are not equal to given value."""
+  homepageUrl_not: String
+
+  """All values that are contained in given list."""
+  homepageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  homepageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  homepageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  homepageUrl_lte: String
+
+  """All values greater than the given value."""
+  homepageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  homepageUrl_gte: String
+
+  """All values containing the given string."""
+  homepageUrl_contains: String
+
+  """All values not containing the given string."""
+  homepageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  homepageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  homepageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  homepageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  homepageUrl_not_ends_with: String
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
   owner: String
 
   """All values that are not equal to given value."""
@@ -1237,6 +1787,176 @@ input RepositoryWhereInput {
 
   """All values that are not equal to given value."""
   isTracked_not: Boolean
+  isFork: Boolean
+
+  """All values that are not equal to given value."""
+  isFork_not: Boolean
+  isLocked: Boolean
+
+  """All values that are not equal to given value."""
+  isLocked_not: Boolean
+  isPrivate: Boolean
+
+  """All values that are not equal to given value."""
+  isPrivate_not: Boolean
+  isArchived: Boolean
+
+  """All values that are not equal to given value."""
+  isArchived_not: Boolean
+  isDisabled: Boolean
+
+  """All values that are not equal to given value."""
+  isDisabled_not: Boolean
+  sshUrl: String
+
+  """All values that are not equal to given value."""
+  sshUrl_not: String
+
+  """All values that are contained in given list."""
+  sshUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  sshUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  sshUrl_lt: String
+
+  """All values less than or equal the given value."""
+  sshUrl_lte: String
+
+  """All values greater than the given value."""
+  sshUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  sshUrl_gte: String
+
+  """All values containing the given string."""
+  sshUrl_contains: String
+
+  """All values not containing the given string."""
+  sshUrl_not_contains: String
+
+  """All values starting with the given string."""
+  sshUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  sshUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  sshUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  sshUrl_not_ends_with: String
+  stargazers: Int
+
+  """All values that are not equal to given value."""
+  stargazers_not: Int
+
+  """All values that are contained in given list."""
+  stargazers_in: [Int!]
+
+  """All values that are not contained in given list."""
+  stargazers_not_in: [Int!]
+
+  """All values less than the given value."""
+  stargazers_lt: Int
+
+  """All values less than or equal the given value."""
+  stargazers_lte: Int
+
+  """All values greater than the given value."""
+  stargazers_gt: Int
+
+  """All values greater than or equal the given value."""
+  stargazers_gte: Int
+  collaborators: Int
+
+  """All values that are not equal to given value."""
+  collaborators_not: Int
+
+  """All values that are contained in given list."""
+  collaborators_in: [Int!]
+
+  """All values that are not contained in given list."""
+  collaborators_not_in: [Int!]
+
+  """All values less than the given value."""
+  collaborators_lt: Int
+
+  """All values less than or equal the given value."""
+  collaborators_lte: Int
+
+  """All values greater than the given value."""
+  collaborators_gt: Int
+
+  """All values greater than or equal the given value."""
+  collaborators_gte: Int
+  watchers: Int
+
+  """All values that are not equal to given value."""
+  watchers_not: Int
+
+  """All values that are contained in given list."""
+  watchers_in: [Int!]
+
+  """All values that are not contained in given list."""
+  watchers_not_in: [Int!]
+
+  """All values less than the given value."""
+  watchers_lt: Int
+
+  """All values less than or equal the given value."""
+  watchers_lte: Int
+
+  """All values greater than the given value."""
+  watchers_gt: Int
+
+  """All values greater than or equal the given value."""
+  watchers_gte: Int
+  issues: Int
+
+  """All values that are not equal to given value."""
+  issues_not: Int
+
+  """All values that are contained in given list."""
+  issues_in: [Int!]
+
+  """All values that are not contained in given list."""
+  issues_not_in: [Int!]
+
+  """All values less than the given value."""
+  issues_lt: Int
+
+  """All values less than or equal the given value."""
+  issues_lte: Int
+
+  """All values greater than the given value."""
+  issues_gt: Int
+
+  """All values greater than or equal the given value."""
+  issues_gte: Int
+  pullRequests: Int
+
+  """All values that are not equal to given value."""
+  pullRequests_not: Int
+
+  """All values that are contained in given list."""
+  pullRequests_in: [Int!]
+
+  """All values that are not contained in given list."""
+  pullRequests_not_in: [Int!]
+
+  """All values less than the given value."""
+  pullRequests_lt: Int
+
+  """All values less than or equal the given value."""
+  pullRequests_lte: Int
+
+  """All values greater than the given value."""
+  pullRequests_gt: Int
+
+  """All values greater than or equal the given value."""
+  pullRequests_gte: Int
   user: UserWhereInput
   appKey: AppKeyWhereInput
 }
@@ -1766,10 +2486,38 @@ export type RepositoryOrderByInput =   'id_ASC' |
   'updatedAtExternal_DESC' |
   'name_ASC' |
   'name_DESC' |
+  'description_ASC' |
+  'description_DESC' |
+  'homepageUrl_ASC' |
+  'homepageUrl_DESC' |
+  'url_ASC' |
+  'url_DESC' |
   'owner_ASC' |
   'owner_DESC' |
   'isTracked_ASC' |
-  'isTracked_DESC'
+  'isTracked_DESC' |
+  'isFork_ASC' |
+  'isFork_DESC' |
+  'isLocked_ASC' |
+  'isLocked_DESC' |
+  'isPrivate_ASC' |
+  'isPrivate_DESC' |
+  'isArchived_ASC' |
+  'isArchived_DESC' |
+  'isDisabled_ASC' |
+  'isDisabled_DESC' |
+  'sshUrl_ASC' |
+  'sshUrl_DESC' |
+  'stargazers_ASC' |
+  'stargazers_DESC' |
+  'collaborators_ASC' |
+  'collaborators_DESC' |
+  'watchers_ASC' |
+  'watchers_DESC' |
+  'issues_ASC' |
+  'issues_DESC' |
+  'pullRequests_ASC' |
+  'pullRequests_DESC'
 
 export type Role =   'USER' |
   'ADMIN'
@@ -2000,8 +2748,22 @@ export interface RepositoryCreateInput {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl?: String | null
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
   user: UserCreateOneWithoutRepositoriesInput
   appKey: AppKeyCreateOneInput
 }
@@ -2017,8 +2779,22 @@ export interface RepositoryCreateWithoutUserInput {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl?: String | null
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
   appKey: AppKeyCreateOneInput
 }
 
@@ -2084,6 +2860,48 @@ export interface RepositoryScalarWhereInput {
   name_not_starts_with?: String | null
   name_ends_with?: String | null
   name_not_ends_with?: String | null
+  description?: String | null
+  description_not?: String | null
+  description_in?: String[] | String | null
+  description_not_in?: String[] | String | null
+  description_lt?: String | null
+  description_lte?: String | null
+  description_gt?: String | null
+  description_gte?: String | null
+  description_contains?: String | null
+  description_not_contains?: String | null
+  description_starts_with?: String | null
+  description_not_starts_with?: String | null
+  description_ends_with?: String | null
+  description_not_ends_with?: String | null
+  homepageUrl?: String | null
+  homepageUrl_not?: String | null
+  homepageUrl_in?: String[] | String | null
+  homepageUrl_not_in?: String[] | String | null
+  homepageUrl_lt?: String | null
+  homepageUrl_lte?: String | null
+  homepageUrl_gt?: String | null
+  homepageUrl_gte?: String | null
+  homepageUrl_contains?: String | null
+  homepageUrl_not_contains?: String | null
+  homepageUrl_starts_with?: String | null
+  homepageUrl_not_starts_with?: String | null
+  homepageUrl_ends_with?: String | null
+  homepageUrl_not_ends_with?: String | null
+  url?: String | null
+  url_not?: String | null
+  url_in?: String[] | String | null
+  url_not_in?: String[] | String | null
+  url_lt?: String | null
+  url_lte?: String | null
+  url_gt?: String | null
+  url_gte?: String | null
+  url_contains?: String | null
+  url_not_contains?: String | null
+  url_starts_with?: String | null
+  url_not_starts_with?: String | null
+  url_ends_with?: String | null
+  url_not_ends_with?: String | null
   owner?: String | null
   owner_not?: String | null
   owner_in?: String[] | String | null
@@ -2100,6 +2918,70 @@ export interface RepositoryScalarWhereInput {
   owner_not_ends_with?: String | null
   isTracked?: Boolean | null
   isTracked_not?: Boolean | null
+  isFork?: Boolean | null
+  isFork_not?: Boolean | null
+  isLocked?: Boolean | null
+  isLocked_not?: Boolean | null
+  isPrivate?: Boolean | null
+  isPrivate_not?: Boolean | null
+  isArchived?: Boolean | null
+  isArchived_not?: Boolean | null
+  isDisabled?: Boolean | null
+  isDisabled_not?: Boolean | null
+  sshUrl?: String | null
+  sshUrl_not?: String | null
+  sshUrl_in?: String[] | String | null
+  sshUrl_not_in?: String[] | String | null
+  sshUrl_lt?: String | null
+  sshUrl_lte?: String | null
+  sshUrl_gt?: String | null
+  sshUrl_gte?: String | null
+  sshUrl_contains?: String | null
+  sshUrl_not_contains?: String | null
+  sshUrl_starts_with?: String | null
+  sshUrl_not_starts_with?: String | null
+  sshUrl_ends_with?: String | null
+  sshUrl_not_ends_with?: String | null
+  stargazers?: Int | null
+  stargazers_not?: Int | null
+  stargazers_in?: Int[] | Int | null
+  stargazers_not_in?: Int[] | Int | null
+  stargazers_lt?: Int | null
+  stargazers_lte?: Int | null
+  stargazers_gt?: Int | null
+  stargazers_gte?: Int | null
+  collaborators?: Int | null
+  collaborators_not?: Int | null
+  collaborators_in?: Int[] | Int | null
+  collaborators_not_in?: Int[] | Int | null
+  collaborators_lt?: Int | null
+  collaborators_lte?: Int | null
+  collaborators_gt?: Int | null
+  collaborators_gte?: Int | null
+  watchers?: Int | null
+  watchers_not?: Int | null
+  watchers_in?: Int[] | Int | null
+  watchers_not_in?: Int[] | Int | null
+  watchers_lt?: Int | null
+  watchers_lte?: Int | null
+  watchers_gt?: Int | null
+  watchers_gte?: Int | null
+  issues?: Int | null
+  issues_not?: Int | null
+  issues_in?: Int[] | Int | null
+  issues_not_in?: Int[] | Int | null
+  issues_lt?: Int | null
+  issues_lte?: Int | null
+  issues_gt?: Int | null
+  issues_gte?: Int | null
+  pullRequests?: Int | null
+  pullRequests_not?: Int | null
+  pullRequests_in?: Int[] | Int | null
+  pullRequests_not_in?: Int[] | Int | null
+  pullRequests_lt?: Int | null
+  pullRequests_lte?: Int | null
+  pullRequests_gt?: Int | null
+  pullRequests_gte?: Int | null
 }
 
 export interface RepositorySubscriptionWhereInput {
@@ -2118,8 +3000,22 @@ export interface RepositoryUpdateInput {
   createdAtExternal?: DateTime | null
   updatedAtExternal?: DateTime | null
   name?: String | null
+  description?: String | null
+  homepageUrl?: String | null
+  url?: String | null
   owner?: String | null
   isTracked?: Boolean | null
+  isFork?: Boolean | null
+  isLocked?: Boolean | null
+  isPrivate?: Boolean | null
+  isArchived?: Boolean | null
+  isDisabled?: Boolean | null
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
   user?: UserUpdateOneRequiredWithoutRepositoriesInput | null
   appKey?: AppKeyUpdateOneRequiredInput | null
 }
@@ -2129,8 +3025,22 @@ export interface RepositoryUpdateManyDataInput {
   createdAtExternal?: DateTime | null
   updatedAtExternal?: DateTime | null
   name?: String | null
+  description?: String | null
+  homepageUrl?: String | null
+  url?: String | null
   owner?: String | null
   isTracked?: Boolean | null
+  isFork?: Boolean | null
+  isLocked?: Boolean | null
+  isPrivate?: Boolean | null
+  isArchived?: Boolean | null
+  isDisabled?: Boolean | null
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
 }
 
 export interface RepositoryUpdateManyMutationInput {
@@ -2138,8 +3048,22 @@ export interface RepositoryUpdateManyMutationInput {
   createdAtExternal?: DateTime | null
   updatedAtExternal?: DateTime | null
   name?: String | null
+  description?: String | null
+  homepageUrl?: String | null
+  url?: String | null
   owner?: String | null
   isTracked?: Boolean | null
+  isFork?: Boolean | null
+  isLocked?: Boolean | null
+  isPrivate?: Boolean | null
+  isArchived?: Boolean | null
+  isDisabled?: Boolean | null
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
 }
 
 export interface RepositoryUpdateManyWithoutUserInput {
@@ -2164,8 +3088,22 @@ export interface RepositoryUpdateWithoutUserDataInput {
   createdAtExternal?: DateTime | null
   updatedAtExternal?: DateTime | null
   name?: String | null
+  description?: String | null
+  homepageUrl?: String | null
+  url?: String | null
   owner?: String | null
   isTracked?: Boolean | null
+  isFork?: Boolean | null
+  isLocked?: Boolean | null
+  isPrivate?: Boolean | null
+  isArchived?: Boolean | null
+  isDisabled?: Boolean | null
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
   appKey?: AppKeyUpdateOneRequiredInput | null
 }
 
@@ -2242,6 +3180,48 @@ export interface RepositoryWhereInput {
   name_not_starts_with?: String | null
   name_ends_with?: String | null
   name_not_ends_with?: String | null
+  description?: String | null
+  description_not?: String | null
+  description_in?: String[] | String | null
+  description_not_in?: String[] | String | null
+  description_lt?: String | null
+  description_lte?: String | null
+  description_gt?: String | null
+  description_gte?: String | null
+  description_contains?: String | null
+  description_not_contains?: String | null
+  description_starts_with?: String | null
+  description_not_starts_with?: String | null
+  description_ends_with?: String | null
+  description_not_ends_with?: String | null
+  homepageUrl?: String | null
+  homepageUrl_not?: String | null
+  homepageUrl_in?: String[] | String | null
+  homepageUrl_not_in?: String[] | String | null
+  homepageUrl_lt?: String | null
+  homepageUrl_lte?: String | null
+  homepageUrl_gt?: String | null
+  homepageUrl_gte?: String | null
+  homepageUrl_contains?: String | null
+  homepageUrl_not_contains?: String | null
+  homepageUrl_starts_with?: String | null
+  homepageUrl_not_starts_with?: String | null
+  homepageUrl_ends_with?: String | null
+  homepageUrl_not_ends_with?: String | null
+  url?: String | null
+  url_not?: String | null
+  url_in?: String[] | String | null
+  url_not_in?: String[] | String | null
+  url_lt?: String | null
+  url_lte?: String | null
+  url_gt?: String | null
+  url_gte?: String | null
+  url_contains?: String | null
+  url_not_contains?: String | null
+  url_starts_with?: String | null
+  url_not_starts_with?: String | null
+  url_ends_with?: String | null
+  url_not_ends_with?: String | null
   owner?: String | null
   owner_not?: String | null
   owner_in?: String[] | String | null
@@ -2258,6 +3238,70 @@ export interface RepositoryWhereInput {
   owner_not_ends_with?: String | null
   isTracked?: Boolean | null
   isTracked_not?: Boolean | null
+  isFork?: Boolean | null
+  isFork_not?: Boolean | null
+  isLocked?: Boolean | null
+  isLocked_not?: Boolean | null
+  isPrivate?: Boolean | null
+  isPrivate_not?: Boolean | null
+  isArchived?: Boolean | null
+  isArchived_not?: Boolean | null
+  isDisabled?: Boolean | null
+  isDisabled_not?: Boolean | null
+  sshUrl?: String | null
+  sshUrl_not?: String | null
+  sshUrl_in?: String[] | String | null
+  sshUrl_not_in?: String[] | String | null
+  sshUrl_lt?: String | null
+  sshUrl_lte?: String | null
+  sshUrl_gt?: String | null
+  sshUrl_gte?: String | null
+  sshUrl_contains?: String | null
+  sshUrl_not_contains?: String | null
+  sshUrl_starts_with?: String | null
+  sshUrl_not_starts_with?: String | null
+  sshUrl_ends_with?: String | null
+  sshUrl_not_ends_with?: String | null
+  stargazers?: Int | null
+  stargazers_not?: Int | null
+  stargazers_in?: Int[] | Int | null
+  stargazers_not_in?: Int[] | Int | null
+  stargazers_lt?: Int | null
+  stargazers_lte?: Int | null
+  stargazers_gt?: Int | null
+  stargazers_gte?: Int | null
+  collaborators?: Int | null
+  collaborators_not?: Int | null
+  collaborators_in?: Int[] | Int | null
+  collaborators_not_in?: Int[] | Int | null
+  collaborators_lt?: Int | null
+  collaborators_lte?: Int | null
+  collaborators_gt?: Int | null
+  collaborators_gte?: Int | null
+  watchers?: Int | null
+  watchers_not?: Int | null
+  watchers_in?: Int[] | Int | null
+  watchers_not_in?: Int[] | Int | null
+  watchers_lt?: Int | null
+  watchers_lte?: Int | null
+  watchers_gt?: Int | null
+  watchers_gte?: Int | null
+  issues?: Int | null
+  issues_not?: Int | null
+  issues_in?: Int[] | Int | null
+  issues_not_in?: Int[] | Int | null
+  issues_lt?: Int | null
+  issues_lte?: Int | null
+  issues_gt?: Int | null
+  issues_gte?: Int | null
+  pullRequests?: Int | null
+  pullRequests_not?: Int | null
+  pullRequests_in?: Int[] | Int | null
+  pullRequests_not_in?: Int[] | Int | null
+  pullRequests_lt?: Int | null
+  pullRequests_lte?: Int | null
+  pullRequests_gt?: Int | null
+  pullRequests_gte?: Int | null
   user?: UserWhereInput | null
   appKey?: AppKeyWhereInput | null
 }
@@ -2567,10 +3611,24 @@ export interface Repository extends Node {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl?: String | null
+  url: String
   owner: String
   user: User
   isTracked: Boolean
   appKey: AppKey
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
 }
 
 /*
@@ -2598,8 +3656,22 @@ export interface RepositoryPreviousValues {
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
   name: String
+  description: String
+  homepageUrl?: String | null
+  url: String
   owner: String
   isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl?: String | null
+  stargazers?: Int | null
+  collaborators?: Int | null
+  watchers?: Int | null
+  issues?: Int | null
+  pullRequests?: Int | null
 }
 
 export interface RepositorySubscriptionPayload {
