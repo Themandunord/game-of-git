@@ -2,17 +2,42 @@ NEST_PROJECT_FOLDER=services/git-service
 WEB_APP_PROJECT_FOLDER=services/webapp-service
 PRISMA_PROJECT_FOLDER=prisma/
 
-up: ## Run Docker Compose Up to start up the entire application
-	docker-compose up -d;
+help: ## Show this help.
+	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/\\$$//' | sed -e 's/##//'
+
+.PHONY: help
+
+.DEFAULT_GOAL := help
+
+copy_env: ## Copy the envrc.example to .envrc
+	cp .envrc.example .envrc
 
 up_data: ## Run Docker Compose Up to start up only the database and prisma, run development locally
 	docker-compose -f docker-compose.data-only.yml up -d;
 
-up_build: ## Docker Docker Compose Build to build the container images
+up_build_data: ## Run Docker Compose Build to build only the database and prisma
+	docker-compose up -d --build;
+
+up: ## Run Docker Compose Up to start up the entire application
+	docker-compose up -d;
+
+up_build: ## Run Docker Compose Build to build the container images
 	docker-compose up -d --build;
 
 down: ## Run Docker Compose Down to stop the application's containers
 	docker-compose down;
+
+down_v: ## Run Docker Compose Down to stop the application's containers with the -v flag to drop the stored volumes
+	docker-compose down -v;
+
+down_data: ## Run Docker Compose Down to stop the application's containers when using data only
+	docker-compose -f docker-compose.data-only.yml down;
+
+down_v_data: ## Run Docker Compose Down to stop the application's containers when using data only with the -v flag to drop the stored volumes
+	docker-compose -f docker-compose.data-only.yml down;
+
+
+
 
 prisma_deploy: ## Deploy the Prisma changes by running prisma deploy in the prisma/ directory
 	cd ${PRISMA_PROJECT_FOLDER} && prisma deploy;
@@ -22,6 +47,15 @@ prisma_seed: ## Run Seed the Prisma data set by running prisma seed in the prism
 
 prisma_reset: ## Reset the Prisma deployment by running prisma reset in the prisma/ directory
 	cd ${PRISMA_PROJECT_FOLDER} && prisma reset;
+
+build_schema: ## Manually Build and Copy the Prisma Schema Types
+	cd ${PRISMA_PROJECT_FOLDER} \
+	&& graphql get-schema --project database \
+	&& graphql codegen --project database;
+
+
+
+# TO BE CLEANED UP
 
 install_nest: ## Install Node App Dependencies
 	cd ${NEST_PROJECT_FOLDER} && yarn;
@@ -43,18 +77,3 @@ test_debug: ## Debug the NestJs App and Tests, run yarn test:debug
 
 test_e2e: ## Run E2E Tests on the NestJs App, run yarn test:e2e
 	cd ${NEST_PROJECT_FOLDER} && yarn test:e2e;
-
-build_schema: ## Manually Build and Copy the Prisma Schema Types
-	cd ${PRISMA_PROJECT_FOLDER} \
-	&& graphql get-schema --project database \
-	&& graphql codegen --project database;
-
-copy_env: ## Copy the envrc.example to .envrc
-	cp .envrc.example .envrc
-
-help: ## Show this help.
-	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/\\$$//' | sed -e 's/##//'
-
-.PHONY: help
-
-.DEFAULT_GOAL := help
