@@ -16,7 +16,7 @@ up_data: ## Run Docker Compose Up to start up only the database and prisma, run 
 	docker-compose -f docker-compose.data-only.yml up -d;
 
 up_build_data: ## Run Docker Compose Build to build only the database and prisma
-	docker-compose up -d --build;
+	docker-compose -f docker-compose.data-only.yml up -d --build;
 
 up: ## Run Docker Compose Up to start up the entire application
 	docker-compose up -d;

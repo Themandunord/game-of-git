@@ -51,7 +51,6 @@ export class UsersService {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
-    console.log('returning from get user: ', result);
 
     return result;
   }

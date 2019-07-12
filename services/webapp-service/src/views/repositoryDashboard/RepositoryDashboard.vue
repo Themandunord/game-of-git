@@ -10,6 +10,9 @@ v-container(fluid)
             |  Last Updated At: {{updatedAt}} 
         span.repo-tag.caption.font-weight-light.blue.lighten-3.black--text
             a(:href="repository.url" target="_blank") GitHub
+        span.repo-tab.caption.font-weight-light.blue.lighten-3.black--text
+            v-icon(small color="black") fa-list
+            | {{eventCount}} Events Logged since added
             //- v-icon(small color="black" :href="repository.url" target="_blank") mdi-github-circle
 
     p {{repository.description}}
@@ -75,6 +78,9 @@ export default class RepositoryDashboard extends Vue {
     }
     get lastUpdatedAt() {
         return new Date(this.repository.updatedAt).toLocaleString();
+    }
+    get eventCount() {
+        return this.repository.eventCount;
     }
 }
 </script>
