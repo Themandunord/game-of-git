@@ -31,10 +31,10 @@ export class RepositoriesController {
     return await this.repositoriesService.syncStore(user);
   }
 
-  @Get('/:user/load/:owner')
-  public async getRepositories(@Param('user') user: string, @Param('owner') owner: string) {
-    return await this.repositoriesService.getRepositories(user, owner);
-  }
+  //   @Get('/:user/load/:owner')
+  //   public async getRepositories(@Param('user') user: string, @Param('owner') owner: string) {
+  //     return await this.repositoriesService.getRepositories(user, owner);
+  //   }
 
   @Get('/:user/select-set/:owner')
   public async selectionSet(@Param('user') user: string, @Param('owner') owner: string) {
@@ -46,7 +46,7 @@ export class RepositoriesController {
     @Param('user') user: string,
     @Param('owner') owner: string,
     @Param('id') idExternal: string,
-    @Param('name') name: string
+    @Param('name') name: string,
   ) {
     return await this.repositoriesService.toggleTracking(user, owner, idExternal, name);
   }

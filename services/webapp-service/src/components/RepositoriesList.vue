@@ -15,7 +15,6 @@ v-layout(row)
                                 :tile="false"
                                 :size="35"
                                 color="grey lighten-4")
-                                img(:src="repo.owner.avatarUrl" alt="avatar")
                         v-flex(xs4 sm22)
                             h3.title {{repo.name}}
                             h4.subheading.ellipsis {{repo.description}}

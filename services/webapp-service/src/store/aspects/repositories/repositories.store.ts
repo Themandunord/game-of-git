@@ -10,7 +10,7 @@ import store from '@/store';
     name: 'repositoriesModule'
 })
 class RepositoriesState extends VuexModule implements IRepositoriesState {
-    public repositories: any[] = [];
+    public repositories: any[] = []; // TODO: better typing
 
     @Mutation
     public setRepositories(repositories?: any[]) {

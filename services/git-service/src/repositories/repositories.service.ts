@@ -1,3 +1,4 @@
+import { WebhooksService } from './../git-client/webhooks/webhooks.service';
 import { Injectable } from '@nestjs/common';
 import { Repository } from '../graphql.schema';
 import { GitClientService } from './../git-client/git-client.service';
@@ -9,11 +10,11 @@ import { runInThisContext } from 'vm';
 export class RepositoriesService {
   constructor(
     private readonly repositoriesResolver: RepositoriesResolver,
-    private readonly gitClient: GitClientService
+    private readonly gitClient: GitClientService,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async getRepositoryFromGit(user: string, ownerUsername: string, repo: string) {
-
     await this.syncRepositoryWithGitHub(repo, ownerUsername, user);
 
     const storedRepository = await this.repositoriesResolver.getRepository(
@@ -91,16 +92,16 @@ export class RepositoriesService {
     return selectableRepos;
   }
 
-  async getRepositories(user: string, owner: string) {
-    // return await this.repositoriesResolver.getRepositories(
-    //   {
-    //     where: {
-    //       login: owner,
-    //     },
-    //   },
-    //   GET_REPOSITORY_BASE,
-    // );
-  }
+  //   async getRepositories(user: string, owner: string) {
+  //     // return await this.repositoriesResolver.getRepositories(
+  //     //   {
+  //     //     where: {
+  //     //       login: owner,
+  //     //     },
+  //     //   },
+  //     //   GET_REPOSITORY_BASE,
+  //     // );
+  //   }
 
   async getRepositoriesFromGit(user: string, owner: string) {
     const repositories = await this.gitClient.getRepositories(user, owner);
@@ -118,11 +119,7 @@ export class RepositoriesService {
   async createRepository(user: string, ownerUsername: string, name: string) {
     console.log(`Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`);
 
-    const repoDetails = await this.gitClient.getRepositoryDetails(
-      user,
-      name,
-      ownerUsername,
-    );
+    const repoDetails = await this.gitClient.getRepositoryDetails(user, name, ownerUsername);
 
     const {
       description,
@@ -225,7 +222,7 @@ export class RepositoriesService {
 
     let repoData = null;
     if (!existingRepository) {
-     repoData = await this.createRepository(user, ownerUsername, name);
+      repoData = await this.createRepository(user, ownerUsername, name);
     } else {
       const updatedRepoData = await this.updateRepository(existingRepository.id, {
         isTracked: !existingRepository.isTracked,
@@ -252,7 +249,7 @@ export class RepositoriesService {
    * @param user
    */
   async syncStore(user: string) {
-    return await this.repositoriesResolver.getRepositories(
+    const repositories = await this.repositoriesResolver.getRepositories(
       {
         where: {
           user: {
@@ -262,18 +259,32 @@ export class RepositoriesService {
       },
       GET_REPOSITORIES,
     );
+
+    // get tracked event count for each repository
+    const results = await Promise.all(
+      repositories.map(async repo => {
+        const eventCount = await this.webhooksService.eventCountForRepository(repo.id);
+        console.log(`Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`);
+
+        return {
+          eventCount,
+          ...repo,
+        };
+      }),
+    );
+
+    return results;
   }
 
   /**
    * Sync the stored Repository with it's current GitHub state
-   * @param user 
-   * @param owner 
-   * @param id 
+   * @param user
+   * @param owner
+   * @param id
    */
   async syncRepositoryWithGitHub(name: string, owner: string, user: string) {
-    console.log('syncing repository: ' , name);
+    console.log('syncing repository: ', name);
     const detailsFromGit = await this.gitClient.getRepositoryDetails(user, name, owner);
-    console.log('sync details from git: ', detailsFromGit);
+    // console.log('sync details from git: ', detailsFromGit);
   }
-
 }

@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppKeyModule } from './app-key/app-key.module';
 import { GitClientModule } from './git-client/git-client.module';
 import { RepositoriesModule } from './repositories/repositories.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RepositoriesModule } from './repositories/repositories.module';
     AppKeyModule,
     GitClientModule,
     RepositoriesModule,
+    MongooseModule.forRoot('mongodb://localhost/nest'),
   ],
   controllers: [AppController],
   providers: [AppService],

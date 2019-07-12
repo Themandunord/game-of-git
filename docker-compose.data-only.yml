@@ -27,5 +27,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres:/var/lib/postgresql/data
+  mongo:
+    # container_name: mongo
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
 volumes:
   postgres:
