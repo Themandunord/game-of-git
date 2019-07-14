@@ -117,7 +117,9 @@ export class RepositoriesService {
   }
 
   async createRepository(user: string, ownerUsername: string, name: string) {
-    console.log(`Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`);
+    console.log(
+      `Repositories Service: Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`,
+    );
 
     const repoDetails = await this.gitClient.getRepositoryDetails(user, name, ownerUsername);
 
@@ -169,7 +171,7 @@ export class RepositoriesService {
       },
     };
 
-    console.log('Create Payload: ', CREATE_PAYLOAD);
+    console.log('Repositories Service: Create Payload: ', CREATE_PAYLOAD);
 
     const newRepoData = await this.repositoriesResolver.createRepository(
       CREATE_PAYLOAD,
@@ -216,7 +218,9 @@ export class RepositoriesService {
    * @param repository
    */
   async toggleTracking(user: string, ownerUsername: string, id: string, name: string) {
-    console.log(`Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`);
+    console.log(
+      `Repositories Service: Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`,
+    );
 
     const existingRepository = await this.getExistingRepository(id);
 
@@ -236,7 +240,7 @@ export class RepositoriesService {
   }
 
   async configureRepositoryWebhooks(repository: Repository, user: string): Promise<void> {
-    console.log('configuring repository webhooks', repository);
+    console.log('Repositories Service: configuring repository webhooks', repository);
     if (repository.isTracked) {
       await this.gitClient.webhooks.initializeRepositoryWebhooks(repository, user);
     } else {
@@ -264,7 +268,9 @@ export class RepositoriesService {
     const results = await Promise.all(
       repositories.map(async repo => {
         const eventCount = await this.webhooksService.eventCountForRepository(repo.id);
-        console.log(`Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`);
+        console.log(
+          `Repositories Service: Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`,
+        );
 
         return {
           eventCount,
@@ -283,8 +289,7 @@ export class RepositoriesService {
    * @param id
    */
   async syncRepositoryWithGitHub(name: string, owner: string, user: string) {
-    console.log('syncing repository: ', name);
-    const detailsFromGit = await this.gitClient.getRepositoryDetails(user, name, owner);
-    // console.log('sync details from git: ', detailsFromGit);
+    console.log('Repositories Service: syncing repository: ', name);
+    await this.gitClient.getRepositoryDetails(user, name, owner);
   }
 }

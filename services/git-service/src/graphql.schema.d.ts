@@ -14,6 +14,19 @@ export enum AppKeyOrderByInput {
     name_DESC = "name_DESC"
 }
 
+export enum GitHubWebhookEventOrderByInput {
+    id_ASC = "id_ASC",
+    id_DESC = "id_DESC",
+    createdAt_ASC = "createdAt_ASC",
+    createdAt_DESC = "createdAt_DESC",
+    eventType_ASC = "eventType_ASC",
+    eventType_DESC = "eventType_DESC",
+    action_ASC = "action_ASC",
+    action_DESC = "action_DESC",
+    sender_ASC = "sender_ASC",
+    sender_DESC = "sender_DESC"
+}
+
 export enum MutationType {
     CREATED = "CREATED",
     UPDATED = "UPDATED",
@@ -98,6 +111,7 @@ export class AppKeyCreateInput {
     key: string;
     name?: string;
     user: UserCreateOneWithoutKeysInput;
+    repositories?: RepositoryCreateManyWithoutAppKeyInput;
 }
 
 export class AppKeyCreateManyWithoutUserInput {
@@ -105,15 +119,23 @@ export class AppKeyCreateManyWithoutUserInput {
     connect?: AppKeyWhereUniqueInput[];
 }
 
-export class AppKeyCreateOneInput {
-    create?: AppKeyCreateInput;
+export class AppKeyCreateOneWithoutRepositoriesInput {
+    create?: AppKeyCreateWithoutRepositoriesInput;
     connect?: AppKeyWhereUniqueInput;
+}
+
+export class AppKeyCreateWithoutRepositoriesInput {
+    id?: string;
+    key: string;
+    name?: string;
+    user: UserCreateOneWithoutKeysInput;
 }
 
 export class AppKeyCreateWithoutUserInput {
     id?: string;
     key: string;
     name?: string;
+    repositories?: RepositoryCreateManyWithoutAppKeyInput;
 }
 
 export class AppKeyScalarWhereInput {
@@ -175,16 +197,11 @@ export class AppKeySubscriptionWhereInput {
     node?: AppKeyWhereInput;
 }
 
-export class AppKeyUpdateDataInput {
-    key?: string;
-    name?: string;
-    user?: UserUpdateOneRequiredWithoutKeysInput;
-}
-
 export class AppKeyUpdateInput {
     key?: string;
     name?: string;
     user?: UserUpdateOneRequiredWithoutKeysInput;
+    repositories?: RepositoryUpdateManyWithoutAppKeyInput;
 }
 
 export class AppKeyUpdateManyDataInput {
@@ -214,16 +231,23 @@ export class AppKeyUpdateManyWithWhereNestedInput {
     data: AppKeyUpdateManyDataInput;
 }
 
-export class AppKeyUpdateOneRequiredInput {
-    create?: AppKeyCreateInput;
+export class AppKeyUpdateOneRequiredWithoutRepositoriesInput {
+    create?: AppKeyCreateWithoutRepositoriesInput;
     connect?: AppKeyWhereUniqueInput;
-    update?: AppKeyUpdateDataInput;
-    upsert?: AppKeyUpsertNestedInput;
+    update?: AppKeyUpdateWithoutRepositoriesDataInput;
+    upsert?: AppKeyUpsertWithoutRepositoriesInput;
+}
+
+export class AppKeyUpdateWithoutRepositoriesDataInput {
+    key?: string;
+    name?: string;
+    user?: UserUpdateOneRequiredWithoutKeysInput;
 }
 
 export class AppKeyUpdateWithoutUserDataInput {
     key?: string;
     name?: string;
+    repositories?: RepositoryUpdateManyWithoutAppKeyInput;
 }
 
 export class AppKeyUpdateWithWhereUniqueWithoutUserInput {
@@ -231,9 +255,9 @@ export class AppKeyUpdateWithWhereUniqueWithoutUserInput {
     data: AppKeyUpdateWithoutUserDataInput;
 }
 
-export class AppKeyUpsertNestedInput {
-    update: AppKeyUpdateDataInput;
-    create: AppKeyCreateInput;
+export class AppKeyUpsertWithoutRepositoriesInput {
+    update: AppKeyUpdateWithoutRepositoriesDataInput;
+    create: AppKeyCreateWithoutRepositoriesInput;
 }
 
 export class AppKeyUpsertWithWhereUniqueWithoutUserInput {
@@ -289,11 +313,243 @@ export class AppKeyWhereInput {
     name_ends_with?: string;
     name_not_ends_with?: string;
     user?: UserWhereInput;
+    repositories_every?: RepositoryWhereInput;
+    repositories_some?: RepositoryWhereInput;
+    repositories_none?: RepositoryWhereInput;
 }
 
 export class AppKeyWhereUniqueInput {
     id?: string;
     key?: string;
+}
+
+export class GitHubWebhookEventCreateInput {
+    id?: string;
+    eventType: string;
+    action?: string;
+    sender: string;
+    repository: RepositoryCreateOneWithoutWebhookEventsInput;
+}
+
+export class GitHubWebhookEventCreateManyWithoutRepositoryInput {
+    create?: GitHubWebhookEventCreateWithoutRepositoryInput[];
+    connect?: GitHubWebhookEventWhereUniqueInput[];
+}
+
+export class GitHubWebhookEventCreateWithoutRepositoryInput {
+    id?: string;
+    eventType: string;
+    action?: string;
+    sender: string;
+}
+
+export class GitHubWebhookEventScalarWhereInput {
+    AND?: GitHubWebhookEventScalarWhereInput[];
+    OR?: GitHubWebhookEventScalarWhereInput[];
+    NOT?: GitHubWebhookEventScalarWhereInput[];
+    id?: string;
+    id_not?: string;
+    id_in?: string[];
+    id_not_in?: string[];
+    id_lt?: string;
+    id_lte?: string;
+    id_gt?: string;
+    id_gte?: string;
+    id_contains?: string;
+    id_not_contains?: string;
+    id_starts_with?: string;
+    id_not_starts_with?: string;
+    id_ends_with?: string;
+    id_not_ends_with?: string;
+    createdAt?: DateTime;
+    createdAt_not?: DateTime;
+    createdAt_in?: DateTime[];
+    createdAt_not_in?: DateTime[];
+    createdAt_lt?: DateTime;
+    createdAt_lte?: DateTime;
+    createdAt_gt?: DateTime;
+    createdAt_gte?: DateTime;
+    eventType?: string;
+    eventType_not?: string;
+    eventType_in?: string[];
+    eventType_not_in?: string[];
+    eventType_lt?: string;
+    eventType_lte?: string;
+    eventType_gt?: string;
+    eventType_gte?: string;
+    eventType_contains?: string;
+    eventType_not_contains?: string;
+    eventType_starts_with?: string;
+    eventType_not_starts_with?: string;
+    eventType_ends_with?: string;
+    eventType_not_ends_with?: string;
+    action?: string;
+    action_not?: string;
+    action_in?: string[];
+    action_not_in?: string[];
+    action_lt?: string;
+    action_lte?: string;
+    action_gt?: string;
+    action_gte?: string;
+    action_contains?: string;
+    action_not_contains?: string;
+    action_starts_with?: string;
+    action_not_starts_with?: string;
+    action_ends_with?: string;
+    action_not_ends_with?: string;
+    sender?: string;
+    sender_not?: string;
+    sender_in?: string[];
+    sender_not_in?: string[];
+    sender_lt?: string;
+    sender_lte?: string;
+    sender_gt?: string;
+    sender_gte?: string;
+    sender_contains?: string;
+    sender_not_contains?: string;
+    sender_starts_with?: string;
+    sender_not_starts_with?: string;
+    sender_ends_with?: string;
+    sender_not_ends_with?: string;
+}
+
+export class GitHubWebhookEventSubscriptionWhereInput {
+    AND?: GitHubWebhookEventSubscriptionWhereInput[];
+    OR?: GitHubWebhookEventSubscriptionWhereInput[];
+    NOT?: GitHubWebhookEventSubscriptionWhereInput[];
+    mutation_in?: MutationType[];
+    updatedFields_contains?: string;
+    updatedFields_contains_every?: string[];
+    updatedFields_contains_some?: string[];
+    node?: GitHubWebhookEventWhereInput;
+}
+
+export class GitHubWebhookEventUpdateInput {
+    eventType?: string;
+    action?: string;
+    sender?: string;
+    repository?: RepositoryUpdateOneRequiredWithoutWebhookEventsInput;
+}
+
+export class GitHubWebhookEventUpdateManyDataInput {
+    eventType?: string;
+    action?: string;
+    sender?: string;
+}
+
+export class GitHubWebhookEventUpdateManyMutationInput {
+    eventType?: string;
+    action?: string;
+    sender?: string;
+}
+
+export class GitHubWebhookEventUpdateManyWithoutRepositoryInput {
+    create?: GitHubWebhookEventCreateWithoutRepositoryInput[];
+    connect?: GitHubWebhookEventWhereUniqueInput[];
+    set?: GitHubWebhookEventWhereUniqueInput[];
+    disconnect?: GitHubWebhookEventWhereUniqueInput[];
+    delete?: GitHubWebhookEventWhereUniqueInput[];
+    update?: GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput[];
+    updateMany?: GitHubWebhookEventUpdateManyWithWhereNestedInput[];
+    deleteMany?: GitHubWebhookEventScalarWhereInput[];
+    upsert?: GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput[];
+}
+
+export class GitHubWebhookEventUpdateManyWithWhereNestedInput {
+    where: GitHubWebhookEventScalarWhereInput;
+    data: GitHubWebhookEventUpdateManyDataInput;
+}
+
+export class GitHubWebhookEventUpdateWithoutRepositoryDataInput {
+    eventType?: string;
+    action?: string;
+    sender?: string;
+}
+
+export class GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput {
+    where: GitHubWebhookEventWhereUniqueInput;
+    data: GitHubWebhookEventUpdateWithoutRepositoryDataInput;
+}
+
+export class GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput {
+    where: GitHubWebhookEventWhereUniqueInput;
+    update: GitHubWebhookEventUpdateWithoutRepositoryDataInput;
+    create: GitHubWebhookEventCreateWithoutRepositoryInput;
+}
+
+export class GitHubWebhookEventWhereInput {
+    AND?: GitHubWebhookEventWhereInput[];
+    OR?: GitHubWebhookEventWhereInput[];
+    NOT?: GitHubWebhookEventWhereInput[];
+    id?: string;
+    id_not?: string;
+    id_in?: string[];
+    id_not_in?: string[];
+    id_lt?: string;
+    id_lte?: string;
+    id_gt?: string;
+    id_gte?: string;
+    id_contains?: string;
+    id_not_contains?: string;
+    id_starts_with?: string;
+    id_not_starts_with?: string;
+    id_ends_with?: string;
+    id_not_ends_with?: string;
+    createdAt?: DateTime;
+    createdAt_not?: DateTime;
+    createdAt_in?: DateTime[];
+    createdAt_not_in?: DateTime[];
+    createdAt_lt?: DateTime;
+    createdAt_lte?: DateTime;
+    createdAt_gt?: DateTime;
+    createdAt_gte?: DateTime;
+    eventType?: string;
+    eventType_not?: string;
+    eventType_in?: string[];
+    eventType_not_in?: string[];
+    eventType_lt?: string;
+    eventType_lte?: string;
+    eventType_gt?: string;
+    eventType_gte?: string;
+    eventType_contains?: string;
+    eventType_not_contains?: string;
+    eventType_starts_with?: string;
+    eventType_not_starts_with?: string;
+    eventType_ends_with?: string;
+    eventType_not_ends_with?: string;
+    action?: string;
+    action_not?: string;
+    action_in?: string[];
+    action_not_in?: string[];
+    action_lt?: string;
+    action_lte?: string;
+    action_gt?: string;
+    action_gte?: string;
+    action_contains?: string;
+    action_not_contains?: string;
+    action_starts_with?: string;
+    action_not_starts_with?: string;
+    action_ends_with?: string;
+    action_not_ends_with?: string;
+    sender?: string;
+    sender_not?: string;
+    sender_in?: string[];
+    sender_not_in?: string[];
+    sender_lt?: string;
+    sender_lte?: string;
+    sender_gt?: string;
+    sender_gte?: string;
+    sender_contains?: string;
+    sender_not_contains?: string;
+    sender_starts_with?: string;
+    sender_not_starts_with?: string;
+    sender_ends_with?: string;
+    sender_not_ends_with?: string;
+    repository?: RepositoryWhereInput;
+}
+
+export class GitHubWebhookEventWhereUniqueInput {
+    id?: string;
 }
 
 export class RepositoryCreateInput {
@@ -318,16 +574,27 @@ export class RepositoryCreateInput {
     watchers?: number;
     issues?: number;
     pullRequests?: number;
-    user: UserCreateOneWithoutRepositoriesInput;
-    appKey: AppKeyCreateOneInput;
+    addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+    appKey: AppKeyCreateOneWithoutRepositoriesInput;
+    webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput;
 }
 
-export class RepositoryCreateManyWithoutUserInput {
-    create?: RepositoryCreateWithoutUserInput[];
+export class RepositoryCreateManyWithoutAddedByInput {
+    create?: RepositoryCreateWithoutAddedByInput[];
     connect?: RepositoryWhereUniqueInput[];
 }
 
-export class RepositoryCreateWithoutUserInput {
+export class RepositoryCreateManyWithoutAppKeyInput {
+    create?: RepositoryCreateWithoutAppKeyInput[];
+    connect?: RepositoryWhereUniqueInput[];
+}
+
+export class RepositoryCreateOneWithoutWebhookEventsInput {
+    create?: RepositoryCreateWithoutWebhookEventsInput;
+    connect?: RepositoryWhereUniqueInput;
+}
+
+export class RepositoryCreateWithoutAddedByInput {
     id?: string;
     idExternal: string;
     createdAtExternal: DateTime;
@@ -349,7 +616,60 @@ export class RepositoryCreateWithoutUserInput {
     watchers?: number;
     issues?: number;
     pullRequests?: number;
-    appKey: AppKeyCreateOneInput;
+    appKey: AppKeyCreateOneWithoutRepositoriesInput;
+    webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput;
+}
+
+export class RepositoryCreateWithoutAppKeyInput {
+    id?: string;
+    idExternal: string;
+    createdAtExternal: DateTime;
+    updatedAtExternal: DateTime;
+    name: string;
+    description?: string;
+    homepageUrl?: string;
+    url: string;
+    owner: string;
+    isTracked: boolean;
+    isFork: boolean;
+    isLocked: boolean;
+    isPrivate: boolean;
+    isArchived: boolean;
+    isDisabled: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
+    addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+    webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput;
+}
+
+export class RepositoryCreateWithoutWebhookEventsInput {
+    id?: string;
+    idExternal: string;
+    createdAtExternal: DateTime;
+    updatedAtExternal: DateTime;
+    name: string;
+    description?: string;
+    homepageUrl?: string;
+    url: string;
+    owner: string;
+    isTracked: boolean;
+    isFork: boolean;
+    isLocked: boolean;
+    isPrivate: boolean;
+    isArchived: boolean;
+    isDisabled: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
+    addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+    appKey: AppKeyCreateOneWithoutRepositoriesInput;
 }
 
 export class RepositoryScalarWhereInput {
@@ -570,8 +890,9 @@ export class RepositoryUpdateInput {
     watchers?: number;
     issues?: number;
     pullRequests?: number;
-    user?: UserUpdateOneRequiredWithoutRepositoriesInput;
-    appKey?: AppKeyUpdateOneRequiredInput;
+    addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput;
+    appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput;
+    webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput;
 }
 
 export class RepositoryUpdateManyDataInput {
@@ -620,16 +941,28 @@ export class RepositoryUpdateManyMutationInput {
     pullRequests?: number;
 }
 
-export class RepositoryUpdateManyWithoutUserInput {
-    create?: RepositoryCreateWithoutUserInput[];
+export class RepositoryUpdateManyWithoutAddedByInput {
+    create?: RepositoryCreateWithoutAddedByInput[];
     connect?: RepositoryWhereUniqueInput[];
     set?: RepositoryWhereUniqueInput[];
     disconnect?: RepositoryWhereUniqueInput[];
     delete?: RepositoryWhereUniqueInput[];
-    update?: RepositoryUpdateWithWhereUniqueWithoutUserInput[];
+    update?: RepositoryUpdateWithWhereUniqueWithoutAddedByInput[];
     updateMany?: RepositoryUpdateManyWithWhereNestedInput[];
     deleteMany?: RepositoryScalarWhereInput[];
-    upsert?: RepositoryUpsertWithWhereUniqueWithoutUserInput[];
+    upsert?: RepositoryUpsertWithWhereUniqueWithoutAddedByInput[];
+}
+
+export class RepositoryUpdateManyWithoutAppKeyInput {
+    create?: RepositoryCreateWithoutAppKeyInput[];
+    connect?: RepositoryWhereUniqueInput[];
+    set?: RepositoryWhereUniqueInput[];
+    disconnect?: RepositoryWhereUniqueInput[];
+    delete?: RepositoryWhereUniqueInput[];
+    update?: RepositoryUpdateWithWhereUniqueWithoutAppKeyInput[];
+    updateMany?: RepositoryUpdateManyWithWhereNestedInput[];
+    deleteMany?: RepositoryScalarWhereInput[];
+    upsert?: RepositoryUpsertWithWhereUniqueWithoutAppKeyInput[];
 }
 
 export class RepositoryUpdateManyWithWhereNestedInput {
@@ -637,7 +970,14 @@ export class RepositoryUpdateManyWithWhereNestedInput {
     data: RepositoryUpdateManyDataInput;
 }
 
-export class RepositoryUpdateWithoutUserDataInput {
+export class RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
+    create?: RepositoryCreateWithoutWebhookEventsInput;
+    connect?: RepositoryWhereUniqueInput;
+    update?: RepositoryUpdateWithoutWebhookEventsDataInput;
+    upsert?: RepositoryUpsertWithoutWebhookEventsInput;
+}
+
+export class RepositoryUpdateWithoutAddedByDataInput {
     idExternal?: string;
     createdAtExternal?: DateTime;
     updatedAtExternal?: DateTime;
@@ -658,18 +998,85 @@ export class RepositoryUpdateWithoutUserDataInput {
     watchers?: number;
     issues?: number;
     pullRequests?: number;
-    appKey?: AppKeyUpdateOneRequiredInput;
+    appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput;
+    webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput;
 }
 
-export class RepositoryUpdateWithWhereUniqueWithoutUserInput {
-    where: RepositoryWhereUniqueInput;
-    data: RepositoryUpdateWithoutUserDataInput;
+export class RepositoryUpdateWithoutAppKeyDataInput {
+    idExternal?: string;
+    createdAtExternal?: DateTime;
+    updatedAtExternal?: DateTime;
+    name?: string;
+    description?: string;
+    homepageUrl?: string;
+    url?: string;
+    owner?: string;
+    isTracked?: boolean;
+    isFork?: boolean;
+    isLocked?: boolean;
+    isPrivate?: boolean;
+    isArchived?: boolean;
+    isDisabled?: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
+    addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput;
+    webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput;
 }
 
-export class RepositoryUpsertWithWhereUniqueWithoutUserInput {
+export class RepositoryUpdateWithoutWebhookEventsDataInput {
+    idExternal?: string;
+    createdAtExternal?: DateTime;
+    updatedAtExternal?: DateTime;
+    name?: string;
+    description?: string;
+    homepageUrl?: string;
+    url?: string;
+    owner?: string;
+    isTracked?: boolean;
+    isFork?: boolean;
+    isLocked?: boolean;
+    isPrivate?: boolean;
+    isArchived?: boolean;
+    isDisabled?: boolean;
+    sshUrl?: string;
+    stargazers?: number;
+    collaborators?: number;
+    watchers?: number;
+    issues?: number;
+    pullRequests?: number;
+    addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput;
+    appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput;
+}
+
+export class RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
     where: RepositoryWhereUniqueInput;
-    update: RepositoryUpdateWithoutUserDataInput;
-    create: RepositoryCreateWithoutUserInput;
+    data: RepositoryUpdateWithoutAddedByDataInput;
+}
+
+export class RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
+    where: RepositoryWhereUniqueInput;
+    data: RepositoryUpdateWithoutAppKeyDataInput;
+}
+
+export class RepositoryUpsertWithoutWebhookEventsInput {
+    update: RepositoryUpdateWithoutWebhookEventsDataInput;
+    create: RepositoryCreateWithoutWebhookEventsInput;
+}
+
+export class RepositoryUpsertWithWhereUniqueWithoutAddedByInput {
+    where: RepositoryWhereUniqueInput;
+    update: RepositoryUpdateWithoutAddedByDataInput;
+    create: RepositoryCreateWithoutAddedByInput;
+}
+
+export class RepositoryUpsertWithWhereUniqueWithoutAppKeyInput {
+    where: RepositoryWhereUniqueInput;
+    update: RepositoryUpdateWithoutAppKeyDataInput;
+    create: RepositoryCreateWithoutAppKeyInput;
 }
 
 export class RepositoryWhereInput {
@@ -856,8 +1263,11 @@ export class RepositoryWhereInput {
     pullRequests_lte?: number;
     pullRequests_gt?: number;
     pullRequests_gte?: number;
-    user?: UserWhereInput;
+    addedBy?: UserWhereInput;
     appKey?: AppKeyWhereInput;
+    webhookEvents_every?: GitHubWebhookEventWhereInput;
+    webhookEvents_some?: GitHubWebhookEventWhereInput;
+    webhookEvents_none?: GitHubWebhookEventWhereInput;
 }
 
 export class RepositoryWhereUniqueInput {
@@ -874,7 +1284,12 @@ export class UserCreateInput {
     role?: Role;
     gitLogin: string;
     keys?: AppKeyCreateManyWithoutUserInput;
-    repositories?: RepositoryCreateManyWithoutUserInput;
+    addedRepositories?: RepositoryCreateManyWithoutAddedByInput;
+}
+
+export class UserCreateOneWithoutAddedRepositoriesInput {
+    create?: UserCreateWithoutAddedRepositoriesInput;
+    connect?: UserWhereUniqueInput;
 }
 
 export class UserCreateOneWithoutKeysInput {
@@ -882,9 +1297,14 @@ export class UserCreateOneWithoutKeysInput {
     connect?: UserWhereUniqueInput;
 }
 
-export class UserCreateOneWithoutRepositoriesInput {
-    create?: UserCreateWithoutRepositoriesInput;
-    connect?: UserWhereUniqueInput;
+export class UserCreateWithoutAddedRepositoriesInput {
+    id?: string;
+    email: string;
+    hash: string;
+    name?: string;
+    role?: Role;
+    gitLogin: string;
+    keys?: AppKeyCreateManyWithoutUserInput;
 }
 
 export class UserCreateWithoutKeysInput {
@@ -894,17 +1314,7 @@ export class UserCreateWithoutKeysInput {
     name?: string;
     role?: Role;
     gitLogin: string;
-    repositories?: RepositoryCreateManyWithoutUserInput;
-}
-
-export class UserCreateWithoutRepositoriesInput {
-    id?: string;
-    email: string;
-    hash: string;
-    name?: string;
-    role?: Role;
-    gitLogin: string;
-    keys?: AppKeyCreateManyWithoutUserInput;
+    addedRepositories?: RepositoryCreateManyWithoutAddedByInput;
 }
 
 export class UserSubscriptionWhereInput {
@@ -925,7 +1335,7 @@ export class UserUpdateInput {
     role?: Role;
     gitLogin?: string;
     keys?: AppKeyUpdateManyWithoutUserInput;
-    repositories?: RepositoryUpdateManyWithoutUserInput;
+    addedRepositories?: RepositoryUpdateManyWithoutAddedByInput;
 }
 
 export class UserUpdateManyMutationInput {
@@ -936,6 +1346,13 @@ export class UserUpdateManyMutationInput {
     gitLogin?: string;
 }
 
+export class UserUpdateOneRequiredWithoutAddedRepositoriesInput {
+    create?: UserCreateWithoutAddedRepositoriesInput;
+    connect?: UserWhereUniqueInput;
+    update?: UserUpdateWithoutAddedRepositoriesDataInput;
+    upsert?: UserUpsertWithoutAddedRepositoriesInput;
+}
+
 export class UserUpdateOneRequiredWithoutKeysInput {
     create?: UserCreateWithoutKeysInput;
     connect?: UserWhereUniqueInput;
@@ -943,23 +1360,7 @@ export class UserUpdateOneRequiredWithoutKeysInput {
     upsert?: UserUpsertWithoutKeysInput;
 }
 
-export class UserUpdateOneRequiredWithoutRepositoriesInput {
-    create?: UserCreateWithoutRepositoriesInput;
-    connect?: UserWhereUniqueInput;
-    update?: UserUpdateWithoutRepositoriesDataInput;
-    upsert?: UserUpsertWithoutRepositoriesInput;
-}
-
-export class UserUpdateWithoutKeysDataInput {
-    email?: string;
-    hash?: string;
-    name?: string;
-    role?: Role;
-    gitLogin?: string;
-    repositories?: RepositoryUpdateManyWithoutUserInput;
-}
-
-export class UserUpdateWithoutRepositoriesDataInput {
+export class UserUpdateWithoutAddedRepositoriesDataInput {
     email?: string;
     hash?: string;
     name?: string;
@@ -968,14 +1369,23 @@ export class UserUpdateWithoutRepositoriesDataInput {
     keys?: AppKeyUpdateManyWithoutUserInput;
 }
 
+export class UserUpdateWithoutKeysDataInput {
+    email?: string;
+    hash?: string;
+    name?: string;
+    role?: Role;
+    gitLogin?: string;
+    addedRepositories?: RepositoryUpdateManyWithoutAddedByInput;
+}
+
+export class UserUpsertWithoutAddedRepositoriesInput {
+    update: UserUpdateWithoutAddedRepositoriesDataInput;
+    create: UserCreateWithoutAddedRepositoriesInput;
+}
+
 export class UserUpsertWithoutKeysInput {
     update: UserUpdateWithoutKeysDataInput;
     create: UserCreateWithoutKeysInput;
-}
-
-export class UserUpsertWithoutRepositoriesInput {
-    update: UserUpdateWithoutRepositoriesDataInput;
-    create: UserCreateWithoutRepositoriesInput;
 }
 
 export class UserWhereInput {
@@ -1075,9 +1485,9 @@ export class UserWhereInput {
     keys_every?: AppKeyWhereInput;
     keys_some?: AppKeyWhereInput;
     keys_none?: AppKeyWhereInput;
-    repositories_every?: RepositoryWhereInput;
-    repositories_some?: RepositoryWhereInput;
-    repositories_none?: RepositoryWhereInput;
+    addedRepositories_every?: RepositoryWhereInput;
+    addedRepositories_some?: RepositoryWhereInput;
+    addedRepositories_none?: RepositoryWhereInput;
 }
 
 export class UserWhereUniqueInput {
@@ -1090,6 +1500,10 @@ export interface Node {
 }
 
 export class AggregateAppKey {
+    count: number;
+}
+
+export class AggregateGitHubWebhookEvent {
     count: number;
 }
 
@@ -1106,6 +1520,7 @@ export class AppKey implements Node {
     user: User;
     key: string;
     name?: string;
+    repositories?: Repository[];
 }
 
 export class AppKeyConnection {
@@ -1136,25 +1551,66 @@ export class BatchPayload {
     count: Long;
 }
 
+export class GitHubWebhookEvent implements Node {
+    id: string;
+    createdAt: DateTime;
+    repository: Repository;
+    eventType: string;
+    action?: string;
+    sender: string;
+}
+
+export class GitHubWebhookEventConnection {
+    pageInfo: PageInfo;
+    edges: GitHubWebhookEventEdge[];
+    aggregate: AggregateGitHubWebhookEvent;
+}
+
+export class GitHubWebhookEventEdge {
+    node: GitHubWebhookEvent;
+    cursor: string;
+}
+
+export class GitHubWebhookEventPreviousValues {
+    id: string;
+    createdAt: DateTime;
+    eventType: string;
+    action?: string;
+    sender: string;
+}
+
+export class GitHubWebhookEventSubscriptionPayload {
+    mutation: MutationType;
+    node?: GitHubWebhookEvent;
+    updatedFields?: string[];
+    previousValues?: GitHubWebhookEventPreviousValues;
+}
+
 export abstract class IMutation {
     abstract createUser(data: UserCreateInput): User | Promise<User>;
-    abstract createRepository(data: RepositoryCreateInput): Repository | Promise<Repository>;
     abstract createAppKey(data: AppKeyCreateInput): AppKey | Promise<AppKey>;
+    abstract createRepository(data: RepositoryCreateInput): Repository | Promise<Repository>;
+    abstract createGitHubWebhookEvent(data: GitHubWebhookEventCreateInput): GitHubWebhookEvent | Promise<GitHubWebhookEvent>;
     abstract updateUser(data: UserUpdateInput, where: UserWhereUniqueInput): User | Promise<User>;
-    abstract updateRepository(data: RepositoryUpdateInput, where: RepositoryWhereUniqueInput): Repository | Promise<Repository>;
     abstract updateAppKey(data: AppKeyUpdateInput, where: AppKeyWhereUniqueInput): AppKey | Promise<AppKey>;
+    abstract updateRepository(data: RepositoryUpdateInput, where: RepositoryWhereUniqueInput): Repository | Promise<Repository>;
+    abstract updateGitHubWebhookEvent(data: GitHubWebhookEventUpdateInput, where: GitHubWebhookEventWhereUniqueInput): GitHubWebhookEvent | Promise<GitHubWebhookEvent>;
     abstract deleteUser(where: UserWhereUniqueInput): User | Promise<User>;
-    abstract deleteRepository(where: RepositoryWhereUniqueInput): Repository | Promise<Repository>;
     abstract deleteAppKey(where: AppKeyWhereUniqueInput): AppKey | Promise<AppKey>;
+    abstract deleteRepository(where: RepositoryWhereUniqueInput): Repository | Promise<Repository>;
+    abstract deleteGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput): GitHubWebhookEvent | Promise<GitHubWebhookEvent>;
     abstract upsertUser(where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput): User | Promise<User>;
-    abstract upsertRepository(where: RepositoryWhereUniqueInput, create: RepositoryCreateInput, update: RepositoryUpdateInput): Repository | Promise<Repository>;
     abstract upsertAppKey(where: AppKeyWhereUniqueInput, create: AppKeyCreateInput, update: AppKeyUpdateInput): AppKey | Promise<AppKey>;
+    abstract upsertRepository(where: RepositoryWhereUniqueInput, create: RepositoryCreateInput, update: RepositoryUpdateInput): Repository | Promise<Repository>;
+    abstract upsertGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput, create: GitHubWebhookEventCreateInput, update: GitHubWebhookEventUpdateInput): GitHubWebhookEvent | Promise<GitHubWebhookEvent>;
     abstract updateManyUsers(data: UserUpdateManyMutationInput, where?: UserWhereInput): BatchPayload | Promise<BatchPayload>;
-    abstract updateManyRepositories(data: RepositoryUpdateManyMutationInput, where?: RepositoryWhereInput): BatchPayload | Promise<BatchPayload>;
     abstract updateManyAppKeys(data: AppKeyUpdateManyMutationInput, where?: AppKeyWhereInput): BatchPayload | Promise<BatchPayload>;
+    abstract updateManyRepositories(data: RepositoryUpdateManyMutationInput, where?: RepositoryWhereInput): BatchPayload | Promise<BatchPayload>;
+    abstract updateManyGitHubWebhookEvents(data: GitHubWebhookEventUpdateManyMutationInput, where?: GitHubWebhookEventWhereInput): BatchPayload | Promise<BatchPayload>;
     abstract deleteManyUsers(where?: UserWhereInput): BatchPayload | Promise<BatchPayload>;
-    abstract deleteManyRepositories(where?: RepositoryWhereInput): BatchPayload | Promise<BatchPayload>;
     abstract deleteManyAppKeys(where?: AppKeyWhereInput): BatchPayload | Promise<BatchPayload>;
+    abstract deleteManyRepositories(where?: RepositoryWhereInput): BatchPayload | Promise<BatchPayload>;
+    abstract deleteManyGitHubWebhookEvents(where?: GitHubWebhookEventWhereInput): BatchPayload | Promise<BatchPayload>;
     abstract executeRaw(database?: PrismaDatabase, query: string): Json | Promise<Json>;
 }
 
@@ -1167,14 +1623,17 @@ export class PageInfo {
 
 export abstract class IQuery {
     abstract users(where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): User[] | Promise<User[]>;
-    abstract repositories(where?: RepositoryWhereInput, orderBy?: RepositoryOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): Repository[] | Promise<Repository[]>;
     abstract appKeys(where?: AppKeyWhereInput, orderBy?: AppKeyOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): AppKey[] | Promise<AppKey[]>;
+    abstract repositories(where?: RepositoryWhereInput, orderBy?: RepositoryOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): Repository[] | Promise<Repository[]>;
+    abstract gitHubWebhookEvents(where?: GitHubWebhookEventWhereInput, orderBy?: GitHubWebhookEventOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): GitHubWebhookEvent[] | Promise<GitHubWebhookEvent[]>;
     abstract user(where: UserWhereUniqueInput): User | Promise<User>;
-    abstract repository(where: RepositoryWhereUniqueInput): Repository | Promise<Repository>;
     abstract appKey(where: AppKeyWhereUniqueInput): AppKey | Promise<AppKey>;
+    abstract repository(where: RepositoryWhereUniqueInput): Repository | Promise<Repository>;
+    abstract gitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput): GitHubWebhookEvent | Promise<GitHubWebhookEvent>;
     abstract usersConnection(where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): UserConnection | Promise<UserConnection>;
-    abstract repositoriesConnection(where?: RepositoryWhereInput, orderBy?: RepositoryOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): RepositoryConnection | Promise<RepositoryConnection>;
     abstract appKeysConnection(where?: AppKeyWhereInput, orderBy?: AppKeyOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): AppKeyConnection | Promise<AppKeyConnection>;
+    abstract repositoriesConnection(where?: RepositoryWhereInput, orderBy?: RepositoryOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): RepositoryConnection | Promise<RepositoryConnection>;
+    abstract gitHubWebhookEventsConnection(where?: GitHubWebhookEventWhereInput, orderBy?: GitHubWebhookEventOrderByInput, skip?: number, after?: string, before?: string, first?: number, last?: number): GitHubWebhookEventConnection | Promise<GitHubWebhookEventConnection>;
     abstract node(id: string): Node | Promise<Node>;
 }
 
@@ -1183,12 +1642,12 @@ export class Repository implements Node {
     idExternal: string;
     createdAtExternal: DateTime;
     updatedAtExternal: DateTime;
+    addedBy: User;
     name: string;
     description: string;
     homepageUrl?: string;
     url: string;
     owner: string;
-    user: User;
     isTracked: boolean;
     appKey: AppKey;
     isFork: boolean;
@@ -1202,6 +1661,7 @@ export class Repository implements Node {
     watchers?: number;
     issues?: number;
     pullRequests?: number;
+    webhookEvents?: GitHubWebhookEvent[];
 }
 
 export class RepositoryConnection {
@@ -1248,8 +1708,9 @@ export class RepositorySubscriptionPayload {
 
 export abstract class ISubscription {
     abstract user(where?: UserSubscriptionWhereInput): UserSubscriptionPayload | Promise<UserSubscriptionPayload>;
-    abstract repository(where?: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload | Promise<RepositorySubscriptionPayload>;
     abstract appKey(where?: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload | Promise<AppKeySubscriptionPayload>;
+    abstract repository(where?: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload | Promise<RepositorySubscriptionPayload>;
+    abstract gitHubWebhookEvent(where?: GitHubWebhookEventSubscriptionWhereInput): GitHubWebhookEventSubscriptionPayload | Promise<GitHubWebhookEventSubscriptionPayload>;
 }
 
 export class User implements Node {
@@ -1261,7 +1722,7 @@ export class User implements Node {
     name?: string;
     role?: Role;
     keys?: AppKey[];
-    repositories?: Repository[];
+    addedRepositories?: Repository[];
     gitLogin: string;
 }
 

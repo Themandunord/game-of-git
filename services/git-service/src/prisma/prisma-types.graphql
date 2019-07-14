@@ -1,7 +1,11 @@
 # source: http://localhost:4466
-# timestamp: Tue Jul 09 2019 20:55:52 GMT-0400 (Eastern Daylight Time)
+# timestamp: Sun Jul 14 2019 16:57:26 GMT-0400 (Eastern Daylight Time)
 
 type AggregateAppKey {
+  count: Int!
+}
+
+type AggregateGitHubWebhookEvent {
   count: Int!
 }
 
@@ -18,6 +22,7 @@ type AppKey implements Node {
   user: User!
   key: String!
   name: String
+  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
 }
 
 """A connection to a list of items."""
@@ -35,6 +40,7 @@ input AppKeyCreateInput {
   key: String!
   name: String
   user: UserCreateOneWithoutKeysInput!
+  repositories: RepositoryCreateManyWithoutAppKeyInput
 }
 
 input AppKeyCreateManyWithoutUserInput {
@@ -42,15 +48,23 @@ input AppKeyCreateManyWithoutUserInput {
   connect: [AppKeyWhereUniqueInput!]
 }
 
-input AppKeyCreateOneInput {
-  create: AppKeyCreateInput
+input AppKeyCreateOneWithoutRepositoriesInput {
+  create: AppKeyCreateWithoutRepositoriesInput
   connect: AppKeyWhereUniqueInput
+}
+
+input AppKeyCreateWithoutRepositoriesInput {
+  id: ID
+  key: String!
+  name: String
+  user: UserCreateOneWithoutKeysInput!
 }
 
 input AppKeyCreateWithoutUserInput {
   id: ID
   key: String!
   name: String
+  repositories: RepositoryCreateManyWithoutAppKeyInput
 }
 
 """An edge in a connection."""
@@ -225,9 +239,7 @@ input AppKeySubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [AppKeySubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -247,16 +259,11 @@ input AppKeySubscriptionWhereInput {
   node: AppKeyWhereInput
 }
 
-input AppKeyUpdateDataInput {
-  key: String
-  name: String
-  user: UserUpdateOneRequiredWithoutKeysInput
-}
-
 input AppKeyUpdateInput {
   key: String
   name: String
   user: UserUpdateOneRequiredWithoutKeysInput
+  repositories: RepositoryUpdateManyWithoutAppKeyInput
 }
 
 input AppKeyUpdateManyDataInput {
@@ -286,16 +293,23 @@ input AppKeyUpdateManyWithWhereNestedInput {
   data: AppKeyUpdateManyDataInput!
 }
 
-input AppKeyUpdateOneRequiredInput {
-  create: AppKeyCreateInput
+input AppKeyUpdateOneRequiredWithoutRepositoriesInput {
+  create: AppKeyCreateWithoutRepositoriesInput
   connect: AppKeyWhereUniqueInput
-  update: AppKeyUpdateDataInput
-  upsert: AppKeyUpsertNestedInput
+  update: AppKeyUpdateWithoutRepositoriesDataInput
+  upsert: AppKeyUpsertWithoutRepositoriesInput
+}
+
+input AppKeyUpdateWithoutRepositoriesDataInput {
+  key: String
+  name: String
+  user: UserUpdateOneRequiredWithoutKeysInput
 }
 
 input AppKeyUpdateWithoutUserDataInput {
   key: String
   name: String
+  repositories: RepositoryUpdateManyWithoutAppKeyInput
 }
 
 input AppKeyUpdateWithWhereUniqueWithoutUserInput {
@@ -303,9 +317,9 @@ input AppKeyUpdateWithWhereUniqueWithoutUserInput {
   data: AppKeyUpdateWithoutUserDataInput!
 }
 
-input AppKeyUpsertNestedInput {
-  update: AppKeyUpdateDataInput!
-  create: AppKeyCreateInput!
+input AppKeyUpsertWithoutRepositoriesInput {
+  update: AppKeyUpdateWithoutRepositoriesDataInput!
+  create: AppKeyCreateWithoutRepositoriesInput!
 }
 
 input AppKeyUpsertWithWhereUniqueWithoutUserInput {
@@ -444,6 +458,9 @@ input AppKeyWhereInput {
   """All values not ending with the given string."""
   name_not_ends_with: String
   user: UserWhereInput
+  repositories_every: RepositoryWhereInput
+  repositories_some: RepositoryWhereInput
+  repositories_none: RepositoryWhereInput
 }
 
 input AppKeyWhereUniqueInput {
@@ -458,6 +475,556 @@ type BatchPayload {
 
 scalar DateTime
 
+type GitHubWebhookEvent implements Node {
+  id: ID!
+  createdAt: DateTime!
+  repository: Repository!
+  eventType: String!
+  action: String
+  sender: String!
+}
+
+"""A connection to a list of items."""
+type GitHubWebhookEventConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GitHubWebhookEventEdge]!
+  aggregate: AggregateGitHubWebhookEvent!
+}
+
+input GitHubWebhookEventCreateInput {
+  id: ID
+  eventType: String!
+  action: String
+  sender: String!
+  repository: RepositoryCreateOneWithoutWebhookEventsInput!
+}
+
+input GitHubWebhookEventCreateManyWithoutRepositoryInput {
+  create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
+  connect: [GitHubWebhookEventWhereUniqueInput!]
+}
+
+input GitHubWebhookEventCreateWithoutRepositoryInput {
+  id: ID
+  eventType: String!
+  action: String
+  sender: String!
+}
+
+"""An edge in a connection."""
+type GitHubWebhookEventEdge {
+  """The item at the end of the edge."""
+  node: GitHubWebhookEvent!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum GitHubWebhookEventOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  eventType_ASC
+  eventType_DESC
+  action_ASC
+  action_DESC
+  sender_ASC
+  sender_DESC
+}
+
+type GitHubWebhookEventPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  eventType: String!
+  action: String
+  sender: String!
+}
+
+input GitHubWebhookEventScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GitHubWebhookEventScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GitHubWebhookEventScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GitHubWebhookEventScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  eventType: String
+
+  """All values that are not equal to given value."""
+  eventType_not: String
+
+  """All values that are contained in given list."""
+  eventType_in: [String!]
+
+  """All values that are not contained in given list."""
+  eventType_not_in: [String!]
+
+  """All values less than the given value."""
+  eventType_lt: String
+
+  """All values less than or equal the given value."""
+  eventType_lte: String
+
+  """All values greater than the given value."""
+  eventType_gt: String
+
+  """All values greater than or equal the given value."""
+  eventType_gte: String
+
+  """All values containing the given string."""
+  eventType_contains: String
+
+  """All values not containing the given string."""
+  eventType_not_contains: String
+
+  """All values starting with the given string."""
+  eventType_starts_with: String
+
+  """All values not starting with the given string."""
+  eventType_not_starts_with: String
+
+  """All values ending with the given string."""
+  eventType_ends_with: String
+
+  """All values not ending with the given string."""
+  eventType_not_ends_with: String
+  action: String
+
+  """All values that are not equal to given value."""
+  action_not: String
+
+  """All values that are contained in given list."""
+  action_in: [String!]
+
+  """All values that are not contained in given list."""
+  action_not_in: [String!]
+
+  """All values less than the given value."""
+  action_lt: String
+
+  """All values less than or equal the given value."""
+  action_lte: String
+
+  """All values greater than the given value."""
+  action_gt: String
+
+  """All values greater than or equal the given value."""
+  action_gte: String
+
+  """All values containing the given string."""
+  action_contains: String
+
+  """All values not containing the given string."""
+  action_not_contains: String
+
+  """All values starting with the given string."""
+  action_starts_with: String
+
+  """All values not starting with the given string."""
+  action_not_starts_with: String
+
+  """All values ending with the given string."""
+  action_ends_with: String
+
+  """All values not ending with the given string."""
+  action_not_ends_with: String
+  sender: String
+
+  """All values that are not equal to given value."""
+  sender_not: String
+
+  """All values that are contained in given list."""
+  sender_in: [String!]
+
+  """All values that are not contained in given list."""
+  sender_not_in: [String!]
+
+  """All values less than the given value."""
+  sender_lt: String
+
+  """All values less than or equal the given value."""
+  sender_lte: String
+
+  """All values greater than the given value."""
+  sender_gt: String
+
+  """All values greater than or equal the given value."""
+  sender_gte: String
+
+  """All values containing the given string."""
+  sender_contains: String
+
+  """All values not containing the given string."""
+  sender_not_contains: String
+
+  """All values starting with the given string."""
+  sender_starts_with: String
+
+  """All values not starting with the given string."""
+  sender_not_starts_with: String
+
+  """All values ending with the given string."""
+  sender_ends_with: String
+
+  """All values not ending with the given string."""
+  sender_not_ends_with: String
+}
+
+type GitHubWebhookEventSubscriptionPayload {
+  mutation: MutationType!
+  node: GitHubWebhookEvent
+  updatedFields: [String!]
+  previousValues: GitHubWebhookEventPreviousValues
+}
+
+input GitHubWebhookEventSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GitHubWebhookEventSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GitHubWebhookEventSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GitHubWebhookEventSubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GitHubWebhookEventWhereInput
+}
+
+input GitHubWebhookEventUpdateInput {
+  eventType: String
+  action: String
+  sender: String
+  repository: RepositoryUpdateOneRequiredWithoutWebhookEventsInput
+}
+
+input GitHubWebhookEventUpdateManyDataInput {
+  eventType: String
+  action: String
+  sender: String
+}
+
+input GitHubWebhookEventUpdateManyMutationInput {
+  eventType: String
+  action: String
+  sender: String
+}
+
+input GitHubWebhookEventUpdateManyWithoutRepositoryInput {
+  create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
+  connect: [GitHubWebhookEventWhereUniqueInput!]
+  set: [GitHubWebhookEventWhereUniqueInput!]
+  disconnect: [GitHubWebhookEventWhereUniqueInput!]
+  delete: [GitHubWebhookEventWhereUniqueInput!]
+  update: [GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput!]
+  updateMany: [GitHubWebhookEventUpdateManyWithWhereNestedInput!]
+  deleteMany: [GitHubWebhookEventScalarWhereInput!]
+  upsert: [GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput!]
+}
+
+input GitHubWebhookEventUpdateManyWithWhereNestedInput {
+  where: GitHubWebhookEventScalarWhereInput!
+  data: GitHubWebhookEventUpdateManyDataInput!
+}
+
+input GitHubWebhookEventUpdateWithoutRepositoryDataInput {
+  eventType: String
+  action: String
+  sender: String
+}
+
+input GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput {
+  where: GitHubWebhookEventWhereUniqueInput!
+  data: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
+}
+
+input GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput {
+  where: GitHubWebhookEventWhereUniqueInput!
+  update: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
+  create: GitHubWebhookEventCreateWithoutRepositoryInput!
+}
+
+input GitHubWebhookEventWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GitHubWebhookEventWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GitHubWebhookEventWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GitHubWebhookEventWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  eventType: String
+
+  """All values that are not equal to given value."""
+  eventType_not: String
+
+  """All values that are contained in given list."""
+  eventType_in: [String!]
+
+  """All values that are not contained in given list."""
+  eventType_not_in: [String!]
+
+  """All values less than the given value."""
+  eventType_lt: String
+
+  """All values less than or equal the given value."""
+  eventType_lte: String
+
+  """All values greater than the given value."""
+  eventType_gt: String
+
+  """All values greater than or equal the given value."""
+  eventType_gte: String
+
+  """All values containing the given string."""
+  eventType_contains: String
+
+  """All values not containing the given string."""
+  eventType_not_contains: String
+
+  """All values starting with the given string."""
+  eventType_starts_with: String
+
+  """All values not starting with the given string."""
+  eventType_not_starts_with: String
+
+  """All values ending with the given string."""
+  eventType_ends_with: String
+
+  """All values not ending with the given string."""
+  eventType_not_ends_with: String
+  action: String
+
+  """All values that are not equal to given value."""
+  action_not: String
+
+  """All values that are contained in given list."""
+  action_in: [String!]
+
+  """All values that are not contained in given list."""
+  action_not_in: [String!]
+
+  """All values less than the given value."""
+  action_lt: String
+
+  """All values less than or equal the given value."""
+  action_lte: String
+
+  """All values greater than the given value."""
+  action_gt: String
+
+  """All values greater than or equal the given value."""
+  action_gte: String
+
+  """All values containing the given string."""
+  action_contains: String
+
+  """All values not containing the given string."""
+  action_not_contains: String
+
+  """All values starting with the given string."""
+  action_starts_with: String
+
+  """All values not starting with the given string."""
+  action_not_starts_with: String
+
+  """All values ending with the given string."""
+  action_ends_with: String
+
+  """All values not ending with the given string."""
+  action_not_ends_with: String
+  sender: String
+
+  """All values that are not equal to given value."""
+  sender_not: String
+
+  """All values that are contained in given list."""
+  sender_in: [String!]
+
+  """All values that are not contained in given list."""
+  sender_not_in: [String!]
+
+  """All values less than the given value."""
+  sender_lt: String
+
+  """All values less than or equal the given value."""
+  sender_lte: String
+
+  """All values greater than the given value."""
+  sender_gt: String
+
+  """All values greater than or equal the given value."""
+  sender_gte: String
+
+  """All values containing the given string."""
+  sender_contains: String
+
+  """All values not containing the given string."""
+  sender_not_contains: String
+
+  """All values starting with the given string."""
+  sender_starts_with: String
+
+  """All values not starting with the given string."""
+  sender_not_starts_with: String
+
+  """All values ending with the given string."""
+  sender_ends_with: String
+
+  """All values not ending with the given string."""
+  sender_not_ends_with: String
+  repository: RepositoryWhereInput
+}
+
+input GitHubWebhookEventWhereUniqueInput {
+  id: ID
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -469,23 +1036,29 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
-  createRepository(data: RepositoryCreateInput!): Repository!
   createAppKey(data: AppKeyCreateInput!): AppKey!
+  createRepository(data: RepositoryCreateInput!): Repository!
+  createGitHubWebhookEvent(data: GitHubWebhookEventCreateInput!): GitHubWebhookEvent!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
   updateAppKey(data: AppKeyUpdateInput!, where: AppKeyWhereUniqueInput!): AppKey
+  updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
+  updateGitHubWebhookEvent(data: GitHubWebhookEventUpdateInput!, where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteRepository(where: RepositoryWhereUniqueInput!): Repository
   deleteAppKey(where: AppKeyWhereUniqueInput!): AppKey
+  deleteRepository(where: RepositoryWhereUniqueInput!): Repository
+  deleteGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
   upsertAppKey(where: AppKeyWhereUniqueInput!, create: AppKeyCreateInput!, update: AppKeyUpdateInput!): AppKey!
+  upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
+  upsertGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!, create: GitHubWebhookEventCreateInput!, update: GitHubWebhookEventUpdateInput!): GitHubWebhookEvent!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
   updateManyAppKeys(data: AppKeyUpdateManyMutationInput!, where: AppKeyWhereInput): BatchPayload!
+  updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
+  updateManyGitHubWebhookEvents(data: GitHubWebhookEventUpdateManyMutationInput!, where: GitHubWebhookEventWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
   deleteManyAppKeys(where: AppKeyWhereInput): BatchPayload!
+  deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
+  deleteManyGitHubWebhookEvents(where: GitHubWebhookEventWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -522,14 +1095,17 @@ enum PrismaDatabase {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
   appKeys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey]!
+  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
+  gitHubWebhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent]!
   user(where: UserWhereUniqueInput!): User
-  repository(where: RepositoryWhereUniqueInput!): Repository
   appKey(where: AppKeyWhereUniqueInput!): AppKey
+  repository(where: RepositoryWhereUniqueInput!): Repository
+  gitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
   appKeysConnection(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppKeyConnection!
+  repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
+  gitHubWebhookEventsConnection(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GitHubWebhookEventConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -543,12 +1119,12 @@ type Repository implements Node {
   idExternal: String!
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
+  addedBy: User!
   name: String!
   description: String!
   homepageUrl: String
   url: String!
   owner: String!
-  user: User!
   isTracked: Boolean!
   appKey: AppKey!
   isFork: Boolean!
@@ -562,6 +1138,7 @@ type Repository implements Node {
   watchers: Int
   issues: Int
   pullRequests: Int
+  webhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent!]
 }
 
 """A connection to a list of items."""
@@ -596,16 +1173,27 @@ input RepositoryCreateInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  user: UserCreateOneWithoutRepositoriesInput!
-  appKey: AppKeyCreateOneInput!
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
 }
 
-input RepositoryCreateManyWithoutUserInput {
-  create: [RepositoryCreateWithoutUserInput!]
+input RepositoryCreateManyWithoutAddedByInput {
+  create: [RepositoryCreateWithoutAddedByInput!]
   connect: [RepositoryWhereUniqueInput!]
 }
 
-input RepositoryCreateWithoutUserInput {
+input RepositoryCreateManyWithoutAppKeyInput {
+  create: [RepositoryCreateWithoutAppKeyInput!]
+  connect: [RepositoryWhereUniqueInput!]
+}
+
+input RepositoryCreateOneWithoutWebhookEventsInput {
+  create: RepositoryCreateWithoutWebhookEventsInput
+  connect: RepositoryWhereUniqueInput
+}
+
+input RepositoryCreateWithoutAddedByInput {
   id: ID
   idExternal: String!
   createdAtExternal: DateTime!
@@ -627,7 +1215,60 @@ input RepositoryCreateWithoutUserInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  appKey: AppKeyCreateOneInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+}
+
+input RepositoryCreateWithoutAppKeyInput {
+  id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  name: String!
+  description: String
+  homepageUrl: String
+  url: String!
+  owner: String!
+  isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+}
+
+input RepositoryCreateWithoutWebhookEventsInput {
+  id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  name: String!
+  description: String
+  homepageUrl: String
+  url: String!
+  owner: String!
+  isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
 }
 
 """An edge in a connection."""
@@ -1234,9 +1875,7 @@ input RepositorySubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [RepositorySubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -1277,8 +1916,9 @@ input RepositoryUpdateInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  user: UserUpdateOneRequiredWithoutRepositoriesInput
-  appKey: AppKeyUpdateOneRequiredInput
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
 input RepositoryUpdateManyDataInput {
@@ -1327,16 +1967,28 @@ input RepositoryUpdateManyMutationInput {
   pullRequests: Int
 }
 
-input RepositoryUpdateManyWithoutUserInput {
-  create: [RepositoryCreateWithoutUserInput!]
+input RepositoryUpdateManyWithoutAddedByInput {
+  create: [RepositoryCreateWithoutAddedByInput!]
   connect: [RepositoryWhereUniqueInput!]
   set: [RepositoryWhereUniqueInput!]
   disconnect: [RepositoryWhereUniqueInput!]
   delete: [RepositoryWhereUniqueInput!]
-  update: [RepositoryUpdateWithWhereUniqueWithoutUserInput!]
+  update: [RepositoryUpdateWithWhereUniqueWithoutAddedByInput!]
   updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
   deleteMany: [RepositoryScalarWhereInput!]
-  upsert: [RepositoryUpsertWithWhereUniqueWithoutUserInput!]
+  upsert: [RepositoryUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input RepositoryUpdateManyWithoutAppKeyInput {
+  create: [RepositoryCreateWithoutAppKeyInput!]
+  connect: [RepositoryWhereUniqueInput!]
+  set: [RepositoryWhereUniqueInput!]
+  disconnect: [RepositoryWhereUniqueInput!]
+  delete: [RepositoryWhereUniqueInput!]
+  update: [RepositoryUpdateWithWhereUniqueWithoutAppKeyInput!]
+  updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
+  deleteMany: [RepositoryScalarWhereInput!]
+  upsert: [RepositoryUpsertWithWhereUniqueWithoutAppKeyInput!]
 }
 
 input RepositoryUpdateManyWithWhereNestedInput {
@@ -1344,7 +1996,14 @@ input RepositoryUpdateManyWithWhereNestedInput {
   data: RepositoryUpdateManyDataInput!
 }
 
-input RepositoryUpdateWithoutUserDataInput {
+input RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
+  create: RepositoryCreateWithoutWebhookEventsInput
+  connect: RepositoryWhereUniqueInput
+  update: RepositoryUpdateWithoutWebhookEventsDataInput
+  upsert: RepositoryUpsertWithoutWebhookEventsInput
+}
+
+input RepositoryUpdateWithoutAddedByDataInput {
   idExternal: String
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
@@ -1365,18 +2024,85 @@ input RepositoryUpdateWithoutUserDataInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  appKey: AppKeyUpdateOneRequiredInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
-input RepositoryUpdateWithWhereUniqueWithoutUserInput {
-  where: RepositoryWhereUniqueInput!
-  data: RepositoryUpdateWithoutUserDataInput!
+input RepositoryUpdateWithoutAppKeyDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  description: String
+  homepageUrl: String
+  url: String
+  owner: String
+  isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
-input RepositoryUpsertWithWhereUniqueWithoutUserInput {
+input RepositoryUpdateWithoutWebhookEventsDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  description: String
+  homepageUrl: String
+  url: String
+  owner: String
+  isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+}
+
+input RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
   where: RepositoryWhereUniqueInput!
-  update: RepositoryUpdateWithoutUserDataInput!
-  create: RepositoryCreateWithoutUserInput!
+  data: RepositoryUpdateWithoutAddedByDataInput!
+}
+
+input RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
+  where: RepositoryWhereUniqueInput!
+  data: RepositoryUpdateWithoutAppKeyDataInput!
+}
+
+input RepositoryUpsertWithoutWebhookEventsInput {
+  update: RepositoryUpdateWithoutWebhookEventsDataInput!
+  create: RepositoryCreateWithoutWebhookEventsInput!
+}
+
+input RepositoryUpsertWithWhereUniqueWithoutAddedByInput {
+  where: RepositoryWhereUniqueInput!
+  update: RepositoryUpdateWithoutAddedByDataInput!
+  create: RepositoryCreateWithoutAddedByInput!
+}
+
+input RepositoryUpsertWithWhereUniqueWithoutAppKeyInput {
+  where: RepositoryWhereUniqueInput!
+  update: RepositoryUpdateWithoutAppKeyDataInput!
+  create: RepositoryCreateWithoutAppKeyInput!
 }
 
 input RepositoryWhereInput {
@@ -1886,8 +2612,11 @@ input RepositoryWhereInput {
 
   """All values greater than or equal the given value."""
   pullRequests_gte: Int
-  user: UserWhereInput
+  addedBy: UserWhereInput
   appKey: AppKeyWhereInput
+  webhookEvents_every: GitHubWebhookEventWhereInput
+  webhookEvents_some: GitHubWebhookEventWhereInput
+  webhookEvents_none: GitHubWebhookEventWhereInput
 }
 
 input RepositoryWhereUniqueInput {
@@ -1903,8 +2632,9 @@ enum Role {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
   appKey(where: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload
+  repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
+  gitHubWebhookEvent(where: GitHubWebhookEventSubscriptionWhereInput): GitHubWebhookEventSubscriptionPayload
 }
 
 type User implements Node {
@@ -1916,7 +2646,7 @@ type User implements Node {
   name: String
   role: Role
   keys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey!]
-  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
+  addedRepositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
   gitLogin: String!
 }
 
@@ -1938,7 +2668,12 @@ input UserCreateInput {
   role: Role
   gitLogin: String!
   keys: AppKeyCreateManyWithoutUserInput
-  repositories: RepositoryCreateManyWithoutUserInput
+  addedRepositories: RepositoryCreateManyWithoutAddedByInput
+}
+
+input UserCreateOneWithoutAddedRepositoriesInput {
+  create: UserCreateWithoutAddedRepositoriesInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutKeysInput {
@@ -1946,9 +2681,14 @@ input UserCreateOneWithoutKeysInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutRepositoriesInput {
-  create: UserCreateWithoutRepositoriesInput
-  connect: UserWhereUniqueInput
+input UserCreateWithoutAddedRepositoriesInput {
+  id: ID
+  email: String!
+  hash: String!
+  name: String
+  role: Role
+  gitLogin: String!
+  keys: AppKeyCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutKeysInput {
@@ -1958,17 +2698,7 @@ input UserCreateWithoutKeysInput {
   name: String
   role: Role
   gitLogin: String!
-  repositories: RepositoryCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutRepositoriesInput {
-  id: ID
-  email: String!
-  hash: String!
-  name: String
-  role: Role
-  gitLogin: String!
-  keys: AppKeyCreateManyWithoutUserInput
+  addedRepositories: RepositoryCreateManyWithoutAddedByInput
 }
 
 """An edge in a connection."""
@@ -2027,9 +2757,7 @@ input UserSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -2056,7 +2784,7 @@ input UserUpdateInput {
   role: Role
   gitLogin: String
   keys: AppKeyUpdateManyWithoutUserInput
-  repositories: RepositoryUpdateManyWithoutUserInput
+  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateManyMutationInput {
@@ -2067,6 +2795,13 @@ input UserUpdateManyMutationInput {
   gitLogin: String
 }
 
+input UserUpdateOneRequiredWithoutAddedRepositoriesInput {
+  create: UserCreateWithoutAddedRepositoriesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutAddedRepositoriesDataInput
+  upsert: UserUpsertWithoutAddedRepositoriesInput
+}
+
 input UserUpdateOneRequiredWithoutKeysInput {
   create: UserCreateWithoutKeysInput
   connect: UserWhereUniqueInput
@@ -2074,23 +2809,7 @@ input UserUpdateOneRequiredWithoutKeysInput {
   upsert: UserUpsertWithoutKeysInput
 }
 
-input UserUpdateOneRequiredWithoutRepositoriesInput {
-  create: UserCreateWithoutRepositoriesInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutRepositoriesDataInput
-  upsert: UserUpsertWithoutRepositoriesInput
-}
-
-input UserUpdateWithoutKeysDataInput {
-  email: String
-  hash: String
-  name: String
-  role: Role
-  gitLogin: String
-  repositories: RepositoryUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutRepositoriesDataInput {
+input UserUpdateWithoutAddedRepositoriesDataInput {
   email: String
   hash: String
   name: String
@@ -2099,14 +2818,23 @@ input UserUpdateWithoutRepositoriesDataInput {
   keys: AppKeyUpdateManyWithoutUserInput
 }
 
+input UserUpdateWithoutKeysDataInput {
+  email: String
+  hash: String
+  name: String
+  role: Role
+  gitLogin: String
+  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+}
+
+input UserUpsertWithoutAddedRepositoriesInput {
+  update: UserUpdateWithoutAddedRepositoriesDataInput!
+  create: UserCreateWithoutAddedRepositoriesInput!
+}
+
 input UserUpsertWithoutKeysInput {
   update: UserUpdateWithoutKeysDataInput!
   create: UserCreateWithoutKeysInput!
-}
-
-input UserUpsertWithoutRepositoriesInput {
-  update: UserUpdateWithoutRepositoriesDataInput!
-  create: UserCreateWithoutRepositoriesInput!
 }
 
 input UserWhereInput {
@@ -2375,9 +3103,9 @@ input UserWhereInput {
   keys_every: AppKeyWhereInput
   keys_some: AppKeyWhereInput
   keys_none: AppKeyWhereInput
-  repositories_every: RepositoryWhereInput
-  repositories_some: RepositoryWhereInput
-  repositories_none: RepositoryWhereInput
+  addedRepositories_every: RepositoryWhereInput
+  addedRepositories_some: RepositoryWhereInput
+  addedRepositories_none: RepositoryWhereInput
 }
 
 input UserWhereUniqueInput {
