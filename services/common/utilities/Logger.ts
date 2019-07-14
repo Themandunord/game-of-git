@@ -15,14 +15,12 @@ export class Logger {
         this.enabled = false;
     }
 
-    private checkAndPrefix(statePrefix: string | null = null, ...content: any[]) {
-        if (!this.enabled) {
-            return;
-        }
+    private checkAndPrefix(statePrefix: string | null = null, content: any[]) {
 
-        if (typeof content === 'string') {
-            console.log('content IS a string: ' + content);
-            return `${this.prefix} ${statePrefix ? ` ${statePrefix}` : ''}: ${content}`;
+        console.log('checking and prefixing content', content)
+
+        if (!this.enabled) {
+            throw new Error('Disabled Logger');
         }
 
         if (content.length === 1 && typeof content[0] === 'string') {
@@ -39,6 +37,8 @@ export class Logger {
             return prefixedContent
         }
 
+        console.log('just returning content');
+
         return content;
     }
 
@@ -47,29 +47,32 @@ export class Logger {
      * @param content 
      */
     public l(...content: any[]) {
-        const prefixedContent = this.checkAndPrefix('', content);
-        console.log(prefixedContent);
+        try {
+            let prefixedContent = this.checkAndPrefix('', content);
+            if (prefixedContent.length === 1 && content.length === 1) {
+                prefixedContent = prefixedContent[0];
+            }
+
+            console.log(prefixedContent);
+        } catch (e) {
+            // logger was disabled (most likely)
+        }
     }
+
 
     /**
      * Shorthand for console.error
      * @param content
      */
     public e(...content: any[]) {
-        const prefixedContent = this.checkAndPrefix('Error', content);
-        if (content.length === 1) {
-            console.error(content[0]);
-        } else {
-            console.error(content);
+        try {
+            let prefixedContent = this.checkAndPrefix('Error', content);
+            if (prefixedContent.length === 1 && content.length === 1) {
+                prefixedContent = prefixedContent[0];
+            }
+            console.error(prefixedContent);
+        } catch (e) {
+            // logger was disabled
         }
     }
 }
-
-
-const l = new Logger('Some Prefix', true);
-
-l.l('Just a string');
-l.l({taaaa: 'object man', as: 123});
-l.l(234);
-l.l(`Interpolated ${5 + 2}`)
-// l.e(`Interpolated ${5 + 2}`)

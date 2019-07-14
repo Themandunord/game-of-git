@@ -24,7 +24,6 @@ class EventModelFactory extends ALogger {
 
 	constructor() {
 		super();
-		console.log('EventModelFactory constructor');
 	}
 	/**
 	 * Make a GitHub Webhook Event model based off the passed in eventType, with optional data
@@ -47,7 +46,7 @@ class EventModelFactory extends ALogger {
 			};
 
 			const newModel = plainToClass(Con, paramObj);
-			console.log(newModel);
+			this.l(newModel);
 
 			return newModel;
 		} catch (e) {
