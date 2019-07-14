@@ -1,21 +1,23 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { ALogger } from '../../common/utilities/ALogger';
 import { AppService } from './app.service';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+export class AppController extends ALogger {
+	constructor(private readonly appService: AppService) {
+		super();
+	}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+	@Get()
+	getHello(): string {
+		return this.appService.getHello();
+	}
 
-  //   @UseGuards(AuthGuard())
-  //   @Get('test')
-  //   findAll() {
-  //     console.log('test');
+	//   @UseGuards(AuthGuard())
+	//   @Get('test')
+	//   findAll() {
+	//     this.l('test');
 
-  //     return [];
-  //   }
+	//     return [];
+	//   }
 }

@@ -11,16 +11,17 @@ type User {
   updatedAt: DateTime! @updatedAt
   name: String
   role: Role @default(value: USER)
-  keys: [AppKey!]!
-  repositories: [Repository!]!
+  keys: [AppKey!]! @relation(name: "UserAppKeys" onDelete: "CASCADE")
+  addedRepositories: [Repository!]! @relation(name: "UserAddedRepositories" onDelete: "SET_NULL")
   gitLogin: String!
 }
 
 type AppKey {
     id: ID! @unique @id
-    user: User!
+    user: User! @relation(name: "UserAppKeys")
     key: String! @unique
     name: String
+    repositories: [Repository!]! @relation(name: "RepositoryAppKey")
 }
 
 type Repository {
@@ -28,6 +29,7 @@ type Repository {
   idExternal: String! @unique
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
+  addedBy: User! @relation(name: "UserAddedRepositories")
   
   name: String! @unique
   description: String! @default(value: "A neat repository")
@@ -35,9 +37,8 @@ type Repository {
   url: String!
 
   owner: String!
-  user: User!
   isTracked: Boolean!
-  appKey: AppKey!
+  appKey: AppKey! @relation(name: "RepositoryAppKey" onDelete: "CASCADE")
 
   isFork: Boolean!
   isLocked: Boolean!
@@ -51,4 +52,16 @@ type Repository {
   watchers: Int
   issues: Int
   pullRequests: Int
+
+  webhookEvents: [GitHubWebhookEvent!]! @relation(name: "WebhooksByRepository" onDelete: "CASCADE")
+}
+
+type GitHubWebhookEvent {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+
+    repository: Repository! @relation(name: "WebhooksByRepository")
+    eventType: String!
+    action: String
+    sender: String!
 }
