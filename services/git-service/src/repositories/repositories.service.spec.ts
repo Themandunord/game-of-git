@@ -1,40 +1,54 @@
+import { WebhooksModule } from './../git-client/webhooks/webhooks.module';
 import { GitClientService } from './../git-client/git-client.service';
 import { GitClientModule } from './../git-client/git-client.module';
 import { RepositoriesResolver } from './repositories.resolver';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepositoriesService } from './repositories.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { RepositoryWebhookSchema } from '../git-client/webhooks/RepositoryWebhook.schema';
+import { WebhooksService } from '../git-client/webhooks/webhooks.service';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 const gitClientServiceMock = jest.mock('./../git-client/git-client.service');
+const webhooksServiceMock = jest.mock('./../git-client/webhooks/webhooks.service');
 const repositoriesResolverMock = jest.mock('./repositories.resolver');
 
 describe('RepositoriesService', () => {
-  let service: RepositoriesService;
+	let service: RepositoriesService;
+	let mongod: MongoMemoryServer;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [GitClientModule],
-      providers: [RepositoriesService, RepositoriesResolver],
-    })
-      .overrideProvider(GitClientService)
-      .useValue(gitClientServiceMock)
-      .overrideProvider(RepositoriesResolver)
-      .useValue(repositoriesResolverMock)
-      .compile();
+	beforeEach(async () => {
+		mongod = new MongoMemoryServer();
+		const uri = await mongod.getConnectionString();
 
-    service = module.get<RepositoriesService>(RepositoriesService);
-  });
+		// MongooseModule.forFeature([{ name: 'RepositoryWebhook', schema: RepositoryWebhookSchema }]);
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+		const module: TestingModule = await Test.createTestingModule({
+			imports: [GitClientModule, WebhooksModule, MongooseModule.forRoot(uri)],
+			providers: [RepositoriesService, RepositoriesResolver],
+		})
+			.overrideProvider(GitClientService)
+			.useValue(gitClientServiceMock)
+			.overrideProvider(RepositoriesResolver)
+			.useValue(repositoriesResolverMock)
+			.overrideProvider(WebhooksService)
+			.useValue(webhooksServiceMock)
+			.compile();
 
-  xdescribe('Retriving the Repository Selection Set', () => {});
+		service = module.get<RepositoriesService>(RepositoriesService);
+	});
 
-  xdescribe('Retrieving Repositories', () => {});
+	it('should be defined', () => {
+		expect(service).toBeDefined();
+	});
 
-  xdescribe('Retrieving Repositories from GitHub', () => {});
+	xdescribe('Retriving the Repository Selection Set', () => {});
 
-  xdescribe('Refreshing Repositories', () => {});
+	xdescribe('Retrieving Repositories', () => {});
 
-  xdescribe('Creating a Respotiroy Record and Updating it\'s isTracked status', () => {});
+	xdescribe('Retrieving Repositories from GitHub', () => {});
+
+	xdescribe('Refreshing Repositories', () => {});
+
+	xdescribe('Creating a Respotiroy Record and Updating it\'s isTracked status', () => {});
 });
