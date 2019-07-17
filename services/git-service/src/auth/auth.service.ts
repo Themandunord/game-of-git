@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException, Inject, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../graphql.schema';
 import { UsersService } from '../users/users.service';
@@ -16,9 +16,11 @@ const saltRounds = 10;
 export class AuthService extends ALogger {
 	constructor(
 		private readonly jwtService: JwtService,
+		@Inject(forwardRef(() => UsersService))
 		private readonly usersService: UsersService,
 	) {
 		super();
+		this.disableLogger();
 	}
 
 	/**

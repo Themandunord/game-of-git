@@ -13,6 +13,7 @@ export class GitClientService extends ALogger {
 	constructor(
 		@Inject(forwardRef(() => AppKeyService))
 		private readonly appKeyService: AppKeyService,
+		@Inject(forwardRef(() => WebhooksService))
 		private readonly webhooksService: WebhooksService,
 	) {
 		super();

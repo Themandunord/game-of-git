@@ -17,7 +17,7 @@ export class Logger {
 
     private checkAndPrefix(statePrefix: string | null = null, content: any[]) {
 
-        console.log('checking and prefixing content', content)
+        // console.log('checking and prefixing content', content)
 
         if (!this.enabled) {
             throw new Error('Disabled Logger');

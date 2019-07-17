@@ -16,13 +16,14 @@ export class UsersService {
 			GET_USERS,
 		);
 
-		const result = {
+        
+		const result = whoami ? {
 			email: whoami.email,
 			id: whoami.id,
 			hasAppKey: whoami.keys && whoami.keys.length > 0 ? true : false,
 			name: whoami.name,
 			gitLogin: whoami.gitLogin,
-		};
+		} : null;
 
 		return result;
 	}
