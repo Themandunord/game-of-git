@@ -5,7 +5,7 @@ query {
   ){
     avatarUrl
     createdAt
-    watching(first: 100){
+    watching(first: 10){
       nodes{
         createdAt
         description
@@ -32,7 +32,7 @@ query {
         stargazers{
           totalCount
         }
-        pullRequests(first:100){
+        pullRequests(first:10){
           totalCount
           nodes{
             author{

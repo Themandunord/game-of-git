@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as fs from 'fs';
 import * as path from 'path';
-import eventModelFactory, { EventModelFactory } from './EventModelFactory';
+import { EventModelFactory } from './EventModelFactory';
 import { AGitHubEvent } from './eventModels/AGitHubEvent.abstract';
 import { GitHubWebhookEvents } from './eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './eventModels/EventType.types';
@@ -14,7 +14,7 @@ describe('ParserService', () => {
 
 	beforeAll(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [ParserService],
+			providers: [ParserService]
 		}).compile();
 
 		service = module.get<ParserService>(ParserService);
@@ -35,12 +35,12 @@ describe('ParserService', () => {
 				service.getWebhookEventHandlerInstance(
 					fakeRepositoryId,
 					DEFINITELY_NOT_A_REAL_EVENT_TYPE,
-					webhookEventPayload,
-				),
+					webhookEventPayload
+				)
 			).rejects.toThrowError(
 				new RegExp(
-					`.*${EventModelFactory.MAKE_MODEL_ERROR(DEFINITELY_NOT_A_REAL_EVENT_TYPE)}`,
-				),
+					`.*${EventModelFactory.MAKE_MODEL_ERROR(DEFINITELY_NOT_A_REAL_EVENT_TYPE)}`
+				)
 			);
 		});
 
@@ -56,7 +56,7 @@ describe('ParserService', () => {
 						beforeAll(async () => {
 							const SAMPLE_JSON_PATH = path.join(
 								__dirname,
-								`eventModels/${eventType}/sample.json`,
+								`eventModels/${eventType}/sample.json`
 							);
 
 							const sampleJsonString = (await new Promise((resolve, reject) => {
@@ -71,11 +71,10 @@ describe('ParserService', () => {
 
 							sampleJson = JSON.parse(sampleJsonString);
 
-							expectedCtor = eventModelFactory.getModelConstructor(eventType);
+							expectedCtor = EventModelFactory.getModelConstructor(eventType);
 						});
 
 						it('Has a sample payload JSON file available for using as a mocked GitHub Webhook', async () => {
-							expect(true).toBeTruthy();
 							expect(sampleJson).toBeInstanceOf(Object);
 						});
 
@@ -83,7 +82,7 @@ describe('ParserService', () => {
 							const resultModel = await service.getWebhookEventHandlerInstance(
 								'',
 								eventType,
-								sampleJson,
+								sampleJson
 							);
 
 							// result instance should be an instance of AGitHubEvent extended implementation
@@ -91,7 +90,7 @@ describe('ParserService', () => {
 							expect(resultModel).toBeInstanceOf(expectedCtor);
 						});
 					});
-				}),
+				})
 			);
 		});
 	});
