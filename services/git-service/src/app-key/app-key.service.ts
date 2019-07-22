@@ -1,8 +1,8 @@
-import { AppKeyResolver } from './app-key.resolver';
-import { UsersService } from './../users/users.service';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
+// import { UsersService } from './../users/users.service';
 import { GitClientService } from './../git-client/git-client.service';
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
-import { gql } from 'apollo-server-core';
+import { AppKeyResolver } from './app-key.resolver';
+// import { gql } from 'apollo-server-core';
 import GET_APP_KEY from './gql/GET_APP_GEY.gql';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class AppKeyService {
 		@Inject(forwardRef(() => GitClientService))
 		private readonly gitClient: GitClientService,
 		// private readonly usersService: UsersService,
-		private readonly appKeyResolver: AppKeyResolver,
+		private readonly appKeyResolver: AppKeyResolver
 	) {}
 
 	/**
@@ -23,11 +23,11 @@ export class AppKeyService {
 			{
 				where: {
 					user: {
-						id: user,
-					},
-				},
+						id: user
+					}
+				}
 			},
-			GET_APP_KEY,
+			GET_APP_KEY
 		);
 
 		return keys;
@@ -60,10 +60,10 @@ export class AppKeyService {
 		const existing = await this.appKeyResolver.getAppKey(
 			{
 				where: {
-					key,
-				},
+					key
+				}
 			},
-			GET_APP_KEY,
+			GET_APP_KEY
 		);
 
 		if (existing != null) {
@@ -73,12 +73,12 @@ export class AppKeyService {
 			data: {
 				user: {
 					connect: {
-						id: user,
-					},
+						id: user
+					}
 				},
 				name,
-				key,
-			},
+				key
+			}
 		};
 		const result = await this.appKeyResolver.createAppKey(createPayload, GET_APP_KEY);
 

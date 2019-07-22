@@ -135,7 +135,7 @@ query {
       }
     }
 
-    labels(first:50){
+    labels(first:10){
       totalCount
       nodes{
         color

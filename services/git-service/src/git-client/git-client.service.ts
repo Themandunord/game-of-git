@@ -1,12 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { ALogger } from '../../../common/utilities/ALogger';
 import config from '../config';
 import { AppKeyService } from './../app-key/app-key.service';
 import GET_REPOSITORIES from './gql/GET_REPOSITORIES.gql';
-import GET_USER_DATA from './gql/GET_USER_DATA.gql';
 import GET_REPOSITORY_DETAILS from './gql/GET_REPOSITORY_DETAILS.gql';
+import GET_USER_DATA from './gql/GET_USER_DATA.gql';
 import { WebhooksService } from './webhooks/webhooks.service';
-import { ALogger } from '../../../common/utilities/ALogger';
 
 @Injectable()
 export class GitClientService extends ALogger {
@@ -14,13 +14,22 @@ export class GitClientService extends ALogger {
 		@Inject(forwardRef(() => AppKeyService))
 		private readonly appKeyService: AppKeyService,
 		@Inject(forwardRef(() => WebhooksService))
-		private readonly webhooksService: WebhooksService,
+		private readonly webhooksService: WebhooksService
 	) {
 		super();
+		this.disableLogger();
 	}
 
 	get webhooks() {
 		return this.webhooksService;
+	}
+
+	private async gqlQuery(data: any, key: string) {
+		return axios.post(config.GITHUB_GRAPHQL_URL, data, {
+			headers: {
+				Authorization: `Bearer ${key}`
+			}
+		});
 	}
 
 	/**
@@ -30,16 +39,11 @@ export class GitClientService extends ALogger {
 	 */
 	async testAppKey(key: string, user: string): Promise<boolean> {
 		try {
-			const result = await axios.post(
-				config.GITHUB_GRAPHQL_URL,
+			const result = await this.gqlQuery(
 				{
-					query: GET_USER_DATA(user),
+					query: GET_USER_DATA(user)
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${key}`,
-					},
-				},
+				key
 			);
 
 			if (result.data == null || result.data.data == null || result.data.data.user == null) {
@@ -63,28 +67,23 @@ export class GitClientService extends ALogger {
 	 * @param user
 	 * @param owner
 	 */
-	async getRepositories(user: string, owner: string) {
+	async getRepositories(user: string, owner: string, count = 100) {
 		const appKeys = await this.appKeyService.get(user);
 		const appKey = appKeys.length > 0 ? appKeys[0] : null;
 		const key = appKey ? appKey.key : null;
 
-		const result = await axios.post(
-			config.GITHUB_GRAPHQL_URL,
+		const result = await this.gqlQuery(
 			{
-				query: GET_REPOSITORIES(owner, 100),
+				query: GET_REPOSITORIES(owner, count)
 			},
-			{
-				headers: {
-					Authorization: `Bearer ${key}`,
-				},
-			},
+			key
 		);
 
 		// add key id used to get these
 		const repositoriesWithAppKeyId = result.data.data.user.repositories.edges.map(val => {
 			const updated = {
 				...val.node,
-				appKey: appKey.id,
+				appKey: appKey.id
 			};
 
 			return updated;
@@ -109,21 +108,16 @@ export class GitClientService extends ALogger {
 
 		this.l(`querying for ${repo} belonging to ${owner}`);
 
-		const result = await axios.post(
-			config.GITHUB_GRAPHQL_URL,
+		const result = await this.gqlQuery(
 			{
-				query: GET_REPOSITORY_DETAILS(repo, owner),
+				query: GET_REPOSITORY_DETAILS(repo, owner)
 			},
-			{
-				headers: {
-					Authorization: `Bearer ${key}`,
-				},
-			},
+			key
 		);
 
 		const repositoryData = {
 			...result.data.data.repository,
-			appKey: appKey.id,
+			appKey: appKey.id
 		};
 
 		return repositoryData;
