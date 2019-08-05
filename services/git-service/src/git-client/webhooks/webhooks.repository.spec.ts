@@ -5,8 +5,8 @@ import { ObjectID } from 'bson';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
 import TestingUtilities from '../../../../../utilities/testing';
-import { AppKeyModule } from '../../app-key/app-key.module';
-import { AppKeyService } from '../../app-key/app-key.service';
+import { AppKeyModule } from '../app-key/app-key.module';
+import { AppKeyService } from '../app-key/app-key.service';
 import { GitClientModule } from '../git-client.module';
 import { GitClientService } from '../git-client.service';
 import { MockCommandBus } from './../../../../../utilities/MockCommandBus';
@@ -19,7 +19,7 @@ import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
 
 const mockGitClientService = jest.mock('./../git-client.service');
-const mockAppKeyService = jest.mock('../../app-key/app-key.service');
+const mockAppKeyService = jest.mock('./../app-key/app-key.service');
 const mockWebhooksService = jest.mock('./webhooks.service');
 
 const OWNER = process.env.GIT_TESTING_USER;

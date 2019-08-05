@@ -1,19 +1,17 @@
-import { AppKey } from './../graphql.schema.d';
-import { UsersService } from './../users/users.service';
-import { UsersModule } from './../users/users.module';
-import { GitClientService } from './../git-client/git-client.service';
-import { GitClientModule } from './../git-client/git-client.module';
+import { AppKey } from '../../graphql.schema';
+import { UsersService } from '../../users/users.service';
+import { UsersModule } from '../../users/users.module';
+import { GitClientService } from '../git-client.service';
+import { GitClientModule } from '../git-client.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppKeyService } from './app-key.service';
 import { AppKeyResolver } from './app-key.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
-const gitClientServiceMock = jest.genMockFromModule<GitClientService>(
-	'./../git-client/git-client.service'
-);
+const gitClientServiceMock = jest.genMockFromModule<GitClientService>('../git-client.service');
 const appKeyResolverMock = jest.genMockFromModule<AppKeyResolver>('./app-key.resolver');
-const usersServiceMock = jest.mock('./../users/users.service');
+const usersServiceMock = jest.mock('../../users/users.service');
 
 const TEST_APP_KEY_SCENARIOS = [
 	{
@@ -79,7 +77,7 @@ const STORE_APP_KEY_SCENARIOS = [
 		}
 	},
 	{
-		it: 'Successfully calls createAppKey once when the AppKey doesn\'t exist and is validated',
+		it: "Successfully calls createAppKey once when the AppKey doesn't exist and is validated",
 		scenario: {
 			testAppKeyMock: jest.fn(async () => {
 				return true;
@@ -132,7 +130,7 @@ describe('AppKeyService', () => {
 			});
 			appKeyResolverMock.getAppKeys = getAppKeysMock;
 
-			await expect(service.get('someUser')).resolves.toEqual([]);
+			await expect(service.getAllByUser('someUser')).resolves.toEqual([]);
 
 			expect(getAppKeysMock).toHaveBeenCalledTimes(1);
 		});
@@ -150,7 +148,7 @@ describe('AppKeyService', () => {
 						const key = scenario.key;
 						const user = scenario.user;
 
-						await expect(service.validateKey(key, user)).resolves.toEqual(
+						await expect(service.validate(key, user)).resolves.toEqual(
 							scenario.toEqual
 						);
 						expect(testAppKeyMock).toHaveBeenCalledTimes(scenario.testAppKeyMockTimes);
@@ -181,7 +179,7 @@ describe('AppKeyService', () => {
 					const name = 'some repo';
 					const username = 'miking-the-viking';
 
-					await expect(service.storeKey(key, user, name, username)).resolves.toEqual(
+					await expect(service.store(key, user, name, username)).resolves.toEqual(
 						scenario.storeKeyResult
 					);
 
@@ -216,7 +214,7 @@ describe('AppKeyService', () => {
 			});
 			gitClientServiceMock.testAppKey = testAppKeyMock;
 
-			await service.validateKey(key, user);
+			await service.validate(key, user);
 
 			expect(testAppKeyMock).toHaveBeenCalledTimes(1);
 			expect(testAppKeyMock).toHaveBeenCalledWith(key, user);

@@ -19,17 +19,17 @@ import AddAppKeyForm from '@/components/AddAppKeyForm.vue';
 import RepositoriesList from '@/components/RepositoriesList.vue';
 
 @Component({
-    components: {
-        AddAppKeyForm,
-        RepositoriesList
-    }
+	components: {
+		AddAppKeyForm,
+		RepositoriesList
+	}
 })
 export default class MyRepositories extends Vue {
-    get hasAppKey() {
-        return AppStateModule.user.hasAppKey;
-    }
-    beforeMount() {
-        RepositoriesStateModule.syncStoredRepositories();
-    }
+	get hasAppKey() {
+		return AppStateModule.user.hasAppKey;
+	}
+	beforeMount() {
+		RepositoriesStateModule.syncStoredRepositories();
+	}
 }
 </script>

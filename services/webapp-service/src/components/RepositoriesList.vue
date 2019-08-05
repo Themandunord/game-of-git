@@ -71,69 +71,69 @@ import HttpClient from '../common/HttpClient';
 import { pluck, switchMap, debounceTime } from 'rxjs/operators';
 
 @Component({
-    subscriptions() {
-        return {
-            userOfInterestObservable: this.$fromDOMEvent('input', 'keyup').pipe(
-                debounceTime(300),
-                pluck<Event, string>('target', 'value')
-            )
-        };
-    }
+	subscriptions() {
+		return {
+			userOfInterestObservable: this.$fromDOMEvent('input', 'keyup').pipe(
+				debounceTime(300),
+				pluck<Event, string>('target', 'value')
+			)
+		};
+	}
 })
 export default class RepositoriesControlList extends Vue {
-    private selectableRepositories = [];
-    private userOfInterest: string = '';
-    private userOfInterestObservable: string = '';
+	private selectableRepositories = [];
+	private userOfInterest: string = '';
+	private userOfInterestObservable: string = '';
 
-    mounted() {
-        this.loadSelectableRepositories();
-    }
+	mounted() {
+		this.loadSelectableRepositories();
+	}
 
-    get hasAppKey() {
-        return AppStateModule.user.hasAppKey;
-    }
+	get hasAppKey() {
+		return AppStateModule.user.hasAppKey;
+	}
 
-    @Watch('hasAppKey')
-    handleAppKeyStatusUpdate() {
-        this.loadSelectableRepositories();
-    }
+	@Watch('hasAppKey')
+	handleAppKeyStatusUpdate() {
+		this.loadSelectableRepositories();
+	}
 
-    @Watch('userOfInterestObservable')
-    reloadRepos() {
-        this.loadSelectableRepositories();
-    }
+	@Watch('userOfInterestObservable')
+	reloadRepos() {
+		this.loadSelectableRepositories();
+	}
 
-    private getRepoTrackingColor(isTracking: boolean) {
-        return isTracking ? 'blue' : 'white';
-    }
+	private getRepoTrackingColor(isTracking: boolean) {
+		return isTracking ? 'blue' : 'white';
+	}
 
-    get myUsername() {
-        return AppStateModule.user.gitLogin;
-    }
+	get myUsername() {
+		return AppStateModule.user.gitLogin;
+	}
 
-    private async loadSelectableRepositories() {
-        if (!this.hasAppKey) {
-            throw new Error(
-                `User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
-            );
-        }
-        const selectable = await HttpClient.repositories.loadSelectableRepositories(
-            this.userOfInterest
-        );
-        this.selectableRepositories = selectable;
-    }
+	private async loadSelectableRepositories() {
+		if (!this.hasAppKey) {
+			throw new Error(
+				`User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
+			);
+		}
+		const selectable = await HttpClient.repositories.loadSelectableRepositories(
+			this.userOfInterest
+		);
+		this.selectableRepositories = selectable;
+	}
 
-    private async toggleRepoTracking(repo: any) {
-        console.log('toggleRepoTracking: ', repo);
-        await HttpClient.repositories.toggleRepositoryTracking(repo);
-        this.loadSelectableRepositories();
-        RepositoriesStateModule.syncStoredRepositories();
-    }
+	private async toggleRepoTracking(repo: any) {
+		console.log('toggleRepoTracking: ', repo);
+		await HttpClient.repositories.toggleRepositoryTracking(repo);
+		this.loadSelectableRepositories();
+		RepositoriesStateModule.syncStoredRepositories();
+	}
 }
 </script>
 
 <style lang="scss" scoped>
 .ellipsis {
-    text-overflow: ellipsis;
+	text-overflow: ellipsis;
 }
 </style>

@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppKeyModule } from '../../app-key/app-key.module';
+import { AppKeyModule } from '../app-key/app-key.module';
 import { GitClientModule } from './../git-client.module';
 import CommandHandlers from './commands';
 import EventHandlers from './events';

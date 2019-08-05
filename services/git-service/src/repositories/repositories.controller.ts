@@ -1,53 +1,74 @@
 import { RepositoriesService } from './repositories.service';
-import { Controller, Param, Get, Post, Body } from '@nestjs/common';
+import { Controller, Param, Get, Post, Body, Logger } from '@nestjs/common';
 
 @Controller('repositories')
 export class RepositoriesController {
-  constructor(private readonly repositoriesService: RepositoriesService) {}
+	private readonly logger = new Logger('RepositoriesController');
+	constructor(private readonly repositoriesService: RepositoriesService) {}
 
-  @Get('/:user/git/:owner')
-  public async fromGitRepositories(@Param('user') user: string, @Param('owner') owner: string) {
-    return await this.repositoriesService.getRepositoriesFromGit(user, owner);
-  }
+	// Interacting only with Internally-Stored Repositories/State
 
-  @Get('/:user/git/:owner/:repo')
-  public async getRepository(
-    @Param('user') user: string,
-    @Param('owner') owner: string,
-    @Param('repo') repo: string,
-  ) {
-    const resp = await this.repositoriesService.getRepositoryFromGit(user, owner, repo);
+	/**
+	 * @todo rejig and rename this to be more accurate to it's purpose: retrieving all of a user's stored repositories and their data
+	 * @param user
+	 */
+	@Get('/:user/get-tracked-repositories')
+	public async getTrackedRepositories(@Param('user') user: string) {
+		return await this.repositoriesService.getAll(user);
+	}
 
-    return resp;
-  }
+	/**
+	 * Toggle whether a repository is to be tracked by GameOfGit
+	 *
+	 * @param user
+	 * @param owner
+	 * @param idExternal
+	 * @param name
+	 */
+	@Post('/:user/toggle-tracking/:owner/:id/:name')
+	public async toggleTracking(
+		@Param('user') user: string,
+		@Param('owner') owner: string,
+		@Param('id') idExternal: string,
+		@Param('name') name: string
+	) {
+		return await this.repositoriesService.toggleTracking(user, owner, idExternal, name);
+	}
 
-  @Get('/:user/refresh/:owner')
-  public async refreshRepositories(@Param('user') user: string, @Param('owner') owner: string) {
-    return await this.repositoriesService.refreshRepositories(user, owner);
-  }
+	// Interacting with both GitHub and internally stored repos
 
-  @Get('/:user/sync-store')
-  public async syncStore(@Param('user') user: string) {
-    return await this.repositoriesService.syncStore(user);
-  }
+	/**
+	 * Retrieve a particular Repositiry of a GitHub User
+	 *
+	 * @param user
+	 * @param owner
+	 * @param repo
+	 */
+	@Get('/:user/git/:owner/:repo')
+	public async getRepository(
+		@Param('user') user: string,
+		@Param('owner') owner: string,
+		@Param('repo') repo: string
+	) {
+		const resp = await this.repositoriesService.getRepositoryWithFreshGitData(
+			user,
+			owner,
+			repo
+		);
 
-  //   @Get('/:user/load/:owner')
-  //   public async getRepositories(@Param('user') user: string, @Param('owner') owner: string) {
-  //     return await this.repositoriesService.getRepositories(user, owner);
-  //   }
+		return resp;
+	}
 
-  @Get('/:user/select-set/:owner')
-  public async selectionSet(@Param('user') user: string, @Param('owner') owner: string) {
-    return await this.repositoriesService.selectionSet(user, owner);
-  }
-
-  @Post('/:user/toggle-tracking/:owner/:id/:name')
-  public async toggleTracking(
-    @Param('user') user: string,
-    @Param('owner') owner: string,
-    @Param('id') idExternal: string,
-    @Param('name') name: string,
-  ) {
-    return await this.repositoriesService.toggleTracking(user, owner, idExternal, name);
-  }
+	/**
+	 * Retrieve the Repository Selection Set for a given GitHub User
+	 *
+	 * This loads all of a User's the selectable repositories and their current tracked status
+	 *
+	 * @param user
+	 * @param owner
+	 */
+	@Get('/:user/select-set/:owner')
+	public async selectionSet(@Param('user') user: string, @Param('owner') owner: string) {
+		return await this.repositoriesService.selectionSet(user, owner);
+	}
 }

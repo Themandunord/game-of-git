@@ -5,42 +5,42 @@ import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-mo
 import store from '@/store';
 
 @Module({
-    dynamic: true,
-    store,
-    name: 'repositoriesModule'
+	dynamic: true,
+	store,
+	name: 'repositoriesModule'
 })
 class RepositoriesState extends VuexModule implements IRepositoriesState {
-    public repositories: any[] = []; // TODO: better typing
+	public repositories: any[] = []; // TODO: better typing
 
-    @Mutation
-    public setRepositories(repositories?: any[]) {
-        if (repositories != null) {
-            this.repositories = repositories;
-        } else {
-            this.repositories = this.repositories;
-        }
-    }
+	@Mutation
+	public setRepositories(repositories?: any[]) {
+		if (repositories != null) {
+			this.repositories = repositories;
+		} else {
+			this.repositories = this.repositories;
+		}
+	}
 
-    @MutationAction({
-        mutate: ['repositories']
-    })
-    public async syncStoredRepositories() {
-        const repositories = await HttpClient.repositories.retrieveUsersStoredRepositories();
+	@MutationAction({
+		mutate: ['repositories']
+	})
+	public async syncStoredRepositories() {
+		const repositories = await HttpClient.repositories.retrieveUsersStoredRepositories();
 
-        return {
-            repositories
-        };
-    }
+		return {
+			repositories
+		};
+	}
 
-    @Mutation
-    setRepository(repository: any) {
-        this.repositories = this.repositories.map(val => {
-            return {
-                ...val,
-                ...(repository.idExternal === val.idExternal ? repository : {})
-            };
-        });
-    }
+	@Mutation
+	setRepository(repository: any) {
+		this.repositories = this.repositories.map(val => {
+			return {
+				...val,
+				...(repository.idExternal === val.idExternal ? repository : {})
+			};
+		});
+	}
 }
 
 export default getModule(RepositoriesState);

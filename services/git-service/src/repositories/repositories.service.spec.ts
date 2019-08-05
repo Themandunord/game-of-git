@@ -25,7 +25,7 @@ describe('RepositoriesService', () => {
 
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [GitClientModule, WebhooksModule, MongooseModule.forRoot(uri)],
-			providers: [RepositoriesService, RepositoriesResolver],
+			providers: [RepositoriesService, RepositoriesResolver]
 		})
 			.overrideProvider(GitClientService)
 			.useValue(gitClientServiceMock)
@@ -48,7 +48,5 @@ describe('RepositoriesService', () => {
 
 	xdescribe('Retrieving Repositories from GitHub', () => {});
 
-	xdescribe('Refreshing Repositories', () => {});
-
-	xdescribe('Creating a Respotiroy Record and Updating it\'s isTracked status', () => {});
+	xdescribe("Creating a Respotiroy Record and Updating it's isTracked status", () => {});
 });

@@ -1,15 +1,15 @@
-import { GitClientService } from './../git-client/git-client.service';
+import { GitClientService } from '../git-client.service';
 import { AppKeyService } from './app-key.service';
 import { AppKeyResolver } from './app-key.resolver';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppKeyController } from './app-key.controller';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '../../users/users.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongooseModule } from '@nestjs/mongoose';
-import { GitClientModule } from '../git-client/git-client.module';
+import { GitClientModule } from '../git-client.module';
 
 const appKeyResolverMock = jest.mock('./app-key.resolver');
-const gitClientServiceMock = jest.mock('./../git-client/git-client.service');
+const gitClientServiceMock = jest.mock('./../git-client.service');
 
 describe('AppKey Controller', () => {
 	let controller: AppKeyController;
@@ -22,7 +22,7 @@ describe('AppKey Controller', () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [UsersModule, GitClientModule, MongooseModule.forRoot(uri)],
 			providers: [AppKeyResolver, AppKeyService],
-			controllers: [AppKeyController],
+			controllers: [AppKeyController]
 		})
 			.overrideProvider(AppKeyResolver)
 			.useValue(appKeyResolverMock)

@@ -67,7 +67,7 @@ export class AuthService {
 
 		const userData = jsonwebtoken.decode(jwt);
 		const email = (userData as Partial<User>).email;
-		const user = await this.usersService.get(email);
+		const user = await this.usersService.getByEmail(email);
 
 		let error = null;
 
@@ -93,7 +93,7 @@ export class AuthService {
 	 * @param email
 	 */
 	async validateUser(email: string): Promise<User> {
-		return await this.usersService.get(email);
+		return await this.usersService.getByEmail(email);
 	}
 
 	/**

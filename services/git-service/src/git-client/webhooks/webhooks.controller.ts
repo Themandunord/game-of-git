@@ -28,7 +28,7 @@ export class WebhooksController {
     received ${gitEventType} ${body.action ? body.action : ''} webhook!
 ---------------------------------------------`);
 		this.logger.log(
-			`Webhook Controller: received ${gitEventType} webhook update for repository ${id} ${Date.now()}`
+			`received ${gitEventType} webhook update for repository ${id} ${Date.now()}`
 		);
 
 		if (!this.eventTypeIsValid(gitEventType)) {
@@ -44,7 +44,7 @@ export class WebhooksController {
 
 	@Get()
 	public async getAllEvents() {
-		this.logger.log('Webhook Controller: getting all webhook events:');
+		this.logger.log('getting all webhook events:');
 
 		return await this.webhooksService.findAllInMongo();
 	}
