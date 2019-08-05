@@ -1,3 +1,4 @@
+import { WebhooksRepository } from './webhooks.repository';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
@@ -22,12 +23,12 @@ export class WebhooksService {
 		private readonly gitClientService: GitClientService,
 		@Inject(forwardRef(() => AppKeyService))
 		private readonly appKeyService: AppKeyService,
-		// @Inject(forwardRef(() => MongoService))
-		// private readonly mongoService: MongoService,
 		@InjectModel('RepositoryWebhook')
 		private readonly repositoryWebhookModel: Model<IRepositoryWebhook>,
 		private readonly parserService: ParserService,
-		private readonly commandBus: CommandBus
+		private readonly commandBus: CommandBus,
+		@Inject(forwardRef(() => WebhooksRepository))
+		private readonly webhooksRepository: WebhooksRepository
 	) {}
 
 	/**
@@ -83,10 +84,6 @@ export class WebhooksService {
 		);
 
 		await this.deleteWebhook(appKey, repository, existingWebhooks[0].id);
-
-		// create the webhook
-		// const result = await this.createWebhook(appKey, repository);
-		// console.log('result from webhook creation: ', result);
 	}
 
 	/**
@@ -224,10 +221,14 @@ export class WebhooksService {
 			throw e;
 		}
 
-		// save the event
-		const webhook = await this.storeInMongo(payload);
+		const webhook = await this.webhooksRepository.store(
+			'',
+			repository,
+			eventType,
+			webhookEvent
+		);
 
-		const command = new HandleWebhookCommand(repository, eventType, webhookEvent, model);
+		const command = new HandleWebhookCommand(webhook._id);
 
 		// passively execute the command
 		await this.commandBus.execute(command);
@@ -265,15 +266,5 @@ export class WebhooksService {
 		);
 
 		return await this.repositoryWebhookModel.count({ repository });
-	}
-
-	private async storeInMongo(
-		createRepositoryWebhookDto: ICreateRepositoryWebhookDto
-	): Promise<IRepositoryWebhook> {
-		const createdRepositoryWebhook = await this.repositoryWebhookModel.create(
-			createRepositoryWebhookDto
-		);
-
-		return createdRepositoryWebhook;
 	}
 }
