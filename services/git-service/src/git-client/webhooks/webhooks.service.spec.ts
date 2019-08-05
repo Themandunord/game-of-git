@@ -1,21 +1,21 @@
-import { CqrsModule, CommandBus } from '@nestjs/cqrs';
+import { CommandBus, CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fs from 'fs';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
 import { AppKeyService } from '../../app-key/app-key.service';
+import TestingUtilities from './../../../../../utilities/testing';
 import { AppKeyModule } from './../../app-key/app-key.module';
 import { GitClientModule } from './../git-client.module';
 import { GitClientService } from './../git-client.service';
+import { HandleWebhookCommand } from './commands/handle-webhook.command';
+import { HandleWebhookHandler } from './commands/handle-webhook.handler';
+import { EventModelFactory } from './parser/EventModelFactory';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { ParserService } from './parser/parser.service';
 import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
 import { WebhooksService } from './webhooks.service';
-import { HandleWebhookHandler } from './commands/HandleWebhookCommandHandler';
-import { HandleWebhookCommand } from './commands/HandleWebhookCommand';
-import { EventModelFactory } from './parser/EventModelFactory';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('../../app-key/app-key.service');
@@ -90,21 +90,9 @@ describe('WebhooksService', () => {
 					let sampleJson: any;
 
 					beforeAll(async () => {
-						const SAMPLE_JSON_PATH = path.join(
-							__dirname,
-							`parser/eventModels/${eventType}/sample.json`
+						sampleJson = await TestingUtilities.loadJson(
+							path.join(__dirname, `parser/eventModels/${eventType}/sample.json`)
 						);
-
-						const sampleJsonString = (await new Promise((resolve, reject) => {
-							fs.readFile(SAMPLE_JSON_PATH, (err, data) => {
-								if (err) {
-									reject(err);
-								}
-								resolve(data);
-							});
-						})).toString();
-
-						sampleJson = JSON.parse(sampleJsonString);
 					});
 
 					it('Should dispatch a HandleWebhookCommand with the correct Webhook Event Model', async () => {

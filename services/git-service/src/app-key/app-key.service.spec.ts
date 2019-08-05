@@ -10,7 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 const gitClientServiceMock = jest.genMockFromModule<GitClientService>(
-	'./../git-client/git-client.service',
+	'./../git-client/git-client.service'
 );
 const appKeyResolverMock = jest.genMockFromModule<AppKeyResolver>('./app-key.resolver');
 const usersServiceMock = jest.mock('./../users/users.service');
@@ -25,8 +25,8 @@ const TEST_APP_KEY_SCENARIOS = [
 			toEqual: true,
 			testAppKeyMockTimes: 1,
 			user: 'someuser',
-			key: 'somekey',
-		},
+			key: 'somekey'
+		}
 	},
 	{
 		it: 'Executes testAppKey once on the GitClient and returns false when the result is false',
@@ -37,9 +37,9 @@ const TEST_APP_KEY_SCENARIOS = [
 			toEqual: false,
 			testAppKeyMockTimes: 1,
 			user: 'someuser',
-			key: 'somekey',
-		},
-	},
+			key: 'somekey'
+		}
+	}
 ];
 
 const STORE_APP_KEY_SCENARIOS = [
@@ -57,8 +57,8 @@ const STORE_APP_KEY_SCENARIOS = [
 			createAppKeyMock: jest.fn(async () => {
 				return {} as AppKey;
 			}),
-			createAppKeyMockTimes: 0,
-		},
+			createAppKeyMockTimes: 0
+		}
 	},
 	{
 		it: 'Bails when the App Key already exists',
@@ -75,8 +75,8 @@ const STORE_APP_KEY_SCENARIOS = [
 				return {} as AppKey;
 			}),
 			createAppKeyMockTimes: 0,
-			storeKeyResult: undefined,
-		},
+			storeKeyResult: undefined
+		}
 	},
 	{
 		it: 'Successfully calls createAppKey once when the AppKey doesn\'t exist and is validated',
@@ -93,9 +93,9 @@ const STORE_APP_KEY_SCENARIOS = [
 				return {} as AppKey;
 			}),
 			createAppKeyMockTimes: 1,
-			storeKeyResult: {},
-		},
-	},
+			storeKeyResult: {}
+		}
+	}
 ];
 
 describe('AppKeyService', () => {
@@ -108,7 +108,7 @@ describe('AppKeyService', () => {
 
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [GitClientModule, UsersModule, MongooseModule.forRoot(uri)],
-			providers: [AppKeyService, AppKeyResolver],
+			providers: [AppKeyService, AppKeyResolver]
 		})
 			.overrideProvider(GitClientService)
 			.useValue(gitClientServiceMock)
@@ -151,17 +151,20 @@ describe('AppKeyService', () => {
 						const user = scenario.user;
 
 						await expect(service.validateKey(key, user)).resolves.toEqual(
-							scenario.toEqual,
+							scenario.toEqual
 						);
 						expect(testAppKeyMock).toHaveBeenCalledTimes(scenario.testAppKeyMockTimes);
 						expect(testAppKeyMock).toHaveBeenCalledWith(scenario.key, scenario.user);
 					});
-				}),
+				})
 			);
 		});
 	});
 
 	describe('Storing an AppKey', () => {
+		const key = 'somekey';
+		const user = 'someuser';
+
 		describe('Scenarios', async () => {
 			STORE_APP_KEY_SCENARIOS.map(async config => {
 				await it(config.it, async () => {
@@ -175,28 +178,26 @@ describe('AppKeyService', () => {
 					const createAppKeyMock = scenario.createAppKeyMock;
 					appKeyResolverMock.createAppKey = createAppKeyMock;
 
-					const key = 'somekey';
-					const user = 'asdfajhoiu432lasrf';
 					const name = 'some repo';
 					const username = 'miking-the-viking';
 
 					await expect(service.storeKey(key, user, name, username)).resolves.toEqual(
-						scenario.storeKeyResult,
+						scenario.storeKeyResult
 					);
 
 					const mocks = [
 						{
 							func: testAppKeyMock,
-							times: scenario.testAppKeyMockTimes,
+							times: scenario.testAppKeyMockTimes
 						},
 						{
 							func: getAppKeyMock,
-							times: scenario.getAppKeyMockTimes,
+							times: scenario.getAppKeyMockTimes
 						},
 						{
 							func: createAppKeyMock,
-							times: scenario.createAppKeyMockTimes,
-						},
+							times: scenario.createAppKeyMockTimes
+						}
 					];
 					mocks.map(mock => {
 						if (mock.times > 0) {
@@ -214,9 +215,6 @@ describe('AppKeyService', () => {
 				return true;
 			});
 			gitClientServiceMock.testAppKey = testAppKeyMock;
-
-			const key = 'somekey';
-			const user = 'someuser';
 
 			await service.validateKey(key, user);
 

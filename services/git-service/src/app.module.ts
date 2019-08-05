@@ -2,8 +2,6 @@ import { forwardRef, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppKeyModule } from './app-key/app-key.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { GitClientModule } from './git-client/git-client.module';
 import { GraphqlOptions } from './graphql.options';
@@ -23,8 +21,6 @@ import { UsersModule } from './users/users.module';
 		PrismaModule,
 		RepositoriesModule,
 		forwardRef(() => UsersModule),
-	],
-	controllers: [AppController],
-	providers: [AppService],
+	]
 })
 export class AppModule {}
