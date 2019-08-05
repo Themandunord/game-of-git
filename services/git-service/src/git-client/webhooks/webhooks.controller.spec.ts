@@ -1,22 +1,18 @@
-import { AppModule } from './../../app.module';
-import { ParserService } from './parser/parser.service';
-import { WebhooksModule } from './webhooks.module';
-import { GitClientService } from './../git-client.service';
-import { Test, TestingModule } from '@nestjs/testing';
-import { WebhooksController } from './webhooks.controller';
-import { GitClientModule } from '../git-client.module';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongooseModule } from '@nestjs/mongoose';
-import { WebhooksService } from './webhooks.service';
-import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
+import { Test, TestingModule } from '@nestjs/testing';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import * as path from 'path';
+import * as request from 'supertest';
+import TestingUtilities from '../../../../../utilities/testing';
 import { AppKeyModule } from '../../app-key/app-key.module';
 import { AppKeyService } from '../../app-key/app-key.service';
-import { forwardRef } from '@nestjs/common';
-import * as request from 'supertest';
+import { GitClientModule } from '../git-client.module';
+import { GitClientService } from './../git-client.service';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
-import * as fs from 'fs';
-import * as path from 'path';
+import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
+import { WebhooksController } from './webhooks.controller';
+import { WebhooksModule } from './webhooks.module';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('../../app-key/app-key.service');
@@ -102,21 +98,9 @@ describe('Webhooks Controller', () => {
 						let sampleJson: any;
 
 						beforeAll(async () => {
-							const SAMPLE_JSON_PATH = path.join(
-								__dirname,
-								`parser/eventModels/${eventType}/sample.json`
+							sampleJson = await TestingUtilities.loadJson(
+								path.join(__dirname, `parser/eventModels/${eventType}/sample.json`)
 							);
-
-							const sampleJsonString = (await new Promise((resolve, reject) => {
-								fs.readFile(SAMPLE_JSON_PATH, (err, data) => {
-									if (err) {
-										reject(err);
-									}
-									resolve(data);
-								});
-							})).toString();
-
-							sampleJson = JSON.parse(sampleJsonString);
 						});
 
 						it('Should store the webhook and respond with a 201', async () => {

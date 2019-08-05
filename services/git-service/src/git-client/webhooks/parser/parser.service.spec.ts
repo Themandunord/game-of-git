@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fs from 'fs';
 import * as path from 'path';
+import TestingUtilities from '../../../../../../utilities/testing';
 import { EventModelFactory } from './EventModelFactory';
 import { AGitHubEvent } from './eventModels/AGitHubEvent.abstract';
 import { GitHubWebhookEvents } from './eventModels/EventType.constants';
@@ -54,22 +54,9 @@ describe('ParserService', () => {
 						const eventType = GitHubWebhookEvents[eventTypeKey];
 
 						beforeAll(async () => {
-							const SAMPLE_JSON_PATH = path.join(
-								__dirname,
-								`eventModels/${eventType}/sample.json`
+							sampleJson = await TestingUtilities.loadJson(
+								path.join(__dirname, `eventModels/${eventType}/sample.json`)
 							);
-
-							const sampleJsonString = (await new Promise((resolve, reject) => {
-								fs.readFile(SAMPLE_JSON_PATH, (err, data) => {
-									if (err) {
-										reject(err);
-									}
-
-									resolve(data);
-								});
-							})).toString();
-
-							sampleJson = JSON.parse(sampleJsonString);
 
 							expectedCtor = EventModelFactory.getModelConstructor(eventType);
 						});

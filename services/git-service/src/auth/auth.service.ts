@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../graphql.schema';
 import { UsersService } from '../users/users.service';
 import * as jsonwebtoken from 'jsonwebtoken';
-import { ALogger } from '../../../common/utilities/ALogger';
 
 // tslint:disable:no-console
 
@@ -13,15 +12,12 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 @Injectable()
-export class AuthService extends ALogger {
+export class AuthService {
 	constructor(
 		private readonly jwtService: JwtService,
 		@Inject(forwardRef(() => UsersService))
-		private readonly usersService: UsersService,
-	) {
-		super();
-		this.disableLogger();
-	}
+		private readonly usersService: UsersService
+	) {}
 
 	/**
 	 * Create a jwt token with the given User data
@@ -42,19 +38,17 @@ export class AuthService extends ALogger {
 					? true
 					: false,
 			name: userData.name ? userData.name : 'Disciple of Shrek',
-			gitLogin: userData.gitLogin,
+			gitLogin: userData.gitLogin
 		};
 		const accessToken = this.jwtService.sign(user);
 
 		return {
 			expiresIn: 3600,
-			accessToken,
+			accessToken
 		};
 	}
 
 	async verifyToken(token: string) {
-		this.l('verifying token', token);
-
 		try {
 			const result = await this.jwtService.verifyAsync(token);
 
@@ -76,20 +70,18 @@ export class AuthService extends ALogger {
 		let error = null;
 
 		if (!user) {
-			this.e(`user did not exist ${email} or jwt was invalid: ${isValid}`);
+			console.error(`user did not exist ${email} or jwt was invalid: ${isValid}`);
 			error = `User did not exist`;
 		}
 
 		if (!isValid) {
-			this.e(`Auth service could not verify the token ${jwt}`);
+			console.error(`Auth service could not verify the token ${jwt}`);
 			error = `invalid jwt`;
 		}
 
 		if (error) {
 			throw new HttpException(`Invalid jwt`, HttpStatus.UNAUTHORIZED);
 		}
-
-		this.l('Returning new jwt token');
 
 		return await this.createToken(user);
 	}
@@ -101,29 +93,19 @@ export class AuthService extends ALogger {
 	async validateUser(email: string): Promise<User> {
 		return await this.usersService.get(email);
 	}
-	//   public async sign(payload, options = {}) {
-	//     return await this.jwtService.sign(payload, options);
-	//   }
 
 	/**
 	 * Encrypt the given password
 	 * @param password
 	 */
 	public async encryptPassword(password: string) {
-		this.l('encrypting password: ' + password);
-		const hashedPassword = bcrypt.hash(password, saltRounds);
-
-		return hashedPassword;
+		return bcrypt.hash(password, saltRounds);
 	}
 
 	/**
 	 * Compare a password against its hash
 	 */
 	public async comparePassword(password: string, hashedPassword: string) {
-		this.l('comparing password: ' + password + ' against ' + hashedPassword);
-		const result = await bcrypt.compare(password, hashedPassword);
-		this.l('comparison result = ' + result);
-
-		return result;
+		return await bcrypt.compare(password, hashedPassword);
 	}
 }

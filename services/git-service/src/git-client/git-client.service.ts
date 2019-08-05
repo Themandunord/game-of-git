@@ -1,6 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { ALogger } from '../../../common/utilities/ALogger';
 import config from '../config';
 import { AppKeyService } from './../app-key/app-key.service';
 import GET_REPOSITORIES from './gql/GET_REPOSITORIES.gql';
@@ -9,16 +8,13 @@ import GET_USER_DATA from './gql/GET_USER_DATA.gql';
 import { WebhooksService } from './webhooks/webhooks.service';
 
 @Injectable()
-export class GitClientService extends ALogger {
+export class GitClientService {
 	constructor(
 		@Inject(forwardRef(() => AppKeyService))
 		private readonly appKeyService: AppKeyService,
 		@Inject(forwardRef(() => WebhooksService))
 		private readonly webhooksService: WebhooksService
-	) {
-		super();
-		this.disableLogger();
-	}
+	) {}
 
 	get webhooks() {
 		return this.webhooksService;
@@ -48,14 +44,14 @@ export class GitClientService extends ALogger {
 
 			if (result.data == null || result.data.data == null || result.data.data.user == null) {
 				// tslint:disable:no-console
-				this.e('Missing expected data to validate against in app key test.');
+				console.error('Missing expected data to validate against in app key test.');
 
 				return false;
 			}
 
 			return true;
 		} catch (e) {
-			this.e('Error testing the app key: ' + e + ' likely invalid.');
+			console.error('Error testing the app key: ' + e + ' likely invalid.');
 		}
 
 		return false;
@@ -100,13 +96,13 @@ export class GitClientService extends ALogger {
 	 * @param owner
 	 */
 	async getRepositoryDetails(user: string, repo: string, owner: string) {
-		this.l(`Git Client getting Repo details for ${repo} belonging to ${owner}`);
+		console.log(`Git Client getting Repo details for ${repo} belonging to ${owner}`);
 
 		const appKeys = await this.appKeyService.get(user);
 		const appKey = appKeys.length > 0 ? appKeys[0] : null;
 		const key = appKey ? appKey.key : null;
 
-		this.l(`querying for ${repo} belonging to ${owner}`);
+		console.log(`querying for ${repo} belonging to ${owner}`);
 
 		const result = await this.gqlQuery(
 			{

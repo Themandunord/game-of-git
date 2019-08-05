@@ -1,4 +1,4 @@
-import { HandleWebhookHandler } from './commands/HandleWebhookCommandHandler';
+import { HandleWebhookHandler } from './commands/handle-webhook.handler';
 import { GitClientModule } from './../git-client.module';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksService } from './webhooks.service';

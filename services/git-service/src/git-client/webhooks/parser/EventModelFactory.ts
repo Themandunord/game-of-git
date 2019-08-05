@@ -1,6 +1,5 @@
 import { CHECK_RUN } from './eventModels/check_run/constants';
 import { plainToClass } from 'class-transformer';
-import { ALogger } from '../../../../../common/utilities/ALogger';
 import models from './eventModels';
 import { AGitHubEvent } from './eventModels/AGitHubEvent.abstract';
 import { CheckRunEvent } from './eventModels/check_run/CheckRunEvent';

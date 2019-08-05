@@ -1,36 +1,18 @@
-import { HandleWebhookCommand } from './commands/HandleWebhookCommand';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ParserService } from './parser/parser.service';
-import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
-import { GitClientService } from './../git-client.service';
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
-import config from '../../config';
+import { Model } from 'mongoose';
 import { Repository } from 'src/graphql.schema';
 import { AppKeyService } from '../../app-key/app-key.service';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Document } from 'mongoose';
+import config from '../../config';
+import { GitClientService } from './../git-client.service';
+import { HandleWebhookCommand } from './commands/handle-webhook.command';
+import { ICreateRepositoryWebhookDto } from './ICreateRepositoryWebhookDto.interface';
+import { IRepositoryWebhook } from './IRepositoryWebhook.interface';
 import { EventModelFactory } from './parser/EventModelFactory';
-import { ALogger } from '../../../../common/utilities/ALogger';
-import { AGitHubEvent } from './parser/eventModels/AGitHubEvent.abstract';
-import { plainToClass } from 'class-transformer';
-
-export interface IRepositoryWebhook extends Document {
-	repository: string;
-	eventType: string;
-	action: string;
-	date: Date;
-	data: any;
-}
-
-export interface CreateRepositoryWebhookDto {
-	repository: string;
-	eventType: string;
-	action: string;
-	date?: Date;
-	data: any;
-}
-
+import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
+import { ParserService } from './parser/parser.service';
 // tslint:disable:no-console
 
 @Injectable()
@@ -222,7 +204,7 @@ export class WebhooksService {
 		eventType: GitHubWebhookEventType,
 		webhookEvent: any
 	) {
-		const payload: CreateRepositoryWebhookDto = {
+		const payload: ICreateRepositoryWebhookDto = {
 			repository,
 			eventType,
 			action: webhookEvent.action ? webhookEvent.action : eventType,
@@ -286,7 +268,7 @@ export class WebhooksService {
 	}
 
 	private async storeInMongo(
-		createRepositoryWebhookDto: CreateRepositoryWebhookDto
+		createRepositoryWebhookDto: ICreateRepositoryWebhookDto
 	): Promise<IRepositoryWebhook> {
 		const createdRepositoryWebhook = await this.repositoryWebhookModel.create(
 			createRepositoryWebhookDto

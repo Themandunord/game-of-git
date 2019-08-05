@@ -13,13 +13,12 @@ import { WebhooksService } from './webhooks/webhooks.service';
 const appKeyServiceMock = jest.genMockFromModule<AppKeyService>('./../app-key/app-key.service');
 const webhooksServiceMock = jest.mock('./webhooks/webhooks.service');
 
-// For transient errors while using shitty ass bus WiFi
-jest.setTimeout(15000);
-
 describe('GitClientService', () => {
 	let service: GitClientService;
 	let mongod: MongoMemoryServer;
-	const validGitAppKey = process.env.GIT_ACCESS_TOKEN;
+	const VALID_GIT_APP_KEY = process.env.GIT_TESTING_TOKEN;
+	const GIT_USER = process.env.GIT_TESTING_USER;
+	const GIT_REPO = process.env.GIT_TESTING_REPOSITORY;
 
 	beforeEach(async () => {
 		mongod = new MongoMemoryServer();
@@ -49,15 +48,11 @@ describe('GitClientService', () => {
 	describe('Testing an App Key', () => {
 		// TODO: HttpClient Module + Service to wrap axios and mock the results from GitHub's API
 		it('Should return true if the axios post call returns true', async () => {
-			await expect(service.testAppKey(validGitAppKey, 'miking-the-viking')).resolves.toEqual(
-				true
-			);
+			await expect(service.testAppKey(VALID_GIT_APP_KEY, GIT_USER)).resolves.toEqual(true);
 		});
 
 		it('Should return false if the axios post call returns false', async () => {
-			await expect(service.testAppKey('asdfasdfadsf', 'miking-the-viking')).resolves.toEqual(
-				false
-			);
+			await expect(service.testAppKey('asdfasdfadsf', GIT_USER)).resolves.toEqual(false);
 		});
 	});
 
@@ -65,11 +60,11 @@ describe('GitClientService', () => {
 		it('Should return an array of repositories from the API cal', async () => {
 			appKeyServiceMock.get = jest.fn(async () => [
 				{
-					key: validGitAppKey
+					key: VALID_GIT_APP_KEY
 				} as AppKey
 			]);
 
-			const result = await service.getRepositories('123123123', 'miking-the-viking', 1);
+			const result = await service.getRepositories('123123123', GIT_USER, 1);
 
 			// should be an array
 			expect(result).toBeInstanceOf(Array);
@@ -80,11 +75,11 @@ describe('GitClientService', () => {
 
 	describe('Retrieving the details of a repository', () => {
 		it('Should retrieve the details for a repository', async () => {
-			const repositoryName = 'game-of-git';
-			const repositoryOwner = 'miking-the-viking';
+			const repositoryName = GIT_REPO;
+			const repositoryOwner = GIT_USER;
 			appKeyServiceMock.get = jest.fn(async () => [
 				{
-					key: validGitAppKey
+					key: VALID_GIT_APP_KEY
 				} as AppKey
 			]);
 

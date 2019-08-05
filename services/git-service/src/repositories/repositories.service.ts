@@ -4,36 +4,33 @@ import { Repository } from '../graphql.schema';
 import { GitClientService } from './../git-client/git-client.service';
 import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
 import { RepositoriesResolver } from './repositories.resolver';
-import { ALogger } from '../../../common/utilities/ALogger';
 
 @Injectable()
-export class RepositoriesService extends ALogger {
+export class RepositoriesService {
 	constructor(
 		private readonly repositoriesResolver: RepositoriesResolver,
 		private readonly gitClient: GitClientService,
-		private readonly webhooksService: WebhooksService,
-	) {
-		super();
-		this.disableLogger();
-	}
+		private readonly webhooksService: WebhooksService
+	) {}
 
 	async getRepositoryFromGit(user: string, ownerUsername: string, repo: string) {
-		this.l(`getting repository from Git for ${user} ${ownerUsername} ${repo}`);
+		// tslint:disable:no-console
+		console.log(`getting repository from Git for ${user} ${ownerUsername} ${repo}`);
 		await this.syncRepositoryWithGitHub(repo, ownerUsername, user);
 
 		const storedRepository = await this.repositoriesResolver.getRepository(
 			{
 				where: {
-					name: repo,
-				},
+					name: repo
+				}
 			},
-			GET_REPOSITORIES,
+			GET_REPOSITORIES
 		);
 		const detailsFromGit = await this.gitClient.getRepositoryDetails(user, repo, ownerUsername);
 
 		return {
 			...detailsFromGit,
-			...(storedRepository ? storedRepository : {}),
+			...(storedRepository ? storedRepository : {})
 		};
 	}
 
@@ -48,11 +45,11 @@ export class RepositoriesService extends ALogger {
 			{
 				where: {
 					user: {
-						id: user,
-					},
-				},
+						id: user
+					}
+				}
 			},
-			GET_REPOSITORIES,
+			GET_REPOSITORIES
 		);
 
 		const selectableRepos = gitRepos.map(val => {
@@ -69,7 +66,7 @@ export class RepositoriesService extends ALogger {
 				name,
 				owner,
 				updatedAt,
-				appKey,
+				appKey
 			} = val;
 
 			const existingRepository = storedRepositories.find(stored => {
@@ -89,7 +86,7 @@ export class RepositoriesService extends ALogger {
 				owner,
 				updatedAtExternal: updatedAt,
 				isTracked: existingRepository != null ? existingRepository.isTracked : false,
-				appKey,
+				appKey
 			};
 		});
 
@@ -118,8 +115,8 @@ export class RepositoriesService extends ALogger {
 	}
 
 	async createRepository(user: string, ownerUsername: string, name: string) {
-		this.l(
-			`Repositories Service: Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`,
+		console.log(
+			`Repositories Service: Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`
 		);
 
 		const repoDetails = await this.gitClient.getRepositoryDetails(user, name, ownerUsername);
@@ -133,7 +130,7 @@ export class RepositoriesService extends ALogger {
 			isPrivate,
 			isArchived,
 			isDisabled,
-			sshUrl,
+			sshUrl
 		} = repoDetails;
 
 		const idExternal = repoDetails.id;
@@ -146,13 +143,13 @@ export class RepositoriesService extends ALogger {
 			data: {
 				user: {
 					connect: {
-						id: user,
-					},
+						id: user
+					}
 				},
 				appKey: {
 					connect: {
-						id: appKey,
-					},
+						id: appKey
+					}
 				},
 				name,
 				description,
@@ -168,15 +165,15 @@ export class RepositoriesService extends ALogger {
 				isPrivate,
 				isArchived,
 				isDisabled,
-				sshUrl,
-			},
+				sshUrl
+			}
 		};
 
-		this.l('Repositories Service: Create Payload: ', CREATE_PAYLOAD);
+		console.log('Repositories Service: Create Payload: ', CREATE_PAYLOAD);
 
 		const newRepoData = await this.repositoriesResolver.createRepository(
 			CREATE_PAYLOAD,
-			GET_REPOSITORIES,
+			GET_REPOSITORIES
 		);
 
 		return newRepoData;
@@ -185,13 +182,13 @@ export class RepositoriesService extends ALogger {
 	async updateRepository(id: string, data: any) {
 		const UPDATE_PAYLOAD = {
 			where: {
-				id,
+				id
 			},
-			data,
+			data
 		};
 		const updatedRepoData = await this.repositoriesResolver.updateRepository(
 			UPDATE_PAYLOAD,
-			GET_REPOSITORIES,
+			GET_REPOSITORIES
 		);
 
 		return updatedRepoData;
@@ -201,10 +198,10 @@ export class RepositoriesService extends ALogger {
 		return await this.repositoriesResolver.getRepository(
 			{
 				where: {
-					idExternal: id,
-				},
+					idExternal: id
+				}
 			},
-			GET_REPOSITORIES,
+			GET_REPOSITORIES
 		);
 	}
 
@@ -219,8 +216,8 @@ export class RepositoriesService extends ALogger {
 	 * @param repository
 	 */
 	async toggleTracking(user: string, ownerUsername: string, id: string, name: string) {
-		this.l(
-			`Repositories Service: Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`,
+		console.log(
+			`Repositories Service: Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`
 		);
 
 		const existingRepository = await this.getExistingRepository(id);
@@ -230,7 +227,7 @@ export class RepositoriesService extends ALogger {
 			repoData = await this.createRepository(user, ownerUsername, name);
 		} else {
 			const updatedRepoData = await this.updateRepository(existingRepository.id, {
-				isTracked: !existingRepository.isTracked,
+				isTracked: !existingRepository.isTracked
 			});
 			repoData = updatedRepoData;
 		}
@@ -241,7 +238,7 @@ export class RepositoriesService extends ALogger {
 	}
 
 	async configureRepositoryWebhooks(repository: Repository, user: string): Promise<void> {
-		this.l('Repositories Service: configuring repository webhooks', repository);
+		console.log('Repositories Service: configuring repository webhooks', repository);
 		if (repository.isTracked) {
 			await this.gitClient.webhooks.initializeRepositoryWebhooks(repository, user);
 		} else {
@@ -258,26 +255,26 @@ export class RepositoriesService extends ALogger {
 			{
 				where: {
 					user: {
-						id: user,
-					},
-				},
+						id: user
+					}
+				}
 			},
-			GET_REPOSITORIES,
+			GET_REPOSITORIES
 		);
 
 		// get tracked event count for each repository
 		const results = await Promise.all(
 			repositories.map(async repo => {
 				const eventCount = await this.webhooksService.eventCountForRepository(repo.id);
-				this.l(
-					`Repositories Service: Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`,
+				console.log(
+					`Repositories Service: Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`
 				);
 
 				return {
 					eventCount,
-					...repo,
+					...repo
 				};
-			}),
+			})
 		);
 
 		return results;
@@ -290,7 +287,7 @@ export class RepositoriesService extends ALogger {
 	 * @param id
 	 */
 	async syncRepositoryWithGitHub(name: string, owner: string, user: string) {
-		this.l('Repositories Service: syncing repository: ', name);
+		console.log('Repositories Service: syncing repository: ', name);
 		await this.gitClient.getRepositoryDetails(user, name, owner);
 	}
 }
