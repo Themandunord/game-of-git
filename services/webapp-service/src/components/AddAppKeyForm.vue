@@ -30,70 +30,70 @@ import HttpClient from '@/common/HttpClient';
 
 @Component
 export default class AddAppKeyForm extends Vue {
-    private dialog = false;
-    private username: string | null = null;
-    private name: string | null = null;
-    private key: string | null = null;
-    private appKeyIsValid: boolean = false;
+	private dialog = false;
+	private username: string | null = null;
+	private name: string | null = null;
+	private key: string | null = null;
+	private appKeyIsValid: boolean = false;
 
-    @Watch('key')
-    private async validateKey() {
-        this.appKeyIsValid = await this.validateAppKey();
-    }
+	@Watch('key')
+	private async validateKey() {
+		this.appKeyIsValid = await this.validateAppKey();
+	}
 
-    get repositories() {
-        return RepositoriesStateModule.repositories;
-    }
+	get repositories() {
+		return RepositoriesStateModule.repositories;
+	}
 
-    get hasAppKey() {
-        return AppStateModule.hasAppKey;
-    }
+	get hasAppKey() {
+		return AppStateModule.hasAppKey;
+	}
 
-    get hasRepositories() {
-        return this.repositories.length === 0;
-    }
+	get hasRepositories() {
+		return this.repositories.length === 0;
+	}
 
-    private async validateAppKey() {
-        if (
-            this.username != null &&
-            this.username.length > 0 &&
-            this.name != null &&
-            this.name.length > 0 &&
-            this.key != null &&
-            this.key.length > 0
-        ) {
-            const isValid = await HttpClient.users.validateAppKey(this.username, this.key);
-            console.log(`server returned: ${isValid} which is a ${typeof isValid}`);
+	private async validateAppKey() {
+		if (
+			this.username != null &&
+			this.username.length > 0 &&
+			this.name != null &&
+			this.name.length > 0 &&
+			this.key != null &&
+			this.key.length > 0
+		) {
+			const isValid = await HttpClient.users.validateAppKey(this.username, this.key);
+			console.log(`server returned: ${isValid} which is a ${typeof isValid}`);
 
-            return isValid;
-        }
-        console.log('Missing param, definitely not valid.');
+			return isValid;
+		}
+		console.log('Missing param, definitely not valid.');
 
-        return false;
-    }
+		return false;
+	}
 
-    private async save() {
-        if (!this.appKeyIsValid) {
-            console.log('App key is not valid, cannot save');
+	private async save() {
+		if (!this.appKeyIsValid) {
+			console.log('App key is not valid, cannot save');
 
-            return;
-        }
-        if (!this.appKeyIsValid) {
-            console.log(
-                `Missing data, cannot save ${this.username} ${this.name} ${this.key} ${this.appKeyIsValid}`
-            );
+			return;
+		}
+		if (!this.appKeyIsValid) {
+			console.log(
+				`Missing data, cannot save ${this.username} ${this.name} ${this.key} ${this.appKeyIsValid}`
+			);
 
-            return;
-        }
+			return;
+		}
 
-        await HttpClient.users.addAppKey(
-            this.username!!,
-            this.name!!,
-            this.key!!,
-            AppStateModule.user.id
-        );
+		await HttpClient.users.addAppKey(
+			this.username!!,
+			this.name!!,
+			this.key!!,
+			AppStateModule.user.id!!
+		);
 
-        HttpClient.refreshUserData();
-    }
+		HttpClient.refreshUserData();
+	}
 }
 </script>

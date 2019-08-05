@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import config from '../config';
 import { AppKeyService } from './../app-key/app-key.service';
@@ -9,6 +9,8 @@ import { WebhooksService } from './webhooks/webhooks.service';
 
 @Injectable()
 export class GitClientService {
+	private readonly logger = new Logger('GitClientService');
+
 	constructor(
 		@Inject(forwardRef(() => AppKeyService))
 		private readonly appKeyService: AppKeyService,
@@ -44,14 +46,14 @@ export class GitClientService {
 
 			if (result.data == null || result.data.data == null || result.data.data.user == null) {
 				// tslint:disable:no-console
-				console.error('Missing expected data to validate against in app key test.');
+				this.logger.error('Missing expected data to validate against in app key test.');
 
 				return false;
 			}
 
 			return true;
 		} catch (e) {
-			console.error('Error testing the app key: ' + e + ' likely invalid.');
+			this.logger.error('Error testing the app key: ' + e + ' likely invalid.');
 		}
 
 		return false;
@@ -96,13 +98,13 @@ export class GitClientService {
 	 * @param owner
 	 */
 	async getRepositoryDetails(user: string, repo: string, owner: string) {
-		console.log(`Git Client getting Repo details for ${repo} belonging to ${owner}`);
+		this.logger.log(`Git Client getting Repo details for ${repo} belonging to ${owner}`);
 
 		const appKeys = await this.appKeyService.get(user);
 		const appKey = appKeys.length > 0 ? appKeys[0] : null;
 		const key = appKey ? appKey.key : null;
 
-		console.log(`querying for ${repo} belonging to ${owner}`);
+		this.logger.log(`querying for ${repo} belonging to ${owner}`);
 
 		const result = await this.gqlQuery(
 			{

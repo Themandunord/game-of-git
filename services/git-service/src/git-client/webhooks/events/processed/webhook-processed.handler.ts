@@ -1,10 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { WebhookProcessedEvent } from './webhook-processed.event';
+import { Logger } from '@nestjs/common';
 
 @EventsHandler(WebhookProcessedEvent)
 export class WebhookProcessedHandler implements IEventHandler<WebhookProcessedEvent> {
+	private readonly logger = new Logger('WebhookProcessedHandler');
 	handle(event: WebhookProcessedEvent) {
-		// tslint:disable:no-console
-		console.log('Async WebhookProcessedEvent...');
+		this.logger.log('Async WebhookProcessedEvent...');
 	}
 }
