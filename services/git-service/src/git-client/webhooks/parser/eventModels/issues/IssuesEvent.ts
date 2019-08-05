@@ -1,16 +1,13 @@
-/*
-SAMPLE https://developer.github.com/v3/activity/events/types/#issuesevent
-*/
-
 import { AGitHubEvent } from '../AGitHubEvent.abstract';
-import { IRepositoryUser } from '../common/IRepositoryUser.interface';
-import { IRepository } from '../common/IRepository.interface';
-import { IRepositoryIssue } from '../common/IRepositoryIssue.interface';
+import { IRepository } from '../../common/IRepository.interface';
+import { IRepositoryIssue } from '../../common/IRepositoryIssue.interface';
+import { IRepositoryUser } from '../../common/IRepositoryUser.interface';
+import { IssuesActionType } from './constants';
 
 export class IssuesEvent extends AGitHubEvent {
-    public action: string;
-    public issue: IRepositoryIssue;
-    public changes: any;
-    public repository: IRepository;
-    public sender: IRepositoryUser;
+	public action: IssuesActionType;
+	public issue: IRepositoryIssue;
+	public changes?: any; // TODO only if `edited`
+	public repository: IRepository;
+	public sender: IRepositoryUser;
 }
