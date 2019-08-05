@@ -1,3 +1,4 @@
+import { WebhooksModule } from './../git-client/webhooks/webhooks.module';
 import { forwardRef, Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AppKeyModule } from './../app-key/app-key.module';
@@ -7,8 +8,13 @@ import { RepositoriesResolver } from './repositories.resolver';
 import { RepositoriesService } from './repositories.service';
 
 @Module({
-  imports: [PrismaModule, forwardRef(() => GitClientModule), forwardRef(() => AppKeyModule)],
-  providers: [RepositoriesService, RepositoriesResolver],
-  controllers: [RepositoriesController],
+	imports: [
+		PrismaModule,
+		forwardRef(() => GitClientModule),
+		forwardRef(() => AppKeyModule),
+		WebhooksModule
+	],
+	providers: [RepositoriesService, RepositoriesResolver],
+	controllers: [RepositoriesController]
 })
 export class RepositoriesModule {}
