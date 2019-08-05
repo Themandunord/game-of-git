@@ -53,3 +53,24 @@ The `services/git-service/` directory contains the NestJs App, run `yarn` to ins
 #### The Front End, Vue
 
 The Vue App has been scaffolded using the Vue CLI, so devleopment is a breeze. Simply run `yarn serve` in the `services/webapp-service/` directory and the Vue app will compile and serve at `localhost:8080` with live file watching.
+
+## Setup
+
+### GitHub Access
+
+In order to function, the service needs permission to access GitHub's API on your behalf. GoG will require a generated personal access token from GitHub which can be creatd by visiting your `Settings` page, then `Developer Settings` > `Personal access tokens`.
+
+Give the token a meaningful name so that you can remember _why_ you made this token (`game-of-git`, for instance). You'll need the following permissions for proper access:
+
+```
+user
+public_repo
+repo
+repo_deployment
+repo:status
+read:repo_hook
+read:org
+read:public_key
+read:gpg_key
+```
+

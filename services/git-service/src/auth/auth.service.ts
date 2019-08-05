@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException, Inject, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../graphql.schema';
 import { UsersService } from '../users/users.service';
@@ -13,110 +13,99 @@ const saltRounds = 10;
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly usersService: UsersService,
-  ) {}
+	constructor(
+		private readonly jwtService: JwtService,
+		@Inject(forwardRef(() => UsersService))
+		private readonly usersService: UsersService
+	) {}
 
-  /**
-   * Create a jwt token with the given User data
-   * @param userData
-   */
-  async createToken(userData: Partial<User>) {
-    const user: {
-      email: string;
-      id: string;
-      hasAppKey: boolean;
-      name: string;
-      gitLogin: string;
-    } = {
-      email: userData.email,
-      id: userData.id,
-      hasAppKey: (userData.keys != null && userData.keys.length > 0 || (userData as any).hasAppKey) ? true : false,
-      name: userData.name ? userData.name : 'Disciple of Shrek',
-      gitLogin: userData.gitLogin,
-    };
-    const accessToken = this.jwtService.sign(user);
+	/**
+	 * Create a jwt token with the given User data
+	 * @param userData
+	 */
+	async createToken(userData: Partial<User>) {
+		const user: {
+			email: string;
+			id: string;
+			hasAppKey: boolean;
+			name: string;
+			gitLogin: string;
+		} = {
+			email: userData.email,
+			id: userData.id,
+			hasAppKey:
+				(userData.keys != null && userData.keys.length > 0) || (userData as any).hasAppKey
+					? true
+					: false,
+			name: userData.name ? userData.name : 'Disciple of Shrek',
+			gitLogin: userData.gitLogin
+		};
+		const accessToken = this.jwtService.sign(user);
 
-    return {
-      expiresIn: 3600,
-      accessToken,
-    };
-  }
+		return {
+			expiresIn: 3600,
+			accessToken
+		};
+	}
 
-  async verifyToken(token: string) {
-    console.log('verifying token', token);
+	async verifyToken(token: string) {
+		try {
+			const result = await this.jwtService.verifyAsync(token);
 
-    try {
-      const result = await this.jwtService.verifyAsync(token);
+			return true;
+		} catch (e) {
+			return false;
+		}
 
-      return true;
-    } catch (e) {
+		return false;
+	}
 
-      return false;
-    }
+	async refreshToken(jwt: string) {
+		const isValid = await this.verifyToken(jwt);
 
-    return false;
-  }
+		const userData = jsonwebtoken.decode(jwt);
+		const email = (userData as Partial<User>).email;
+		const user = await this.usersService.get(email);
 
-  async refreshToken(jwt: string) {
-    const isValid = await this.verifyToken(jwt);
+		let error = null;
 
-    const userData = jsonwebtoken.decode(jwt);
-    const email = (userData as Partial<User>).email;
-    const user = await this.usersService.get(email);
+		if (!user) {
+			console.error(`user did not exist ${email} or jwt was invalid: ${isValid}`);
+			error = `User did not exist`;
+		}
 
-    let error = null;
+		if (!isValid) {
+			console.error(`Auth service could not verify the token ${jwt}`);
+			error = `invalid jwt`;
+		}
 
-    if (!user) {
-      console.error(`user did not exist ${email} or jwt was invalid: ${isValid}`);
-      error = `User did not exist`;
-    }
+		if (error) {
+			throw new HttpException(`Invalid jwt`, HttpStatus.UNAUTHORIZED);
+		}
 
-    if (!isValid) {
-      console.error(`Auth service could not verify the token ${jwt}`);
-      error = `invalid jwt`;
-    }
+		return await this.createToken(user);
+	}
 
-    if (error) {
-      throw new HttpException(`Invalid jwt`, HttpStatus.UNAUTHORIZED);
-    }
+	/**
+	 * Validate that the given user exists to authenticate
+	 * @param email
+	 */
+	async validateUser(email: string): Promise<User> {
+		return await this.usersService.get(email);
+	}
 
-    console.log('Returning new jwt token');
+	/**
+	 * Encrypt the given password
+	 * @param password
+	 */
+	public async encryptPassword(password: string) {
+		return bcrypt.hash(password, saltRounds);
+	}
 
-    return await this.createToken(user);
-  }
-
-  /**
-   * Validate that the given user exists to authenticate
-   * @param email
-   */
-  async validateUser(email: string): Promise<User> {
-    return await this.usersService.get(email);
-  }
-  //   public async sign(payload, options = {}) {
-  //     return await this.jwtService.sign(payload, options);
-  //   }
-
-  /**
-   * Encrypt the given password
-   * @param password
-   */
-  public async encryptPassword(password: string) {
-    console.log('encrypting password: ' + password);
-    const hashedPassword = bcrypt.hash(password, saltRounds);
-
-    return hashedPassword;
-  }
-
-  /**
-   * Compare a password against its hash
-   */
-  public async comparePassword(password: string, hashedPassword: string) {
-    console.log('comparing password: ' + password + ' against ' + hashedPassword);
-    const result = await bcrypt.compare(password, hashedPassword);
-    console.log('comparison result = ' + result);
-
-    return result;
-  }
+	/**
+	 * Compare a password against its hash
+	 */
+	public async comparePassword(password: string, hashedPassword: string) {
+		return await bcrypt.compare(password, hashedPassword);
+	}
 }

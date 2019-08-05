@@ -1,32 +1,48 @@
 import { WebhooksService } from './webhooks.service';
-import { Controller, Post, Body, Headers, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Headers, Param, Get, NotFoundException } from '@nestjs/common';
+import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
+import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 
 @Controller('webhook')
 export class WebhooksController {
-  constructor(private readonly webhooksService: WebhooksService) {}
-  @Post('/:id')
-  async webhookHandler(@Param('id') id: string, @Body() body, @Headers() headers) {
-    const gitEventType = headers['x-github-event']; // https://developer.github.com/webhooks/
-    console.log(`
+	constructor(private readonly webhooksService: WebhooksService) {}
+	@Post('/:id')
+	async webhookHandler(@Param('id') id: string, @Body() body, @Headers() headers) {
+		// https://developer.github.com/webhooks/
+
+		const gitEventType = headers['x-github-event'] as GitHubWebhookEventType;
+		// const gitDelivery = headers['x-github-delivery'];
+
+		console.log(`
 ---------------------------------------------
     received ${gitEventType} ${body.action ? body.action : ''} webhook!
 ---------------------------------------------`);
-    // const gitDelivery = headers['x-github-delivery'];
-    console.log(
-      `Webhook Controller: received ${gitEventType} webhook update for repository ${id} ${Date.now()}`,
-    );
+		console.log(
+			`Webhook Controller: received ${gitEventType} webhook update for repository ${id} ${Date.now()}`
+		);
 
-    // TODO: implement and use te parser in order to process the webhook payload
-    const result = await this.webhooksService.storeEvent(id, gitEventType, body);
+		if (!this.eventTypeIsValid(gitEventType)) {
+			console.error('Returning NotFoundException');
 
-    // console.log('Webhook Controller: result from storage: ', result);
-    return result;
-  }
+			throw new NotFoundException(`Event Type ${gitEventType} was not found/supported`);
+		}
 
-  @Get()
-  public async getAllEvents() {
-    console.log('Webhook Controller: getting all webhook events:');
+		const result = await this.webhooksService.handleEvent(id, gitEventType, body);
 
-    return await this.webhooksService.findAll();
-  }
+		return result;
+	}
+
+	@Get()
+	public async getAllEvents() {
+		console.log('Webhook Controller: getting all webhook events:');
+
+		return await this.webhooksService.findAllInMongo();
+	}
+
+	private eventTypeIsValid(eventType: string): boolean {
+		return (
+			Object.keys(GitHubWebhookEvents).find(val => GitHubWebhookEvents[val] === eventType) !=
+			null
+		);
+	}
 }
