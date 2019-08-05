@@ -1,3 +1,3 @@
 export interface IGitHubState {
-    users: any[];
+	users: any[];
 }

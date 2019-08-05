@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppKeyModule } from './app-key/app-key.module';
+import { AppKeyModule } from './git-client/app-key/app-key.module';
 import { AuthModule } from './auth/auth.module';
 import { GitClientModule } from './git-client/git-client.module';
 import { GraphqlOptions } from './graphql.options';
@@ -15,12 +15,12 @@ import { UsersModule } from './users/users.module';
 		forwardRef(() => AuthModule),
 		GitClientModule,
 		GraphQLModule.forRootAsync({
-			useClass: GraphqlOptions,
+			useClass: GraphqlOptions
 		}),
 		MongooseModule.forRoot('mongodb://localhost/nest'),
 		PrismaModule,
 		RepositoriesModule,
-		forwardRef(() => UsersModule),
+		forwardRef(() => UsersModule)
 	]
 })
 export class AppModule {}

@@ -26,7 +26,7 @@ export class AuthController {
 	async login(@Body('email') email, @Body('password') password: string) {
 		this.logger.log(`Auth Controller: Trying to login for ${email} with ${password}`);
 
-		const user = await this.usersService.get(email);
+		const user = await this.usersService.getByEmail(email);
 
 		if (!user) {
 			this.logger.warn(`user did not exist ${email}`);

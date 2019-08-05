@@ -1,7 +1,7 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { AppKeyModule } from './../app-key/app-key.module';
+import { AppKeyModule } from '../git-client/app-key/app-key.module';
 import { GitClientService } from './../git-client/git-client.service';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -33,19 +33,19 @@ describe('Users Controller', () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [
 				AppKeyModule,
-				MongooseModule.forRoot(uri),
+				MongooseModule.forRoot(uri)
 				// MongooseModule.forFeature([
 				// 	{ name: 'RepositoryWebhook', schema: RepositoryWebhookSchema },
 				// ]),
 			],
 			providers: [
-				UsersService,
+				UsersService
 				// {
 				// 	provide: getModelToken('RepositoryWebhook'),
 				// 	useValue: RepositoryWebhookSchema,
 				// },
 			],
-			controllers: [UsersController],
+			controllers: [UsersController]
 		})
 			.overrideProvider(UsersService)
 			.useValue(usersServiceMock)
@@ -59,8 +59,6 @@ describe('Users Controller', () => {
 	it('should be defined', () => {
 		expect(controller).toBeDefined();
 	});
-
-	xdescribe('Get All Users', () => {});
 
 	xdescribe('Who am I / Retrieve User Data', () => {});
 });

@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AppKeyModule } from '../app-key/app-key.module';
+import { AppKeyModule } from '../git-client/app-key/app-key.module';
 import { AuthModule } from '../auth/auth.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UsersController } from './users.controller';
@@ -10,6 +10,6 @@ import { UsersService } from './users.service';
 	imports: [PrismaModule, forwardRef(() => AuthModule), forwardRef(() => AppKeyModule)],
 	providers: [UsersResolver, UsersService],
 	exports: [UsersResolver, UsersService],
-	controllers: [UsersController],
+	controllers: [UsersController]
 })
 export class UsersModule {}

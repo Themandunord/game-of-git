@@ -31,19 +31,19 @@ import HttpClient from '@/common/HttpClient';
 
 @Component
 export default class Login extends Vue {
-  public email: string = '';
-  public password: string = '';
+	public email: string = '';
+	public password: string = '';
 
-  get httpClient() {
-    return HttpClient;
-  }
+	get httpClient() {
+		return HttpClient;
+	}
 
-  login() {
-    this.httpClient.login(
-      this.email,
-      this.password,
-      this.$route.params.nextUrl ? this.$route.params.nextUrl : '/'
-    );
-  }
+	login() {
+		this.httpClient.login(
+			this.email,
+			this.password,
+			this.$route.params.nextUrl ? this.$route.params.nextUrl : '/'
+		);
+	}
 }
 </script>

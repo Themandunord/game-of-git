@@ -32,44 +32,44 @@ import HttpClient from '@/common/HttpClient';
 
 @Component
 export default class NavBar extends Vue {
-    @Prop({
-        required: true
-    })
-    private routes!: RouteConfig[];
+	@Prop({
+		required: true
+	})
+	private routes!: RouteConfig[];
 
-    public routeTo(path: string, params?: any) {
-        const routeTo = {
-            name: path,
-            params: params ? { ...params } : {}
-        };
-        this.$router.push(routeTo);
-    }
+	public routeTo(path: string, params?: any) {
+		const routeTo = {
+			name: path,
+			params: params ? { ...params } : {}
+		};
+		this.$router.push(routeTo);
+	}
 
-    get shouldShowLogout() {
-        return AppStateModule.user.isAuthenticated;
-    }
+	get shouldShowLogout() {
+		return AppStateModule.user.isAuthenticated;
+	}
 
-    logout() {
-        HttpClient.logout();
-    }
+	logout() {
+		HttpClient.logout();
+	}
 
-    get drawer() {
-        return AppStateModule.navExpanded;
-    }
+	get drawer() {
+		return AppStateModule.navExpanded;
+	}
 
-    set drawer(val: boolean) {
-        AppStateModule.setNavExpanded(val);
-    }
+	set drawer(val: boolean) {
+		AppStateModule.setNavExpanded(val);
+	}
 
-    // use prop values for initial data
-    //   helloMsg = 'Hello, ' + this.propMessage
+	// use prop values for initial data
+	//   helloMsg = 'Hello, ' + this.propMessage
 }
 </script>
 
 <style lang="scss" scoped>
 .logout {
-    position: absolute;
-    bottom:0;
-    width:100%;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 }
 </style>

@@ -1,5 +1,5 @@
 import { WebhooksService } from './../git-client/webhooks/webhooks.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Repository } from '../graphql.schema';
 import { GitClientService } from './../git-client/git-client.service';
 import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
@@ -7,16 +7,25 @@ import { RepositoriesResolver } from './repositories.resolver';
 
 @Injectable()
 export class RepositoriesService {
+	private readonly logger = new Logger('RepositoriesService');
 	constructor(
 		private readonly repositoriesResolver: RepositoriesResolver,
 		private readonly gitClient: GitClientService,
 		private readonly webhooksService: WebhooksService
 	) {}
 
-	async getRepositoryFromGit(user: string, ownerUsername: string, repo: string) {
-		// tslint:disable:no-console
-		console.log(`getting repository from Git for ${user} ${ownerUsername} ${repo}`);
-		await this.syncRepositoryWithGitHub(repo, ownerUsername, user);
+	/**
+	 * Load a repository from GitHub's API and merge it with the locally stored data
+	 *
+	 * @param user
+	 * @param ownerUsername
+	 * @param repo
+	 */
+	async getRepositoryWithFreshGitData(user: string, ownerUsername: string, repo: string) {
+		this.logger.log(`getting repository from Git for ${user} ${ownerUsername} ${repo}`);
+
+		// todo then can just call getRepository on the resolver.
+		// await this.syncRepositoryWithGitHub(repo, ownerUsername, user);
 
 		const storedRepository = await this.repositoriesResolver.getRepository(
 			{
@@ -26,7 +35,7 @@ export class RepositoriesService {
 			},
 			GET_REPOSITORIES
 		);
-		const detailsFromGit = await this.gitClient.getRepositoryDetails(user, repo, ownerUsername);
+		const detailsFromGit = await this.gitClient.get(user, repo, ownerUsername);
 
 		return {
 			...detailsFromGit,
@@ -35,19 +44,16 @@ export class RepositoriesService {
 	}
 
 	/**
-	 * Retrieve the list of repositories currently being tracked and that can be tracked belon ging to a specific GitHub login
+	 * Retrieve the list of repositories currently being tracked and that can be tracked belonging to a specific GitHub login
+	 *
 	 * @param user
 	 * @param ownerUsername
 	 */
 	async selectionSet(user: string, ownerUsername: string) {
-		const gitRepos = await this.gitClient.getRepositories(user, ownerUsername);
+		const gitRepos = await this.gitClient.getAll(user, ownerUsername);
 		const storedRepositories = await this.repositoriesResolver.getRepositories(
 			{
-				where: {
-					user: {
-						id: user
-					}
-				}
+				owner: ownerUsername
 			},
 			GET_REPOSITORIES
 		);
@@ -93,33 +99,19 @@ export class RepositoriesService {
 		return selectableRepos;
 	}
 
-	//   async getRepositories(user: string, owner: string) {
-	//     // return await this.repositoriesResolver.getRepositories(
-	//     //   {
-	//     //     where: {
-	//     //       login: owner,
-	//     //     },
-	//     //   },
-	//     //   GET_REPOSITORY_BASE,
-	//     // );
-	//   }
-
-	async getRepositoriesFromGit(user: string, owner: string) {
-		const repositories = await this.gitClient.getRepositories(user, owner);
-
-		return repositories;
-	}
-
-	async refreshRepositories(user: string, owner: string) {
-		const repositories = await this.gitClient.getRepositories(user, owner);
-	}
-
-	async createRepository(user: string, ownerUsername: string, name: string) {
-		console.log(
-			`Repositories Service: Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`
+	/**
+	 * Create an Internally stored Repository for a User
+	 *
+	 * @param user
+	 * @param ownerUsername
+	 * @param name
+	 */
+	async create(user: string, ownerUsername: string, name: string) {
+		this.logger.log(
+			`Create Repository for user ${user}, repo ${name} belonging to ${ownerUsername}`
 		);
 
-		const repoDetails = await this.gitClient.getRepositoryDetails(user, name, ownerUsername);
+		const repoDetails = await this.gitClient.get(user, name, ownerUsername);
 
 		const {
 			description,
@@ -141,7 +133,7 @@ export class RepositoriesService {
 
 		const CREATE_PAYLOAD = {
 			data: {
-				user: {
+				addedBy: {
 					connect: {
 						id: user
 					}
@@ -169,7 +161,8 @@ export class RepositoriesService {
 			}
 		};
 
-		console.log('Repositories Service: Create Payload: ', CREATE_PAYLOAD);
+		// tslint:disable-next-line:no-console
+		console.log(CREATE_PAYLOAD);
 
 		const newRepoData = await this.repositoriesResolver.createRepository(
 			CREATE_PAYLOAD,
@@ -179,7 +172,13 @@ export class RepositoriesService {
 		return newRepoData;
 	}
 
-	async updateRepository(id: string, data: any) {
+	/**
+	 * Updates the internally stored Repository
+	 *
+	 * @param id
+	 * @param data
+	 */
+	async update(id: string, data: any) {
 		const UPDATE_PAYLOAD = {
 			where: {
 				id
@@ -194,11 +193,16 @@ export class RepositoriesService {
 		return updatedRepoData;
 	}
 
-	async getExistingRepository(id: string) {
+	/**
+	 * Retrieves an internally stored Repository
+	 *
+	 * @param idExternal
+	 */
+	async get(idExternal: string) {
 		return await this.repositoriesResolver.getRepository(
 			{
 				where: {
-					idExternal: id
+					idExternal
 				}
 			},
 			GET_REPOSITORIES
@@ -206,55 +210,15 @@ export class RepositoriesService {
 	}
 
 	/**
-	 * Toggle whether a repository should be tracked or not by switching the `isTracked` boolean on the record
-	 *
-	 * **NOTE** This will create a new Repository record if the GitHub `id` (or `idExternal`, when stored internally)
-	 * does not already exist in the Repositories db. Once created it will update the existing record.
-	 *
-	 * @param user
-	 * @param id
-	 * @param repository
-	 */
-	async toggleTracking(user: string, ownerUsername: string, id: string, name: string) {
-		console.log(
-			`Repositories Service: Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`
-		);
-
-		const existingRepository = await this.getExistingRepository(id);
-
-		let repoData = null;
-		if (!existingRepository) {
-			repoData = await this.createRepository(user, ownerUsername, name);
-		} else {
-			const updatedRepoData = await this.updateRepository(existingRepository.id, {
-				isTracked: !existingRepository.isTracked
-			});
-			repoData = updatedRepoData;
-		}
-		// toggle the github webhooks
-		await this.configureRepositoryWebhooks(repoData, user);
-
-		return repoData;
-	}
-
-	async configureRepositoryWebhooks(repository: Repository, user: string): Promise<void> {
-		console.log('Repositories Service: configuring repository webhooks', repository);
-		if (repository.isTracked) {
-			await this.gitClient.webhooks.initializeRepositoryWebhooks(repository, user);
-		} else {
-			await this.gitClient.webhooks.destroyRepositoryWebhooks(repository, user);
-		}
-	}
-
-	/**
 	 * Retrieve all stored repository data by user id
+	 *
 	 * @param user
 	 */
-	async syncStore(user: string) {
+	async getAll(user: string) {
 		const repositories = await this.repositoriesResolver.getRepositories(
 			{
 				where: {
-					user: {
+					addedBy: {
 						id: user
 					}
 				}
@@ -266,8 +230,8 @@ export class RepositoriesService {
 		const results = await Promise.all(
 			repositories.map(async repo => {
 				const eventCount = await this.webhooksService.eventCountForRepository(repo.id);
-				console.log(
-					`Repositories Service: Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`
+				this.logger.log(
+					`Returned ${eventCount} events for repo id ${repo.id}, ${repo.name}`
 				);
 
 				return {
@@ -281,13 +245,66 @@ export class RepositoriesService {
 	}
 
 	/**
+	 * Toggle whether a repository should be tracked or not by switching the `isTracked` boolean on the record
+	 *
+	 * **NOTE** This will create a new Repository record if the GitHub `id` (or `idExternal`, when stored internally)
+	 * does not already exist in the Repositories db. Once created it will update the existing record.
+	 *
+	 * @param user
+	 * @param id
+	 * @param repository
+	 */
+	async toggleTracking(user: string, ownerUsername: string, id: string, name: string) {
+		this.logger.log(
+			`Toggle Tracking for user ${user}, repo ${name} belonging to ${ownerUsername}`
+		);
+
+		const existingRepository = await this.get(id);
+
+		let repoData = null;
+		if (!existingRepository) {
+			repoData = await this.create(user, ownerUsername, name);
+		} else {
+			const updatedRepoData = await this.update(existingRepository.id, {
+				isTracked: !existingRepository.isTracked
+			});
+			repoData = updatedRepoData;
+		}
+		// toggle the github webhooks
+		await this.configureRepositoryWebhooks(repoData, user);
+
+		return repoData;
+	}
+
+	/**
+	 * Configures the Webhooks of a Repository based on the `isTracked` status of the Repo
+	 *
+	 * - if `true` then it initializes them
+	 * - if `false` then it destroys them
+	 *
+	 * @param repository
+	 * @param user
+	 */
+	async configureRepositoryWebhooks(repository: Repository, user: string): Promise<void> {
+		this.logger.log(`configuring repository webhooks ${repository.name}`);
+		if (repository.isTracked) {
+			await this.gitClient.webhooks.initializeWebhooks(repository, user);
+		} else {
+			await this.gitClient.webhooks.destroyWebhooks(repository, user);
+		}
+	}
+
+	/**
 	 * Sync the stored Repository with it's current GitHub state
+	 *
+	 * @todo implement
+	 *
 	 * @param user
 	 * @param owner
 	 * @param id
 	 */
 	async syncRepositoryWithGitHub(name: string, owner: string, user: string) {
-		console.log('Repositories Service: syncing repository: ', name);
-		await this.gitClient.getRepositoryDetails(user, name, owner);
+		this.logger.log(`syncing repository: ${name}`);
+		const updatedData = await this.gitClient.get(user, name, owner);
 	}
 }

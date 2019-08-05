@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 // import { UsersService } from './../users/users.service';
-import { GitClientService } from './../git-client/git-client.service';
+import { GitClientService } from '../git-client.service';
 import { AppKeyResolver } from './app-key.resolver';
 // import { gql } from 'apollo-server-core';
 import GET_APP_KEY from './gql/GET_APP_GEY.gql';
@@ -15,15 +15,31 @@ export class AppKeyService {
 	) {}
 
 	/**
-	 * Get an AppKey by the user's id
-	 * @param user
+	 * Retrieve an AppKey record by its `key`
+	 *
+	 * @param key
 	 */
-	async get(user: string) {
+	async getbyKey(key: string) {
+		return await this.appKeyResolver.getAppKey(
+			{
+				where: {
+					key
+				}
+			},
+			GET_APP_KEY
+		);
+	}
+
+	/**
+	 * Get all AppKey by the user's id
+	 * @param id User's Id
+	 */
+	async getAllByUser(id: string) {
 		const keys = await this.appKeyResolver.getAppKeys(
 			{
 				where: {
 					user: {
-						id: user
+						id
 					}
 				}
 			},
@@ -38,7 +54,7 @@ export class AppKeyService {
 	 * @param key
 	 * @param user
 	 */
-	async validateKey(key: string, user: string) {
+	async validate(key: string, user: string) {
 		const valid = await this.gitClient.testAppKey(key, user);
 
 		return valid;
@@ -51,24 +67,18 @@ export class AppKeyService {
 	 * @param name
 	 * @param username
 	 */
-	async storeKey(key: string, user: string, name: string, username: string) {
-		const isValid = await this.validateKey(key, username);
+	async store(key: string, user: string, name: string, username: string) {
+		const isValid = await this.validate(key, username);
 		if (!isValid) {
 			return;
 		}
 
-		const existing = await this.appKeyResolver.getAppKey(
-			{
-				where: {
-					key
-				}
-			},
-			GET_APP_KEY
-		);
+		const existing = await this.getbyKey(key);
 
 		if (existing != null) {
 			return;
 		}
+
 		const createPayload = {
 			data: {
 				user: {
