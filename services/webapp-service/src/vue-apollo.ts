@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueApollo from 'vue-apollo';
 // add module import and define apolloClient type
 import { ApolloClient } from 'apollo-client';
+import { WebSocketLink } from 'apollo-link-ws';
+import { HttpLink } from 'apollo-link-http';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
@@ -22,12 +24,25 @@ Vue.use(VueApollo);
 const AUTH_TOKEN = 'apollo-token';
 
 // Http endpoint
+// const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/graphql';
 const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/graphql';
+// const httpLink = new HttpLink({
+//   // You should use an absolute URL here
+//   uri: 'http://localhost:3020/graphql',
+// })
+
 // Files URL root
 export const filesRoot =
 	process.env.VUE_APP_FILES_ROOT || httpEndpoint.substr(0, httpEndpoint.indexOf('/graphql'));
 
 Vue.prototype.$filesRoot = filesRoot;
+
+// const wsLink = new WebSocketLink({
+//   uri: 'ws://localhost:3000/subscriptions',
+//   options: {
+//     reconnect: true,
+//   },
+// })
 
 // Config
 const defaultOptions = {
