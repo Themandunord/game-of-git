@@ -5,9 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
-import { AppKeyService } from '../../app-key/app-key.service';
+import { AppKeyService } from '../app-key/app-key.service';
 import TestingUtilities from './../../../../../utilities/testing';
-import { AppKeyModule } from './../../app-key/app-key.module';
+import { AppKeyModule } from '../app-key/app-key.module';
 import { GitClientModule } from './../git-client.module';
 import { GitClientService } from './../git-client.service';
 import { HandleWebhookCommand } from './commands/handle-webhook.command';
@@ -21,7 +21,7 @@ import { WebhooksService } from './webhooks.service';
 import { WebhooksRepository } from './webhooks.repository';
 
 const mockGitClientService = jest.mock('./../git-client.service');
-const mockAppKeyService = jest.mock('../../app-key/app-key.service');
+const mockAppKeyService = jest.mock('./../app-key/app-key.service');
 
 const GITHUB_WEBHOOK_EVENT_TYPES = Object.keys(GitHubWebhookEvents) as GitHubWebhookEventType[];
 
@@ -78,9 +78,9 @@ describe('WebhooksService', () => {
 
 	xdescribe('Repository Webhook Deletion', () => {});
 
-	xdescribe('Retrieving a Repository\'s locally stored events', () => {});
+	xdescribe("Retrieving a Repository's locally stored events", () => {});
 
-	xdescribe('Retrieving a Repository\'s local stored event count', () => {});
+	xdescribe("Retrieving a Repository's local stored event count", () => {});
 
 	describe('Inbound Webhook Handling', async () => {
 		// for each event type suported...

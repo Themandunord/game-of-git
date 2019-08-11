@@ -1,28 +1,24 @@
-import { WebhooksRepository } from './webhooks.repository';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
 import { Model } from 'mongoose';
 import { Repository } from 'src/graphql.schema';
-import { AppKeyService } from '../../app-key/app-key.service';
 import config from '../../config';
 import { GitClientService } from './../git-client.service';
 import { HandleWebhookCommand } from './commands/handle-webhook.command';
-import { ICreateRepositoryWebhookDto } from './ICreateRepositoryWebhookDto.interface';
 import { IRepositoryWebhook } from './IRepositoryWebhook.interface';
-import { EventModelFactory } from './parser/EventModelFactory';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { ParserService } from './parser/parser.service';
-// tslint:disable:no-console
+import { WebhooksRepository } from './webhooks.repository';
 
 @Injectable()
 export class WebhooksService {
+	private readonly logger = new Logger('WebhooksService');
+
 	constructor(
 		@Inject(forwardRef(() => GitClientService))
 		private readonly gitClientService: GitClientService,
-		@Inject(forwardRef(() => AppKeyService))
-		private readonly appKeyService: AppKeyService,
 		@InjectModel('RepositoryWebhook')
 		private readonly repositoryWebhookModel: Model<IRepositoryWebhook>,
 		private readonly parserService: ParserService,
@@ -39,12 +35,12 @@ export class WebhooksService {
 	 * @param repository
 	 * @param user
 	 */
-	async initializeRepositoryWebhooks(repository: Repository, user: string) {
-		console.log(
-			`Webhooks Service: Initializing Repository webhooks ${repository.owner} - ${repository.name} on behalf of ${user}`
+	async initializeWebhooks(repository: Repository, user: string) {
+		this.logger.log(
+			`Initializing Repository webhooks ${repository.owner} - ${repository.name} on behalf of ${user}`
 		);
 
-		const appKeys = await this.appKeyService.get(user);
+		const appKeys = await this.gitClientService.appKey.getAllByUser(user);
 		const appKey = appKeys.length > 0 ? appKeys[0].key : null;
 
 		// TODO: Handle if there is no app key
@@ -52,13 +48,14 @@ export class WebhooksService {
 		// check for existing webhooks for this repo, if they exist alreday we'll need to either update or delete them.
 		// Implementation, TBD!
 		// const existingWebhooks = await this.listWebhooks(repository, user);
-		// console.log(`There are ${existingWebhooks.length} existing webhooks in this repository`);
+		// this.logger.log(`There are ${existingWebhooks.length} existing webhooks in this repository`);
 
 		// create the webhook
-		const result = await this.createWebhook(appKey, repository);
-		console.log('Webhooks Service: result from webhook creation: ', result);
+		const result = await this.initialize(appKey, repository);
+		// tslint:disable-next-line:no-console
+		console.log('result from webhook creation: ', result);
 
-		// TODO: Error hnadling
+		// TODO: Error handling
 	}
 
 	/**
@@ -69,37 +66,37 @@ export class WebhooksService {
 	 * @param repository
 	 * @param user
 	 */
-	async destroyRepositoryWebhooks(repository: Repository, user: string) {
-		console.log(
-			`Webhooks Service: Destroying Repository webhooks ${repository.owner} - ${repository.name} on behalf of ${user}`
+	async destroyWebhooks(repository: Repository, user: string) {
+		this.logger.log(
+			`Destroying Repository webhooks ${repository.owner} - ${repository.name} on behalf of ${user}`
 		);
 
-		const appKeys = await this.appKeyService.get(user);
+		const appKeys = await this.gitClientService.appKey.getAllByUser(user);
 		const appKey = appKeys.length > 0 ? appKeys[0].key : null;
 		// check for existing webhooks for this repo, if they exist alreday we'll need to either update or delete them.
 		// Implementation, TBD!
-		const existingWebhooks = await this.listWebhooks(repository, user);
-		console.log(
-			`Webhooks Service: There are ${existingWebhooks.length} existing webhooks in this repository`
+		const existingWebhooks = await this.getAll(repository, user);
+		this.logger.log(
+			`There are ${existingWebhooks.length} existing webhooks in this repository`
 		);
 
-		await this.deleteWebhook(appKey, repository, existingWebhooks[0].id);
+		await this.destroy(appKey, repository, existingWebhooks[0].id);
 	}
 
 	/**
 	 * Uses the GitHub Webhook API to Retrieve a list of Webhooks currently configured on a repositories
 	 * @param repoId
 	 */
-	async listWebhooks(repository: Repository, user: string) {
-		console.log(
-			`Webhooks Service: listing webhooks currently configured on the repository for user ${user} and repo ${repository.name}`
+	async getAll(repository: Repository, user: string) {
+		this.logger.log(
+			`listing webhooks currently configured on the repository for user ${user} and repo ${repository.name}`
 		);
 
-		const appKeys = await this.appKeyService.get(user);
+		const appKeys = await this.gitClientService.appKey.getAllByUser(user);
 		const appKey = appKeys.length > 0 ? appKeys[0].key : null;
 
 		const route = `${config.GITHUB_REST_URL}repos/${repository.owner}/${repository.name}/hooks`;
-		console.log(`Webhooks Service: requesting ${route} with ${appKey}`);
+		this.logger.log(`requesting ${route} with ${appKey}`);
 
 		try {
 			const result = await axios.get(route, {
@@ -110,24 +107,24 @@ export class WebhooksService {
 
 			return result.data;
 		} catch (e) {
-			console.error('Webhooks Service: Error Querying for the users webhooks: ' + e);
+			this.logger.error('Error Querying for the users webhooks: ' + e);
 		}
 	}
 
 	/**
-	 * Uses the GitHub Webhook API to create a new Webhook
+	 * Uses the GitHub Webhook API to initialize/create a new Webhook
 	 *
 	 * @param owner
 	 * @param repository
 	 */
-	async createWebhook(key: string, repository: Repository) {
-		console.log(
-			`Webhooks Service: Creating a webhook for ${repository.owner}'s repository ${repository.name}`
+	async initialize(key: string, repository: Repository) {
+		this.logger.log(
+			`Creating a webhook for ${repository.owner}'s repository ${repository.name}`
 		);
 		// throw new Error(`Net yet configured`);
 		const route = `${config.GITHUB_REST_URL}repos/${repository.owner}/${repository.name}/hooks`;
 		const url = `${process.env.GIT_SERVICE_DOMAIN}/webhook/${repository.id}`;
-		console.log(`Webhooks Service: requesting from ${route} webhook url = ${url}`);
+		this.logger.log(`requesting from ${route} webhook url = ${url}`);
 
 		const CREATE_WEBHOOK_PAYLOAD = {
 			name: 'web',
@@ -147,13 +144,12 @@ export class WebhooksService {
 				}
 			});
 
-			console.log('Webhooks Service: result from create webhook api call: ', result.data);
+			// tslint:disable-next-line:no-console
+			console.log('result from create webhook api call: ', result.data);
 
 			return result.data;
 		} catch (e) {
-			console.error(
-				'Webhooks Service: Error Creating the webhook for the users webhooks: ' + e
-			);
+			this.logger.error('Error Creating the webhook for the users webhooks: ' + e);
 		}
 	}
 
@@ -164,9 +160,9 @@ export class WebhooksService {
 	 * @param repository
 	 * @param webhookId
 	 */
-	async deleteWebhook(key: string, repository: Repository, webhookId: number) {
-		console.log(
-			`Webhooks Service: Deleting a webhook ${webhookId} for ${repository.owner}'s repository ${repository.name}`
+	async destroy(key: string, repository: Repository, webhookId: number) {
+		this.logger.log(
+			`Deleting a webhook ${webhookId} for ${repository.owner}'s repository ${repository.name}`
 		);
 		const route = `${config.GITHUB_REST_URL}repos/${repository.owner}/${repository.name}/hooks/${webhookId}`;
 
@@ -177,13 +173,12 @@ export class WebhooksService {
 				}
 			});
 
-			console.log('Webhooks Service: result from delete webhook api call: ', result.data);
+			// tslint:disable-next-line:no-console
+			console.log('result from delete webhook api call: ', result.data);
 
 			return result.data;
 		} catch (e) {
-			console.error(
-				'Webhooks Service: Error Deleting the webhook for the users webhooks: ' + e
-			);
+			this.logger.error('Error Deleting the webhook for the users webhooks: ' + e);
 		}
 	}
 
@@ -201,25 +196,29 @@ export class WebhooksService {
 		eventType: GitHubWebhookEventType,
 		webhookEvent: any
 	) {
-		const payload: ICreateRepositoryWebhookDto = {
-			repository,
-			eventType,
-			action: webhookEvent.action ? webhookEvent.action : eventType,
-			data: webhookEvent
-		};
-		// console.log(
-		// 	`Webhooks Service: Storing (${eventType}) Event for repository ${repository} ${Date.now()}`
-		// );
+		// TODO: validate that repository is tracked.
+
+		// TODO: validate the event came from GitHub
+
+		this.logger.log(`Storing (${eventType}) Event for repository ${repository} ${Date.now()}`);
 
 		let model;
 
 		try {
-			model = await this.parseWebhookEventModel(repository, eventType, webhookEvent);
+			// model = await this.parseWebhookEventModel(repository, eventType, webhookEvent);
+			model = await this.parserService.getWebhookEventHandlerInstance(
+				repository,
+				eventType,
+				webhookEvent
+			);
 		} catch (e) {
-			console.error(`There was an error making the Model ${eventType} ${repository}`);
+			this.logger.error(`There was an error making the Model ${eventType} ${repository}`);
+			// tslint:disable-next-line:no-console
 			console.error(e);
 			throw e;
 		}
+
+		// TODO: use the model to execute the webhook?
 
 		const webhook = await this.webhooksRepository.store(
 			'',
@@ -237,21 +236,10 @@ export class WebhooksService {
 	}
 
 	/**
-	 * Parses the webhook received from GitHub for a Repository
-	 *
-	 * @param repository
-	 * @param eventType
-	 * @param webhookEvent
-	 */
-	async parseWebhookEventModel(repository, eventType, webhookEvent) {
-		return await EventModelFactory.makeModel(repository, eventType, webhookEvent);
-	}
-
-	/**
 	 * Retrieves all stored webhooks of a repository
 	 */
 	async findAllInMongo(): Promise<IRepositoryWebhook[]> {
-		console.log(`Webhooks Service: Retrieving all Webhook Events ${Date.now()}`);
+		this.logger.log(`Retrieving all Webhook Events ${Date.now()}`);
 
 		return await this.repositoryWebhookModel.find().exec();
 	}
@@ -261,9 +249,7 @@ export class WebhooksService {
 	 * @param repository
 	 */
 	async eventCountForRepository(repository: string): Promise<number> {
-		console.log(
-			`Webhooks Service: Retrieving the stored event count for repository ${repository}`
-		);
+		this.logger.log(`Retrieving the stored event count for repository ${repository}`);
 
 		return await this.repositoryWebhookModel.count({ repository });
 	}

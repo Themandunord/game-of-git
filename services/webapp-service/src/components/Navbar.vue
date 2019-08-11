@@ -1,24 +1,26 @@
 <template lang="pug">
 div
-    v-navigation-drawer(v-model="drawer" clipped fixed app)
-        v-list(dense)
-            v-list-tile(
-                v-for="route in routes" :key="route.path" @click="routeTo(route.name, route.props)"
-            )
-                v-list-tile-action
-                    v-icon dashboard
-                v-list-tile-content
-                    v-list-tile-title {{route.displayName}}
-        
-        v-list.logout(dense v-if="shouldShowLogout")
-            v-list-tile(@click="logout")
-                v-list-tile-action
-                    v-icon dashboard
-                v-list-tile-content
-                    v-list-tile-title Logout
-    v-toolbar(app fixed clipped-left)
-        v-toolbar-side-icon(@click.stop="drawer = !drawer")
-        v-toolbar-title Application
+	v-app-bar(app clipped-left)
+		
+		v-app-bar-nav-icon(@click.stop="drawer = !drawer")
+		v-toolbar-title A Game of Git
+
+	v-navigation-drawer(v-model="drawer" app clipped)
+		v-list(dense)
+			v-list-item(
+				v-for="route in routes" :key="route.path" @click="routeTo(route.name, route.props)"
+			)
+				v-list-item-icon
+					v-icon dashboard
+				v-list-item-content
+					v-list-item-title(v-text="route.displayName")
+		
+		v-list.logout(dense v-if="shouldShowLogout")
+			v-list-item(@click="logout")
+				v-list-item-icon
+					v-icon dashboard
+				v-list-item-content
+					v-list-item-title Logout
 </template>
 
 <script lang="ts">
@@ -32,44 +34,44 @@ import HttpClient from '@/common/HttpClient';
 
 @Component
 export default class NavBar extends Vue {
-    @Prop({
-        required: true
-    })
-    private routes!: RouteConfig[];
+	@Prop({
+		required: true
+	})
+	private routes!: RouteConfig[];
 
-    public routeTo(path: string, params?: any) {
-        const routeTo = {
-            name: path,
-            params: params ? { ...params } : {}
-        };
-        this.$router.push(routeTo);
-    }
+	public routeTo(path: string, params?: any) {
+		const routeTo = {
+			name: path,
+			params: params ? { ...params } : {}
+		};
+		this.$router.push(routeTo);
+	}
 
-    get shouldShowLogout() {
-        return AppStateModule.user.isAuthenticated;
-    }
+	get shouldShowLogout() {
+		return AppStateModule.user.isAuthenticated;
+	}
 
-    logout() {
-        HttpClient.logout();
-    }
+	logout() {
+		HttpClient.logout();
+	}
 
-    get drawer() {
-        return AppStateModule.navExpanded;
-    }
+	get drawer() {
+		return AppStateModule.navExpanded;
+	}
 
-    set drawer(val: boolean) {
-        AppStateModule.setNavExpanded(val);
-    }
+	set drawer(val: boolean) {
+		AppStateModule.setNavExpanded(val);
+	}
 
-    // use prop values for initial data
-    //   helloMsg = 'Hello, ' + this.propMessage
+	// use prop values for initial data
+	//   helloMsg = 'Hello, ' + this.propMessage
 }
 </script>
 
 <style lang="scss" scoped>
 .logout {
-    position: absolute;
-    bottom:0;
-    width:100%;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 }
 </style>

@@ -6,12 +6,17 @@ import store from '@/store';
 import '@/registerServiceWorker';
 
 import VueRx from 'vue-rx';
+import vuetify from './plugins/vuetify';
+import '@babel/polyfill';
+import { createProvider } from './vue-apollo';
 Vue.use(VueRx);
 
 Vue.config.productionTip = false;
 
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+	router,
+	store,
+	vuetify,
+	apolloProvider: createProvider(),
+	render: h => h(App)
 }).$mount('#app');

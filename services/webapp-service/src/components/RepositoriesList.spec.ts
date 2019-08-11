@@ -1,5 +1,5 @@
 describe('RepositoriesList Vue Component', () => {
-  it('stubs', () => {
-    expect(true).toBeTruthy();
-  });
+	it('stubs', () => {
+		expect(true).toBeTruthy();
+	});
 });

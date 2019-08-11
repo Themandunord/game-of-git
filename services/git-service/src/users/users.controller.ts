@@ -1,23 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
-import { AppKeyService } from './../app-key/app-key.service';
+import { Controller, Get, Param, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-	constructor(
-		private readonly usersService: UsersService,
-		private readonly appKeyService: AppKeyService,
-	) {}
-
-	/**
-	 * Retrieve all app users from the Users Service
-	 * @todo implement meaningfully with parameters
-	 * @todo test
-	 */
-	@Get()
-	async findAll() {
-		return await this.usersService.getAll();
-	}
+	constructor(private readonly usersService: UsersService) {}
 
 	/**
 	 * Returns the User of the given User Id

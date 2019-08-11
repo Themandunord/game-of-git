@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, HttpException, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException, Inject, forwardRef, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../graphql.schema';
 import { UsersService } from '../users/users.service';
@@ -13,6 +13,8 @@ const saltRounds = 10;
 
 @Injectable()
 export class AuthService {
+	private readonly logger = new Logger('AuthService');
+
 	constructor(
 		private readonly jwtService: JwtService,
 		@Inject(forwardRef(() => UsersService))
@@ -65,17 +67,17 @@ export class AuthService {
 
 		const userData = jsonwebtoken.decode(jwt);
 		const email = (userData as Partial<User>).email;
-		const user = await this.usersService.get(email);
+		const user = await this.usersService.getByEmail(email);
 
 		let error = null;
 
 		if (!user) {
-			console.error(`user did not exist ${email} or jwt was invalid: ${isValid}`);
+			this.logger.warn(`user did not exist ${email} or jwt was invalid: ${isValid}`);
 			error = `User did not exist`;
 		}
 
 		if (!isValid) {
-			console.error(`Auth service could not verify the token ${jwt}`);
+			this.logger.warn(`Auth service could not verify the token ${jwt}`);
 			error = `invalid jwt`;
 		}
 
@@ -91,7 +93,7 @@ export class AuthService {
 	 * @param email
 	 */
 	async validateUser(email: string): Promise<User> {
-		return await this.usersService.get(email);
+		return await this.usersService.getByEmail(email);
 	}
 
 	/**

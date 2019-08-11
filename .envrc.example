@@ -1,3 +1,4 @@
+export LOG_LEVEL=info
 export APP_ENVIRONMENT=development
 export GIT_ACCESS_TOKEN=
 export GIT_TESTING_TOKEN=

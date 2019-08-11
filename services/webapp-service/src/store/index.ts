@@ -7,9 +7,9 @@ import { IGitHubState } from '@/store/aspects/github';
 Vue.use(Vuex);
 
 interface IStore {
-    app: IAppState;
-    repositories: IRepositoriesState;
-    github: IGitHubState;
+	app: IAppState;
+	repositories: IRepositoriesState;
+	github: IGitHubState;
 }
 
 export default new Vuex.Store<IStore>({});

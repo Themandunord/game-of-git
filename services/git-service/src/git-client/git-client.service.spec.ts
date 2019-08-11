@@ -2,15 +2,15 @@ import { AppKey } from './../graphql.schema.d';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { AppKeyService } from '../app-key/app-key.service';
-import { AppKeyModule } from './../app-key/app-key.module';
+import { AppKeyService } from './app-key/app-key.service';
+import { AppKeyModule } from './app-key/app-key.module';
 import { GitClientModule } from './git-client.module';
 import { GitClientService } from './git-client.service';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { WebhooksService } from './webhooks/webhooks.service';
 
 // const appKeyServiceMock = jest.mock('./../app-key/app-key.service');
-const appKeyServiceMock = jest.genMockFromModule<AppKeyService>('./../app-key/app-key.service');
+const appKeyServiceMock = jest.genMockFromModule<AppKeyService>('./app-key/app-key.service');
 const webhooksServiceMock = jest.mock('./webhooks/webhooks.service');
 
 describe('GitClientService', () => {
@@ -56,15 +56,15 @@ describe('GitClientService', () => {
 		});
 	});
 
-	describe('Retrieving a user\'s repositories', () => {
+	describe("Retrieving a user's repositories", () => {
 		it('Should return an array of repositories from the API cal', async () => {
-			appKeyServiceMock.get = jest.fn(async () => [
+			appKeyServiceMock.getAllByUser = jest.fn(async () => [
 				{
 					key: VALID_GIT_APP_KEY
 				} as AppKey
 			]);
 
-			const result = await service.getRepositories('123123123', GIT_USER, 1);
+			const result = await service.getAll('123123123', GIT_USER, 1);
 
 			// should be an array
 			expect(result).toBeInstanceOf(Array);
@@ -77,17 +77,13 @@ describe('GitClientService', () => {
 		it('Should retrieve the details for a repository', async () => {
 			const repositoryName = GIT_REPO;
 			const repositoryOwner = GIT_USER;
-			appKeyServiceMock.get = jest.fn(async () => [
+			appKeyServiceMock.getAllByUser = jest.fn(async () => [
 				{
 					key: VALID_GIT_APP_KEY
 				} as AppKey
 			]);
 
-			const result = await service.getRepositoryDetails(
-				'123123',
-				repositoryName,
-				repositoryOwner
-			);
+			const result = await service.get('123123', repositoryName, repositoryOwner);
 
 			expect(result).toBeDefined();
 			expect(result.name).toEqual(repositoryName);

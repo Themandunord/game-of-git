@@ -1,78 +1,351 @@
-import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
-import { IResolvers } from 'graphql-tools/dist/Interfaces'
-import { Options } from 'graphql-binding'
-import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
+import { IResolvers } from 'graphql-tools/dist/Interfaces';
+import { Options } from 'graphql-binding';
+import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding';
 
 export interface Query {
-    users: <T = Array<User | null>>(args: { where?: UserWhereInput | null, orderBy?: UserOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    repositories: <T = Array<Repository | null>>(args: { where?: RepositoryWhereInput | null, orderBy?: RepositoryOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    appKeys: <T = Array<AppKey | null>>(args: { where?: AppKeyWhereInput | null, orderBy?: AppKeyOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    repository: <T = Repository | null>(args: { where: RepositoryWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    appKey: <T = AppKey | null>(args: { where: AppKeyWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput | null, orderBy?: UserOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    repositoriesConnection: <T = RepositoryConnection>(args: { where?: RepositoryWhereInput | null, orderBy?: RepositoryOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    appKeysConnection: <T = AppKeyConnection>(args: { where?: AppKeyWhereInput | null, orderBy?: AppKeyOrderByInput | null, skip?: Int | null, after?: String | null, before?: String | null, first?: Int | null, last?: Int | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> 
-  }
+	users: <T = Array<User | null>>(
+		args: {
+			where?: UserWhereInput | null;
+			orderBy?: UserOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	appKeys: <T = Array<AppKey | null>>(
+		args: {
+			where?: AppKeyWhereInput | null;
+			orderBy?: AppKeyOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	repositories: <T = Array<Repository | null>>(
+		args: {
+			where?: RepositoryWhereInput | null;
+			orderBy?: RepositoryOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	gitHubWebhookEvents: <T = Array<GitHubWebhookEvent | null>>(
+		args: {
+			where?: GitHubWebhookEventWhereInput | null;
+			orderBy?: GitHubWebhookEventOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	user: <T = User | null>(
+		args: { where: UserWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	appKey: <T = AppKey | null>(
+		args: { where: AppKeyWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	repository: <T = Repository | null>(
+		args: { where: RepositoryWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	gitHubWebhookEvent: <T = GitHubWebhookEvent | null>(
+		args: { where: GitHubWebhookEventWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	usersConnection: <T = UserConnection>(
+		args: {
+			where?: UserWhereInput | null;
+			orderBy?: UserOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	appKeysConnection: <T = AppKeyConnection>(
+		args: {
+			where?: AppKeyWhereInput | null;
+			orderBy?: AppKeyOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	repositoriesConnection: <T = RepositoryConnection>(
+		args: {
+			where?: RepositoryWhereInput | null;
+			orderBy?: RepositoryOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	gitHubWebhookEventsConnection: <T = GitHubWebhookEventConnection>(
+		args: {
+			where?: GitHubWebhookEventWhereInput | null;
+			orderBy?: GitHubWebhookEventOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	node: <T = Node | null>(
+		args: { id: ID_Output },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+}
 
 export interface Mutation {
-    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createRepository: <T = Repository>(args: { data: RepositoryCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    createAppKey: <T = AppKey>(args: { data: AppKeyCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateRepository: <T = Repository | null>(args: { data: RepositoryUpdateInput, where: RepositoryWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    updateAppKey: <T = AppKey | null>(args: { data: AppKeyUpdateInput, where: AppKeyWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteRepository: <T = Repository | null>(args: { where: RepositoryWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    deleteAppKey: <T = AppKey | null>(args: { where: AppKeyWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T | null> ,
-    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertRepository: <T = Repository>(args: { where: RepositoryWhereUniqueInput, create: RepositoryCreateInput, update: RepositoryUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    upsertAppKey: <T = AppKey>(args: { where: AppKeyWhereUniqueInput, create: AppKeyCreateInput, update: AppKeyUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateManyMutationInput, where?: UserWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyRepositories: <T = BatchPayload>(args: { data: RepositoryUpdateManyMutationInput, where?: RepositoryWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    updateManyAppKeys: <T = BatchPayload>(args: { data: AppKeyUpdateManyMutationInput, where?: AppKeyWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyRepositories: <T = BatchPayload>(args: { where?: RepositoryWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyAppKeys: <T = BatchPayload>(args: { where?: AppKeyWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    executeRaw: <T = Json>(args: { database?: PrismaDatabase | null, query: String }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
-  }
+	createUser: <T = User>(
+		args: { data: UserCreateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	createAppKey: <T = AppKey>(
+		args: { data: AppKeyCreateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	createRepository: <T = Repository>(
+		args: { data: RepositoryCreateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	createGitHubWebhookEvent: <T = GitHubWebhookEvent>(
+		args: { data: GitHubWebhookEventCreateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	updateUser: <T = User | null>(
+		args: { data: UserUpdateInput; where: UserWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	updateAppKey: <T = AppKey | null>(
+		args: { data: AppKeyUpdateInput; where: AppKeyWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	updateRepository: <T = Repository | null>(
+		args: { data: RepositoryUpdateInput; where: RepositoryWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	updateGitHubWebhookEvent: <T = GitHubWebhookEvent | null>(
+		args: { data: GitHubWebhookEventUpdateInput; where: GitHubWebhookEventWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	deleteUser: <T = User | null>(
+		args: { where: UserWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	deleteAppKey: <T = AppKey | null>(
+		args: { where: AppKeyWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	deleteRepository: <T = Repository | null>(
+		args: { where: RepositoryWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	deleteGitHubWebhookEvent: <T = GitHubWebhookEvent | null>(
+		args: { where: GitHubWebhookEventWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	upsertUser: <T = User>(
+		args: { where: UserWhereUniqueInput; create: UserCreateInput; update: UserUpdateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	upsertAppKey: <T = AppKey>(
+		args: {
+			where: AppKeyWhereUniqueInput;
+			create: AppKeyCreateInput;
+			update: AppKeyUpdateInput;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	upsertRepository: <T = Repository>(
+		args: {
+			where: RepositoryWhereUniqueInput;
+			create: RepositoryCreateInput;
+			update: RepositoryUpdateInput;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	upsertGitHubWebhookEvent: <T = GitHubWebhookEvent>(
+		args: {
+			where: GitHubWebhookEventWhereUniqueInput;
+			create: GitHubWebhookEventCreateInput;
+			update: GitHubWebhookEventUpdateInput;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	updateManyUsers: <T = BatchPayload>(
+		args: { data: UserUpdateManyMutationInput; where?: UserWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	updateManyAppKeys: <T = BatchPayload>(
+		args: { data: AppKeyUpdateManyMutationInput; where?: AppKeyWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	updateManyRepositories: <T = BatchPayload>(
+		args: { data: RepositoryUpdateManyMutationInput; where?: RepositoryWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	updateManyGitHubWebhookEvents: <T = BatchPayload>(
+		args: {
+			data: GitHubWebhookEventUpdateManyMutationInput;
+			where?: GitHubWebhookEventWhereInput | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	deleteManyUsers: <T = BatchPayload>(
+		args: { where?: UserWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	deleteManyAppKeys: <T = BatchPayload>(
+		args: { where?: AppKeyWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	deleteManyRepositories: <T = BatchPayload>(
+		args: { where?: RepositoryWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	deleteManyGitHubWebhookEvents: <T = BatchPayload>(
+		args: { where?: GitHubWebhookEventWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	executeRaw: <T = Json>(
+		args: { database?: PrismaDatabase | null; query: String },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+}
 
 export interface Subscription {
-    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    repository: <T = RepositorySubscriptionPayload | null>(args: { where?: RepositorySubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> ,
-    appKey: <T = AppKeySubscriptionPayload | null>(args: { where?: AppKeySubscriptionWhereInput | null }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T | null>> 
-  }
+	user: <T = UserSubscriptionPayload | null>(
+		args: { where?: UserSubscriptionWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<AsyncIterator<T | null>>;
+	appKey: <T = AppKeySubscriptionPayload | null>(
+		args: { where?: AppKeySubscriptionWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<AsyncIterator<T | null>>;
+	repository: <T = RepositorySubscriptionPayload | null>(
+		args: { where?: RepositorySubscriptionWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<AsyncIterator<T | null>>;
+	gitHubWebhookEvent: <T = GitHubWebhookEventSubscriptionPayload | null>(
+		args: { where?: GitHubWebhookEventSubscriptionWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<AsyncIterator<T | null>>;
+}
 
 export interface Exists {
-  User: (where?: UserWhereInput) => Promise<boolean>
-  Repository: (where?: RepositoryWhereInput) => Promise<boolean>
-  AppKey: (where?: AppKeyWhereInput) => Promise<boolean>
+	User: (where?: UserWhereInput) => Promise<boolean>;
+	AppKey: (where?: AppKeyWhereInput) => Promise<boolean>;
+	Repository: (where?: RepositoryWhereInput) => Promise<boolean>;
+	GitHubWebhookEvent: (where?: GitHubWebhookEventWhereInput) => Promise<boolean>;
 }
 
 export interface Prisma {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-  exists: Exists
-  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
-  delegate(operation: 'query' | 'mutation', fieldName: string, args: {
-    [key: string]: any;
-}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
-delegateSubscription(fieldName: string, args?: {
-    [key: string]: any;
-}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<AsyncIterator<any>>;
-getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
+	query: Query;
+	mutation: Mutation;
+	subscription: Subscription;
+	exists: Exists;
+	request: <T = any>(query: string, variables?: { [key: string]: any }) => Promise<T>;
+	delegate(
+		operation: 'query' | 'mutation',
+		fieldName: string,
+		args: {
+			[key: string]: any;
+		},
+		infoOrQuery?: GraphQLResolveInfo | string,
+		options?: Options
+	): Promise<any>;
+	delegateSubscription(
+		fieldName: string,
+		args?: {
+			[key: string]: any;
+		},
+		infoOrQuery?: GraphQLResolveInfo | string,
+		options?: Options
+	): Promise<AsyncIterator<any>>;
+	getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
 }
 
 export interface BindingConstructor<T> {
-  new(options: BasePrismaOptions): T
+	new (options: BasePrismaOptions): T;
 }
 /**
  * Type Defs
-*/
+ */
 
 const typeDefs = `type AggregateAppKey {
+  count: Int!
+}
+
+type AggregateGitHubWebhookEvent {
   count: Int!
 }
 
@@ -89,6 +362,7 @@ type AppKey implements Node {
   user: User!
   key: String!
   name: String
+  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
 }
 
 """A connection to a list of items."""
@@ -106,6 +380,7 @@ input AppKeyCreateInput {
   key: String!
   name: String
   user: UserCreateOneWithoutKeysInput!
+  repositories: RepositoryCreateManyWithoutAppKeyInput
 }
 
 input AppKeyCreateManyWithoutUserInput {
@@ -113,15 +388,23 @@ input AppKeyCreateManyWithoutUserInput {
   connect: [AppKeyWhereUniqueInput!]
 }
 
-input AppKeyCreateOneInput {
-  create: AppKeyCreateInput
+input AppKeyCreateOneWithoutRepositoriesInput {
+  create: AppKeyCreateWithoutRepositoriesInput
   connect: AppKeyWhereUniqueInput
+}
+
+input AppKeyCreateWithoutRepositoriesInput {
+  id: ID
+  key: String!
+  name: String
+  user: UserCreateOneWithoutKeysInput!
 }
 
 input AppKeyCreateWithoutUserInput {
   id: ID
   key: String!
   name: String
+  repositories: RepositoryCreateManyWithoutAppKeyInput
 }
 
 """An edge in a connection."""
@@ -318,16 +601,11 @@ input AppKeySubscriptionWhereInput {
   node: AppKeyWhereInput
 }
 
-input AppKeyUpdateDataInput {
-  key: String
-  name: String
-  user: UserUpdateOneRequiredWithoutKeysInput
-}
-
 input AppKeyUpdateInput {
   key: String
   name: String
   user: UserUpdateOneRequiredWithoutKeysInput
+  repositories: RepositoryUpdateManyWithoutAppKeyInput
 }
 
 input AppKeyUpdateManyDataInput {
@@ -357,16 +635,23 @@ input AppKeyUpdateManyWithWhereNestedInput {
   data: AppKeyUpdateManyDataInput!
 }
 
-input AppKeyUpdateOneRequiredInput {
-  create: AppKeyCreateInput
+input AppKeyUpdateOneRequiredWithoutRepositoriesInput {
+  create: AppKeyCreateWithoutRepositoriesInput
   connect: AppKeyWhereUniqueInput
-  update: AppKeyUpdateDataInput
-  upsert: AppKeyUpsertNestedInput
+  update: AppKeyUpdateWithoutRepositoriesDataInput
+  upsert: AppKeyUpsertWithoutRepositoriesInput
+}
+
+input AppKeyUpdateWithoutRepositoriesDataInput {
+  key: String
+  name: String
+  user: UserUpdateOneRequiredWithoutKeysInput
 }
 
 input AppKeyUpdateWithoutUserDataInput {
   key: String
   name: String
+  repositories: RepositoryUpdateManyWithoutAppKeyInput
 }
 
 input AppKeyUpdateWithWhereUniqueWithoutUserInput {
@@ -374,9 +659,9 @@ input AppKeyUpdateWithWhereUniqueWithoutUserInput {
   data: AppKeyUpdateWithoutUserDataInput!
 }
 
-input AppKeyUpsertNestedInput {
-  update: AppKeyUpdateDataInput!
-  create: AppKeyCreateInput!
+input AppKeyUpsertWithoutRepositoriesInput {
+  update: AppKeyUpdateWithoutRepositoriesDataInput!
+  create: AppKeyCreateWithoutRepositoriesInput!
 }
 
 input AppKeyUpsertWithWhereUniqueWithoutUserInput {
@@ -515,6 +800,9 @@ input AppKeyWhereInput {
   """All values not ending with the given string."""
   name_not_ends_with: String
   user: UserWhereInput
+  repositories_every: RepositoryWhereInput
+  repositories_some: RepositoryWhereInput
+  repositories_none: RepositoryWhereInput
 }
 
 input AppKeyWhereUniqueInput {
@@ -529,6 +817,558 @@ type BatchPayload {
 
 scalar DateTime
 
+type GitHubWebhookEvent implements Node {
+  id: ID!
+  createdAt: DateTime!
+  repository: Repository!
+  eventType: String!
+  action: String
+  sender: String!
+}
+
+"""A connection to a list of items."""
+type GitHubWebhookEventConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GitHubWebhookEventEdge]!
+  aggregate: AggregateGitHubWebhookEvent!
+}
+
+input GitHubWebhookEventCreateInput {
+  id: ID
+  eventType: String!
+  action: String
+  sender: String!
+  repository: RepositoryCreateOneWithoutWebhookEventsInput!
+}
+
+input GitHubWebhookEventCreateManyWithoutRepositoryInput {
+  create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
+  connect: [GitHubWebhookEventWhereUniqueInput!]
+}
+
+input GitHubWebhookEventCreateWithoutRepositoryInput {
+  id: ID
+  eventType: String!
+  action: String
+  sender: String!
+}
+
+"""An edge in a connection."""
+type GitHubWebhookEventEdge {
+  """The item at the end of the edge."""
+  node: GitHubWebhookEvent!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum GitHubWebhookEventOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  eventType_ASC
+  eventType_DESC
+  action_ASC
+  action_DESC
+  sender_ASC
+  sender_DESC
+}
+
+type GitHubWebhookEventPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  eventType: String!
+  action: String
+  sender: String!
+}
+
+input GitHubWebhookEventScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GitHubWebhookEventScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GitHubWebhookEventScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GitHubWebhookEventScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  eventType: String
+
+  """All values that are not equal to given value."""
+  eventType_not: String
+
+  """All values that are contained in given list."""
+  eventType_in: [String!]
+
+  """All values that are not contained in given list."""
+  eventType_not_in: [String!]
+
+  """All values less than the given value."""
+  eventType_lt: String
+
+  """All values less than or equal the given value."""
+  eventType_lte: String
+
+  """All values greater than the given value."""
+  eventType_gt: String
+
+  """All values greater than or equal the given value."""
+  eventType_gte: String
+
+  """All values containing the given string."""
+  eventType_contains: String
+
+  """All values not containing the given string."""
+  eventType_not_contains: String
+
+  """All values starting with the given string."""
+  eventType_starts_with: String
+
+  """All values not starting with the given string."""
+  eventType_not_starts_with: String
+
+  """All values ending with the given string."""
+  eventType_ends_with: String
+
+  """All values not ending with the given string."""
+  eventType_not_ends_with: String
+  action: String
+
+  """All values that are not equal to given value."""
+  action_not: String
+
+  """All values that are contained in given list."""
+  action_in: [String!]
+
+  """All values that are not contained in given list."""
+  action_not_in: [String!]
+
+  """All values less than the given value."""
+  action_lt: String
+
+  """All values less than or equal the given value."""
+  action_lte: String
+
+  """All values greater than the given value."""
+  action_gt: String
+
+  """All values greater than or equal the given value."""
+  action_gte: String
+
+  """All values containing the given string."""
+  action_contains: String
+
+  """All values not containing the given string."""
+  action_not_contains: String
+
+  """All values starting with the given string."""
+  action_starts_with: String
+
+  """All values not starting with the given string."""
+  action_not_starts_with: String
+
+  """All values ending with the given string."""
+  action_ends_with: String
+
+  """All values not ending with the given string."""
+  action_not_ends_with: String
+  sender: String
+
+  """All values that are not equal to given value."""
+  sender_not: String
+
+  """All values that are contained in given list."""
+  sender_in: [String!]
+
+  """All values that are not contained in given list."""
+  sender_not_in: [String!]
+
+  """All values less than the given value."""
+  sender_lt: String
+
+  """All values less than or equal the given value."""
+  sender_lte: String
+
+  """All values greater than the given value."""
+  sender_gt: String
+
+  """All values greater than or equal the given value."""
+  sender_gte: String
+
+  """All values containing the given string."""
+  sender_contains: String
+
+  """All values not containing the given string."""
+  sender_not_contains: String
+
+  """All values starting with the given string."""
+  sender_starts_with: String
+
+  """All values not starting with the given string."""
+  sender_not_starts_with: String
+
+  """All values ending with the given string."""
+  sender_ends_with: String
+
+  """All values not ending with the given string."""
+  sender_not_ends_with: String
+}
+
+type GitHubWebhookEventSubscriptionPayload {
+  mutation: MutationType!
+  node: GitHubWebhookEvent
+  updatedFields: [String!]
+  previousValues: GitHubWebhookEventPreviousValues
+}
+
+input GitHubWebhookEventSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GitHubWebhookEventSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GitHubWebhookEventSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GitHubWebhookEventSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GitHubWebhookEventWhereInput
+}
+
+input GitHubWebhookEventUpdateInput {
+  eventType: String
+  action: String
+  sender: String
+  repository: RepositoryUpdateOneRequiredWithoutWebhookEventsInput
+}
+
+input GitHubWebhookEventUpdateManyDataInput {
+  eventType: String
+  action: String
+  sender: String
+}
+
+input GitHubWebhookEventUpdateManyMutationInput {
+  eventType: String
+  action: String
+  sender: String
+}
+
+input GitHubWebhookEventUpdateManyWithoutRepositoryInput {
+  create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
+  connect: [GitHubWebhookEventWhereUniqueInput!]
+  set: [GitHubWebhookEventWhereUniqueInput!]
+  disconnect: [GitHubWebhookEventWhereUniqueInput!]
+  delete: [GitHubWebhookEventWhereUniqueInput!]
+  update: [GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput!]
+  updateMany: [GitHubWebhookEventUpdateManyWithWhereNestedInput!]
+  deleteMany: [GitHubWebhookEventScalarWhereInput!]
+  upsert: [GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput!]
+}
+
+input GitHubWebhookEventUpdateManyWithWhereNestedInput {
+  where: GitHubWebhookEventScalarWhereInput!
+  data: GitHubWebhookEventUpdateManyDataInput!
+}
+
+input GitHubWebhookEventUpdateWithoutRepositoryDataInput {
+  eventType: String
+  action: String
+  sender: String
+}
+
+input GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput {
+  where: GitHubWebhookEventWhereUniqueInput!
+  data: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
+}
+
+input GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput {
+  where: GitHubWebhookEventWhereUniqueInput!
+  update: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
+  create: GitHubWebhookEventCreateWithoutRepositoryInput!
+}
+
+input GitHubWebhookEventWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GitHubWebhookEventWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GitHubWebhookEventWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GitHubWebhookEventWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  eventType: String
+
+  """All values that are not equal to given value."""
+  eventType_not: String
+
+  """All values that are contained in given list."""
+  eventType_in: [String!]
+
+  """All values that are not contained in given list."""
+  eventType_not_in: [String!]
+
+  """All values less than the given value."""
+  eventType_lt: String
+
+  """All values less than or equal the given value."""
+  eventType_lte: String
+
+  """All values greater than the given value."""
+  eventType_gt: String
+
+  """All values greater than or equal the given value."""
+  eventType_gte: String
+
+  """All values containing the given string."""
+  eventType_contains: String
+
+  """All values not containing the given string."""
+  eventType_not_contains: String
+
+  """All values starting with the given string."""
+  eventType_starts_with: String
+
+  """All values not starting with the given string."""
+  eventType_not_starts_with: String
+
+  """All values ending with the given string."""
+  eventType_ends_with: String
+
+  """All values not ending with the given string."""
+  eventType_not_ends_with: String
+  action: String
+
+  """All values that are not equal to given value."""
+  action_not: String
+
+  """All values that are contained in given list."""
+  action_in: [String!]
+
+  """All values that are not contained in given list."""
+  action_not_in: [String!]
+
+  """All values less than the given value."""
+  action_lt: String
+
+  """All values less than or equal the given value."""
+  action_lte: String
+
+  """All values greater than the given value."""
+  action_gt: String
+
+  """All values greater than or equal the given value."""
+  action_gte: String
+
+  """All values containing the given string."""
+  action_contains: String
+
+  """All values not containing the given string."""
+  action_not_contains: String
+
+  """All values starting with the given string."""
+  action_starts_with: String
+
+  """All values not starting with the given string."""
+  action_not_starts_with: String
+
+  """All values ending with the given string."""
+  action_ends_with: String
+
+  """All values not ending with the given string."""
+  action_not_ends_with: String
+  sender: String
+
+  """All values that are not equal to given value."""
+  sender_not: String
+
+  """All values that are contained in given list."""
+  sender_in: [String!]
+
+  """All values that are not contained in given list."""
+  sender_not_in: [String!]
+
+  """All values less than the given value."""
+  sender_lt: String
+
+  """All values less than or equal the given value."""
+  sender_lte: String
+
+  """All values greater than the given value."""
+  sender_gt: String
+
+  """All values greater than or equal the given value."""
+  sender_gte: String
+
+  """All values containing the given string."""
+  sender_contains: String
+
+  """All values not containing the given string."""
+  sender_not_contains: String
+
+  """All values starting with the given string."""
+  sender_starts_with: String
+
+  """All values not starting with the given string."""
+  sender_not_starts_with: String
+
+  """All values ending with the given string."""
+  sender_ends_with: String
+
+  """All values not ending with the given string."""
+  sender_not_ends_with: String
+  repository: RepositoryWhereInput
+}
+
+input GitHubWebhookEventWhereUniqueInput {
+  id: ID
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -540,23 +1380,29 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
-  createRepository(data: RepositoryCreateInput!): Repository!
   createAppKey(data: AppKeyCreateInput!): AppKey!
+  createRepository(data: RepositoryCreateInput!): Repository!
+  createGitHubWebhookEvent(data: GitHubWebhookEventCreateInput!): GitHubWebhookEvent!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
   updateAppKey(data: AppKeyUpdateInput!, where: AppKeyWhereUniqueInput!): AppKey
+  updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
+  updateGitHubWebhookEvent(data: GitHubWebhookEventUpdateInput!, where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteRepository(where: RepositoryWhereUniqueInput!): Repository
   deleteAppKey(where: AppKeyWhereUniqueInput!): AppKey
+  deleteRepository(where: RepositoryWhereUniqueInput!): Repository
+  deleteGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
   upsertAppKey(where: AppKeyWhereUniqueInput!, create: AppKeyCreateInput!, update: AppKeyUpdateInput!): AppKey!
+  upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
+  upsertGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!, create: GitHubWebhookEventCreateInput!, update: GitHubWebhookEventUpdateInput!): GitHubWebhookEvent!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
   updateManyAppKeys(data: AppKeyUpdateManyMutationInput!, where: AppKeyWhereInput): BatchPayload!
+  updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
+  updateManyGitHubWebhookEvents(data: GitHubWebhookEventUpdateManyMutationInput!, where: GitHubWebhookEventWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
   deleteManyAppKeys(where: AppKeyWhereInput): BatchPayload!
+  deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
+  deleteManyGitHubWebhookEvents(where: GitHubWebhookEventWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -593,14 +1439,17 @@ enum PrismaDatabase {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
   appKeys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey]!
+  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
+  gitHubWebhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent]!
   user(where: UserWhereUniqueInput!): User
-  repository(where: RepositoryWhereUniqueInput!): Repository
   appKey(where: AppKeyWhereUniqueInput!): AppKey
+  repository(where: RepositoryWhereUniqueInput!): Repository
+  gitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
   appKeysConnection(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppKeyConnection!
+  repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
+  gitHubWebhookEventsConnection(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GitHubWebhookEventConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -614,12 +1463,12 @@ type Repository implements Node {
   idExternal: String!
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
+  addedBy: User!
   name: String!
   description: String!
   homepageUrl: String
   url: String!
   owner: String!
-  user: User!
   isTracked: Boolean!
   appKey: AppKey!
   isFork: Boolean!
@@ -633,6 +1482,7 @@ type Repository implements Node {
   watchers: Int
   issues: Int
   pullRequests: Int
+  webhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent!]
 }
 
 """A connection to a list of items."""
@@ -651,7 +1501,7 @@ input RepositoryCreateInput {
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
   name: String!
-  description: String!
+  description: String
   homepageUrl: String
   url: String!
   owner: String!
@@ -667,22 +1517,33 @@ input RepositoryCreateInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  user: UserCreateOneWithoutRepositoriesInput!
-  appKey: AppKeyCreateOneInput!
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
 }
 
-input RepositoryCreateManyWithoutUserInput {
-  create: [RepositoryCreateWithoutUserInput!]
+input RepositoryCreateManyWithoutAddedByInput {
+  create: [RepositoryCreateWithoutAddedByInput!]
   connect: [RepositoryWhereUniqueInput!]
 }
 
-input RepositoryCreateWithoutUserInput {
+input RepositoryCreateManyWithoutAppKeyInput {
+  create: [RepositoryCreateWithoutAppKeyInput!]
+  connect: [RepositoryWhereUniqueInput!]
+}
+
+input RepositoryCreateOneWithoutWebhookEventsInput {
+  create: RepositoryCreateWithoutWebhookEventsInput
+  connect: RepositoryWhereUniqueInput
+}
+
+input RepositoryCreateWithoutAddedByInput {
   id: ID
   idExternal: String!
   createdAtExternal: DateTime!
   updatedAtExternal: DateTime!
   name: String!
-  description: String!
+  description: String
   homepageUrl: String
   url: String!
   owner: String!
@@ -698,7 +1559,60 @@ input RepositoryCreateWithoutUserInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  appKey: AppKeyCreateOneInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+}
+
+input RepositoryCreateWithoutAppKeyInput {
+  id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  name: String!
+  description: String
+  homepageUrl: String
+  url: String!
+  owner: String!
+  isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+}
+
+input RepositoryCreateWithoutWebhookEventsInput {
+  id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  name: String!
+  description: String
+  homepageUrl: String
+  url: String!
+  owner: String!
+  isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
 }
 
 """An edge in a connection."""
@@ -1348,8 +2262,9 @@ input RepositoryUpdateInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  user: UserUpdateOneRequiredWithoutRepositoriesInput
-  appKey: AppKeyUpdateOneRequiredInput
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
 input RepositoryUpdateManyDataInput {
@@ -1398,16 +2313,28 @@ input RepositoryUpdateManyMutationInput {
   pullRequests: Int
 }
 
-input RepositoryUpdateManyWithoutUserInput {
-  create: [RepositoryCreateWithoutUserInput!]
+input RepositoryUpdateManyWithoutAddedByInput {
+  create: [RepositoryCreateWithoutAddedByInput!]
   connect: [RepositoryWhereUniqueInput!]
   set: [RepositoryWhereUniqueInput!]
   disconnect: [RepositoryWhereUniqueInput!]
   delete: [RepositoryWhereUniqueInput!]
-  update: [RepositoryUpdateWithWhereUniqueWithoutUserInput!]
+  update: [RepositoryUpdateWithWhereUniqueWithoutAddedByInput!]
   updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
   deleteMany: [RepositoryScalarWhereInput!]
-  upsert: [RepositoryUpsertWithWhereUniqueWithoutUserInput!]
+  upsert: [RepositoryUpsertWithWhereUniqueWithoutAddedByInput!]
+}
+
+input RepositoryUpdateManyWithoutAppKeyInput {
+  create: [RepositoryCreateWithoutAppKeyInput!]
+  connect: [RepositoryWhereUniqueInput!]
+  set: [RepositoryWhereUniqueInput!]
+  disconnect: [RepositoryWhereUniqueInput!]
+  delete: [RepositoryWhereUniqueInput!]
+  update: [RepositoryUpdateWithWhereUniqueWithoutAppKeyInput!]
+  updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
+  deleteMany: [RepositoryScalarWhereInput!]
+  upsert: [RepositoryUpsertWithWhereUniqueWithoutAppKeyInput!]
 }
 
 input RepositoryUpdateManyWithWhereNestedInput {
@@ -1415,7 +2342,14 @@ input RepositoryUpdateManyWithWhereNestedInput {
   data: RepositoryUpdateManyDataInput!
 }
 
-input RepositoryUpdateWithoutUserDataInput {
+input RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
+  create: RepositoryCreateWithoutWebhookEventsInput
+  connect: RepositoryWhereUniqueInput
+  update: RepositoryUpdateWithoutWebhookEventsDataInput
+  upsert: RepositoryUpsertWithoutWebhookEventsInput
+}
+
+input RepositoryUpdateWithoutAddedByDataInput {
   idExternal: String
   createdAtExternal: DateTime
   updatedAtExternal: DateTime
@@ -1436,18 +2370,85 @@ input RepositoryUpdateWithoutUserDataInput {
   watchers: Int
   issues: Int
   pullRequests: Int
-  appKey: AppKeyUpdateOneRequiredInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
-input RepositoryUpdateWithWhereUniqueWithoutUserInput {
-  where: RepositoryWhereUniqueInput!
-  data: RepositoryUpdateWithoutUserDataInput!
+input RepositoryUpdateWithoutAppKeyDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  description: String
+  homepageUrl: String
+  url: String
+  owner: String
+  isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
-input RepositoryUpsertWithWhereUniqueWithoutUserInput {
+input RepositoryUpdateWithoutWebhookEventsDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  description: String
+  homepageUrl: String
+  url: String
+  owner: String
+  isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+}
+
+input RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
   where: RepositoryWhereUniqueInput!
-  update: RepositoryUpdateWithoutUserDataInput!
-  create: RepositoryCreateWithoutUserInput!
+  data: RepositoryUpdateWithoutAddedByDataInput!
+}
+
+input RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
+  where: RepositoryWhereUniqueInput!
+  data: RepositoryUpdateWithoutAppKeyDataInput!
+}
+
+input RepositoryUpsertWithoutWebhookEventsInput {
+  update: RepositoryUpdateWithoutWebhookEventsDataInput!
+  create: RepositoryCreateWithoutWebhookEventsInput!
+}
+
+input RepositoryUpsertWithWhereUniqueWithoutAddedByInput {
+  where: RepositoryWhereUniqueInput!
+  update: RepositoryUpdateWithoutAddedByDataInput!
+  create: RepositoryCreateWithoutAddedByInput!
+}
+
+input RepositoryUpsertWithWhereUniqueWithoutAppKeyInput {
+  where: RepositoryWhereUniqueInput!
+  update: RepositoryUpdateWithoutAppKeyDataInput!
+  create: RepositoryCreateWithoutAppKeyInput!
 }
 
 input RepositoryWhereInput {
@@ -1957,8 +2958,11 @@ input RepositoryWhereInput {
 
   """All values greater than or equal the given value."""
   pullRequests_gte: Int
-  user: UserWhereInput
+  addedBy: UserWhereInput
   appKey: AppKeyWhereInput
+  webhookEvents_every: GitHubWebhookEventWhereInput
+  webhookEvents_some: GitHubWebhookEventWhereInput
+  webhookEvents_none: GitHubWebhookEventWhereInput
 }
 
 input RepositoryWhereUniqueInput {
@@ -1974,8 +2978,9 @@ enum Role {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
   appKey(where: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload
+  repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
+  gitHubWebhookEvent(where: GitHubWebhookEventSubscriptionWhereInput): GitHubWebhookEventSubscriptionPayload
 }
 
 type User implements Node {
@@ -1987,7 +2992,7 @@ type User implements Node {
   name: String
   role: Role
   keys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey!]
-  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
+  addedRepositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
   gitLogin: String!
 }
 
@@ -2009,7 +3014,12 @@ input UserCreateInput {
   role: Role
   gitLogin: String!
   keys: AppKeyCreateManyWithoutUserInput
-  repositories: RepositoryCreateManyWithoutUserInput
+  addedRepositories: RepositoryCreateManyWithoutAddedByInput
+}
+
+input UserCreateOneWithoutAddedRepositoriesInput {
+  create: UserCreateWithoutAddedRepositoriesInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutKeysInput {
@@ -2017,9 +3027,14 @@ input UserCreateOneWithoutKeysInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutRepositoriesInput {
-  create: UserCreateWithoutRepositoriesInput
-  connect: UserWhereUniqueInput
+input UserCreateWithoutAddedRepositoriesInput {
+  id: ID
+  email: String!
+  hash: String!
+  name: String
+  role: Role
+  gitLogin: String!
+  keys: AppKeyCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutKeysInput {
@@ -2029,17 +3044,7 @@ input UserCreateWithoutKeysInput {
   name: String
   role: Role
   gitLogin: String!
-  repositories: RepositoryCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutRepositoriesInput {
-  id: ID
-  email: String!
-  hash: String!
-  name: String
-  role: Role
-  gitLogin: String!
-  keys: AppKeyCreateManyWithoutUserInput
+  addedRepositories: RepositoryCreateManyWithoutAddedByInput
 }
 
 """An edge in a connection."""
@@ -2127,7 +3132,7 @@ input UserUpdateInput {
   role: Role
   gitLogin: String
   keys: AppKeyUpdateManyWithoutUserInput
-  repositories: RepositoryUpdateManyWithoutUserInput
+  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateManyMutationInput {
@@ -2138,6 +3143,13 @@ input UserUpdateManyMutationInput {
   gitLogin: String
 }
 
+input UserUpdateOneRequiredWithoutAddedRepositoriesInput {
+  create: UserCreateWithoutAddedRepositoriesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutAddedRepositoriesDataInput
+  upsert: UserUpsertWithoutAddedRepositoriesInput
+}
+
 input UserUpdateOneRequiredWithoutKeysInput {
   create: UserCreateWithoutKeysInput
   connect: UserWhereUniqueInput
@@ -2145,23 +3157,7 @@ input UserUpdateOneRequiredWithoutKeysInput {
   upsert: UserUpsertWithoutKeysInput
 }
 
-input UserUpdateOneRequiredWithoutRepositoriesInput {
-  create: UserCreateWithoutRepositoriesInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutRepositoriesDataInput
-  upsert: UserUpsertWithoutRepositoriesInput
-}
-
-input UserUpdateWithoutKeysDataInput {
-  email: String
-  hash: String
-  name: String
-  role: Role
-  gitLogin: String
-  repositories: RepositoryUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutRepositoriesDataInput {
+input UserUpdateWithoutAddedRepositoriesDataInput {
   email: String
   hash: String
   name: String
@@ -2170,14 +3166,23 @@ input UserUpdateWithoutRepositoriesDataInput {
   keys: AppKeyUpdateManyWithoutUserInput
 }
 
+input UserUpdateWithoutKeysDataInput {
+  email: String
+  hash: String
+  name: String
+  role: Role
+  gitLogin: String
+  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+}
+
+input UserUpsertWithoutAddedRepositoriesInput {
+  update: UserUpdateWithoutAddedRepositoriesDataInput!
+  create: UserCreateWithoutAddedRepositoriesInput!
+}
+
 input UserUpsertWithoutKeysInput {
   update: UserUpdateWithoutKeysDataInput!
   create: UserCreateWithoutKeysInput!
-}
-
-input UserUpsertWithoutRepositoriesInput {
-  update: UserUpdateWithoutRepositoriesDataInput!
-  create: UserCreateWithoutRepositoriesInput!
 }
 
 input UserWhereInput {
@@ -2446,1089 +3451,1549 @@ input UserWhereInput {
   keys_every: AppKeyWhereInput
   keys_some: AppKeyWhereInput
   keys_none: AppKeyWhereInput
-  repositories_every: RepositoryWhereInput
-  repositories_some: RepositoryWhereInput
-  repositories_none: RepositoryWhereInput
+  addedRepositories_every: RepositoryWhereInput
+  addedRepositories_some: RepositoryWhereInput
+  addedRepositories_none: RepositoryWhereInput
 }
 
 input UserWhereUniqueInput {
   id: ID
   email: String
 }
-`
+`;
 
-export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})
+export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({ typeDefs });
 
 /**
  * Types
-*/
+ */
 
-export type AppKeyOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'key_ASC' |
-  'key_DESC' |
-  'name_ASC' |
-  'name_DESC'
+export type AppKeyOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'key_ASC'
+	| 'key_DESC'
+	| 'name_ASC'
+	| 'name_DESC';
 
-export type MutationType =   'CREATED' |
-  'UPDATED' |
-  'DELETED'
+export type GitHubWebhookEventOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'createdAt_ASC'
+	| 'createdAt_DESC'
+	| 'eventType_ASC'
+	| 'eventType_DESC'
+	| 'action_ASC'
+	| 'action_DESC'
+	| 'sender_ASC'
+	| 'sender_DESC';
 
-export type PrismaDatabase =   'default'
+export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED';
 
-export type RepositoryOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'idExternal_ASC' |
-  'idExternal_DESC' |
-  'createdAtExternal_ASC' |
-  'createdAtExternal_DESC' |
-  'updatedAtExternal_ASC' |
-  'updatedAtExternal_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'description_ASC' |
-  'description_DESC' |
-  'homepageUrl_ASC' |
-  'homepageUrl_DESC' |
-  'url_ASC' |
-  'url_DESC' |
-  'owner_ASC' |
-  'owner_DESC' |
-  'isTracked_ASC' |
-  'isTracked_DESC' |
-  'isFork_ASC' |
-  'isFork_DESC' |
-  'isLocked_ASC' |
-  'isLocked_DESC' |
-  'isPrivate_ASC' |
-  'isPrivate_DESC' |
-  'isArchived_ASC' |
-  'isArchived_DESC' |
-  'isDisabled_ASC' |
-  'isDisabled_DESC' |
-  'sshUrl_ASC' |
-  'sshUrl_DESC' |
-  'stargazers_ASC' |
-  'stargazers_DESC' |
-  'collaborators_ASC' |
-  'collaborators_DESC' |
-  'watchers_ASC' |
-  'watchers_DESC' |
-  'issues_ASC' |
-  'issues_DESC' |
-  'pullRequests_ASC' |
-  'pullRequests_DESC'
+export type PrismaDatabase = 'default';
 
-export type Role =   'USER' |
-  'ADMIN'
+export type RepositoryOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'idExternal_ASC'
+	| 'idExternal_DESC'
+	| 'createdAtExternal_ASC'
+	| 'createdAtExternal_DESC'
+	| 'updatedAtExternal_ASC'
+	| 'updatedAtExternal_DESC'
+	| 'name_ASC'
+	| 'name_DESC'
+	| 'description_ASC'
+	| 'description_DESC'
+	| 'homepageUrl_ASC'
+	| 'homepageUrl_DESC'
+	| 'url_ASC'
+	| 'url_DESC'
+	| 'owner_ASC'
+	| 'owner_DESC'
+	| 'isTracked_ASC'
+	| 'isTracked_DESC'
+	| 'isFork_ASC'
+	| 'isFork_DESC'
+	| 'isLocked_ASC'
+	| 'isLocked_DESC'
+	| 'isPrivate_ASC'
+	| 'isPrivate_DESC'
+	| 'isArchived_ASC'
+	| 'isArchived_DESC'
+	| 'isDisabled_ASC'
+	| 'isDisabled_DESC'
+	| 'sshUrl_ASC'
+	| 'sshUrl_DESC'
+	| 'stargazers_ASC'
+	| 'stargazers_DESC'
+	| 'collaborators_ASC'
+	| 'collaborators_DESC'
+	| 'watchers_ASC'
+	| 'watchers_DESC'
+	| 'issues_ASC'
+	| 'issues_DESC'
+	| 'pullRequests_ASC'
+	| 'pullRequests_DESC';
 
-export type UserOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'email_ASC' |
-  'email_DESC' |
-  'hash_ASC' |
-  'hash_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'role_ASC' |
-  'role_DESC' |
-  'gitLogin_ASC' |
-  'gitLogin_DESC'
+export type Role = 'USER' | 'ADMIN';
+
+export type UserOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'email_ASC'
+	| 'email_DESC'
+	| 'hash_ASC'
+	| 'hash_DESC'
+	| 'createdAt_ASC'
+	| 'createdAt_DESC'
+	| 'updatedAt_ASC'
+	| 'updatedAt_DESC'
+	| 'name_ASC'
+	| 'name_DESC'
+	| 'role_ASC'
+	| 'role_DESC'
+	| 'gitLogin_ASC'
+	| 'gitLogin_DESC';
 
 export interface AppKeyCreateInput {
-  id?: ID_Input | null
-  key: String
-  name?: String | null
-  user: UserCreateOneWithoutKeysInput
+	id?: ID_Input | null;
+	key: String;
+	name?: String | null;
+	user: UserCreateOneWithoutKeysInput;
+	repositories?: RepositoryCreateManyWithoutAppKeyInput | null;
 }
 
 export interface AppKeyCreateManyWithoutUserInput {
-  create?: AppKeyCreateWithoutUserInput[] | AppKeyCreateWithoutUserInput | null
-  connect?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null
+	create?: AppKeyCreateWithoutUserInput[] | AppKeyCreateWithoutUserInput | null;
+	connect?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null;
 }
 
-export interface AppKeyCreateOneInput {
-  create?: AppKeyCreateInput | null
-  connect?: AppKeyWhereUniqueInput | null
+export interface AppKeyCreateOneWithoutRepositoriesInput {
+	create?: AppKeyCreateWithoutRepositoriesInput | null;
+	connect?: AppKeyWhereUniqueInput | null;
+}
+
+export interface AppKeyCreateWithoutRepositoriesInput {
+	id?: ID_Input | null;
+	key: String;
+	name?: String | null;
+	user: UserCreateOneWithoutKeysInput;
 }
 
 export interface AppKeyCreateWithoutUserInput {
-  id?: ID_Input | null
-  key: String
-  name?: String | null
+	id?: ID_Input | null;
+	key: String;
+	name?: String | null;
+	repositories?: RepositoryCreateManyWithoutAppKeyInput | null;
 }
 
 export interface AppKeyScalarWhereInput {
-  AND?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null
-  OR?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null
-  NOT?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  key?: String | null
-  key_not?: String | null
-  key_in?: String[] | String | null
-  key_not_in?: String[] | String | null
-  key_lt?: String | null
-  key_lte?: String | null
-  key_gt?: String | null
-  key_gte?: String | null
-  key_contains?: String | null
-  key_not_contains?: String | null
-  key_starts_with?: String | null
-  key_not_starts_with?: String | null
-  key_ends_with?: String | null
-  key_not_ends_with?: String | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
+	AND?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null;
+	OR?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null;
+	NOT?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	key?: String | null;
+	key_not?: String | null;
+	key_in?: String[] | String | null;
+	key_not_in?: String[] | String | null;
+	key_lt?: String | null;
+	key_lte?: String | null;
+	key_gt?: String | null;
+	key_gte?: String | null;
+	key_contains?: String | null;
+	key_not_contains?: String | null;
+	key_starts_with?: String | null;
+	key_not_starts_with?: String | null;
+	key_ends_with?: String | null;
+	key_not_ends_with?: String | null;
+	name?: String | null;
+	name_not?: String | null;
+	name_in?: String[] | String | null;
+	name_not_in?: String[] | String | null;
+	name_lt?: String | null;
+	name_lte?: String | null;
+	name_gt?: String | null;
+	name_gte?: String | null;
+	name_contains?: String | null;
+	name_not_contains?: String | null;
+	name_starts_with?: String | null;
+	name_not_starts_with?: String | null;
+	name_ends_with?: String | null;
+	name_not_ends_with?: String | null;
 }
 
 export interface AppKeySubscriptionWhereInput {
-  AND?: AppKeySubscriptionWhereInput[] | AppKeySubscriptionWhereInput | null
-  OR?: AppKeySubscriptionWhereInput[] | AppKeySubscriptionWhereInput | null
-  NOT?: AppKeySubscriptionWhereInput[] | AppKeySubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: AppKeyWhereInput | null
-}
-
-export interface AppKeyUpdateDataInput {
-  key?: String | null
-  name?: String | null
-  user?: UserUpdateOneRequiredWithoutKeysInput | null
+	AND?: AppKeySubscriptionWhereInput[] | AppKeySubscriptionWhereInput | null;
+	OR?: AppKeySubscriptionWhereInput[] | AppKeySubscriptionWhereInput | null;
+	NOT?: AppKeySubscriptionWhereInput[] | AppKeySubscriptionWhereInput | null;
+	mutation_in?: MutationType[] | MutationType | null;
+	updatedFields_contains?: String | null;
+	updatedFields_contains_every?: String[] | String | null;
+	updatedFields_contains_some?: String[] | String | null;
+	node?: AppKeyWhereInput | null;
 }
 
 export interface AppKeyUpdateInput {
-  key?: String | null
-  name?: String | null
-  user?: UserUpdateOneRequiredWithoutKeysInput | null
+	key?: String | null;
+	name?: String | null;
+	user?: UserUpdateOneRequiredWithoutKeysInput | null;
+	repositories?: RepositoryUpdateManyWithoutAppKeyInput | null;
 }
 
 export interface AppKeyUpdateManyDataInput {
-  key?: String | null
-  name?: String | null
+	key?: String | null;
+	name?: String | null;
 }
 
 export interface AppKeyUpdateManyMutationInput {
-  key?: String | null
-  name?: String | null
+	key?: String | null;
+	name?: String | null;
 }
 
 export interface AppKeyUpdateManyWithoutUserInput {
-  create?: AppKeyCreateWithoutUserInput[] | AppKeyCreateWithoutUserInput | null
-  connect?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null
-  set?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null
-  disconnect?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null
-  delete?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null
-  update?: AppKeyUpdateWithWhereUniqueWithoutUserInput[] | AppKeyUpdateWithWhereUniqueWithoutUserInput | null
-  updateMany?: AppKeyUpdateManyWithWhereNestedInput[] | AppKeyUpdateManyWithWhereNestedInput | null
-  deleteMany?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null
-  upsert?: AppKeyUpsertWithWhereUniqueWithoutUserInput[] | AppKeyUpsertWithWhereUniqueWithoutUserInput | null
+	create?: AppKeyCreateWithoutUserInput[] | AppKeyCreateWithoutUserInput | null;
+	connect?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null;
+	set?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null;
+	disconnect?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null;
+	delete?: AppKeyWhereUniqueInput[] | AppKeyWhereUniqueInput | null;
+	update?:
+		| AppKeyUpdateWithWhereUniqueWithoutUserInput[]
+		| AppKeyUpdateWithWhereUniqueWithoutUserInput
+		| null;
+	updateMany?:
+		| AppKeyUpdateManyWithWhereNestedInput[]
+		| AppKeyUpdateManyWithWhereNestedInput
+		| null;
+	deleteMany?: AppKeyScalarWhereInput[] | AppKeyScalarWhereInput | null;
+	upsert?:
+		| AppKeyUpsertWithWhereUniqueWithoutUserInput[]
+		| AppKeyUpsertWithWhereUniqueWithoutUserInput
+		| null;
 }
 
 export interface AppKeyUpdateManyWithWhereNestedInput {
-  where: AppKeyScalarWhereInput
-  data: AppKeyUpdateManyDataInput
+	where: AppKeyScalarWhereInput;
+	data: AppKeyUpdateManyDataInput;
 }
 
-export interface AppKeyUpdateOneRequiredInput {
-  create?: AppKeyCreateInput | null
-  connect?: AppKeyWhereUniqueInput | null
-  update?: AppKeyUpdateDataInput | null
-  upsert?: AppKeyUpsertNestedInput | null
+export interface AppKeyUpdateOneRequiredWithoutRepositoriesInput {
+	create?: AppKeyCreateWithoutRepositoriesInput | null;
+	connect?: AppKeyWhereUniqueInput | null;
+	update?: AppKeyUpdateWithoutRepositoriesDataInput | null;
+	upsert?: AppKeyUpsertWithoutRepositoriesInput | null;
+}
+
+export interface AppKeyUpdateWithoutRepositoriesDataInput {
+	key?: String | null;
+	name?: String | null;
+	user?: UserUpdateOneRequiredWithoutKeysInput | null;
 }
 
 export interface AppKeyUpdateWithoutUserDataInput {
-  key?: String | null
-  name?: String | null
+	key?: String | null;
+	name?: String | null;
+	repositories?: RepositoryUpdateManyWithoutAppKeyInput | null;
 }
 
 export interface AppKeyUpdateWithWhereUniqueWithoutUserInput {
-  where: AppKeyWhereUniqueInput
-  data: AppKeyUpdateWithoutUserDataInput
+	where: AppKeyWhereUniqueInput;
+	data: AppKeyUpdateWithoutUserDataInput;
 }
 
-export interface AppKeyUpsertNestedInput {
-  update: AppKeyUpdateDataInput
-  create: AppKeyCreateInput
+export interface AppKeyUpsertWithoutRepositoriesInput {
+	update: AppKeyUpdateWithoutRepositoriesDataInput;
+	create: AppKeyCreateWithoutRepositoriesInput;
 }
 
 export interface AppKeyUpsertWithWhereUniqueWithoutUserInput {
-  where: AppKeyWhereUniqueInput
-  update: AppKeyUpdateWithoutUserDataInput
-  create: AppKeyCreateWithoutUserInput
+	where: AppKeyWhereUniqueInput;
+	update: AppKeyUpdateWithoutUserDataInput;
+	create: AppKeyCreateWithoutUserInput;
 }
 
 export interface AppKeyWhereInput {
-  AND?: AppKeyWhereInput[] | AppKeyWhereInput | null
-  OR?: AppKeyWhereInput[] | AppKeyWhereInput | null
-  NOT?: AppKeyWhereInput[] | AppKeyWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  key?: String | null
-  key_not?: String | null
-  key_in?: String[] | String | null
-  key_not_in?: String[] | String | null
-  key_lt?: String | null
-  key_lte?: String | null
-  key_gt?: String | null
-  key_gte?: String | null
-  key_contains?: String | null
-  key_not_contains?: String | null
-  key_starts_with?: String | null
-  key_not_starts_with?: String | null
-  key_ends_with?: String | null
-  key_not_ends_with?: String | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  user?: UserWhereInput | null
+	AND?: AppKeyWhereInput[] | AppKeyWhereInput | null;
+	OR?: AppKeyWhereInput[] | AppKeyWhereInput | null;
+	NOT?: AppKeyWhereInput[] | AppKeyWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	key?: String | null;
+	key_not?: String | null;
+	key_in?: String[] | String | null;
+	key_not_in?: String[] | String | null;
+	key_lt?: String | null;
+	key_lte?: String | null;
+	key_gt?: String | null;
+	key_gte?: String | null;
+	key_contains?: String | null;
+	key_not_contains?: String | null;
+	key_starts_with?: String | null;
+	key_not_starts_with?: String | null;
+	key_ends_with?: String | null;
+	key_not_ends_with?: String | null;
+	name?: String | null;
+	name_not?: String | null;
+	name_in?: String[] | String | null;
+	name_not_in?: String[] | String | null;
+	name_lt?: String | null;
+	name_lte?: String | null;
+	name_gt?: String | null;
+	name_gte?: String | null;
+	name_contains?: String | null;
+	name_not_contains?: String | null;
+	name_starts_with?: String | null;
+	name_not_starts_with?: String | null;
+	name_ends_with?: String | null;
+	name_not_ends_with?: String | null;
+	user?: UserWhereInput | null;
+	repositories_every?: RepositoryWhereInput | null;
+	repositories_some?: RepositoryWhereInput | null;
+	repositories_none?: RepositoryWhereInput | null;
 }
 
 export interface AppKeyWhereUniqueInput {
-  id?: ID_Input | null
-  key?: String | null
+	id?: ID_Input | null;
+	key?: String | null;
+}
+
+export interface GitHubWebhookEventCreateInput {
+	id?: ID_Input | null;
+	eventType: String;
+	action?: String | null;
+	sender: String;
+	repository: RepositoryCreateOneWithoutWebhookEventsInput;
+}
+
+export interface GitHubWebhookEventCreateManyWithoutRepositoryInput {
+	create?:
+		| GitHubWebhookEventCreateWithoutRepositoryInput[]
+		| GitHubWebhookEventCreateWithoutRepositoryInput
+		| null;
+	connect?: GitHubWebhookEventWhereUniqueInput[] | GitHubWebhookEventWhereUniqueInput | null;
+}
+
+export interface GitHubWebhookEventCreateWithoutRepositoryInput {
+	id?: ID_Input | null;
+	eventType: String;
+	action?: String | null;
+	sender: String;
+}
+
+export interface GitHubWebhookEventScalarWhereInput {
+	AND?: GitHubWebhookEventScalarWhereInput[] | GitHubWebhookEventScalarWhereInput | null;
+	OR?: GitHubWebhookEventScalarWhereInput[] | GitHubWebhookEventScalarWhereInput | null;
+	NOT?: GitHubWebhookEventScalarWhereInput[] | GitHubWebhookEventScalarWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	createdAt?: DateTime | null;
+	createdAt_not?: DateTime | null;
+	createdAt_in?: DateTime[] | DateTime | null;
+	createdAt_not_in?: DateTime[] | DateTime | null;
+	createdAt_lt?: DateTime | null;
+	createdAt_lte?: DateTime | null;
+	createdAt_gt?: DateTime | null;
+	createdAt_gte?: DateTime | null;
+	eventType?: String | null;
+	eventType_not?: String | null;
+	eventType_in?: String[] | String | null;
+	eventType_not_in?: String[] | String | null;
+	eventType_lt?: String | null;
+	eventType_lte?: String | null;
+	eventType_gt?: String | null;
+	eventType_gte?: String | null;
+	eventType_contains?: String | null;
+	eventType_not_contains?: String | null;
+	eventType_starts_with?: String | null;
+	eventType_not_starts_with?: String | null;
+	eventType_ends_with?: String | null;
+	eventType_not_ends_with?: String | null;
+	action?: String | null;
+	action_not?: String | null;
+	action_in?: String[] | String | null;
+	action_not_in?: String[] | String | null;
+	action_lt?: String | null;
+	action_lte?: String | null;
+	action_gt?: String | null;
+	action_gte?: String | null;
+	action_contains?: String | null;
+	action_not_contains?: String | null;
+	action_starts_with?: String | null;
+	action_not_starts_with?: String | null;
+	action_ends_with?: String | null;
+	action_not_ends_with?: String | null;
+	sender?: String | null;
+	sender_not?: String | null;
+	sender_in?: String[] | String | null;
+	sender_not_in?: String[] | String | null;
+	sender_lt?: String | null;
+	sender_lte?: String | null;
+	sender_gt?: String | null;
+	sender_gte?: String | null;
+	sender_contains?: String | null;
+	sender_not_contains?: String | null;
+	sender_starts_with?: String | null;
+	sender_not_starts_with?: String | null;
+	sender_ends_with?: String | null;
+	sender_not_ends_with?: String | null;
+}
+
+export interface GitHubWebhookEventSubscriptionWhereInput {
+	AND?:
+		| GitHubWebhookEventSubscriptionWhereInput[]
+		| GitHubWebhookEventSubscriptionWhereInput
+		| null;
+	OR?:
+		| GitHubWebhookEventSubscriptionWhereInput[]
+		| GitHubWebhookEventSubscriptionWhereInput
+		| null;
+	NOT?:
+		| GitHubWebhookEventSubscriptionWhereInput[]
+		| GitHubWebhookEventSubscriptionWhereInput
+		| null;
+	mutation_in?: MutationType[] | MutationType | null;
+	updatedFields_contains?: String | null;
+	updatedFields_contains_every?: String[] | String | null;
+	updatedFields_contains_some?: String[] | String | null;
+	node?: GitHubWebhookEventWhereInput | null;
+}
+
+export interface GitHubWebhookEventUpdateInput {
+	eventType?: String | null;
+	action?: String | null;
+	sender?: String | null;
+	repository?: RepositoryUpdateOneRequiredWithoutWebhookEventsInput | null;
+}
+
+export interface GitHubWebhookEventUpdateManyDataInput {
+	eventType?: String | null;
+	action?: String | null;
+	sender?: String | null;
+}
+
+export interface GitHubWebhookEventUpdateManyMutationInput {
+	eventType?: String | null;
+	action?: String | null;
+	sender?: String | null;
+}
+
+export interface GitHubWebhookEventUpdateManyWithoutRepositoryInput {
+	create?:
+		| GitHubWebhookEventCreateWithoutRepositoryInput[]
+		| GitHubWebhookEventCreateWithoutRepositoryInput
+		| null;
+	connect?: GitHubWebhookEventWhereUniqueInput[] | GitHubWebhookEventWhereUniqueInput | null;
+	set?: GitHubWebhookEventWhereUniqueInput[] | GitHubWebhookEventWhereUniqueInput | null;
+	disconnect?: GitHubWebhookEventWhereUniqueInput[] | GitHubWebhookEventWhereUniqueInput | null;
+	delete?: GitHubWebhookEventWhereUniqueInput[] | GitHubWebhookEventWhereUniqueInput | null;
+	update?:
+		| GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput[]
+		| GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput
+		| null;
+	updateMany?:
+		| GitHubWebhookEventUpdateManyWithWhereNestedInput[]
+		| GitHubWebhookEventUpdateManyWithWhereNestedInput
+		| null;
+	deleteMany?: GitHubWebhookEventScalarWhereInput[] | GitHubWebhookEventScalarWhereInput | null;
+	upsert?:
+		| GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput[]
+		| GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput
+		| null;
+}
+
+export interface GitHubWebhookEventUpdateManyWithWhereNestedInput {
+	where: GitHubWebhookEventScalarWhereInput;
+	data: GitHubWebhookEventUpdateManyDataInput;
+}
+
+export interface GitHubWebhookEventUpdateWithoutRepositoryDataInput {
+	eventType?: String | null;
+	action?: String | null;
+	sender?: String | null;
+}
+
+export interface GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput {
+	where: GitHubWebhookEventWhereUniqueInput;
+	data: GitHubWebhookEventUpdateWithoutRepositoryDataInput;
+}
+
+export interface GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput {
+	where: GitHubWebhookEventWhereUniqueInput;
+	update: GitHubWebhookEventUpdateWithoutRepositoryDataInput;
+	create: GitHubWebhookEventCreateWithoutRepositoryInput;
+}
+
+export interface GitHubWebhookEventWhereInput {
+	AND?: GitHubWebhookEventWhereInput[] | GitHubWebhookEventWhereInput | null;
+	OR?: GitHubWebhookEventWhereInput[] | GitHubWebhookEventWhereInput | null;
+	NOT?: GitHubWebhookEventWhereInput[] | GitHubWebhookEventWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	createdAt?: DateTime | null;
+	createdAt_not?: DateTime | null;
+	createdAt_in?: DateTime[] | DateTime | null;
+	createdAt_not_in?: DateTime[] | DateTime | null;
+	createdAt_lt?: DateTime | null;
+	createdAt_lte?: DateTime | null;
+	createdAt_gt?: DateTime | null;
+	createdAt_gte?: DateTime | null;
+	eventType?: String | null;
+	eventType_not?: String | null;
+	eventType_in?: String[] | String | null;
+	eventType_not_in?: String[] | String | null;
+	eventType_lt?: String | null;
+	eventType_lte?: String | null;
+	eventType_gt?: String | null;
+	eventType_gte?: String | null;
+	eventType_contains?: String | null;
+	eventType_not_contains?: String | null;
+	eventType_starts_with?: String | null;
+	eventType_not_starts_with?: String | null;
+	eventType_ends_with?: String | null;
+	eventType_not_ends_with?: String | null;
+	action?: String | null;
+	action_not?: String | null;
+	action_in?: String[] | String | null;
+	action_not_in?: String[] | String | null;
+	action_lt?: String | null;
+	action_lte?: String | null;
+	action_gt?: String | null;
+	action_gte?: String | null;
+	action_contains?: String | null;
+	action_not_contains?: String | null;
+	action_starts_with?: String | null;
+	action_not_starts_with?: String | null;
+	action_ends_with?: String | null;
+	action_not_ends_with?: String | null;
+	sender?: String | null;
+	sender_not?: String | null;
+	sender_in?: String[] | String | null;
+	sender_not_in?: String[] | String | null;
+	sender_lt?: String | null;
+	sender_lte?: String | null;
+	sender_gt?: String | null;
+	sender_gte?: String | null;
+	sender_contains?: String | null;
+	sender_not_contains?: String | null;
+	sender_starts_with?: String | null;
+	sender_not_starts_with?: String | null;
+	sender_ends_with?: String | null;
+	sender_not_ends_with?: String | null;
+	repository?: RepositoryWhereInput | null;
+}
+
+export interface GitHubWebhookEventWhereUniqueInput {
+	id?: ID_Input | null;
 }
 
 export interface RepositoryCreateInput {
-  id?: ID_Input | null
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl?: String | null
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
-  user: UserCreateOneWithoutRepositoriesInput
-  appKey: AppKeyCreateOneInput
+	id?: ID_Input | null;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	name: String;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+	appKey: AppKeyCreateOneWithoutRepositoriesInput;
+	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
 }
 
-export interface RepositoryCreateManyWithoutUserInput {
-  create?: RepositoryCreateWithoutUserInput[] | RepositoryCreateWithoutUserInput | null
-  connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null
+export interface RepositoryCreateManyWithoutAddedByInput {
+	create?: RepositoryCreateWithoutAddedByInput[] | RepositoryCreateWithoutAddedByInput | null;
+	connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
 }
 
-export interface RepositoryCreateWithoutUserInput {
-  id?: ID_Input | null
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl?: String | null
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
-  appKey: AppKeyCreateOneInput
+export interface RepositoryCreateManyWithoutAppKeyInput {
+	create?: RepositoryCreateWithoutAppKeyInput[] | RepositoryCreateWithoutAppKeyInput | null;
+	connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+}
+
+export interface RepositoryCreateOneWithoutWebhookEventsInput {
+	create?: RepositoryCreateWithoutWebhookEventsInput | null;
+	connect?: RepositoryWhereUniqueInput | null;
+}
+
+export interface RepositoryCreateWithoutAddedByInput {
+	id?: ID_Input | null;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	name: String;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	appKey: AppKeyCreateOneWithoutRepositoriesInput;
+	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
+}
+
+export interface RepositoryCreateWithoutAppKeyInput {
+	id?: ID_Input | null;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	name: String;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
+}
+
+export interface RepositoryCreateWithoutWebhookEventsInput {
+	id?: ID_Input | null;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	name: String;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+	appKey: AppKeyCreateOneWithoutRepositoriesInput;
 }
 
 export interface RepositoryScalarWhereInput {
-  AND?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null
-  OR?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null
-  NOT?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  idExternal?: String | null
-  idExternal_not?: String | null
-  idExternal_in?: String[] | String | null
-  idExternal_not_in?: String[] | String | null
-  idExternal_lt?: String | null
-  idExternal_lte?: String | null
-  idExternal_gt?: String | null
-  idExternal_gte?: String | null
-  idExternal_contains?: String | null
-  idExternal_not_contains?: String | null
-  idExternal_starts_with?: String | null
-  idExternal_not_starts_with?: String | null
-  idExternal_ends_with?: String | null
-  idExternal_not_ends_with?: String | null
-  createdAtExternal?: DateTime | null
-  createdAtExternal_not?: DateTime | null
-  createdAtExternal_in?: DateTime[] | DateTime | null
-  createdAtExternal_not_in?: DateTime[] | DateTime | null
-  createdAtExternal_lt?: DateTime | null
-  createdAtExternal_lte?: DateTime | null
-  createdAtExternal_gt?: DateTime | null
-  createdAtExternal_gte?: DateTime | null
-  updatedAtExternal?: DateTime | null
-  updatedAtExternal_not?: DateTime | null
-  updatedAtExternal_in?: DateTime[] | DateTime | null
-  updatedAtExternal_not_in?: DateTime[] | DateTime | null
-  updatedAtExternal_lt?: DateTime | null
-  updatedAtExternal_lte?: DateTime | null
-  updatedAtExternal_gt?: DateTime | null
-  updatedAtExternal_gte?: DateTime | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  description?: String | null
-  description_not?: String | null
-  description_in?: String[] | String | null
-  description_not_in?: String[] | String | null
-  description_lt?: String | null
-  description_lte?: String | null
-  description_gt?: String | null
-  description_gte?: String | null
-  description_contains?: String | null
-  description_not_contains?: String | null
-  description_starts_with?: String | null
-  description_not_starts_with?: String | null
-  description_ends_with?: String | null
-  description_not_ends_with?: String | null
-  homepageUrl?: String | null
-  homepageUrl_not?: String | null
-  homepageUrl_in?: String[] | String | null
-  homepageUrl_not_in?: String[] | String | null
-  homepageUrl_lt?: String | null
-  homepageUrl_lte?: String | null
-  homepageUrl_gt?: String | null
-  homepageUrl_gte?: String | null
-  homepageUrl_contains?: String | null
-  homepageUrl_not_contains?: String | null
-  homepageUrl_starts_with?: String | null
-  homepageUrl_not_starts_with?: String | null
-  homepageUrl_ends_with?: String | null
-  homepageUrl_not_ends_with?: String | null
-  url?: String | null
-  url_not?: String | null
-  url_in?: String[] | String | null
-  url_not_in?: String[] | String | null
-  url_lt?: String | null
-  url_lte?: String | null
-  url_gt?: String | null
-  url_gte?: String | null
-  url_contains?: String | null
-  url_not_contains?: String | null
-  url_starts_with?: String | null
-  url_not_starts_with?: String | null
-  url_ends_with?: String | null
-  url_not_ends_with?: String | null
-  owner?: String | null
-  owner_not?: String | null
-  owner_in?: String[] | String | null
-  owner_not_in?: String[] | String | null
-  owner_lt?: String | null
-  owner_lte?: String | null
-  owner_gt?: String | null
-  owner_gte?: String | null
-  owner_contains?: String | null
-  owner_not_contains?: String | null
-  owner_starts_with?: String | null
-  owner_not_starts_with?: String | null
-  owner_ends_with?: String | null
-  owner_not_ends_with?: String | null
-  isTracked?: Boolean | null
-  isTracked_not?: Boolean | null
-  isFork?: Boolean | null
-  isFork_not?: Boolean | null
-  isLocked?: Boolean | null
-  isLocked_not?: Boolean | null
-  isPrivate?: Boolean | null
-  isPrivate_not?: Boolean | null
-  isArchived?: Boolean | null
-  isArchived_not?: Boolean | null
-  isDisabled?: Boolean | null
-  isDisabled_not?: Boolean | null
-  sshUrl?: String | null
-  sshUrl_not?: String | null
-  sshUrl_in?: String[] | String | null
-  sshUrl_not_in?: String[] | String | null
-  sshUrl_lt?: String | null
-  sshUrl_lte?: String | null
-  sshUrl_gt?: String | null
-  sshUrl_gte?: String | null
-  sshUrl_contains?: String | null
-  sshUrl_not_contains?: String | null
-  sshUrl_starts_with?: String | null
-  sshUrl_not_starts_with?: String | null
-  sshUrl_ends_with?: String | null
-  sshUrl_not_ends_with?: String | null
-  stargazers?: Int | null
-  stargazers_not?: Int | null
-  stargazers_in?: Int[] | Int | null
-  stargazers_not_in?: Int[] | Int | null
-  stargazers_lt?: Int | null
-  stargazers_lte?: Int | null
-  stargazers_gt?: Int | null
-  stargazers_gte?: Int | null
-  collaborators?: Int | null
-  collaborators_not?: Int | null
-  collaborators_in?: Int[] | Int | null
-  collaborators_not_in?: Int[] | Int | null
-  collaborators_lt?: Int | null
-  collaborators_lte?: Int | null
-  collaborators_gt?: Int | null
-  collaborators_gte?: Int | null
-  watchers?: Int | null
-  watchers_not?: Int | null
-  watchers_in?: Int[] | Int | null
-  watchers_not_in?: Int[] | Int | null
-  watchers_lt?: Int | null
-  watchers_lte?: Int | null
-  watchers_gt?: Int | null
-  watchers_gte?: Int | null
-  issues?: Int | null
-  issues_not?: Int | null
-  issues_in?: Int[] | Int | null
-  issues_not_in?: Int[] | Int | null
-  issues_lt?: Int | null
-  issues_lte?: Int | null
-  issues_gt?: Int | null
-  issues_gte?: Int | null
-  pullRequests?: Int | null
-  pullRequests_not?: Int | null
-  pullRequests_in?: Int[] | Int | null
-  pullRequests_not_in?: Int[] | Int | null
-  pullRequests_lt?: Int | null
-  pullRequests_lte?: Int | null
-  pullRequests_gt?: Int | null
-  pullRequests_gte?: Int | null
+	AND?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null;
+	OR?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null;
+	NOT?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	idExternal?: String | null;
+	idExternal_not?: String | null;
+	idExternal_in?: String[] | String | null;
+	idExternal_not_in?: String[] | String | null;
+	idExternal_lt?: String | null;
+	idExternal_lte?: String | null;
+	idExternal_gt?: String | null;
+	idExternal_gte?: String | null;
+	idExternal_contains?: String | null;
+	idExternal_not_contains?: String | null;
+	idExternal_starts_with?: String | null;
+	idExternal_not_starts_with?: String | null;
+	idExternal_ends_with?: String | null;
+	idExternal_not_ends_with?: String | null;
+	createdAtExternal?: DateTime | null;
+	createdAtExternal_not?: DateTime | null;
+	createdAtExternal_in?: DateTime[] | DateTime | null;
+	createdAtExternal_not_in?: DateTime[] | DateTime | null;
+	createdAtExternal_lt?: DateTime | null;
+	createdAtExternal_lte?: DateTime | null;
+	createdAtExternal_gt?: DateTime | null;
+	createdAtExternal_gte?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	updatedAtExternal_not?: DateTime | null;
+	updatedAtExternal_in?: DateTime[] | DateTime | null;
+	updatedAtExternal_not_in?: DateTime[] | DateTime | null;
+	updatedAtExternal_lt?: DateTime | null;
+	updatedAtExternal_lte?: DateTime | null;
+	updatedAtExternal_gt?: DateTime | null;
+	updatedAtExternal_gte?: DateTime | null;
+	name?: String | null;
+	name_not?: String | null;
+	name_in?: String[] | String | null;
+	name_not_in?: String[] | String | null;
+	name_lt?: String | null;
+	name_lte?: String | null;
+	name_gt?: String | null;
+	name_gte?: String | null;
+	name_contains?: String | null;
+	name_not_contains?: String | null;
+	name_starts_with?: String | null;
+	name_not_starts_with?: String | null;
+	name_ends_with?: String | null;
+	name_not_ends_with?: String | null;
+	description?: String | null;
+	description_not?: String | null;
+	description_in?: String[] | String | null;
+	description_not_in?: String[] | String | null;
+	description_lt?: String | null;
+	description_lte?: String | null;
+	description_gt?: String | null;
+	description_gte?: String | null;
+	description_contains?: String | null;
+	description_not_contains?: String | null;
+	description_starts_with?: String | null;
+	description_not_starts_with?: String | null;
+	description_ends_with?: String | null;
+	description_not_ends_with?: String | null;
+	homepageUrl?: String | null;
+	homepageUrl_not?: String | null;
+	homepageUrl_in?: String[] | String | null;
+	homepageUrl_not_in?: String[] | String | null;
+	homepageUrl_lt?: String | null;
+	homepageUrl_lte?: String | null;
+	homepageUrl_gt?: String | null;
+	homepageUrl_gte?: String | null;
+	homepageUrl_contains?: String | null;
+	homepageUrl_not_contains?: String | null;
+	homepageUrl_starts_with?: String | null;
+	homepageUrl_not_starts_with?: String | null;
+	homepageUrl_ends_with?: String | null;
+	homepageUrl_not_ends_with?: String | null;
+	url?: String | null;
+	url_not?: String | null;
+	url_in?: String[] | String | null;
+	url_not_in?: String[] | String | null;
+	url_lt?: String | null;
+	url_lte?: String | null;
+	url_gt?: String | null;
+	url_gte?: String | null;
+	url_contains?: String | null;
+	url_not_contains?: String | null;
+	url_starts_with?: String | null;
+	url_not_starts_with?: String | null;
+	url_ends_with?: String | null;
+	url_not_ends_with?: String | null;
+	owner?: String | null;
+	owner_not?: String | null;
+	owner_in?: String[] | String | null;
+	owner_not_in?: String[] | String | null;
+	owner_lt?: String | null;
+	owner_lte?: String | null;
+	owner_gt?: String | null;
+	owner_gte?: String | null;
+	owner_contains?: String | null;
+	owner_not_contains?: String | null;
+	owner_starts_with?: String | null;
+	owner_not_starts_with?: String | null;
+	owner_ends_with?: String | null;
+	owner_not_ends_with?: String | null;
+	isTracked?: Boolean | null;
+	isTracked_not?: Boolean | null;
+	isFork?: Boolean | null;
+	isFork_not?: Boolean | null;
+	isLocked?: Boolean | null;
+	isLocked_not?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isPrivate_not?: Boolean | null;
+	isArchived?: Boolean | null;
+	isArchived_not?: Boolean | null;
+	isDisabled?: Boolean | null;
+	isDisabled_not?: Boolean | null;
+	sshUrl?: String | null;
+	sshUrl_not?: String | null;
+	sshUrl_in?: String[] | String | null;
+	sshUrl_not_in?: String[] | String | null;
+	sshUrl_lt?: String | null;
+	sshUrl_lte?: String | null;
+	sshUrl_gt?: String | null;
+	sshUrl_gte?: String | null;
+	sshUrl_contains?: String | null;
+	sshUrl_not_contains?: String | null;
+	sshUrl_starts_with?: String | null;
+	sshUrl_not_starts_with?: String | null;
+	sshUrl_ends_with?: String | null;
+	sshUrl_not_ends_with?: String | null;
+	stargazers?: Int | null;
+	stargazers_not?: Int | null;
+	stargazers_in?: Int[] | Int | null;
+	stargazers_not_in?: Int[] | Int | null;
+	stargazers_lt?: Int | null;
+	stargazers_lte?: Int | null;
+	stargazers_gt?: Int | null;
+	stargazers_gte?: Int | null;
+	collaborators?: Int | null;
+	collaborators_not?: Int | null;
+	collaborators_in?: Int[] | Int | null;
+	collaborators_not_in?: Int[] | Int | null;
+	collaborators_lt?: Int | null;
+	collaborators_lte?: Int | null;
+	collaborators_gt?: Int | null;
+	collaborators_gte?: Int | null;
+	watchers?: Int | null;
+	watchers_not?: Int | null;
+	watchers_in?: Int[] | Int | null;
+	watchers_not_in?: Int[] | Int | null;
+	watchers_lt?: Int | null;
+	watchers_lte?: Int | null;
+	watchers_gt?: Int | null;
+	watchers_gte?: Int | null;
+	issues?: Int | null;
+	issues_not?: Int | null;
+	issues_in?: Int[] | Int | null;
+	issues_not_in?: Int[] | Int | null;
+	issues_lt?: Int | null;
+	issues_lte?: Int | null;
+	issues_gt?: Int | null;
+	issues_gte?: Int | null;
+	pullRequests?: Int | null;
+	pullRequests_not?: Int | null;
+	pullRequests_in?: Int[] | Int | null;
+	pullRequests_not_in?: Int[] | Int | null;
+	pullRequests_lt?: Int | null;
+	pullRequests_lte?: Int | null;
+	pullRequests_gt?: Int | null;
+	pullRequests_gte?: Int | null;
 }
 
 export interface RepositorySubscriptionWhereInput {
-  AND?: RepositorySubscriptionWhereInput[] | RepositorySubscriptionWhereInput | null
-  OR?: RepositorySubscriptionWhereInput[] | RepositorySubscriptionWhereInput | null
-  NOT?: RepositorySubscriptionWhereInput[] | RepositorySubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: RepositoryWhereInput | null
+	AND?: RepositorySubscriptionWhereInput[] | RepositorySubscriptionWhereInput | null;
+	OR?: RepositorySubscriptionWhereInput[] | RepositorySubscriptionWhereInput | null;
+	NOT?: RepositorySubscriptionWhereInput[] | RepositorySubscriptionWhereInput | null;
+	mutation_in?: MutationType[] | MutationType | null;
+	updatedFields_contains?: String | null;
+	updatedFields_contains_every?: String[] | String | null;
+	updatedFields_contains_some?: String[] | String | null;
+	node?: RepositoryWhereInput | null;
 }
 
 export interface RepositoryUpdateInput {
-  idExternal?: String | null
-  createdAtExternal?: DateTime | null
-  updatedAtExternal?: DateTime | null
-  name?: String | null
-  description?: String | null
-  homepageUrl?: String | null
-  url?: String | null
-  owner?: String | null
-  isTracked?: Boolean | null
-  isFork?: Boolean | null
-  isLocked?: Boolean | null
-  isPrivate?: Boolean | null
-  isArchived?: Boolean | null
-  isDisabled?: Boolean | null
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
-  user?: UserUpdateOneRequiredWithoutRepositoriesInput | null
-  appKey?: AppKeyUpdateOneRequiredInput | null
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
+	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
+	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
 }
 
 export interface RepositoryUpdateManyDataInput {
-  idExternal?: String | null
-  createdAtExternal?: DateTime | null
-  updatedAtExternal?: DateTime | null
-  name?: String | null
-  description?: String | null
-  homepageUrl?: String | null
-  url?: String | null
-  owner?: String | null
-  isTracked?: Boolean | null
-  isFork?: Boolean | null
-  isLocked?: Boolean | null
-  isPrivate?: Boolean | null
-  isArchived?: Boolean | null
-  isDisabled?: Boolean | null
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
 }
 
 export interface RepositoryUpdateManyMutationInput {
-  idExternal?: String | null
-  createdAtExternal?: DateTime | null
-  updatedAtExternal?: DateTime | null
-  name?: String | null
-  description?: String | null
-  homepageUrl?: String | null
-  url?: String | null
-  owner?: String | null
-  isTracked?: Boolean | null
-  isFork?: Boolean | null
-  isLocked?: Boolean | null
-  isPrivate?: Boolean | null
-  isArchived?: Boolean | null
-  isDisabled?: Boolean | null
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
 }
 
-export interface RepositoryUpdateManyWithoutUserInput {
-  create?: RepositoryCreateWithoutUserInput[] | RepositoryCreateWithoutUserInput | null
-  connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null
-  set?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null
-  disconnect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null
-  delete?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null
-  update?: RepositoryUpdateWithWhereUniqueWithoutUserInput[] | RepositoryUpdateWithWhereUniqueWithoutUserInput | null
-  updateMany?: RepositoryUpdateManyWithWhereNestedInput[] | RepositoryUpdateManyWithWhereNestedInput | null
-  deleteMany?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null
-  upsert?: RepositoryUpsertWithWhereUniqueWithoutUserInput[] | RepositoryUpsertWithWhereUniqueWithoutUserInput | null
+export interface RepositoryUpdateManyWithoutAddedByInput {
+	create?: RepositoryCreateWithoutAddedByInput[] | RepositoryCreateWithoutAddedByInput | null;
+	connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	set?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	disconnect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	delete?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	update?:
+		| RepositoryUpdateWithWhereUniqueWithoutAddedByInput[]
+		| RepositoryUpdateWithWhereUniqueWithoutAddedByInput
+		| null;
+	updateMany?:
+		| RepositoryUpdateManyWithWhereNestedInput[]
+		| RepositoryUpdateManyWithWhereNestedInput
+		| null;
+	deleteMany?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null;
+	upsert?:
+		| RepositoryUpsertWithWhereUniqueWithoutAddedByInput[]
+		| RepositoryUpsertWithWhereUniqueWithoutAddedByInput
+		| null;
+}
+
+export interface RepositoryUpdateManyWithoutAppKeyInput {
+	create?: RepositoryCreateWithoutAppKeyInput[] | RepositoryCreateWithoutAppKeyInput | null;
+	connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	set?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	disconnect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	delete?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+	update?:
+		| RepositoryUpdateWithWhereUniqueWithoutAppKeyInput[]
+		| RepositoryUpdateWithWhereUniqueWithoutAppKeyInput
+		| null;
+	updateMany?:
+		| RepositoryUpdateManyWithWhereNestedInput[]
+		| RepositoryUpdateManyWithWhereNestedInput
+		| null;
+	deleteMany?: RepositoryScalarWhereInput[] | RepositoryScalarWhereInput | null;
+	upsert?:
+		| RepositoryUpsertWithWhereUniqueWithoutAppKeyInput[]
+		| RepositoryUpsertWithWhereUniqueWithoutAppKeyInput
+		| null;
 }
 
 export interface RepositoryUpdateManyWithWhereNestedInput {
-  where: RepositoryScalarWhereInput
-  data: RepositoryUpdateManyDataInput
+	where: RepositoryScalarWhereInput;
+	data: RepositoryUpdateManyDataInput;
 }
 
-export interface RepositoryUpdateWithoutUserDataInput {
-  idExternal?: String | null
-  createdAtExternal?: DateTime | null
-  updatedAtExternal?: DateTime | null
-  name?: String | null
-  description?: String | null
-  homepageUrl?: String | null
-  url?: String | null
-  owner?: String | null
-  isTracked?: Boolean | null
-  isFork?: Boolean | null
-  isLocked?: Boolean | null
-  isPrivate?: Boolean | null
-  isArchived?: Boolean | null
-  isDisabled?: Boolean | null
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
-  appKey?: AppKeyUpdateOneRequiredInput | null
+export interface RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
+	create?: RepositoryCreateWithoutWebhookEventsInput | null;
+	connect?: RepositoryWhereUniqueInput | null;
+	update?: RepositoryUpdateWithoutWebhookEventsDataInput | null;
+	upsert?: RepositoryUpsertWithoutWebhookEventsInput | null;
 }
 
-export interface RepositoryUpdateWithWhereUniqueWithoutUserInput {
-  where: RepositoryWhereUniqueInput
-  data: RepositoryUpdateWithoutUserDataInput
+export interface RepositoryUpdateWithoutAddedByDataInput {
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
+	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
 }
 
-export interface RepositoryUpsertWithWhereUniqueWithoutUserInput {
-  where: RepositoryWhereUniqueInput
-  update: RepositoryUpdateWithoutUserDataInput
-  create: RepositoryCreateWithoutUserInput
+export interface RepositoryUpdateWithoutAppKeyDataInput {
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
+	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
+}
+
+export interface RepositoryUpdateWithoutWebhookEventsDataInput {
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
+	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
+}
+
+export interface RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
+	where: RepositoryWhereUniqueInput;
+	data: RepositoryUpdateWithoutAddedByDataInput;
+}
+
+export interface RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
+	where: RepositoryWhereUniqueInput;
+	data: RepositoryUpdateWithoutAppKeyDataInput;
+}
+
+export interface RepositoryUpsertWithoutWebhookEventsInput {
+	update: RepositoryUpdateWithoutWebhookEventsDataInput;
+	create: RepositoryCreateWithoutWebhookEventsInput;
+}
+
+export interface RepositoryUpsertWithWhereUniqueWithoutAddedByInput {
+	where: RepositoryWhereUniqueInput;
+	update: RepositoryUpdateWithoutAddedByDataInput;
+	create: RepositoryCreateWithoutAddedByInput;
+}
+
+export interface RepositoryUpsertWithWhereUniqueWithoutAppKeyInput {
+	where: RepositoryWhereUniqueInput;
+	update: RepositoryUpdateWithoutAppKeyDataInput;
+	create: RepositoryCreateWithoutAppKeyInput;
 }
 
 export interface RepositoryWhereInput {
-  AND?: RepositoryWhereInput[] | RepositoryWhereInput | null
-  OR?: RepositoryWhereInput[] | RepositoryWhereInput | null
-  NOT?: RepositoryWhereInput[] | RepositoryWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  idExternal?: String | null
-  idExternal_not?: String | null
-  idExternal_in?: String[] | String | null
-  idExternal_not_in?: String[] | String | null
-  idExternal_lt?: String | null
-  idExternal_lte?: String | null
-  idExternal_gt?: String | null
-  idExternal_gte?: String | null
-  idExternal_contains?: String | null
-  idExternal_not_contains?: String | null
-  idExternal_starts_with?: String | null
-  idExternal_not_starts_with?: String | null
-  idExternal_ends_with?: String | null
-  idExternal_not_ends_with?: String | null
-  createdAtExternal?: DateTime | null
-  createdAtExternal_not?: DateTime | null
-  createdAtExternal_in?: DateTime[] | DateTime | null
-  createdAtExternal_not_in?: DateTime[] | DateTime | null
-  createdAtExternal_lt?: DateTime | null
-  createdAtExternal_lte?: DateTime | null
-  createdAtExternal_gt?: DateTime | null
-  createdAtExternal_gte?: DateTime | null
-  updatedAtExternal?: DateTime | null
-  updatedAtExternal_not?: DateTime | null
-  updatedAtExternal_in?: DateTime[] | DateTime | null
-  updatedAtExternal_not_in?: DateTime[] | DateTime | null
-  updatedAtExternal_lt?: DateTime | null
-  updatedAtExternal_lte?: DateTime | null
-  updatedAtExternal_gt?: DateTime | null
-  updatedAtExternal_gte?: DateTime | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  description?: String | null
-  description_not?: String | null
-  description_in?: String[] | String | null
-  description_not_in?: String[] | String | null
-  description_lt?: String | null
-  description_lte?: String | null
-  description_gt?: String | null
-  description_gte?: String | null
-  description_contains?: String | null
-  description_not_contains?: String | null
-  description_starts_with?: String | null
-  description_not_starts_with?: String | null
-  description_ends_with?: String | null
-  description_not_ends_with?: String | null
-  homepageUrl?: String | null
-  homepageUrl_not?: String | null
-  homepageUrl_in?: String[] | String | null
-  homepageUrl_not_in?: String[] | String | null
-  homepageUrl_lt?: String | null
-  homepageUrl_lte?: String | null
-  homepageUrl_gt?: String | null
-  homepageUrl_gte?: String | null
-  homepageUrl_contains?: String | null
-  homepageUrl_not_contains?: String | null
-  homepageUrl_starts_with?: String | null
-  homepageUrl_not_starts_with?: String | null
-  homepageUrl_ends_with?: String | null
-  homepageUrl_not_ends_with?: String | null
-  url?: String | null
-  url_not?: String | null
-  url_in?: String[] | String | null
-  url_not_in?: String[] | String | null
-  url_lt?: String | null
-  url_lte?: String | null
-  url_gt?: String | null
-  url_gte?: String | null
-  url_contains?: String | null
-  url_not_contains?: String | null
-  url_starts_with?: String | null
-  url_not_starts_with?: String | null
-  url_ends_with?: String | null
-  url_not_ends_with?: String | null
-  owner?: String | null
-  owner_not?: String | null
-  owner_in?: String[] | String | null
-  owner_not_in?: String[] | String | null
-  owner_lt?: String | null
-  owner_lte?: String | null
-  owner_gt?: String | null
-  owner_gte?: String | null
-  owner_contains?: String | null
-  owner_not_contains?: String | null
-  owner_starts_with?: String | null
-  owner_not_starts_with?: String | null
-  owner_ends_with?: String | null
-  owner_not_ends_with?: String | null
-  isTracked?: Boolean | null
-  isTracked_not?: Boolean | null
-  isFork?: Boolean | null
-  isFork_not?: Boolean | null
-  isLocked?: Boolean | null
-  isLocked_not?: Boolean | null
-  isPrivate?: Boolean | null
-  isPrivate_not?: Boolean | null
-  isArchived?: Boolean | null
-  isArchived_not?: Boolean | null
-  isDisabled?: Boolean | null
-  isDisabled_not?: Boolean | null
-  sshUrl?: String | null
-  sshUrl_not?: String | null
-  sshUrl_in?: String[] | String | null
-  sshUrl_not_in?: String[] | String | null
-  sshUrl_lt?: String | null
-  sshUrl_lte?: String | null
-  sshUrl_gt?: String | null
-  sshUrl_gte?: String | null
-  sshUrl_contains?: String | null
-  sshUrl_not_contains?: String | null
-  sshUrl_starts_with?: String | null
-  sshUrl_not_starts_with?: String | null
-  sshUrl_ends_with?: String | null
-  sshUrl_not_ends_with?: String | null
-  stargazers?: Int | null
-  stargazers_not?: Int | null
-  stargazers_in?: Int[] | Int | null
-  stargazers_not_in?: Int[] | Int | null
-  stargazers_lt?: Int | null
-  stargazers_lte?: Int | null
-  stargazers_gt?: Int | null
-  stargazers_gte?: Int | null
-  collaborators?: Int | null
-  collaborators_not?: Int | null
-  collaborators_in?: Int[] | Int | null
-  collaborators_not_in?: Int[] | Int | null
-  collaborators_lt?: Int | null
-  collaborators_lte?: Int | null
-  collaborators_gt?: Int | null
-  collaborators_gte?: Int | null
-  watchers?: Int | null
-  watchers_not?: Int | null
-  watchers_in?: Int[] | Int | null
-  watchers_not_in?: Int[] | Int | null
-  watchers_lt?: Int | null
-  watchers_lte?: Int | null
-  watchers_gt?: Int | null
-  watchers_gte?: Int | null
-  issues?: Int | null
-  issues_not?: Int | null
-  issues_in?: Int[] | Int | null
-  issues_not_in?: Int[] | Int | null
-  issues_lt?: Int | null
-  issues_lte?: Int | null
-  issues_gt?: Int | null
-  issues_gte?: Int | null
-  pullRequests?: Int | null
-  pullRequests_not?: Int | null
-  pullRequests_in?: Int[] | Int | null
-  pullRequests_not_in?: Int[] | Int | null
-  pullRequests_lt?: Int | null
-  pullRequests_lte?: Int | null
-  pullRequests_gt?: Int | null
-  pullRequests_gte?: Int | null
-  user?: UserWhereInput | null
-  appKey?: AppKeyWhereInput | null
+	AND?: RepositoryWhereInput[] | RepositoryWhereInput | null;
+	OR?: RepositoryWhereInput[] | RepositoryWhereInput | null;
+	NOT?: RepositoryWhereInput[] | RepositoryWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	idExternal?: String | null;
+	idExternal_not?: String | null;
+	idExternal_in?: String[] | String | null;
+	idExternal_not_in?: String[] | String | null;
+	idExternal_lt?: String | null;
+	idExternal_lte?: String | null;
+	idExternal_gt?: String | null;
+	idExternal_gte?: String | null;
+	idExternal_contains?: String | null;
+	idExternal_not_contains?: String | null;
+	idExternal_starts_with?: String | null;
+	idExternal_not_starts_with?: String | null;
+	idExternal_ends_with?: String | null;
+	idExternal_not_ends_with?: String | null;
+	createdAtExternal?: DateTime | null;
+	createdAtExternal_not?: DateTime | null;
+	createdAtExternal_in?: DateTime[] | DateTime | null;
+	createdAtExternal_not_in?: DateTime[] | DateTime | null;
+	createdAtExternal_lt?: DateTime | null;
+	createdAtExternal_lte?: DateTime | null;
+	createdAtExternal_gt?: DateTime | null;
+	createdAtExternal_gte?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	updatedAtExternal_not?: DateTime | null;
+	updatedAtExternal_in?: DateTime[] | DateTime | null;
+	updatedAtExternal_not_in?: DateTime[] | DateTime | null;
+	updatedAtExternal_lt?: DateTime | null;
+	updatedAtExternal_lte?: DateTime | null;
+	updatedAtExternal_gt?: DateTime | null;
+	updatedAtExternal_gte?: DateTime | null;
+	name?: String | null;
+	name_not?: String | null;
+	name_in?: String[] | String | null;
+	name_not_in?: String[] | String | null;
+	name_lt?: String | null;
+	name_lte?: String | null;
+	name_gt?: String | null;
+	name_gte?: String | null;
+	name_contains?: String | null;
+	name_not_contains?: String | null;
+	name_starts_with?: String | null;
+	name_not_starts_with?: String | null;
+	name_ends_with?: String | null;
+	name_not_ends_with?: String | null;
+	description?: String | null;
+	description_not?: String | null;
+	description_in?: String[] | String | null;
+	description_not_in?: String[] | String | null;
+	description_lt?: String | null;
+	description_lte?: String | null;
+	description_gt?: String | null;
+	description_gte?: String | null;
+	description_contains?: String | null;
+	description_not_contains?: String | null;
+	description_starts_with?: String | null;
+	description_not_starts_with?: String | null;
+	description_ends_with?: String | null;
+	description_not_ends_with?: String | null;
+	homepageUrl?: String | null;
+	homepageUrl_not?: String | null;
+	homepageUrl_in?: String[] | String | null;
+	homepageUrl_not_in?: String[] | String | null;
+	homepageUrl_lt?: String | null;
+	homepageUrl_lte?: String | null;
+	homepageUrl_gt?: String | null;
+	homepageUrl_gte?: String | null;
+	homepageUrl_contains?: String | null;
+	homepageUrl_not_contains?: String | null;
+	homepageUrl_starts_with?: String | null;
+	homepageUrl_not_starts_with?: String | null;
+	homepageUrl_ends_with?: String | null;
+	homepageUrl_not_ends_with?: String | null;
+	url?: String | null;
+	url_not?: String | null;
+	url_in?: String[] | String | null;
+	url_not_in?: String[] | String | null;
+	url_lt?: String | null;
+	url_lte?: String | null;
+	url_gt?: String | null;
+	url_gte?: String | null;
+	url_contains?: String | null;
+	url_not_contains?: String | null;
+	url_starts_with?: String | null;
+	url_not_starts_with?: String | null;
+	url_ends_with?: String | null;
+	url_not_ends_with?: String | null;
+	owner?: String | null;
+	owner_not?: String | null;
+	owner_in?: String[] | String | null;
+	owner_not_in?: String[] | String | null;
+	owner_lt?: String | null;
+	owner_lte?: String | null;
+	owner_gt?: String | null;
+	owner_gte?: String | null;
+	owner_contains?: String | null;
+	owner_not_contains?: String | null;
+	owner_starts_with?: String | null;
+	owner_not_starts_with?: String | null;
+	owner_ends_with?: String | null;
+	owner_not_ends_with?: String | null;
+	isTracked?: Boolean | null;
+	isTracked_not?: Boolean | null;
+	isFork?: Boolean | null;
+	isFork_not?: Boolean | null;
+	isLocked?: Boolean | null;
+	isLocked_not?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isPrivate_not?: Boolean | null;
+	isArchived?: Boolean | null;
+	isArchived_not?: Boolean | null;
+	isDisabled?: Boolean | null;
+	isDisabled_not?: Boolean | null;
+	sshUrl?: String | null;
+	sshUrl_not?: String | null;
+	sshUrl_in?: String[] | String | null;
+	sshUrl_not_in?: String[] | String | null;
+	sshUrl_lt?: String | null;
+	sshUrl_lte?: String | null;
+	sshUrl_gt?: String | null;
+	sshUrl_gte?: String | null;
+	sshUrl_contains?: String | null;
+	sshUrl_not_contains?: String | null;
+	sshUrl_starts_with?: String | null;
+	sshUrl_not_starts_with?: String | null;
+	sshUrl_ends_with?: String | null;
+	sshUrl_not_ends_with?: String | null;
+	stargazers?: Int | null;
+	stargazers_not?: Int | null;
+	stargazers_in?: Int[] | Int | null;
+	stargazers_not_in?: Int[] | Int | null;
+	stargazers_lt?: Int | null;
+	stargazers_lte?: Int | null;
+	stargazers_gt?: Int | null;
+	stargazers_gte?: Int | null;
+	collaborators?: Int | null;
+	collaborators_not?: Int | null;
+	collaborators_in?: Int[] | Int | null;
+	collaborators_not_in?: Int[] | Int | null;
+	collaborators_lt?: Int | null;
+	collaborators_lte?: Int | null;
+	collaborators_gt?: Int | null;
+	collaborators_gte?: Int | null;
+	watchers?: Int | null;
+	watchers_not?: Int | null;
+	watchers_in?: Int[] | Int | null;
+	watchers_not_in?: Int[] | Int | null;
+	watchers_lt?: Int | null;
+	watchers_lte?: Int | null;
+	watchers_gt?: Int | null;
+	watchers_gte?: Int | null;
+	issues?: Int | null;
+	issues_not?: Int | null;
+	issues_in?: Int[] | Int | null;
+	issues_not_in?: Int[] | Int | null;
+	issues_lt?: Int | null;
+	issues_lte?: Int | null;
+	issues_gt?: Int | null;
+	issues_gte?: Int | null;
+	pullRequests?: Int | null;
+	pullRequests_not?: Int | null;
+	pullRequests_in?: Int[] | Int | null;
+	pullRequests_not_in?: Int[] | Int | null;
+	pullRequests_lt?: Int | null;
+	pullRequests_lte?: Int | null;
+	pullRequests_gt?: Int | null;
+	pullRequests_gte?: Int | null;
+	addedBy?: UserWhereInput | null;
+	appKey?: AppKeyWhereInput | null;
+	webhookEvents_every?: GitHubWebhookEventWhereInput | null;
+	webhookEvents_some?: GitHubWebhookEventWhereInput | null;
+	webhookEvents_none?: GitHubWebhookEventWhereInput | null;
 }
 
 export interface RepositoryWhereUniqueInput {
-  id?: ID_Input | null
-  idExternal?: String | null
-  name?: String | null
+	id?: ID_Input | null;
+	idExternal?: String | null;
+	name?: String | null;
 }
 
 export interface UserCreateInput {
-  id?: ID_Input | null
-  email: String
-  hash: String
-  name?: String | null
-  role?: Role | null
-  gitLogin: String
-  keys?: AppKeyCreateManyWithoutUserInput | null
-  repositories?: RepositoryCreateManyWithoutUserInput | null
+	id?: ID_Input | null;
+	email: String;
+	hash: String;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin: String;
+	keys?: AppKeyCreateManyWithoutUserInput | null;
+	addedRepositories?: RepositoryCreateManyWithoutAddedByInput | null;
+}
+
+export interface UserCreateOneWithoutAddedRepositoriesInput {
+	create?: UserCreateWithoutAddedRepositoriesInput | null;
+	connect?: UserWhereUniqueInput | null;
 }
 
 export interface UserCreateOneWithoutKeysInput {
-  create?: UserCreateWithoutKeysInput | null
-  connect?: UserWhereUniqueInput | null
+	create?: UserCreateWithoutKeysInput | null;
+	connect?: UserWhereUniqueInput | null;
 }
 
-export interface UserCreateOneWithoutRepositoriesInput {
-  create?: UserCreateWithoutRepositoriesInput | null
-  connect?: UserWhereUniqueInput | null
+export interface UserCreateWithoutAddedRepositoriesInput {
+	id?: ID_Input | null;
+	email: String;
+	hash: String;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin: String;
+	keys?: AppKeyCreateManyWithoutUserInput | null;
 }
 
 export interface UserCreateWithoutKeysInput {
-  id?: ID_Input | null
-  email: String
-  hash: String
-  name?: String | null
-  role?: Role | null
-  gitLogin: String
-  repositories?: RepositoryCreateManyWithoutUserInput | null
-}
-
-export interface UserCreateWithoutRepositoriesInput {
-  id?: ID_Input | null
-  email: String
-  hash: String
-  name?: String | null
-  role?: Role | null
-  gitLogin: String
-  keys?: AppKeyCreateManyWithoutUserInput | null
+	id?: ID_Input | null;
+	email: String;
+	hash: String;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin: String;
+	addedRepositories?: RepositoryCreateManyWithoutAddedByInput | null;
 }
 
 export interface UserSubscriptionWhereInput {
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null
-  mutation_in?: MutationType[] | MutationType | null
-  updatedFields_contains?: String | null
-  updatedFields_contains_every?: String[] | String | null
-  updatedFields_contains_some?: String[] | String | null
-  node?: UserWhereInput | null
+	AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null;
+	OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null;
+	NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput | null;
+	mutation_in?: MutationType[] | MutationType | null;
+	updatedFields_contains?: String | null;
+	updatedFields_contains_every?: String[] | String | null;
+	updatedFields_contains_some?: String[] | String | null;
+	node?: UserWhereInput | null;
 }
 
 export interface UserUpdateInput {
-  email?: String | null
-  hash?: String | null
-  name?: String | null
-  role?: Role | null
-  gitLogin?: String | null
-  keys?: AppKeyUpdateManyWithoutUserInput | null
-  repositories?: RepositoryUpdateManyWithoutUserInput | null
+	email?: String | null;
+	hash?: String | null;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin?: String | null;
+	keys?: AppKeyUpdateManyWithoutUserInput | null;
+	addedRepositories?: RepositoryUpdateManyWithoutAddedByInput | null;
 }
 
 export interface UserUpdateManyMutationInput {
-  email?: String | null
-  hash?: String | null
-  name?: String | null
-  role?: Role | null
-  gitLogin?: String | null
+	email?: String | null;
+	hash?: String | null;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin?: String | null;
+}
+
+export interface UserUpdateOneRequiredWithoutAddedRepositoriesInput {
+	create?: UserCreateWithoutAddedRepositoriesInput | null;
+	connect?: UserWhereUniqueInput | null;
+	update?: UserUpdateWithoutAddedRepositoriesDataInput | null;
+	upsert?: UserUpsertWithoutAddedRepositoriesInput | null;
 }
 
 export interface UserUpdateOneRequiredWithoutKeysInput {
-  create?: UserCreateWithoutKeysInput | null
-  connect?: UserWhereUniqueInput | null
-  update?: UserUpdateWithoutKeysDataInput | null
-  upsert?: UserUpsertWithoutKeysInput | null
+	create?: UserCreateWithoutKeysInput | null;
+	connect?: UserWhereUniqueInput | null;
+	update?: UserUpdateWithoutKeysDataInput | null;
+	upsert?: UserUpsertWithoutKeysInput | null;
 }
 
-export interface UserUpdateOneRequiredWithoutRepositoriesInput {
-  create?: UserCreateWithoutRepositoriesInput | null
-  connect?: UserWhereUniqueInput | null
-  update?: UserUpdateWithoutRepositoriesDataInput | null
-  upsert?: UserUpsertWithoutRepositoriesInput | null
+export interface UserUpdateWithoutAddedRepositoriesDataInput {
+	email?: String | null;
+	hash?: String | null;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin?: String | null;
+	keys?: AppKeyUpdateManyWithoutUserInput | null;
 }
 
 export interface UserUpdateWithoutKeysDataInput {
-  email?: String | null
-  hash?: String | null
-  name?: String | null
-  role?: Role | null
-  gitLogin?: String | null
-  repositories?: RepositoryUpdateManyWithoutUserInput | null
+	email?: String | null;
+	hash?: String | null;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin?: String | null;
+	addedRepositories?: RepositoryUpdateManyWithoutAddedByInput | null;
 }
 
-export interface UserUpdateWithoutRepositoriesDataInput {
-  email?: String | null
-  hash?: String | null
-  name?: String | null
-  role?: Role | null
-  gitLogin?: String | null
-  keys?: AppKeyUpdateManyWithoutUserInput | null
+export interface UserUpsertWithoutAddedRepositoriesInput {
+	update: UserUpdateWithoutAddedRepositoriesDataInput;
+	create: UserCreateWithoutAddedRepositoriesInput;
 }
 
 export interface UserUpsertWithoutKeysInput {
-  update: UserUpdateWithoutKeysDataInput
-  create: UserCreateWithoutKeysInput
-}
-
-export interface UserUpsertWithoutRepositoriesInput {
-  update: UserUpdateWithoutRepositoriesDataInput
-  create: UserCreateWithoutRepositoriesInput
+	update: UserUpdateWithoutKeysDataInput;
+	create: UserCreateWithoutKeysInput;
 }
 
 export interface UserWhereInput {
-  AND?: UserWhereInput[] | UserWhereInput | null
-  OR?: UserWhereInput[] | UserWhereInput | null
-  NOT?: UserWhereInput[] | UserWhereInput | null
-  id?: ID_Input | null
-  id_not?: ID_Input | null
-  id_in?: ID_Output[] | ID_Output | null
-  id_not_in?: ID_Output[] | ID_Output | null
-  id_lt?: ID_Input | null
-  id_lte?: ID_Input | null
-  id_gt?: ID_Input | null
-  id_gte?: ID_Input | null
-  id_contains?: ID_Input | null
-  id_not_contains?: ID_Input | null
-  id_starts_with?: ID_Input | null
-  id_not_starts_with?: ID_Input | null
-  id_ends_with?: ID_Input | null
-  id_not_ends_with?: ID_Input | null
-  email?: String | null
-  email_not?: String | null
-  email_in?: String[] | String | null
-  email_not_in?: String[] | String | null
-  email_lt?: String | null
-  email_lte?: String | null
-  email_gt?: String | null
-  email_gte?: String | null
-  email_contains?: String | null
-  email_not_contains?: String | null
-  email_starts_with?: String | null
-  email_not_starts_with?: String | null
-  email_ends_with?: String | null
-  email_not_ends_with?: String | null
-  hash?: String | null
-  hash_not?: String | null
-  hash_in?: String[] | String | null
-  hash_not_in?: String[] | String | null
-  hash_lt?: String | null
-  hash_lte?: String | null
-  hash_gt?: String | null
-  hash_gte?: String | null
-  hash_contains?: String | null
-  hash_not_contains?: String | null
-  hash_starts_with?: String | null
-  hash_not_starts_with?: String | null
-  hash_ends_with?: String | null
-  hash_not_ends_with?: String | null
-  createdAt?: DateTime | null
-  createdAt_not?: DateTime | null
-  createdAt_in?: DateTime[] | DateTime | null
-  createdAt_not_in?: DateTime[] | DateTime | null
-  createdAt_lt?: DateTime | null
-  createdAt_lte?: DateTime | null
-  createdAt_gt?: DateTime | null
-  createdAt_gte?: DateTime | null
-  updatedAt?: DateTime | null
-  updatedAt_not?: DateTime | null
-  updatedAt_in?: DateTime[] | DateTime | null
-  updatedAt_not_in?: DateTime[] | DateTime | null
-  updatedAt_lt?: DateTime | null
-  updatedAt_lte?: DateTime | null
-  updatedAt_gt?: DateTime | null
-  updatedAt_gte?: DateTime | null
-  name?: String | null
-  name_not?: String | null
-  name_in?: String[] | String | null
-  name_not_in?: String[] | String | null
-  name_lt?: String | null
-  name_lte?: String | null
-  name_gt?: String | null
-  name_gte?: String | null
-  name_contains?: String | null
-  name_not_contains?: String | null
-  name_starts_with?: String | null
-  name_not_starts_with?: String | null
-  name_ends_with?: String | null
-  name_not_ends_with?: String | null
-  role?: Role | null
-  role_not?: Role | null
-  role_in?: Role[] | Role | null
-  role_not_in?: Role[] | Role | null
-  gitLogin?: String | null
-  gitLogin_not?: String | null
-  gitLogin_in?: String[] | String | null
-  gitLogin_not_in?: String[] | String | null
-  gitLogin_lt?: String | null
-  gitLogin_lte?: String | null
-  gitLogin_gt?: String | null
-  gitLogin_gte?: String | null
-  gitLogin_contains?: String | null
-  gitLogin_not_contains?: String | null
-  gitLogin_starts_with?: String | null
-  gitLogin_not_starts_with?: String | null
-  gitLogin_ends_with?: String | null
-  gitLogin_not_ends_with?: String | null
-  keys_every?: AppKeyWhereInput | null
-  keys_some?: AppKeyWhereInput | null
-  keys_none?: AppKeyWhereInput | null
-  repositories_every?: RepositoryWhereInput | null
-  repositories_some?: RepositoryWhereInput | null
-  repositories_none?: RepositoryWhereInput | null
+	AND?: UserWhereInput[] | UserWhereInput | null;
+	OR?: UserWhereInput[] | UserWhereInput | null;
+	NOT?: UserWhereInput[] | UserWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	email?: String | null;
+	email_not?: String | null;
+	email_in?: String[] | String | null;
+	email_not_in?: String[] | String | null;
+	email_lt?: String | null;
+	email_lte?: String | null;
+	email_gt?: String | null;
+	email_gte?: String | null;
+	email_contains?: String | null;
+	email_not_contains?: String | null;
+	email_starts_with?: String | null;
+	email_not_starts_with?: String | null;
+	email_ends_with?: String | null;
+	email_not_ends_with?: String | null;
+	hash?: String | null;
+	hash_not?: String | null;
+	hash_in?: String[] | String | null;
+	hash_not_in?: String[] | String | null;
+	hash_lt?: String | null;
+	hash_lte?: String | null;
+	hash_gt?: String | null;
+	hash_gte?: String | null;
+	hash_contains?: String | null;
+	hash_not_contains?: String | null;
+	hash_starts_with?: String | null;
+	hash_not_starts_with?: String | null;
+	hash_ends_with?: String | null;
+	hash_not_ends_with?: String | null;
+	createdAt?: DateTime | null;
+	createdAt_not?: DateTime | null;
+	createdAt_in?: DateTime[] | DateTime | null;
+	createdAt_not_in?: DateTime[] | DateTime | null;
+	createdAt_lt?: DateTime | null;
+	createdAt_lte?: DateTime | null;
+	createdAt_gt?: DateTime | null;
+	createdAt_gte?: DateTime | null;
+	updatedAt?: DateTime | null;
+	updatedAt_not?: DateTime | null;
+	updatedAt_in?: DateTime[] | DateTime | null;
+	updatedAt_not_in?: DateTime[] | DateTime | null;
+	updatedAt_lt?: DateTime | null;
+	updatedAt_lte?: DateTime | null;
+	updatedAt_gt?: DateTime | null;
+	updatedAt_gte?: DateTime | null;
+	name?: String | null;
+	name_not?: String | null;
+	name_in?: String[] | String | null;
+	name_not_in?: String[] | String | null;
+	name_lt?: String | null;
+	name_lte?: String | null;
+	name_gt?: String | null;
+	name_gte?: String | null;
+	name_contains?: String | null;
+	name_not_contains?: String | null;
+	name_starts_with?: String | null;
+	name_not_starts_with?: String | null;
+	name_ends_with?: String | null;
+	name_not_ends_with?: String | null;
+	role?: Role | null;
+	role_not?: Role | null;
+	role_in?: Role[] | Role | null;
+	role_not_in?: Role[] | Role | null;
+	gitLogin?: String | null;
+	gitLogin_not?: String | null;
+	gitLogin_in?: String[] | String | null;
+	gitLogin_not_in?: String[] | String | null;
+	gitLogin_lt?: String | null;
+	gitLogin_lte?: String | null;
+	gitLogin_gt?: String | null;
+	gitLogin_gte?: String | null;
+	gitLogin_contains?: String | null;
+	gitLogin_not_contains?: String | null;
+	gitLogin_starts_with?: String | null;
+	gitLogin_not_starts_with?: String | null;
+	gitLogin_ends_with?: String | null;
+	gitLogin_not_ends_with?: String | null;
+	keys_every?: AppKeyWhereInput | null;
+	keys_some?: AppKeyWhereInput | null;
+	keys_none?: AppKeyWhereInput | null;
+	addedRepositories_every?: RepositoryWhereInput | null;
+	addedRepositories_some?: RepositoryWhereInput | null;
+	addedRepositories_none?: RepositoryWhereInput | null;
 }
 
 export interface UserWhereUniqueInput {
-  id?: ID_Input | null
-  email?: String | null
+	id?: ID_Input | null;
+	email?: String | null;
 }
 
 /*
@@ -3536,26 +5001,31 @@ export interface UserWhereUniqueInput {
 
  */
 export interface Node {
-  id: ID_Output
+	id: ID_Output;
 }
 
 export interface AggregateAppKey {
-  count: Int
+	count: Int;
+}
+
+export interface AggregateGitHubWebhookEvent {
+	count: Int;
 }
 
 export interface AggregateRepository {
-  count: Int
+	count: Int;
 }
 
 export interface AggregateUser {
-  count: Int
+	count: Int;
 }
 
 export interface AppKey extends Node {
-  id: ID_Output
-  user: User
-  key: String
-  name?: String | null
+	id: ID_Output;
+	user: User;
+	key: String;
+	name?: String | null;
+	repositories?: Array<Repository> | null;
 }
 
 /*
@@ -3563,9 +5033,9 @@ export interface AppKey extends Node {
 
  */
 export interface AppKeyConnection {
-  pageInfo: PageInfo
-  edges: Array<AppKeyEdge | null>
-  aggregate: AggregateAppKey
+	pageInfo: PageInfo;
+	edges: Array<AppKeyEdge | null>;
+	aggregate: AggregateAppKey;
 }
 
 /*
@@ -3573,25 +5043,68 @@ export interface AppKeyConnection {
 
  */
 export interface AppKeyEdge {
-  node: AppKey
-  cursor: String
+	node: AppKey;
+	cursor: String;
 }
 
 export interface AppKeyPreviousValues {
-  id: ID_Output
-  key: String
-  name?: String | null
+	id: ID_Output;
+	key: String;
+	name?: String | null;
 }
 
 export interface AppKeySubscriptionPayload {
-  mutation: MutationType
-  node?: AppKey | null
-  updatedFields?: Array<String> | null
-  previousValues?: AppKeyPreviousValues | null
+	mutation: MutationType;
+	node?: AppKey | null;
+	updatedFields?: Array<String> | null;
+	previousValues?: AppKeyPreviousValues | null;
 }
 
 export interface BatchPayload {
-  count: Long
+	count: Long;
+}
+
+export interface GitHubWebhookEvent extends Node {
+	id: ID_Output;
+	createdAt: DateTime;
+	repository: Repository;
+	eventType: String;
+	action?: String | null;
+	sender: String;
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface GitHubWebhookEventConnection {
+	pageInfo: PageInfo;
+	edges: Array<GitHubWebhookEventEdge | null>;
+	aggregate: AggregateGitHubWebhookEvent;
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface GitHubWebhookEventEdge {
+	node: GitHubWebhookEvent;
+	cursor: String;
+}
+
+export interface GitHubWebhookEventPreviousValues {
+	id: ID_Output;
+	createdAt: DateTime;
+	eventType: String;
+	action?: String | null;
+	sender: String;
+}
+
+export interface GitHubWebhookEventSubscriptionPayload {
+	mutation: MutationType;
+	node?: GitHubWebhookEvent | null;
+	updatedFields?: Array<String> | null;
+	previousValues?: GitHubWebhookEventPreviousValues | null;
 }
 
 /*
@@ -3599,36 +5112,37 @@ export interface BatchPayload {
 
  */
 export interface PageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor?: String | null
-  endCursor?: String | null
+	hasNextPage: Boolean;
+	hasPreviousPage: Boolean;
+	startCursor?: String | null;
+	endCursor?: String | null;
 }
 
 export interface Repository extends Node {
-  id: ID_Output
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl?: String | null
-  url: String
-  owner: String
-  user: User
-  isTracked: Boolean
-  appKey: AppKey
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
+	id: ID_Output;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	addedBy: User;
+	name: String;
+	description: String;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	appKey: AppKey;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	webhookEvents?: Array<GitHubWebhookEvent> | null;
 }
 
 /*
@@ -3636,9 +5150,9 @@ export interface Repository extends Node {
 
  */
 export interface RepositoryConnection {
-  pageInfo: PageInfo
-  edges: Array<RepositoryEdge | null>
-  aggregate: AggregateRepository
+	pageInfo: PageInfo;
+	edges: Array<RepositoryEdge | null>;
+	aggregate: AggregateRepository;
 }
 
 /*
@@ -3646,52 +5160,52 @@ export interface RepositoryConnection {
 
  */
 export interface RepositoryEdge {
-  node: Repository
-  cursor: String
+	node: Repository;
+	cursor: String;
 }
 
 export interface RepositoryPreviousValues {
-  id: ID_Output
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl?: String | null
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl?: String | null
-  stargazers?: Int | null
-  collaborators?: Int | null
-  watchers?: Int | null
-  issues?: Int | null
-  pullRequests?: Int | null
+	id: ID_Output;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	name: String;
+	description: String;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
 }
 
 export interface RepositorySubscriptionPayload {
-  mutation: MutationType
-  node?: Repository | null
-  updatedFields?: Array<String> | null
-  previousValues?: RepositoryPreviousValues | null
+	mutation: MutationType;
+	node?: Repository | null;
+	updatedFields?: Array<String> | null;
+	previousValues?: RepositoryPreviousValues | null;
 }
 
 export interface User extends Node {
-  id: ID_Output
-  email: String
-  hash: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  name?: String | null
-  role?: Role | null
-  keys?: Array<AppKey> | null
-  repositories?: Array<Repository> | null
-  gitLogin: String
+	id: ID_Output;
+	email: String;
+	hash: String;
+	createdAt: DateTime;
+	updatedAt: DateTime;
+	name?: String | null;
+	role?: Role | null;
+	keys?: Array<AppKey> | null;
+	addedRepositories?: Array<Repository> | null;
+	gitLogin: String;
 }
 
 /*
@@ -3699,9 +5213,9 @@ export interface User extends Node {
 
  */
 export interface UserConnection {
-  pageInfo: PageInfo
-  edges: Array<UserEdge | null>
-  aggregate: AggregateUser
+	pageInfo: PageInfo;
+	edges: Array<UserEdge | null>;
+	aggregate: AggregateUser;
 }
 
 /*
@@ -3709,58 +5223,58 @@ export interface UserConnection {
 
  */
 export interface UserEdge {
-  node: User
-  cursor: String
+	node: User;
+	cursor: String;
 }
 
 export interface UserPreviousValues {
-  id: ID_Output
-  email: String
-  hash: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  name?: String | null
-  role?: Role | null
-  gitLogin: String
+	id: ID_Output;
+	email: String;
+	hash: String;
+	createdAt: DateTime;
+	updatedAt: DateTime;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin: String;
 }
 
 export interface UserSubscriptionPayload {
-  mutation: MutationType
-  node?: User | null
-  updatedFields?: Array<String> | null
-  previousValues?: UserPreviousValues | null
+	mutation: MutationType;
+	node?: User | null;
+	updatedFields?: Array<String> | null;
+	previousValues?: UserPreviousValues | null;
 }
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
-export type Boolean = boolean
+export type Boolean = boolean;
 
-export type DateTime = Date | string
+export type DateTime = Date | string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
-export type ID_Input = string | number
-export type ID_Output = string
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type Int = number
+export type Int = number;
 
 /*
 Raw JSON value
 */
-export type Json = any
+export type Json = any;
 
 /*
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 */
-export type Long = string
+export type Long = string;
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type String = string
+export type String = string;

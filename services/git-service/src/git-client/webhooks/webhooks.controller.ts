@@ -1,10 +1,20 @@
 import { WebhooksService } from './webhooks.service';
-import { Controller, Post, Body, Headers, Param, Get, NotFoundException } from '@nestjs/common';
+import {
+	Controller,
+	Post,
+	Body,
+	Headers,
+	Param,
+	Get,
+	NotFoundException,
+	Logger
+} from '@nestjs/common';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 
 @Controller('webhook')
 export class WebhooksController {
+	private readonly logger = new Logger('WebhooksController');
 	constructor(private readonly webhooksService: WebhooksService) {}
 	@Post('/:id')
 	async webhookHandler(@Param('id') id: string, @Body() body, @Headers() headers) {
@@ -13,16 +23,16 @@ export class WebhooksController {
 		const gitEventType = headers['x-github-event'] as GitHubWebhookEventType;
 		// const gitDelivery = headers['x-github-delivery'];
 
-		console.log(`
+		this.logger.log(`
 ---------------------------------------------
     received ${gitEventType} ${body.action ? body.action : ''} webhook!
 ---------------------------------------------`);
-		console.log(
-			`Webhook Controller: received ${gitEventType} webhook update for repository ${id} ${Date.now()}`
+		this.logger.log(
+			`received ${gitEventType} webhook update for repository ${id} ${Date.now()}`
 		);
 
 		if (!this.eventTypeIsValid(gitEventType)) {
-			console.error('Returning NotFoundException');
+			this.logger.error('Returning NotFoundException');
 
 			throw new NotFoundException(`Event Type ${gitEventType} was not found/supported`);
 		}
@@ -34,7 +44,7 @@ export class WebhooksController {
 
 	@Get()
 	public async getAllEvents() {
-		console.log('Webhook Controller: getting all webhook events:');
+		this.logger.log('getting all webhook events:');
 
 		return await this.webhooksService.findAllInMongo();
 	}
