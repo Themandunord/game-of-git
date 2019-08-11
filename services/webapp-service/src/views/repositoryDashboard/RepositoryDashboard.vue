@@ -14,7 +14,7 @@ v-container(fluid)
 			v-icon(small color="black") fa-list
 			| {{eventCount}} Events Logged since added
 			//- v-icon(small color="black" :href="repository.url" target="_blank") mdi-github-circle
-
+		EventsSummaryList
 	p {{repository.description}}
 </template>
 
@@ -25,11 +25,13 @@ import AppStateModule from '@/store/aspects/app';
 import AddAppKeyForm from '@/components/AddAppKeyForm.vue';
 import RepositoriesList from '@/components/RepositoriesList.vue';
 import HttpClient from '@/common/HttpClient';
+import EventsSummaryList from '@/components/EventsSummaryList.vue';
 
 @Component({
 	components: {
 		AddAppKeyForm,
-		RepositoriesList
+		RepositoriesList,
+		EventsSummaryList
 	}
 })
 export default class RepositoryDashboard extends Vue {
