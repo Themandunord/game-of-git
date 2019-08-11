@@ -11,6 +11,7 @@ import store from '@/store';
 })
 class RepositoriesState extends VuexModule implements IRepositoriesState {
 	public repositories: any[] = []; // TODO: better typing
+	public events: any[] = []; //TODO: better typing
 
 	@Mutation
 	public setRepositories(repositories?: any[]) {
@@ -40,6 +41,16 @@ class RepositoriesState extends VuexModule implements IRepositoriesState {
 				...(repository.idExternal === val.idExternal ? repository : {})
 			};
 		});
+	}
+
+	// todo: better typing and validation
+	@Mutation
+	public addEvent(event: any) {
+		if (!event) {
+			return;
+		}
+
+		this.events = [...this.events, event];
 	}
 }
 

@@ -84,6 +84,9 @@ export default class RepositoryDashboard extends Vue {
 	get eventCount() {
 		return this.repository.eventCount;
 	}
+	get events() {
+		return [];
+	}
 }
 </script>
 
