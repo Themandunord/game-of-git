@@ -4,3 +4,5 @@ declare module '*.vue' {
 }
 
 declare module 'vuetify/lib';
+
+declare module 'vue-cli-plugin-apollo/graphql-client';
