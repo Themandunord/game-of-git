@@ -1,3 +1,3 @@
 export interface IAppState {
-  navExpanded: boolean;
+	navExpanded: boolean;
 }

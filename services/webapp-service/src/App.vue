@@ -19,42 +19,42 @@ import { REPOSITORY_DASHBOARD } from '@/router/routes';
 import { IRoute } from '@/router/routes';
 
 @Component({
-    components: {
-        NavBar
-    }
+	components: {
+		NavBar
+	}
 })
 export default class App extends Vue {
-    public routeManager = routeManager;
+	public routeManager = routeManager;
 
-    get routes() {
-        return this.routeManager.myRoutes;
-    }
+	get routes() {
+		return this.routeManager.myRoutes;
+	}
 
-    beforeMount() {
-        // tslint:disable-next-line:no-console
-        console.log(this.routeManager.myRoutes);
-        RepositoriesStateModule.syncStoredRepositories();
-    }
+	beforeMount() {
+		// tslint:disable-next-line:no-console
+		console.log(this.routeManager.myRoutes);
+		RepositoriesStateModule.syncStoredRepositories();
+	}
 
-    get trackedRepositories() {
-        return RepositoriesStateModule.repositories.filter(repo => repo.isTracked === true);
-    }
+	get trackedRepositories() {
+		return RepositoriesStateModule.repositories.filter(repo => repo.isTracked === true);
+	}
 
-    @Watch('trackedRepositories', {
-        deep: true,
-        immediate: true
-    })
-    private async updateCustomRouteRepositories() {
-        const newCustomRoutes = this.trackedRepositories.map(repo => {
-            return {
-                name: REPOSITORY_DASHBOARD.name,
-                props: {
-                    id: repo.id
-                },
-                displayName: `${repo.name} Dashboard`
-            };
-        });
-        routeManager.customRoutes = newCustomRoutes;
-    }
+	@Watch('trackedRepositories', {
+		deep: true,
+		immediate: true
+	})
+	private async updateCustomRouteRepositories() {
+		const newCustomRoutes = this.trackedRepositories.map(repo => {
+			return {
+				name: REPOSITORY_DASHBOARD.name,
+				props: {
+					id: repo.id
+				},
+				displayName: `${repo.name} Dashboard`
+			};
+		});
+		routeManager.customRoutes = newCustomRoutes;
+	}
 }
 </script>

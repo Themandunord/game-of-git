@@ -1,13 +1,11 @@
+import { GitClientService } from './../git-client.service';
 import { Controller, Put, Body, Post } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../../users/users.service';
 import { AppKeyService } from './app-key.service';
 
 @Controller('app-key')
 export class AppKeyController {
-	constructor(
-		private readonly usersService: UsersService,
-		private readonly appKeyService: AppKeyService,
-	) {}
+	constructor(private readonly gitService: GitClientService) {}
 
 	/**
 	 * Adds a GitHub App Key and attaches it to the given User
@@ -21,9 +19,9 @@ export class AppKeyController {
 		@Body('username') username: string,
 		@Body('key') key: string,
 		@Body('name') name: string,
-		@Body('user') user: string,
+		@Body('user') user: string
 	) {
-		return await this.appKeyService.storeKey(key, user, name, username);
+		return await this.gitService.appKey.store(key, user, name, username);
 	}
 
 	/**
@@ -33,7 +31,7 @@ export class AppKeyController {
 	 */
 	@Post('/validate-key')
 	async validateKey(@Body('key') key: string, @Body('username') user: string) {
-		const isValid = await this.appKeyService.validateKey(key, user);
+		const isValid = await this.gitService.appKey.validate(key, user);
 
 		return isValid;
 	}

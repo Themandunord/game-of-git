@@ -1,5 +1,5 @@
 describe('Users Client', () => {
-  it('stubs', () => {
-    expect(true).toBeTruthy();
-  });
+	it('stubs', () => {
+		expect(true).toBeTruthy();
+	});
 });

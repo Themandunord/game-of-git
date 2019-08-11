@@ -10,7 +10,7 @@ describe('UsersService', () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [UsersService, UsersResolver],
+			providers: [UsersService, UsersResolver]
 		})
 			.overrideProvider(UsersResolver)
 			.useValue(usersResolverMock)
@@ -25,15 +25,15 @@ describe('UsersService', () => {
 				email: 'someemail',
 				id: 'someID1234',
 				name: 'some name',
-				gitLogin: 'somegitLogin',
+				gitLogin: 'somegitLogin'
 			};
 			const userData = {
 				...userDataBase,
-				keys: [{}],
+				keys: [{}]
 			};
 			const expectedUserData = {
 				...userDataBase,
-				hasAppKey: true,
+				hasAppKey: true
 			};
 			const getUserMock = jest.fn(async () => {
 				return userData as User;
@@ -71,22 +71,22 @@ describe('UsersService', () => {
 			email: 'someemail',
 			id: 'someID1234',
 			name: 'some name',
-			gitLogin: 'somegitLogin',
+			gitLogin: 'somegitLogin'
 		};
 		const userData = {
 			...userDataBase,
-			keys: [{}],
+			keys: [{}]
 		};
 		const expectedUserData = {
 			...userDataBase,
-			hasAppKey: true,
+			hasAppKey: true
 		};
 		const getUserMock = jest.fn(async () => {
 			return userData as User;
 		});
 		usersResolverMock.getUser = getUserMock;
 
-		await expect(service.get('someemail')).resolves.toEqual(expectedUserData);
+		await expect(service.getByEmail('someemail')).resolves.toEqual(expectedUserData);
 		expect(getUserMock).toHaveBeenCalledTimes(1);
 	});
 });
