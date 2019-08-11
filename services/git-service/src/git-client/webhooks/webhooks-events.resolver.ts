@@ -1,6 +1,6 @@
+import { GitHubWebhookEvent } from './../../graphql.schema.d';
 import { Query, Resolver, Args, Info, Mutation, Subscription } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
-import { GitHubWebhookEvent } from '../../graphql.schema';
 import pubSub from '../../pubsub';
 
 @Resolver('WebhookEvents')
@@ -27,10 +27,13 @@ export class WebhookEventsResolver {
 		return await this.prisma.mutation.updateGitHubWebhookEvent(args, info);
 	}
 
-	@Subscription('gitHubWebhookEvent')
-	gitHubWebhookEventAdded() {
-		console.log('GITHUB WEBHOOK EVENT ADDED!');
+	@Subscription()
+	async gitHubWebhookEvent(@Args() args, @Info() info) {
+		console.log('gitHubWebhookEvent subscription!');
 
-		return pubSub.asyncIterator('gitHubWebhookEventAdded');
+		return await this.prisma.subscription.gitHubWebhookEvent(args, info);
+
+		// TODO: switch to custo mimplementation instead of exposing backend
+		// return pubSub.asyncIterator('gitHubWebhookEvent');
 	}
 }
