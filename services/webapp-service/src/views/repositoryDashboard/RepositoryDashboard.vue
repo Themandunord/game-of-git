@@ -14,8 +14,8 @@ v-container(fluid)
 			v-icon(small color="black") fa-list
 			| {{eventCount}} Events Logged since added
 			//- v-icon(small color="black" :href="repository.url" target="_blank") mdi-github-circle
-		EventsSummaryList
 	p {{repository.description}}
+	EventsSummaryList
 </template>
 
 <script lang="ts">
