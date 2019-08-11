@@ -1,5 +1,8 @@
 <template lang="pug">
-	v-data-table(:headers="headers" :items="items" :items-per-age="5" class="elevation-1")
+	v-data-table(:headers="headers" :items="items" :items-per-age="5" class="elevation-1" dark)
+		//- template(v-slot:items="props")
+		//- 	td.text-xs-right {{ props.item.name }}
+		//- 	td.text-xs-right {{ props.item.fat }}
 </template>
 
 <script lang="ts">
