@@ -28,10 +28,10 @@ export class WebhooksRepository {
 	}
 
 	async store(owner: string, repository: string, eventType: string, eventData: any) {
-		console.log(repository);
-		console.log(eventType);
+		// console.log(repository);
+		// console.log(eventType);
 		const action = eventData.action ? eventData.action : eventType;
-		console.log(action);
+		// console.log(action);
 		const createWebhookDto: ICreateRepositoryWebhookDto = {
 			repository,
 			eventType,
@@ -44,7 +44,8 @@ export class WebhooksRepository {
 			data: {
 				eventType,
 				action,
-				sender: eventData.sender.login ? eventData.sender.login : 'UNKNOWN',
+				sender:
+					eventData.sender && eventData.sender.login ? eventData.sender.login : 'UNKNOWN',
 				repository: {
 					connect: {
 						id: repository
