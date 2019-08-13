@@ -1,27 +1,29 @@
-import { ObjectID } from 'bson';
-import { MockCommandBus } from './../../../../../utilities/MockCommandBus';
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
-import { AppKeyService } from '../app-key/app-key.service';
-import TestingUtilities from './../../../../../utilities/testing';
 import { AppKeyModule } from '../app-key/app-key.module';
+import { AppKeyService } from '../app-key/app-key.service';
+import { MockCommandBus } from './../../../../../utilities/MockCommandBus';
+import TestingUtilities from './../../../../../utilities/testing';
 import { GitClientModule } from './../git-client.module';
 import { GitClientService } from './../git-client.service';
 import { HandleWebhookCommand } from './commands/handle-webhook.command';
 import { HandleWebhookHandler } from './commands/handle-webhook.handler';
-import { EventModelFactory } from './parser/EventModelFactory';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { ParserService } from './parser/parser.service';
 import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
-import { WebhooksService } from './webhooks.service';
+import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksRepository } from './webhooks.repository';
+import { WebhooksService } from './webhooks.service';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
+const mockWebhookEventsResolver = jest.genMockFromModule<WebhookEventsResolver>(
+	'./webhooks-events.resolver'
+);
 
 const GITHUB_WEBHOOK_EVENT_TYPES = Object.keys(GitHubWebhookEvents) as GitHubWebhookEventType[];
 
@@ -39,6 +41,10 @@ describe('WebhooksService', () => {
 
 		mockCommandBus = new MockCommandBus();
 
+		mockWebhookEventsResolver.createWebhookEvent = async (args: any, info: any) => {
+			return {} as any;
+		};
+
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [
 				GitClientModule,
@@ -54,7 +60,8 @@ describe('WebhooksService', () => {
 				WebhooksService,
 				GitClientService,
 				ParserService,
-				HandleWebhookHandler
+				HandleWebhookHandler,
+				WebhookEventsResolver
 			]
 		})
 			.overrideProvider(CommandBus)
@@ -63,6 +70,8 @@ describe('WebhooksService', () => {
 			.useValue(mockGitClientService)
 			.overrideProvider(AppKeyService)
 			.useValue(mockAppKeyService)
+			.overrideProvider(WebhookEventsResolver)
+			.useValue(mockWebhookEventsResolver)
 			.compile();
 
 		service = module.get<WebhooksService>(WebhooksService);
