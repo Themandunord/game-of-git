@@ -25,9 +25,9 @@ import EventHandlers from './events';
 		WebhooksRepository,
 		WebhooksService,
 		ParserService,
+		WebhookEventsResolver,
 		...CommandHandlers,
-		...EventHandlers,
-		WebhookEventsResolver
+		...EventHandlers
 	],
 	controllers: [WebhooksController],
 	exports: [WebhooksService]

@@ -17,10 +17,14 @@ import { ParserService } from './parser/parser.service';
 import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
 import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
+import { WebhookEventsResolver } from './webhooks-events.resolver';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
 const mockWebhooksService = jest.mock('./webhooks.service');
+const mockWebhookEventsResolver = jest.genMockFromModule<WebhookEventsResolver>(
+	'./webhooks-events.resolver'
+);
 
 const OWNER = process.env.GIT_TESTING_USER;
 const REPOSITORY = process.env.GIT_TESTING_REPOSITORY;
@@ -35,6 +39,10 @@ describe('Webhooks Repository', () => {
 	beforeAll(async () => {
 		mongod = new MongoMemoryServer();
 		const uri = await mongod.getConnectionString();
+
+		mockWebhookEventsResolver.createWebhookEvent = async (args: any, info: any) => {
+			return {} as any;
+		};
 
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [
@@ -56,6 +64,8 @@ describe('Webhooks Repository', () => {
 			.useValue(mockGitClientService)
 			.overrideProvider(AppKeyService)
 			.useValue(mockAppKeyService)
+			.overrideProvider(WebhookEventsResolver)
+			.useValue(mockWebhookEventsResolver)
 			.compile();
 
 		repository = module.get<WebhooksRepository>(WebhooksRepository);

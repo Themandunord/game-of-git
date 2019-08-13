@@ -11,11 +11,16 @@ import { GitClientService } from './../git-client.service';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
+import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksModule } from './webhooks.module';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
+// const mockWebhooksRepository = jest.genMockFromModule<WebhooksRepository>('./webhooks.repository');
+const mockWebhookEventsResolver = jest.genMockFromModule<WebhookEventsResolver>(
+	'./webhooks-events.resolver'
+);
 
 const GITHUB_WEBHOOK_EVENT_TYPES = Object.keys(GitHubWebhookEvents) as GitHubWebhookEventType[];
 
@@ -46,6 +51,10 @@ describe('Webhooks Controller', () => {
 
 	let mongod: MongoMemoryServer;
 
+	mockWebhookEventsResolver.createWebhookEvent = async (args: any, info: any) => {
+		return {} as any;
+	};
+
 	beforeEach(async () => {
 		mongod = new MongoMemoryServer();
 		const uri = await mongod.getConnectionString();
@@ -62,12 +71,17 @@ describe('Webhooks Controller', () => {
 				]),
 				MongooseModule.forRoot(uri)
 			],
+			// providers: [WebhooksRepository],
 			controllers: [WebhooksController]
 		})
 			.overrideProvider(GitClientService)
 			.useValue(mockGitClientService)
 			.overrideProvider(AppKeyService)
 			.useValue(mockAppKeyService)
+			.overrideProvider(WebhookEventsResolver)
+			.useValue(mockWebhookEventsResolver)
+			// .overrideProvider(WebhooksRepository)
+			// .useValue(mockWebhooksRepository)
 			.compile();
 
 		app = moduleFixture.createNestApplication();
@@ -96,11 +110,20 @@ describe('Webhooks Controller', () => {
 						const eventType = GitHubWebhookEvents[eventTypeKey];
 
 						let sampleJson: any;
+						let expectedData;
 
 						beforeAll(async () => {
 							sampleJson = await TestingUtilities.loadJson(
 								path.join(__dirname, `parser/eventModels/${eventType}/sample.json`)
 							);
+							// expectedData = {
+							// 	id: repoId,
+							// 	createdAt: new Date(),
+							// 	eventType: GitHubWebhookEvents[eventTypeKey],
+							// 	action: sampleJson.action,
+							// 	sender: sampleJson.sender ? sampleJson.sender.login : 'unknown'
+							// };
+							// mockWebhooksRepository.store = jest.fn(async () => expectedData);
 						});
 
 						it('Should store the webhook and respond with a 201', async () => {
