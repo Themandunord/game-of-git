@@ -1,31 +1,37 @@
 <template lang="pug">
 v-container(fluid)
-	h2.display-3 {{repository.name}} Game Dashboard
-	p
-		span.repo-tag.caption.font-weight-light.blue.lighten-3.black--text 
-			v-icon(small color="black") calendar_today 
-			|  Repo Incepted At: {{createdAt}} 
-		span.repo-tag.caption.font-weight-light.blue.lighten-3.black--text 
-			v-icon(small color="black") calendar_today 
-			|  Last Updated At: {{updatedAt}} 
-		span.repo-tag.caption.font-weight-light.blue.lighten-3.black--text
-			a(:href="repository.url" target="_blank") GitHub
-		span.repo-tab.caption.font-weight-light.blue.lighten-3.black--text
-			v-icon(small color="black") fa-list
-			| {{eventCount}} Events Logged since added
-			//- v-icon(small color="black" :href="repository.url" target="_blank") mdi-github-circle
+	h2.display-3 Game Dashboard - 
+		code {{repository.name}}
+	v-subheader
+		v-chip
+			span.caption.font-weight-light 
+				v-icon(small color="black") calendar_today 
+				|  Repo Incepted At: {{createdAt}} 
+		v-chip
+			span.caption.font-weight-light 
+				v-icon(small color="black") calendar_today 
+				|  Last Updated At: {{updatedAt}} 
+		v-chip
+			span.caption.font-weight-light
+				a(:href="repository.url" target="_blank") GitHub
+		v-chip
+			span.repo-tab.caption.font-weight-light
+				v-icon(small color="black") fa-list
+				| {{eventCount}} Events Logged since added
+				//- v-icon(small color="black" :href="repository.url" target="_blank") mdi-github-circle
 	p {{repository.description}}
 	EventsSummaryList
+
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
-import AddAppKeyForm from '@/components/AddAppKeyForm.vue';
-import RepositoriesList from '@/components/RepositoriesList.vue';
+import AddAppKeyForm from '@/components/forms/AddAppKeyForm.vue';
+import RepositoriesList from '@/components/repositories/RepositoriesList.vue';
 import HttpClient from '@/common/HttpClient';
-import EventsSummaryList from '@/components/EventsSummaryList.vue';
+import EventsSummaryList from '@/components/webhook-events/EventsSummaryList.vue';
 
 @Component({
 	components: {
@@ -89,10 +95,3 @@ export default class RepositoryDashboard extends Vue {
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-.repo-tag {
-	margin-left: 1rem;
-	padding: 0.35rem;
-}
-</style>

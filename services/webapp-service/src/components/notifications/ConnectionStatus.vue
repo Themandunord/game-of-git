@@ -12,9 +12,9 @@ import {
 	CONNECTING,
 	CONNECTED,
 	RECONNECTING
-} from '../store/aspects/app/IAppState.interface';
+} from '../../store/aspects/app/IAppState.interface';
 
-import AppStateModule from '../store/aspects/app';
+import AppStateModule from '../../store/aspects/app';
 
 @Component
 export default class ConnectionStatus extends Vue {
