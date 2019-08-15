@@ -1,3 +1,3 @@
 export interface IRepositoriesState {
-	repositories: any[];
+	repositories: any[]; // TODO: better typing
 }

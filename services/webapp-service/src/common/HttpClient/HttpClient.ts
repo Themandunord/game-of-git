@@ -36,22 +36,26 @@ export class HttpClient extends AbstractHttpClient {
 	}
 
 	public async refreshUserData() {
-		const userData = await this.users.loadUserData();
-		this.user = {
-			...this.user,
-			...userData
-		};
-		AppStateModule.setUser({
-			...AppStateModule.user,
-			...userData
-		});
+		if (AppStateModule.user && AppStateModule.user.isAuthenticated) {
+			const userData = await this.users.loadUserData();
+			AppStateModule.setUser({
+				...AppStateModule.user,
+				...userData
+			});
+		}
 	}
 
 	public async validateJwtToken() {
 		try {
-			const userData = await this.users.loadUserData();
+			if (AppStateModule.user && AppStateModule.user.isAuthenticated) {
+				const userData = await this.users.loadUserData();
 
-			return true;
+				return true;
+			}
+
+			console.log('There was no user property in the store, was unable to loadUserData.');
+
+			return false;
 		} catch (e) {
 			console.error('There was an error querying for the usersData', e);
 
