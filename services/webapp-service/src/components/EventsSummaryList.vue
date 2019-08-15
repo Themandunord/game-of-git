@@ -22,8 +22,8 @@ import gql from 'graphql-tag';
 		// `,
 		gitHubWebhookEvents: {
 			query: gql`
-				query {
-					gitHubWebhookEvents {
+				query RepositoryWebhookEvents($id: ID!) {
+					gitHubWebhookEvents(where: { repository: { id: $id } }) {
 						id
 						createdAt
 						eventType
@@ -32,6 +32,11 @@ import gql from 'graphql-tag';
 					}
 				}
 			`,
+			variables() {
+				return {
+					id: (this as any).$route.params.id
+				};
+			},
 			subscribeToMore: {
 				// document: gql`
 				// 	subscription name($param: String!) {
@@ -42,8 +47,8 @@ import gql from 'graphql-tag';
 				// 	}
 				// `,
 				document: gql`
-					subscription {
-						gitHubWebhookEvent {
+					subscription($id: ID!) {
+						gitHubWebhookEvent(where: { node: { repository: { id: $id } } }) {
 							mutation
 							node {
 								id
@@ -55,6 +60,11 @@ import gql from 'graphql-tag';
 						}
 					}
 				`,
+				variables() {
+					return {
+						id: (this as any).$route.params.id
+					};
+				},
 				updateQuery: (previousResult: any, { subscriptionData }: any) => {
 					console.log('updateQuery: ');
 					console.log(previousResult.gitHubWebhookEvents);

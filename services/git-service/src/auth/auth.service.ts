@@ -63,29 +63,34 @@ export class AuthService {
 	}
 
 	async refreshToken(jwt: string) {
-		const isValid = await this.verifyToken(jwt);
+		try {
+			const isValid = await this.verifyToken(jwt);
 
-		const userData = jsonwebtoken.decode(jwt);
-		const email = (userData as Partial<User>).email;
-		const user = await this.usersService.getByEmail(email);
+			const userData = jsonwebtoken.decode(jwt);
+			const email = (userData as Partial<User>).email;
+			const user = await this.usersService.getByEmail(email);
 
-		let error = null;
+			let error = null;
 
-		if (!user) {
-			this.logger.warn(`user did not exist ${email} or jwt was invalid: ${isValid}`);
-			error = `User did not exist`;
+			if (!user) {
+				this.logger.warn(`user did not exist ${email} or jwt was invalid: ${isValid}`);
+				error = `User did not exist`;
+			}
+
+			if (!isValid) {
+				this.logger.warn(`Auth service could not verify the token ${jwt}`);
+				error = `invalid jwt`;
+			}
+
+			if (error) {
+				throw new HttpException(`Invalid jwt`, HttpStatus.UNAUTHORIZED);
+			}
+
+			return await this.createToken(user);
+		} catch (e) {
+			console.error('The token was not valid');
+			throw e;
 		}
-
-		if (!isValid) {
-			this.logger.warn(`Auth service could not verify the token ${jwt}`);
-			error = `invalid jwt`;
-		}
-
-		if (error) {
-			throw new HttpException(`Invalid jwt`, HttpStatus.UNAUTHORIZED);
-		}
-
-		return await this.createToken(user);
 	}
 
 	/**
