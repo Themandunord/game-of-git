@@ -10,6 +10,15 @@ export class UsersClient {
 	 * Load User Data for a given user
 	 */
 	async loadUserData() {
+		if (this.client == null) {
+			console.error('Unable to load user data, client is null.');
+			throw new Error(`Unable to load user data, client is null`);
+		}
+		if (this.client.user == null) {
+			// tslint:disable-next-line:no-console
+			console.error('Unable to load user data, client.user is null.');
+			throw new Error(`Unable to load user data, client.user is null`);
+		}
 		if (this.client.user.id == null) {
 			console.error('Unable to load user data, id is null.');
 			throw new Error(`Unable to load user data, id is null`);

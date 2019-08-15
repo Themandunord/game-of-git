@@ -81,19 +81,6 @@ import gql from 'graphql-tag';
 					}
 					console.log('There was an update to the query');
 				}
-				// // Variables passed to the subscription. Since we're using a function,
-				// // they are reactive
-				// variables() {
-				// 	return {
-				// 		param: this.param
-				// 	};
-				// },
-				// // Mutate the previous result
-				// updateQuery: (previousResult, { subscriptionData }) => {
-				// 	// Here, return the new result from the previous with the new data
-				// 	console.log('update from subscription');
-				// 	// return previousResult;
-				// }
 			},
 			prefetch: true
 		}

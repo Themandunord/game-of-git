@@ -5,7 +5,7 @@ import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-mo
 import store from '@/store';
 
 interface IBaseUserData {
-	email: string;
+	email: null;
 	exp: number;
 	gitLogin: string;
 	hasAppKey: boolean;
@@ -47,6 +47,18 @@ class AppState extends VuexModule implements IAppState {
 		}
 	}
 
+	@Mutation resetUser() {
+		this.user = {
+			email: null,
+			exp: 0,
+			gitLogin: null,
+			hasAppKey: null,
+			iat: null,
+			id: null,
+			name: null,
+			isAuthenticated: null
+		} as any;
+	}
 	@Mutation
 	public setUser(user: any) {
 		this.user = user;
