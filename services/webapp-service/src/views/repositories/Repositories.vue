@@ -1,6 +1,6 @@
 <template lang="pug">
 v-container(fluid)
-    h2.display-3 My Repositories
+    h2.display-3 GitHub Repositories Search
 
     template(v-if="!hasAppKey")
         v-alert(:value="true" type="info")
@@ -24,7 +24,7 @@ import RepositoriesList from '@/components/RepositoriesList.vue';
 		RepositoriesList
 	}
 })
-export default class MyRepositories extends Vue {
+export default class Repositories extends Vue {
 	get hasAppKey() {
 		return AppStateModule.user.hasAppKey;
 	}
