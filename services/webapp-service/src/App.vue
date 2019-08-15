@@ -1,8 +1,9 @@
 <template lang="pug">
-    v-app(dark)
-        NavBar(:routes="routes")
-        v-content
-            router-view
+	v-app(dark)
+		NavBar(:routes="routes")
+		v-content
+			router-view
+		ConnectionStatus
 </template>
 
 <script lang="ts">
@@ -17,10 +18,12 @@ import routeManager, { RouteManager } from '@/router/RouteManager';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import { REPOSITORY_DASHBOARD } from '@/router/routes';
 import { IRoute } from '@/router/routes';
+import ConnectionStatus from './components/ConnectionStatus.vue';
 
 @Component({
 	components: {
-		NavBar
+		NavBar,
+		ConnectionStatus
 	}
 })
 export default class App extends Vue {

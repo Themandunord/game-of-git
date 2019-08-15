@@ -1,3 +1,4 @@
+import { ConnectionState, DISCONNECTED, IConnectionState } from './IAppState.interface';
 import { IAppState } from '.';
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
 
@@ -14,6 +15,14 @@ interface IBaseUserData {
 	isAuthenticated: boolean;
 }
 
+interface StateUpdate {
+	state: ConnectionState;
+}
+interface ReconnectAttemptUpdate {
+	reconnectAttempt: number;
+}
+type ConnectionStateUpdate = StateUpdate | ReconnectAttemptUpdate;
+
 @Module({
 	dynamic: true,
 	store,
@@ -21,6 +30,11 @@ interface IBaseUserData {
 })
 class AppState extends VuexModule implements IAppState {
 	public navExpanded: boolean = false;
+
+	public connection: IConnectionState = {
+		reconnectAttempt: null,
+		state: DISCONNECTED
+	};
 
 	public user: Partial<IBaseUserData> = {};
 
@@ -44,6 +58,11 @@ class AppState extends VuexModule implements IAppState {
 		}
 
 		return this.user.hasAppKey;
+	}
+
+	@Mutation
+	public setConnectionState(state: ConnectionStateUpdate) {
+		this.connection = { ...this.connection, ...state };
 	}
 }
 
