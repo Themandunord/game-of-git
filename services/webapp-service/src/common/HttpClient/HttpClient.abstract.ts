@@ -14,7 +14,7 @@ import { interval, BehaviorSubject } from 'rxjs';
 
 const connectionStateObservable = new BehaviorSubject<ConnectionState>(DISCONNECTED);
 
-const PING_INTERVAL_MS = 6_000;
+const PING_INTERVAL_MS = 600_000;
 
 /**
  * Abstract Http Client implementation safely wrapping auth, user context and the underlying implementation.
