@@ -34,7 +34,7 @@ import gql from 'graphql-tag';
 			`,
 			variables() {
 				return {
-					id: (this as any).$route.params.id
+					id: (this as any).routeRepoId
 				};
 			},
 			subscribeToMore: {
@@ -62,7 +62,7 @@ import gql from 'graphql-tag';
 				`,
 				variables() {
 					return {
-						id: (this as any).$route.params.id
+						id: (this as any).routeRepoId
 					};
 				},
 				updateQuery: (previousResult: any, { subscriptionData }: any) => {
@@ -94,12 +94,17 @@ import gql from 'graphql-tag';
 				// 	console.log('update from subscription');
 				// 	// return previousResult;
 				// }
-			}
+			},
+			prefetch: true
 		}
 	} as any // :'(
 })
 export default class EventsSummaryList extends Vue {
 	private gitHubWebhookEvents = [];
+
+	get routeRepoId() {
+		return this.$route.params.id;
+	}
 
 	private headers = [
 		{

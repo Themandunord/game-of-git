@@ -1,6 +1,5 @@
 <template lang="pug">
 	v-snackbar(v-model="showMessage" :color="statusColor" :timeout="timeout") {{ message }}
-		//- v-btn(color="pink" text @click="showMessage = false") Close
 </template>
 
 <script lang="ts">
