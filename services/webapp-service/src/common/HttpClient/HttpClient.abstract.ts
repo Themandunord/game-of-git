@@ -1,9 +1,20 @@
+import {
+	DISCONNECTED,
+	CONNECTED,
+	CONNECTING,
+	ConnectionState
+} from './../../store/aspects/app/IAppState.interface';
 import router from '@/router';
 import AppStateModule from '@/store/aspects/app';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import * as jwtClient from 'jsonwebtoken';
 import config from '../../config';
 import { LOGIN } from '@/router/routes';
+import { interval, BehaviorSubject } from 'rxjs';
+
+const connectionStateObservable = new BehaviorSubject<ConnectionState>(DISCONNECTED);
+
+const PING_INTERVAL_MS = 6_000;
 
 /**
  * Abstract Http Client implementation safely wrapping auth, user context and the underlying implementation.
@@ -25,12 +36,33 @@ export default class AbstractHttpClient {
 	public user: any | null = {};
 
 	constructor(client?: AxiosInstance) {
+		connectionStateObservable.subscribe(x => AppStateModule.setConnectionState({ state: x }));
+
+		const pingInterval = interval(PING_INTERVAL_MS);
+		pingInterval.subscribe(() => this.ping());
+
 		if (client) {
 			this.axiosClient = client;
 
 			return;
 		}
 		this.initClient();
+	}
+
+	get connectionState() {
+		return connectionStateObservable.getValue();
+	}
+
+	public async ping() {
+		try {
+			// AppStateModule.setConnectionState({ state: CONNECTING });
+			await this.axiosClient.get(`${AbstractHttpClient.apiUrl}/ping`);
+			if (AppStateModule.connection.state !== CONNECTED) {
+				AppStateModule.setConnectionState({ state: CONNECTED });
+			}
+		} catch (e) {
+			AppStateModule.setConnectionState({ state: DISCONNECTED });
+		}
 	}
 
 	/**
@@ -98,33 +130,46 @@ export default class AbstractHttpClient {
 				}
 			}
 		}
+		this.ping();
 	}
 
 	private async refreshToken(jwt: string) {
-		const route = `${AbstractHttpClient.apiUrl}/auth/refresh`;
+		try {
+			const route = `${AbstractHttpClient.apiUrl}/auth/refresh`;
+			const result = await this.axiosClient.post(route, {
+				jwt
+			});
 
-		const result = await this.axiosClient.post(route, {
-			jwt
-		});
+			if (!result.data.accessToken) {
+				this.user = null;
+				this.setJwt('');
 
-		if (!result.data.accessToken) {
-			this.user = null;
-			this.setJwt('');
+				return;
+			}
 
-			return;
+			this.setJwt(result.data.accessToken);
+
+			const user = jwtClient.decode(result.data.accessToken);
+
+			const userData =
+				user instanceof Object
+					? { ...user, isAuthenticated: true }
+					: { isAuthenticated: false };
+
+			this.user = userData;
+			AppStateModule.setUser({ ...AppStateModule.user, ...userData });
+		} catch (e) {
+			console.error('There was an error refreshing the jwt: ', e);
+			AppStateModule.setConnectionState({ state: DISCONNECTED });
+
+			if (e.response.status === 401) {
+				// unauthorized. Ensure there is no stored jwt and send to login.
+				this.setJwt('');
+				window.location.reload();
+			}
+
+			throw e;
 		}
-
-		this.setJwt(result.data.accessToken);
-
-		const user = jwtClient.decode(result.data.accessToken);
-
-		const userData =
-			user instanceof Object
-				? { ...user, isAuthenticated: true }
-				: { isAuthenticated: false };
-
-		this.user = userData;
-		AppStateModule.setUser({ ...AppStateModule.user, ...userData });
 	}
 
 	private setAutoTokenRefreshMiddleware() {
