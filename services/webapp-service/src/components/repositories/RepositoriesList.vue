@@ -76,7 +76,7 @@ v-layout(row)
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
-import HttpClient from '../common/HttpClient';
+import HttpClient from '../../common/HttpClient';
 import { pluck, switchMap, debounceTime } from 'rxjs/operators';
 
 @Component({

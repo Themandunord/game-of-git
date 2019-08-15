@@ -5,7 +5,7 @@ export const LOGIN: IRoute = {
 	path: '/login',
 	name: 'login',
 	displayName: 'Login',
-	component: () => import(/* webpackChunkName: 'login' */ '@/components/Login.vue'),
+	component: () => import(/* webpackChunkName: 'login' */ '@/components/auth/Login.vue'),
 	meta: {
 		routemanager: (context: IRouteManagerContext) => {
 			// don't show login if the user has a jwt (ie. is logged in)

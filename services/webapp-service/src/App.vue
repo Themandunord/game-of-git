@@ -11,14 +11,14 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
 
-import NavBar from '@/components/Navbar.vue';
+import NavBar from '@/components/nav/Navbar.vue';
 import { ROUTES } from '@/router/routes';
 import router from '@/router';
 import routeManager, { RouteManager } from '@/router/RouteManager';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import { REPOSITORY_DASHBOARD } from '@/router/routes';
 import { IRoute } from '@/router/routes';
-import ConnectionStatus from './components/ConnectionStatus.vue';
+import ConnectionStatus from './components/notifications/ConnectionStatus.vue';
 
 @Component({
 	components: {

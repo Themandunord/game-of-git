@@ -1,6 +1,5 @@
 <template lang="pug">
 	v-snackbar(v-model="showMessage" :color="statusColor" :timeout="timeout") {{ message }}
-		//- v-btn(color="pink" text @click="showMessage = false") Close
 </template>
 
 <script lang="ts">
@@ -13,9 +12,9 @@ import {
 	CONNECTING,
 	CONNECTED,
 	RECONNECTING
-} from '../store/aspects/app/IAppState.interface';
+} from '../../store/aspects/app/IAppState.interface';
 
-import AppStateModule from '../store/aspects/app';
+import AppStateModule from '../../store/aspects/app';
 
 @Component
 export default class ConnectionStatus extends Vue {
