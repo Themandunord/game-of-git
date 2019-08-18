@@ -1,3 +1,4 @@
+import { GamesClient } from './games/games.client';
 import { LOGIN } from './../../router/routes/login';
 import AppStateModule from '@/store/aspects/app';
 import { AxiosInstance } from 'axios';
@@ -14,11 +15,13 @@ import router from '@/router';
 export class HttpClient extends AbstractHttpClient {
 	public repositories!: RepositoriesClient;
 	public users!: UsersClient;
+	public games!: GamesClient;
 
 	constructor(client?: AxiosInstance) {
 		super(client);
 		this.repositories = new RepositoriesClient(this);
 		this.users = new UsersClient(this);
+		this.games = new GamesClient(this);
 
 		if (this.user) {
 			this.refreshUserData();

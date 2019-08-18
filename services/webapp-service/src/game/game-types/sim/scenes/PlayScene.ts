@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { BehaviorSubject } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
-import GameStateModule from '../../store/aspects/game';
+import GameStateModule from '../../../../store/aspects/game';
 
 const VELOCITY: [number, number] = [200, 20];
 

@@ -1,1031 +1,2293 @@
 # source: http://localhost:4466
-# timestamp: Sun Jul 14 2019 16:57:26 GMT-0400 (Eastern Daylight Time)
+# timestamp: Wed Aug 21 2019 21:36:23 GMT-0400 (Eastern Daylight Time)
 
 type AggregateAppKey {
-  count: Int!
+	count: Int!
+}
+
+type AggregateGame {
+	count: Int!
 }
 
 type AggregateGitHubWebhookEvent {
-  count: Int!
+	count: Int!
 }
 
 type AggregateRepository {
-  count: Int!
+	count: Int!
 }
 
 type AggregateUser {
-  count: Int!
+	count: Int!
 }
 
 type AppKey implements Node {
-  id: ID!
-  user: User!
-  key: String!
-  name: String
-  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
+	id: ID!
+	user: User!
+	key: String!
+	name: String
+	repositories(
+		where: RepositoryWhereInput
+		orderBy: RepositoryOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [Repository!]
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type AppKeyConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
 
-  """A list of edges."""
-  edges: [AppKeyEdge]!
-  aggregate: AggregateAppKey!
+	"""
+	A list of edges.
+	"""
+	edges: [AppKeyEdge]!
+	aggregate: AggregateAppKey!
 }
 
 input AppKeyCreateInput {
-  id: ID
-  key: String!
-  name: String
-  user: UserCreateOneWithoutKeysInput!
-  repositories: RepositoryCreateManyWithoutAppKeyInput
+	id: ID
+	key: String!
+	name: String
+	user: UserCreateOneWithoutKeysInput!
+	repositories: RepositoryCreateManyWithoutAppKeyInput
 }
 
 input AppKeyCreateManyWithoutUserInput {
-  create: [AppKeyCreateWithoutUserInput!]
-  connect: [AppKeyWhereUniqueInput!]
+	create: [AppKeyCreateWithoutUserInput!]
+	connect: [AppKeyWhereUniqueInput!]
 }
 
 input AppKeyCreateOneWithoutRepositoriesInput {
-  create: AppKeyCreateWithoutRepositoriesInput
-  connect: AppKeyWhereUniqueInput
+	create: AppKeyCreateWithoutRepositoriesInput
+	connect: AppKeyWhereUniqueInput
 }
 
 input AppKeyCreateWithoutRepositoriesInput {
-  id: ID
-  key: String!
-  name: String
-  user: UserCreateOneWithoutKeysInput!
+	id: ID
+	key: String!
+	name: String
+	user: UserCreateOneWithoutKeysInput!
 }
 
 input AppKeyCreateWithoutUserInput {
-  id: ID
-  key: String!
-  name: String
-  repositories: RepositoryCreateManyWithoutAppKeyInput
+	id: ID
+	key: String!
+	name: String
+	repositories: RepositoryCreateManyWithoutAppKeyInput
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type AppKeyEdge {
-  """The item at the end of the edge."""
-  node: AppKey!
+	"""
+	The item at the end of the edge.
+	"""
+	node: AppKey!
 
-  """A cursor for use in pagination."""
-  cursor: String!
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: String!
 }
 
 enum AppKeyOrderByInput {
-  id_ASC
-  id_DESC
-  key_ASC
-  key_DESC
-  name_ASC
-  name_DESC
+	id_ASC
+	id_DESC
+	key_ASC
+	key_DESC
+	name_ASC
+	name_DESC
 }
 
 type AppKeyPreviousValues {
-  id: ID!
-  key: String!
-  name: String
+	id: ID!
+	key: String!
+	name: String
 }
 
 input AppKeyScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [AppKeyScalarWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [AppKeyScalarWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [AppKeyScalarWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [AppKeyScalarWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [AppKeyScalarWhereInput!]
-  id: ID
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [AppKeyScalarWhereInput!]
+	id: ID
 
-  """All values that are not equal to given value."""
-  id_not: ID
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
 
-  """All values that are contained in given list."""
-  id_in: [ID!]
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
 
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
 
-  """All values less than the given value."""
-  id_lt: ID
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
 
-  """All values less than or equal the given value."""
-  id_lte: ID
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
 
-  """All values greater than the given value."""
-  id_gt: ID
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
 
-  """All values greater than or equal the given value."""
-  id_gte: ID
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
 
-  """All values containing the given string."""
-  id_contains: ID
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
 
-  """All values not containing the given string."""
-  id_not_contains: ID
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
 
-  """All values starting with the given string."""
-  id_starts_with: ID
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
 
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
 
-  """All values ending with the given string."""
-  id_ends_with: ID
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
 
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  key: String
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	key: String
 
-  """All values that are not equal to given value."""
-  key_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	key_not: String
 
-  """All values that are contained in given list."""
-  key_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	key_in: [String!]
 
-  """All values that are not contained in given list."""
-  key_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	key_not_in: [String!]
 
-  """All values less than the given value."""
-  key_lt: String
+	"""
+	All values less than the given value.
+	"""
+	key_lt: String
 
-  """All values less than or equal the given value."""
-  key_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	key_lte: String
 
-  """All values greater than the given value."""
-  key_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	key_gt: String
 
-  """All values greater than or equal the given value."""
-  key_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	key_gte: String
 
-  """All values containing the given string."""
-  key_contains: String
+	"""
+	All values containing the given string.
+	"""
+	key_contains: String
 
-  """All values not containing the given string."""
-  key_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	key_not_contains: String
 
-  """All values starting with the given string."""
-  key_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	key_starts_with: String
 
-  """All values not starting with the given string."""
-  key_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	key_not_starts_with: String
 
-  """All values ending with the given string."""
-  key_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	key_ends_with: String
 
-  """All values not ending with the given string."""
-  key_not_ends_with: String
-  name: String
+	"""
+	All values not ending with the given string.
+	"""
+	key_not_ends_with: String
+	name: String
 
-  """All values that are not equal to given value."""
-  name_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	name_not: String
 
-  """All values that are contained in given list."""
-  name_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	name_in: [String!]
 
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	name_not_in: [String!]
 
-  """All values less than the given value."""
-  name_lt: String
+	"""
+	All values less than the given value.
+	"""
+	name_lt: String
 
-  """All values less than or equal the given value."""
-  name_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	name_lte: String
 
-  """All values greater than the given value."""
-  name_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	name_gt: String
 
-  """All values greater than or equal the given value."""
-  name_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	name_gte: String
 
-  """All values containing the given string."""
-  name_contains: String
+	"""
+	All values containing the given string.
+	"""
+	name_contains: String
 
-  """All values not containing the given string."""
-  name_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	name_not_contains: String
 
-  """All values starting with the given string."""
-  name_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	name_starts_with: String
 
-  """All values not starting with the given string."""
-  name_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	name_not_starts_with: String
 
-  """All values ending with the given string."""
-  name_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	name_ends_with: String
 
-  """All values not ending with the given string."""
-  name_not_ends_with: String
+	"""
+	All values not ending with the given string.
+	"""
+	name_not_ends_with: String
 }
 
 type AppKeySubscriptionPayload {
-  mutation: MutationType!
-  node: AppKey
-  updatedFields: [String!]
-  previousValues: AppKeyPreviousValues
+	mutation: MutationType!
+	node: AppKey
+	updatedFields: [String!]
+	previousValues: AppKeyPreviousValues
 }
 
 input AppKeySubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [AppKeySubscriptionWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [AppKeySubscriptionWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [AppKeySubscriptionWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [AppKeySubscriptionWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [AppKeySubscriptionWhereInput!]
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [AppKeySubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
-  mutation_in: [MutationType!]
+	"""
+	The subscription event gets dispatched when it's listed in mutation_in
+	"""
+	mutation_in: [MutationType!]
 
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
+	"""
+	The subscription event gets only dispatched when one of the updated fields names is included in this list
+	"""
+	updatedFields_contains: String
 
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
+	"""
+	The subscription event gets only dispatched when all of the field names included in this list have been updated
+	"""
+	updatedFields_contains_every: [String!]
 
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: AppKeyWhereInput
+	"""
+	The subscription event gets only dispatched when some of the field names included in this list have been updated
+	"""
+	updatedFields_contains_some: [String!]
+	node: AppKeyWhereInput
 }
 
 input AppKeyUpdateInput {
-  key: String
-  name: String
-  user: UserUpdateOneRequiredWithoutKeysInput
-  repositories: RepositoryUpdateManyWithoutAppKeyInput
+	key: String
+	name: String
+	user: UserUpdateOneRequiredWithoutKeysInput
+	repositories: RepositoryUpdateManyWithoutAppKeyInput
 }
 
 input AppKeyUpdateManyDataInput {
-  key: String
-  name: String
+	key: String
+	name: String
 }
 
 input AppKeyUpdateManyMutationInput {
-  key: String
-  name: String
+	key: String
+	name: String
 }
 
 input AppKeyUpdateManyWithoutUserInput {
-  create: [AppKeyCreateWithoutUserInput!]
-  connect: [AppKeyWhereUniqueInput!]
-  set: [AppKeyWhereUniqueInput!]
-  disconnect: [AppKeyWhereUniqueInput!]
-  delete: [AppKeyWhereUniqueInput!]
-  update: [AppKeyUpdateWithWhereUniqueWithoutUserInput!]
-  updateMany: [AppKeyUpdateManyWithWhereNestedInput!]
-  deleteMany: [AppKeyScalarWhereInput!]
-  upsert: [AppKeyUpsertWithWhereUniqueWithoutUserInput!]
+	create: [AppKeyCreateWithoutUserInput!]
+	connect: [AppKeyWhereUniqueInput!]
+	set: [AppKeyWhereUniqueInput!]
+	disconnect: [AppKeyWhereUniqueInput!]
+	delete: [AppKeyWhereUniqueInput!]
+	update: [AppKeyUpdateWithWhereUniqueWithoutUserInput!]
+	updateMany: [AppKeyUpdateManyWithWhereNestedInput!]
+	deleteMany: [AppKeyScalarWhereInput!]
+	upsert: [AppKeyUpsertWithWhereUniqueWithoutUserInput!]
 }
 
 input AppKeyUpdateManyWithWhereNestedInput {
-  where: AppKeyScalarWhereInput!
-  data: AppKeyUpdateManyDataInput!
+	where: AppKeyScalarWhereInput!
+	data: AppKeyUpdateManyDataInput!
 }
 
 input AppKeyUpdateOneRequiredWithoutRepositoriesInput {
-  create: AppKeyCreateWithoutRepositoriesInput
-  connect: AppKeyWhereUniqueInput
-  update: AppKeyUpdateWithoutRepositoriesDataInput
-  upsert: AppKeyUpsertWithoutRepositoriesInput
+	create: AppKeyCreateWithoutRepositoriesInput
+	connect: AppKeyWhereUniqueInput
+	update: AppKeyUpdateWithoutRepositoriesDataInput
+	upsert: AppKeyUpsertWithoutRepositoriesInput
 }
 
 input AppKeyUpdateWithoutRepositoriesDataInput {
-  key: String
-  name: String
-  user: UserUpdateOneRequiredWithoutKeysInput
+	key: String
+	name: String
+	user: UserUpdateOneRequiredWithoutKeysInput
 }
 
 input AppKeyUpdateWithoutUserDataInput {
-  key: String
-  name: String
-  repositories: RepositoryUpdateManyWithoutAppKeyInput
+	key: String
+	name: String
+	repositories: RepositoryUpdateManyWithoutAppKeyInput
 }
 
 input AppKeyUpdateWithWhereUniqueWithoutUserInput {
-  where: AppKeyWhereUniqueInput!
-  data: AppKeyUpdateWithoutUserDataInput!
+	where: AppKeyWhereUniqueInput!
+	data: AppKeyUpdateWithoutUserDataInput!
 }
 
 input AppKeyUpsertWithoutRepositoriesInput {
-  update: AppKeyUpdateWithoutRepositoriesDataInput!
-  create: AppKeyCreateWithoutRepositoriesInput!
+	update: AppKeyUpdateWithoutRepositoriesDataInput!
+	create: AppKeyCreateWithoutRepositoriesInput!
 }
 
 input AppKeyUpsertWithWhereUniqueWithoutUserInput {
-  where: AppKeyWhereUniqueInput!
-  update: AppKeyUpdateWithoutUserDataInput!
-  create: AppKeyCreateWithoutUserInput!
+	where: AppKeyWhereUniqueInput!
+	update: AppKeyUpdateWithoutUserDataInput!
+	create: AppKeyCreateWithoutUserInput!
 }
 
 input AppKeyWhereInput {
-  """Logical AND on all given filters."""
-  AND: [AppKeyWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [AppKeyWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [AppKeyWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [AppKeyWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [AppKeyWhereInput!]
-  id: ID
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [AppKeyWhereInput!]
+	id: ID
 
-  """All values that are not equal to given value."""
-  id_not: ID
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
 
-  """All values that are contained in given list."""
-  id_in: [ID!]
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
 
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
 
-  """All values less than the given value."""
-  id_lt: ID
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
 
-  """All values less than or equal the given value."""
-  id_lte: ID
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
 
-  """All values greater than the given value."""
-  id_gt: ID
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
 
-  """All values greater than or equal the given value."""
-  id_gte: ID
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
 
-  """All values containing the given string."""
-  id_contains: ID
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
 
-  """All values not containing the given string."""
-  id_not_contains: ID
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
 
-  """All values starting with the given string."""
-  id_starts_with: ID
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
 
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
 
-  """All values ending with the given string."""
-  id_ends_with: ID
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
 
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  key: String
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	key: String
 
-  """All values that are not equal to given value."""
-  key_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	key_not: String
 
-  """All values that are contained in given list."""
-  key_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	key_in: [String!]
 
-  """All values that are not contained in given list."""
-  key_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	key_not_in: [String!]
 
-  """All values less than the given value."""
-  key_lt: String
+	"""
+	All values less than the given value.
+	"""
+	key_lt: String
 
-  """All values less than or equal the given value."""
-  key_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	key_lte: String
 
-  """All values greater than the given value."""
-  key_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	key_gt: String
 
-  """All values greater than or equal the given value."""
-  key_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	key_gte: String
 
-  """All values containing the given string."""
-  key_contains: String
+	"""
+	All values containing the given string.
+	"""
+	key_contains: String
 
-  """All values not containing the given string."""
-  key_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	key_not_contains: String
 
-  """All values starting with the given string."""
-  key_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	key_starts_with: String
 
-  """All values not starting with the given string."""
-  key_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	key_not_starts_with: String
 
-  """All values ending with the given string."""
-  key_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	key_ends_with: String
 
-  """All values not ending with the given string."""
-  key_not_ends_with: String
-  name: String
+	"""
+	All values not ending with the given string.
+	"""
+	key_not_ends_with: String
+	name: String
 
-  """All values that are not equal to given value."""
-  name_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	name_not: String
 
-  """All values that are contained in given list."""
-  name_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	name_in: [String!]
 
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	name_not_in: [String!]
 
-  """All values less than the given value."""
-  name_lt: String
+	"""
+	All values less than the given value.
+	"""
+	name_lt: String
 
-  """All values less than or equal the given value."""
-  name_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	name_lte: String
 
-  """All values greater than the given value."""
-  name_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	name_gt: String
 
-  """All values greater than or equal the given value."""
-  name_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	name_gte: String
 
-  """All values containing the given string."""
-  name_contains: String
+	"""
+	All values containing the given string.
+	"""
+	name_contains: String
 
-  """All values not containing the given string."""
-  name_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	name_not_contains: String
 
-  """All values starting with the given string."""
-  name_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	name_starts_with: String
 
-  """All values not starting with the given string."""
-  name_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	name_not_starts_with: String
 
-  """All values ending with the given string."""
-  name_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	name_ends_with: String
 
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  user: UserWhereInput
-  repositories_every: RepositoryWhereInput
-  repositories_some: RepositoryWhereInput
-  repositories_none: RepositoryWhereInput
+	"""
+	All values not ending with the given string.
+	"""
+	name_not_ends_with: String
+	user: UserWhereInput
+	repositories_every: RepositoryWhereInput
+	repositories_some: RepositoryWhereInput
+	repositories_none: RepositoryWhereInput
 }
 
 input AppKeyWhereUniqueInput {
-  id: ID
-  key: String
+	id: ID
+	key: String
 }
 
 type BatchPayload {
-  """The number of nodes that have been affected by the Batch operation."""
-  count: Long!
+	"""
+	The number of nodes that have been affected by the Batch operation.
+	"""
+	count: Long!
 }
 
 scalar DateTime
 
-type GitHubWebhookEvent implements Node {
-  id: ID!
-  createdAt: DateTime!
-  repository: Repository!
-  eventType: String!
-  action: String
-  sender: String!
+type Game implements Node {
+	id: ID!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	repository: Repository!
+	title: String!
+	owner: User!
+	type: String!
 }
 
-"""A connection to a list of items."""
-type GitHubWebhookEventConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
+"""
+A connection to a list of items.
+"""
+type GameConnection {
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
 
-  """A list of edges."""
-  edges: [GitHubWebhookEventEdge]!
-  aggregate: AggregateGitHubWebhookEvent!
+	"""
+	A list of edges.
+	"""
+	edges: [GameEdge]!
+	aggregate: AggregateGame!
+}
+
+input GameCreateInput {
+	id: ID
+	title: String!
+	type: String!
+	repository: RepositoryCreateOneWithoutGameInput!
+	owner: UserCreateOneWithoutGamesOwnedInput!
+}
+
+input GameCreateManyWithoutOwnerInput {
+	create: [GameCreateWithoutOwnerInput!]
+	connect: [GameWhereUniqueInput!]
+}
+
+input GameCreateOneWithoutRepositoryInput {
+	create: GameCreateWithoutRepositoryInput
+	connect: GameWhereUniqueInput
+}
+
+input GameCreateWithoutOwnerInput {
+	id: ID
+	title: String!
+	type: String!
+	repository: RepositoryCreateOneWithoutGameInput!
+}
+
+input GameCreateWithoutRepositoryInput {
+	id: ID
+	title: String!
+	type: String!
+	owner: UserCreateOneWithoutGamesOwnedInput!
+}
+
+"""
+An edge in a connection.
+"""
+type GameEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Game!
+
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: String!
+}
+
+enum GameOrderByInput {
+	id_ASC
+	id_DESC
+	createdAt_ASC
+	createdAt_DESC
+	updatedAt_ASC
+	updatedAt_DESC
+	title_ASC
+	title_DESC
+	type_ASC
+	type_DESC
+}
+
+type GamePreviousValues {
+	id: ID!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	title: String!
+	type: String!
+}
+
+input GameScalarWhereInput {
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [GameScalarWhereInput!]
+
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [GameScalarWhereInput!]
+
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [GameScalarWhereInput!]
+	id: ID
+
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
+
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
+
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
+
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
+
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
+
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
+
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
+
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
+
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
+
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
+
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	createdAt: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAt_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	createdAt_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAt_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	createdAt_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAt_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	createdAt_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAt_gte: DateTime
+	updatedAt: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	updatedAt_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	updatedAt_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	updatedAt_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	updatedAt_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	updatedAt_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	updatedAt_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	updatedAt_gte: DateTime
+	title: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	title_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	title_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	title_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	title_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	title_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	title_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	title_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	title_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	title_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	title_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	title_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	title_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	title_not_ends_with: String
+	type: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	type_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	type_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	type_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	type_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	type_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	type_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	type_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	type_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	type_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	type_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	type_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	type_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	type_not_ends_with: String
+}
+
+type GameSubscriptionPayload {
+	mutation: MutationType!
+	node: Game
+	updatedFields: [String!]
+	previousValues: GamePreviousValues
+}
+
+input GameSubscriptionWhereInput {
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [GameSubscriptionWhereInput!]
+
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [GameSubscriptionWhereInput!]
+
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [GameSubscriptionWhereInput!]
+
+	"""
+	The subscription event gets dispatched when it's listed in mutation_in
+	"""
+	mutation_in: [MutationType!]
+
+	"""
+	The subscription event gets only dispatched when one of the updated fields names is included in this list
+	"""
+	updatedFields_contains: String
+
+	"""
+	The subscription event gets only dispatched when all of the field names included in this list have been updated
+	"""
+	updatedFields_contains_every: [String!]
+
+	"""
+	The subscription event gets only dispatched when some of the field names included in this list have been updated
+	"""
+	updatedFields_contains_some: [String!]
+	node: GameWhereInput
+}
+
+input GameUpdateInput {
+	title: String
+	type: String
+	repository: RepositoryUpdateOneRequiredWithoutGameInput
+	owner: UserUpdateOneRequiredWithoutGamesOwnedInput
+}
+
+input GameUpdateManyDataInput {
+	title: String
+	type: String
+}
+
+input GameUpdateManyMutationInput {
+	title: String
+	type: String
+}
+
+input GameUpdateManyWithoutOwnerInput {
+	create: [GameCreateWithoutOwnerInput!]
+	connect: [GameWhereUniqueInput!]
+	set: [GameWhereUniqueInput!]
+	disconnect: [GameWhereUniqueInput!]
+	delete: [GameWhereUniqueInput!]
+	update: [GameUpdateWithWhereUniqueWithoutOwnerInput!]
+	updateMany: [GameUpdateManyWithWhereNestedInput!]
+	deleteMany: [GameScalarWhereInput!]
+	upsert: [GameUpsertWithWhereUniqueWithoutOwnerInput!]
+}
+
+input GameUpdateManyWithWhereNestedInput {
+	where: GameScalarWhereInput!
+	data: GameUpdateManyDataInput!
+}
+
+input GameUpdateOneWithoutRepositoryInput {
+	create: GameCreateWithoutRepositoryInput
+	connect: GameWhereUniqueInput
+	disconnect: Boolean
+	delete: Boolean
+	update: GameUpdateWithoutRepositoryDataInput
+	upsert: GameUpsertWithoutRepositoryInput
+}
+
+input GameUpdateWithoutOwnerDataInput {
+	title: String
+	type: String
+	repository: RepositoryUpdateOneRequiredWithoutGameInput
+}
+
+input GameUpdateWithoutRepositoryDataInput {
+	title: String
+	type: String
+	owner: UserUpdateOneRequiredWithoutGamesOwnedInput
+}
+
+input GameUpdateWithWhereUniqueWithoutOwnerInput {
+	where: GameWhereUniqueInput!
+	data: GameUpdateWithoutOwnerDataInput!
+}
+
+input GameUpsertWithoutRepositoryInput {
+	update: GameUpdateWithoutRepositoryDataInput!
+	create: GameCreateWithoutRepositoryInput!
+}
+
+input GameUpsertWithWhereUniqueWithoutOwnerInput {
+	where: GameWhereUniqueInput!
+	update: GameUpdateWithoutOwnerDataInput!
+	create: GameCreateWithoutOwnerInput!
+}
+
+input GameWhereInput {
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [GameWhereInput!]
+
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [GameWhereInput!]
+
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [GameWhereInput!]
+	id: ID
+
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
+
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
+
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
+
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
+
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
+
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
+
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
+
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
+
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
+
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
+
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	createdAt: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAt_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	createdAt_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAt_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	createdAt_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAt_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	createdAt_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAt_gte: DateTime
+	updatedAt: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	updatedAt_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	updatedAt_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	updatedAt_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	updatedAt_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	updatedAt_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	updatedAt_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	updatedAt_gte: DateTime
+	title: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	title_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	title_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	title_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	title_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	title_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	title_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	title_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	title_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	title_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	title_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	title_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	title_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	title_not_ends_with: String
+	type: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	type_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	type_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	type_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	type_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	type_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	type_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	type_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	type_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	type_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	type_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	type_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	type_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	type_not_ends_with: String
+	repository: RepositoryWhereInput
+	owner: UserWhereInput
+}
+
+input GameWhereUniqueInput {
+	id: ID
+}
+
+type GitHubWebhookEvent implements Node {
+	id: ID!
+	createdAt: DateTime!
+	repository: Repository!
+	eventType: String!
+	action: String
+	sender: String!
+}
+
+"""
+A connection to a list of items.
+"""
+type GitHubWebhookEventConnection {
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+
+	"""
+	A list of edges.
+	"""
+	edges: [GitHubWebhookEventEdge]!
+	aggregate: AggregateGitHubWebhookEvent!
 }
 
 input GitHubWebhookEventCreateInput {
-  id: ID
-  eventType: String!
-  action: String
-  sender: String!
-  repository: RepositoryCreateOneWithoutWebhookEventsInput!
+	id: ID
+	eventType: String!
+	action: String
+	sender: String!
+	repository: RepositoryCreateOneWithoutWebhookEventsInput!
 }
 
 input GitHubWebhookEventCreateManyWithoutRepositoryInput {
-  create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
-  connect: [GitHubWebhookEventWhereUniqueInput!]
+	create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
+	connect: [GitHubWebhookEventWhereUniqueInput!]
 }
 
 input GitHubWebhookEventCreateWithoutRepositoryInput {
-  id: ID
-  eventType: String!
-  action: String
-  sender: String!
+	id: ID
+	eventType: String!
+	action: String
+	sender: String!
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type GitHubWebhookEventEdge {
-  """The item at the end of the edge."""
-  node: GitHubWebhookEvent!
+	"""
+	The item at the end of the edge.
+	"""
+	node: GitHubWebhookEvent!
 
-  """A cursor for use in pagination."""
-  cursor: String!
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: String!
 }
 
 enum GitHubWebhookEventOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  eventType_ASC
-  eventType_DESC
-  action_ASC
-  action_DESC
-  sender_ASC
-  sender_DESC
+	id_ASC
+	id_DESC
+	createdAt_ASC
+	createdAt_DESC
+	eventType_ASC
+	eventType_DESC
+	action_ASC
+	action_DESC
+	sender_ASC
+	sender_DESC
 }
 
 type GitHubWebhookEventPreviousValues {
-  id: ID!
-  createdAt: DateTime!
-  eventType: String!
-  action: String
-  sender: String!
+	id: ID!
+	createdAt: DateTime!
+	eventType: String!
+	action: String
+	sender: String!
 }
 
 input GitHubWebhookEventScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [GitHubWebhookEventScalarWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [GitHubWebhookEventScalarWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [GitHubWebhookEventScalarWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [GitHubWebhookEventScalarWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [GitHubWebhookEventScalarWhereInput!]
-  id: ID
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [GitHubWebhookEventScalarWhereInput!]
+	id: ID
 
-  """All values that are not equal to given value."""
-  id_not: ID
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
 
-  """All values that are contained in given list."""
-  id_in: [ID!]
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
 
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
 
-  """All values less than the given value."""
-  id_lt: ID
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
 
-  """All values less than or equal the given value."""
-  id_lte: ID
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
 
-  """All values greater than the given value."""
-  id_gt: ID
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
 
-  """All values greater than or equal the given value."""
-  id_gte: ID
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
 
-  """All values containing the given string."""
-  id_contains: ID
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
 
-  """All values not containing the given string."""
-  id_not_contains: ID
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
 
-  """All values starting with the given string."""
-  id_starts_with: ID
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
 
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
 
-  """All values ending with the given string."""
-  id_ends_with: ID
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
 
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  createdAt: DateTime
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	createdAt: DateTime
 
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAt_not: DateTime
 
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
+	"""
+	All values that are contained in given list.
+	"""
+	createdAt_in: [DateTime!]
 
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAt_not_in: [DateTime!]
 
-  """All values less than the given value."""
-  createdAt_lt: DateTime
+	"""
+	All values less than the given value.
+	"""
+	createdAt_lt: DateTime
 
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAt_lte: DateTime
 
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
+	"""
+	All values greater than the given value.
+	"""
+	createdAt_gt: DateTime
 
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  eventType: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAt_gte: DateTime
+	eventType: String
 
-  """All values that are not equal to given value."""
-  eventType_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	eventType_not: String
 
-  """All values that are contained in given list."""
-  eventType_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	eventType_in: [String!]
 
-  """All values that are not contained in given list."""
-  eventType_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	eventType_not_in: [String!]
 
-  """All values less than the given value."""
-  eventType_lt: String
+	"""
+	All values less than the given value.
+	"""
+	eventType_lt: String
 
-  """All values less than or equal the given value."""
-  eventType_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	eventType_lte: String
 
-  """All values greater than the given value."""
-  eventType_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	eventType_gt: String
 
-  """All values greater than or equal the given value."""
-  eventType_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	eventType_gte: String
 
-  """All values containing the given string."""
-  eventType_contains: String
+	"""
+	All values containing the given string.
+	"""
+	eventType_contains: String
 
-  """All values not containing the given string."""
-  eventType_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	eventType_not_contains: String
 
-  """All values starting with the given string."""
-  eventType_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	eventType_starts_with: String
 
-  """All values not starting with the given string."""
-  eventType_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	eventType_not_starts_with: String
 
-  """All values ending with the given string."""
-  eventType_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	eventType_ends_with: String
 
-  """All values not ending with the given string."""
-  eventType_not_ends_with: String
-  action: String
+	"""
+	All values not ending with the given string.
+	"""
+	eventType_not_ends_with: String
+	action: String
 
-  """All values that are not equal to given value."""
-  action_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	action_not: String
 
-  """All values that are contained in given list."""
-  action_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	action_in: [String!]
 
-  """All values that are not contained in given list."""
-  action_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	action_not_in: [String!]
 
-  """All values less than the given value."""
-  action_lt: String
+	"""
+	All values less than the given value.
+	"""
+	action_lt: String
 
-  """All values less than or equal the given value."""
-  action_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	action_lte: String
 
-  """All values greater than the given value."""
-  action_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	action_gt: String
 
-  """All values greater than or equal the given value."""
-  action_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	action_gte: String
 
-  """All values containing the given string."""
-  action_contains: String
+	"""
+	All values containing the given string.
+	"""
+	action_contains: String
 
-  """All values not containing the given string."""
-  action_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	action_not_contains: String
 
-  """All values starting with the given string."""
-  action_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	action_starts_with: String
 
-  """All values not starting with the given string."""
-  action_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	action_not_starts_with: String
 
-  """All values ending with the given string."""
-  action_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	action_ends_with: String
 
-  """All values not ending with the given string."""
-  action_not_ends_with: String
-  sender: String
+	"""
+	All values not ending with the given string.
+	"""
+	action_not_ends_with: String
+	sender: String
 
-  """All values that are not equal to given value."""
-  sender_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	sender_not: String
 
-  """All values that are contained in given list."""
-  sender_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	sender_in: [String!]
 
-  """All values that are not contained in given list."""
-  sender_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	sender_not_in: [String!]
 
-  """All values less than the given value."""
-  sender_lt: String
+	"""
+	All values less than the given value.
+	"""
+	sender_lt: String
 
-  """All values less than or equal the given value."""
-  sender_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	sender_lte: String
 
-  """All values greater than the given value."""
-  sender_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	sender_gt: String
 
-  """All values greater than or equal the given value."""
-  sender_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	sender_gte: String
 
-  """All values containing the given string."""
-  sender_contains: String
+	"""
+	All values containing the given string.
+	"""
+	sender_contains: String
 
-  """All values not containing the given string."""
-  sender_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	sender_not_contains: String
 
-  """All values starting with the given string."""
-  sender_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	sender_starts_with: String
 
-  """All values not starting with the given string."""
-  sender_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	sender_not_starts_with: String
 
-  """All values ending with the given string."""
-  sender_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	sender_ends_with: String
 
-  """All values not ending with the given string."""
-  sender_not_ends_with: String
+	"""
+	All values not ending with the given string.
+	"""
+	sender_not_ends_with: String
 }
 
 type GitHubWebhookEventSubscriptionPayload {
-  mutation: MutationType!
-  node: GitHubWebhookEvent
-  updatedFields: [String!]
-  previousValues: GitHubWebhookEventPreviousValues
+	mutation: MutationType!
+	node: GitHubWebhookEvent
+	updatedFields: [String!]
+	previousValues: GitHubWebhookEventPreviousValues
 }
 
 input GitHubWebhookEventSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [GitHubWebhookEventSubscriptionWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [GitHubWebhookEventSubscriptionWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [GitHubWebhookEventSubscriptionWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [GitHubWebhookEventSubscriptionWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [GitHubWebhookEventSubscriptionWhereInput!]
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [GitHubWebhookEventSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
-  mutation_in: [MutationType!]
+	"""
+	The subscription event gets dispatched when it's listed in mutation_in
+	"""
+	mutation_in: [MutationType!]
 
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
+	"""
+	The subscription event gets only dispatched when one of the updated fields names is included in this list
+	"""
+	updatedFields_contains: String
 
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
+	"""
+	The subscription event gets only dispatched when all of the field names included in this list have been updated
+	"""
+	updatedFields_contains_every: [String!]
 
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: GitHubWebhookEventWhereInput
+	"""
+	The subscription event gets only dispatched when some of the field names included in this list have been updated
+	"""
+	updatedFields_contains_some: [String!]
+	node: GitHubWebhookEventWhereInput
 }
 
 input GitHubWebhookEventUpdateInput {
-  eventType: String
-  action: String
-  sender: String
-  repository: RepositoryUpdateOneRequiredWithoutWebhookEventsInput
+	eventType: String
+	action: String
+	sender: String
+	repository: RepositoryUpdateOneRequiredWithoutWebhookEventsInput
 }
 
 input GitHubWebhookEventUpdateManyDataInput {
-  eventType: String
-  action: String
-  sender: String
+	eventType: String
+	action: String
+	sender: String
 }
 
 input GitHubWebhookEventUpdateManyMutationInput {
-  eventType: String
-  action: String
-  sender: String
+	eventType: String
+	action: String
+	sender: String
 }
 
 input GitHubWebhookEventUpdateManyWithoutRepositoryInput {
-  create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
-  connect: [GitHubWebhookEventWhereUniqueInput!]
-  set: [GitHubWebhookEventWhereUniqueInput!]
-  disconnect: [GitHubWebhookEventWhereUniqueInput!]
-  delete: [GitHubWebhookEventWhereUniqueInput!]
-  update: [GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput!]
-  updateMany: [GitHubWebhookEventUpdateManyWithWhereNestedInput!]
-  deleteMany: [GitHubWebhookEventScalarWhereInput!]
-  upsert: [GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput!]
+	create: [GitHubWebhookEventCreateWithoutRepositoryInput!]
+	connect: [GitHubWebhookEventWhereUniqueInput!]
+	set: [GitHubWebhookEventWhereUniqueInput!]
+	disconnect: [GitHubWebhookEventWhereUniqueInput!]
+	delete: [GitHubWebhookEventWhereUniqueInput!]
+	update: [GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput!]
+	updateMany: [GitHubWebhookEventUpdateManyWithWhereNestedInput!]
+	deleteMany: [GitHubWebhookEventScalarWhereInput!]
+	upsert: [GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput!]
 }
 
 input GitHubWebhookEventUpdateManyWithWhereNestedInput {
-  where: GitHubWebhookEventScalarWhereInput!
-  data: GitHubWebhookEventUpdateManyDataInput!
+	where: GitHubWebhookEventScalarWhereInput!
+	data: GitHubWebhookEventUpdateManyDataInput!
 }
 
 input GitHubWebhookEventUpdateWithoutRepositoryDataInput {
-  eventType: String
-  action: String
-  sender: String
+	eventType: String
+	action: String
+	sender: String
 }
 
 input GitHubWebhookEventUpdateWithWhereUniqueWithoutRepositoryInput {
-  where: GitHubWebhookEventWhereUniqueInput!
-  data: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
+	where: GitHubWebhookEventWhereUniqueInput!
+	data: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
 }
 
 input GitHubWebhookEventUpsertWithWhereUniqueWithoutRepositoryInput {
-  where: GitHubWebhookEventWhereUniqueInput!
-  update: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
-  create: GitHubWebhookEventCreateWithoutRepositoryInput!
+	where: GitHubWebhookEventWhereUniqueInput!
+	update: GitHubWebhookEventUpdateWithoutRepositoryDataInput!
+	create: GitHubWebhookEventCreateWithoutRepositoryInput!
 }
 
 input GitHubWebhookEventWhereInput {
-  """Logical AND on all given filters."""
-  AND: [GitHubWebhookEventWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [GitHubWebhookEventWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [GitHubWebhookEventWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [GitHubWebhookEventWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [GitHubWebhookEventWhereInput!]
-  id: ID
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [GitHubWebhookEventWhereInput!]
+	id: ID
 
-  """All values that are not equal to given value."""
-  id_not: ID
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
 
-  """All values that are contained in given list."""
-  id_in: [ID!]
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
 
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
 
-  """All values less than the given value."""
-  id_lt: ID
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
 
-  """All values less than or equal the given value."""
-  id_lte: ID
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
 
-  """All values greater than the given value."""
-  id_gt: ID
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
 
-  """All values greater than or equal the given value."""
-  id_gte: ID
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
 
-  """All values containing the given string."""
-  id_contains: ID
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
 
-  """All values not containing the given string."""
-  id_not_contains: ID
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
 
-  """All values starting with the given string."""
-  id_starts_with: ID
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
 
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
 
-  """All values ending with the given string."""
-  id_ends_with: ID
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
 
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  createdAt: DateTime
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	createdAt: DateTime
 
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAt_not: DateTime
 
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
+	"""
+	All values that are contained in given list.
+	"""
+	createdAt_in: [DateTime!]
 
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAt_not_in: [DateTime!]
 
-  """All values less than the given value."""
-  createdAt_lt: DateTime
+	"""
+	All values less than the given value.
+	"""
+	createdAt_lt: DateTime
 
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAt_lte: DateTime
 
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
+	"""
+	All values greater than the given value.
+	"""
+	createdAt_gt: DateTime
 
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  eventType: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAt_gte: DateTime
+	eventType: String
 
-  """All values that are not equal to given value."""
-  eventType_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	eventType_not: String
 
-  """All values that are contained in given list."""
-  eventType_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	eventType_in: [String!]
 
-  """All values that are not contained in given list."""
-  eventType_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	eventType_not_in: [String!]
 
-  """All values less than the given value."""
-  eventType_lt: String
+	"""
+	All values less than the given value.
+	"""
+	eventType_lt: String
 
-  """All values less than or equal the given value."""
-  eventType_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	eventType_lte: String
 
-  """All values greater than the given value."""
-  eventType_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	eventType_gt: String
 
-  """All values greater than or equal the given value."""
-  eventType_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	eventType_gte: String
 
-  """All values containing the given string."""
-  eventType_contains: String
+	"""
+	All values containing the given string.
+	"""
+	eventType_contains: String
 
-  """All values not containing the given string."""
-  eventType_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	eventType_not_contains: String
 
-  """All values starting with the given string."""
-  eventType_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	eventType_starts_with: String
 
-  """All values not starting with the given string."""
-  eventType_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	eventType_not_starts_with: String
 
-  """All values ending with the given string."""
-  eventType_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	eventType_ends_with: String
 
-  """All values not ending with the given string."""
-  eventType_not_ends_with: String
-  action: String
+	"""
+	All values not ending with the given string.
+	"""
+	eventType_not_ends_with: String
+	action: String
 
-  """All values that are not equal to given value."""
-  action_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	action_not: String
 
-  """All values that are contained in given list."""
-  action_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	action_in: [String!]
 
-  """All values that are not contained in given list."""
-  action_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	action_not_in: [String!]
 
-  """All values less than the given value."""
-  action_lt: String
+	"""
+	All values less than the given value.
+	"""
+	action_lt: String
 
-  """All values less than or equal the given value."""
-  action_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	action_lte: String
 
-  """All values greater than the given value."""
-  action_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	action_gt: String
 
-  """All values greater than or equal the given value."""
-  action_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	action_gte: String
 
-  """All values containing the given string."""
-  action_contains: String
+	"""
+	All values containing the given string.
+	"""
+	action_contains: String
 
-  """All values not containing the given string."""
-  action_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	action_not_contains: String
 
-  """All values starting with the given string."""
-  action_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	action_starts_with: String
 
-  """All values not starting with the given string."""
-  action_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	action_not_starts_with: String
 
-  """All values ending with the given string."""
-  action_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	action_ends_with: String
 
-  """All values not ending with the given string."""
-  action_not_ends_with: String
-  sender: String
+	"""
+	All values not ending with the given string.
+	"""
+	action_not_ends_with: String
+	sender: String
 
-  """All values that are not equal to given value."""
-  sender_not: String
+	"""
+	All values that are not equal to given value.
+	"""
+	sender_not: String
 
-  """All values that are contained in given list."""
-  sender_in: [String!]
+	"""
+	All values that are contained in given list.
+	"""
+	sender_in: [String!]
 
-  """All values that are not contained in given list."""
-  sender_not_in: [String!]
+	"""
+	All values that are not contained in given list.
+	"""
+	sender_not_in: [String!]
 
-  """All values less than the given value."""
-  sender_lt: String
+	"""
+	All values less than the given value.
+	"""
+	sender_lt: String
 
-  """All values less than or equal the given value."""
-  sender_lte: String
+	"""
+	All values less than or equal the given value.
+	"""
+	sender_lte: String
 
-  """All values greater than the given value."""
-  sender_gt: String
+	"""
+	All values greater than the given value.
+	"""
+	sender_gt: String
 
-  """All values greater than or equal the given value."""
-  sender_gte: String
+	"""
+	All values greater than or equal the given value.
+	"""
+	sender_gte: String
 
-  """All values containing the given string."""
-  sender_contains: String
+	"""
+	All values containing the given string.
+	"""
+	sender_contains: String
 
-  """All values not containing the given string."""
-  sender_not_contains: String
+	"""
+	All values not containing the given string.
+	"""
+	sender_not_contains: String
 
-  """All values starting with the given string."""
-  sender_starts_with: String
+	"""
+	All values starting with the given string.
+	"""
+	sender_starts_with: String
 
-  """All values not starting with the given string."""
-  sender_not_starts_with: String
+	"""
+	All values not starting with the given string.
+	"""
+	sender_not_starts_with: String
 
-  """All values ending with the given string."""
-  sender_ends_with: String
+	"""
+	All values ending with the given string.
+	"""
+	sender_ends_with: String
 
-  """All values not ending with the given string."""
-  sender_not_ends_with: String
-  repository: RepositoryWhereInput
+	"""
+	All values not ending with the given string.
+	"""
+	sender_not_ends_with: String
+	repository: RepositoryWhereInput
 }
 
 input GitHubWebhookEventWhereUniqueInput {
-  id: ID
+	id: ID
 }
 
-"""Raw JSON value"""
+"""
+Raw JSON value
+"""
 scalar Json
 
 """
@@ -1035,2080 +2297,3237 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createUser(data: UserCreateInput!): User!
-  createAppKey(data: AppKeyCreateInput!): AppKey!
-  createRepository(data: RepositoryCreateInput!): Repository!
-  createGitHubWebhookEvent(data: GitHubWebhookEventCreateInput!): GitHubWebhookEvent!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateAppKey(data: AppKeyUpdateInput!, where: AppKeyWhereUniqueInput!): AppKey
-  updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
-  updateGitHubWebhookEvent(data: GitHubWebhookEventUpdateInput!, where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
-  deleteUser(where: UserWhereUniqueInput!): User
-  deleteAppKey(where: AppKeyWhereUniqueInput!): AppKey
-  deleteRepository(where: RepositoryWhereUniqueInput!): Repository
-  deleteGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertAppKey(where: AppKeyWhereUniqueInput!, create: AppKeyCreateInput!, update: AppKeyUpdateInput!): AppKey!
-  upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
-  upsertGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!, create: GitHubWebhookEventCreateInput!, update: GitHubWebhookEventUpdateInput!): GitHubWebhookEvent!
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  updateManyAppKeys(data: AppKeyUpdateManyMutationInput!, where: AppKeyWhereInput): BatchPayload!
-  updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
-  updateManyGitHubWebhookEvents(data: GitHubWebhookEventUpdateManyMutationInput!, where: GitHubWebhookEventWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyAppKeys(where: AppKeyWhereInput): BatchPayload!
-  deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
-  deleteManyGitHubWebhookEvents(where: GitHubWebhookEventWhereInput): BatchPayload!
-  executeRaw(database: PrismaDatabase, query: String!): Json!
+	createUser(data: UserCreateInput!): User!
+	createAppKey(data: AppKeyCreateInput!): AppKey!
+	createRepository(data: RepositoryCreateInput!): Repository!
+	createGitHubWebhookEvent(data: GitHubWebhookEventCreateInput!): GitHubWebhookEvent!
+	createGame(data: GameCreateInput!): Game!
+	updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+	updateAppKey(data: AppKeyUpdateInput!, where: AppKeyWhereUniqueInput!): AppKey
+	updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
+	updateGitHubWebhookEvent(
+		data: GitHubWebhookEventUpdateInput!
+		where: GitHubWebhookEventWhereUniqueInput!
+	): GitHubWebhookEvent
+	updateGame(data: GameUpdateInput!, where: GameWhereUniqueInput!): Game
+	deleteUser(where: UserWhereUniqueInput!): User
+	deleteAppKey(where: AppKeyWhereUniqueInput!): AppKey
+	deleteRepository(where: RepositoryWhereUniqueInput!): Repository
+	deleteGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
+	deleteGame(where: GameWhereUniqueInput!): Game
+	upsertUser(
+		where: UserWhereUniqueInput!
+		create: UserCreateInput!
+		update: UserUpdateInput!
+	): User!
+	upsertAppKey(
+		where: AppKeyWhereUniqueInput!
+		create: AppKeyCreateInput!
+		update: AppKeyUpdateInput!
+	): AppKey!
+	upsertRepository(
+		where: RepositoryWhereUniqueInput!
+		create: RepositoryCreateInput!
+		update: RepositoryUpdateInput!
+	): Repository!
+	upsertGitHubWebhookEvent(
+		where: GitHubWebhookEventWhereUniqueInput!
+		create: GitHubWebhookEventCreateInput!
+		update: GitHubWebhookEventUpdateInput!
+	): GitHubWebhookEvent!
+	upsertGame(
+		where: GameWhereUniqueInput!
+		create: GameCreateInput!
+		update: GameUpdateInput!
+	): Game!
+	updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+	updateManyAppKeys(data: AppKeyUpdateManyMutationInput!, where: AppKeyWhereInput): BatchPayload!
+	updateManyRepositories(
+		data: RepositoryUpdateManyMutationInput!
+		where: RepositoryWhereInput
+	): BatchPayload!
+	updateManyGitHubWebhookEvents(
+		data: GitHubWebhookEventUpdateManyMutationInput!
+		where: GitHubWebhookEventWhereInput
+	): BatchPayload!
+	updateManyGames(data: GameUpdateManyMutationInput!, where: GameWhereInput): BatchPayload!
+	deleteManyUsers(where: UserWhereInput): BatchPayload!
+	deleteManyAppKeys(where: AppKeyWhereInput): BatchPayload!
+	deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
+	deleteManyGitHubWebhookEvents(where: GitHubWebhookEventWhereInput): BatchPayload!
+	deleteManyGames(where: GameWhereInput): BatchPayload!
+	executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
 enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
+	CREATED
+	UPDATED
+	DELETED
 }
 
-"""An object with an ID"""
+"""
+An object with an ID
+"""
 interface Node {
-  """The id of the object."""
-  id: ID!
+	"""
+	The id of the object.
+	"""
+	id: ID!
 }
 
-"""Information about pagination in a connection."""
+"""
+Information about pagination in a connection.
+"""
 type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
+	"""
+	When paginating forwards, are there more items?
+	"""
+	hasNextPage: Boolean!
 
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
+	"""
+	When paginating backwards, are there more items?
+	"""
+	hasPreviousPage: Boolean!
 
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
+	"""
+	When paginating backwards, the cursor to continue.
+	"""
+	startCursor: String
 
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
+	"""
+	When paginating forwards, the cursor to continue.
+	"""
+	endCursor: String
 }
 
 enum PrismaDatabase {
-  default
+	default
 }
 
 type Query {
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  appKeys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey]!
-  repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
-  gitHubWebhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent]!
-  user(where: UserWhereUniqueInput!): User
-  appKey(where: AppKeyWhereUniqueInput!): AppKey
-  repository(where: RepositoryWhereUniqueInput!): Repository
-  gitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  appKeysConnection(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppKeyConnection!
-  repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
-  gitHubWebhookEventsConnection(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GitHubWebhookEventConnection!
+	users(
+		where: UserWhereInput
+		orderBy: UserOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [User]!
+	appKeys(
+		where: AppKeyWhereInput
+		orderBy: AppKeyOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [AppKey]!
+	repositories(
+		where: RepositoryWhereInput
+		orderBy: RepositoryOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [Repository]!
+	gitHubWebhookEvents(
+		where: GitHubWebhookEventWhereInput
+		orderBy: GitHubWebhookEventOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [GitHubWebhookEvent]!
+	games(
+		where: GameWhereInput
+		orderBy: GameOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [Game]!
+	user(where: UserWhereUniqueInput!): User
+	appKey(where: AppKeyWhereUniqueInput!): AppKey
+	repository(where: RepositoryWhereUniqueInput!): Repository
+	gitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
+	game(where: GameWhereUniqueInput!): Game
+	usersConnection(
+		where: UserWhereInput
+		orderBy: UserOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): UserConnection!
+	appKeysConnection(
+		where: AppKeyWhereInput
+		orderBy: AppKeyOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): AppKeyConnection!
+	repositoriesConnection(
+		where: RepositoryWhereInput
+		orderBy: RepositoryOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): RepositoryConnection!
+	gitHubWebhookEventsConnection(
+		where: GitHubWebhookEventWhereInput
+		orderBy: GitHubWebhookEventOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): GitHubWebhookEventConnection!
+	gamesConnection(
+		where: GameWhereInput
+		orderBy: GameOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): GameConnection!
 
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
+	"""
+	Fetches an object given its ID
+	"""
+	node(
+		"""
+		The ID of an object
+		"""
+		id: ID!
+	): Node
 }
 
 type Repository implements Node {
-  id: ID!
-  idExternal: String!
-  createdAtExternal: DateTime!
-  updatedAtExternal: DateTime!
-  addedBy: User!
-  name: String!
-  description: String!
-  homepageUrl: String
-  url: String!
-  owner: String!
-  isTracked: Boolean!
-  appKey: AppKey!
-  isFork: Boolean!
-  isLocked: Boolean!
-  isPrivate: Boolean!
-  isArchived: Boolean!
-  isDisabled: Boolean!
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  webhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent!]
+	id: ID!
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	addedBy: User!
+	name: String!
+	description: String!
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	appKey: AppKey!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	webhookEvents(
+		where: GitHubWebhookEventWhereInput
+		orderBy: GitHubWebhookEventOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [GitHubWebhookEvent!]
+	game: Game
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type RepositoryConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
 
-  """A list of edges."""
-  edges: [RepositoryEdge]!
-  aggregate: AggregateRepository!
+	"""
+	A list of edges.
+	"""
+	edges: [RepositoryEdge]!
+	aggregate: AggregateRepository!
 }
 
 input RepositoryCreateInput {
-  id: ID
-  idExternal: String!
-  createdAtExternal: DateTime!
-  updatedAtExternal: DateTime!
-  name: String!
-  description: String
-  homepageUrl: String
-  url: String!
-  owner: String!
-  isTracked: Boolean!
-  isFork: Boolean!
-  isLocked: Boolean!
-  isPrivate: Boolean!
-  isArchived: Boolean!
-  isDisabled: Boolean!
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
-  appKey: AppKeyCreateOneWithoutRepositoriesInput!
-  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+	id: ID
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	name: String!
+	description: String
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+	appKey: AppKeyCreateOneWithoutRepositoriesInput!
+	webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+	game: GameCreateOneWithoutRepositoryInput
 }
 
 input RepositoryCreateManyWithoutAddedByInput {
-  create: [RepositoryCreateWithoutAddedByInput!]
-  connect: [RepositoryWhereUniqueInput!]
+	create: [RepositoryCreateWithoutAddedByInput!]
+	connect: [RepositoryWhereUniqueInput!]
 }
 
 input RepositoryCreateManyWithoutAppKeyInput {
-  create: [RepositoryCreateWithoutAppKeyInput!]
-  connect: [RepositoryWhereUniqueInput!]
+	create: [RepositoryCreateWithoutAppKeyInput!]
+	connect: [RepositoryWhereUniqueInput!]
+}
+
+input RepositoryCreateOneWithoutGameInput {
+	create: RepositoryCreateWithoutGameInput
+	connect: RepositoryWhereUniqueInput
 }
 
 input RepositoryCreateOneWithoutWebhookEventsInput {
-  create: RepositoryCreateWithoutWebhookEventsInput
-  connect: RepositoryWhereUniqueInput
+	create: RepositoryCreateWithoutWebhookEventsInput
+	connect: RepositoryWhereUniqueInput
 }
 
 input RepositoryCreateWithoutAddedByInput {
-  id: ID
-  idExternal: String!
-  createdAtExternal: DateTime!
-  updatedAtExternal: DateTime!
-  name: String!
-  description: String
-  homepageUrl: String
-  url: String!
-  owner: String!
-  isTracked: Boolean!
-  isFork: Boolean!
-  isLocked: Boolean!
-  isPrivate: Boolean!
-  isArchived: Boolean!
-  isDisabled: Boolean!
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  appKey: AppKeyCreateOneWithoutRepositoriesInput!
-  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+	id: ID
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	name: String!
+	description: String
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	appKey: AppKeyCreateOneWithoutRepositoriesInput!
+	webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+	game: GameCreateOneWithoutRepositoryInput
 }
 
 input RepositoryCreateWithoutAppKeyInput {
-  id: ID
-  idExternal: String!
-  createdAtExternal: DateTime!
-  updatedAtExternal: DateTime!
-  name: String!
-  description: String
-  homepageUrl: String
-  url: String!
-  owner: String!
-  isTracked: Boolean!
-  isFork: Boolean!
-  isLocked: Boolean!
-  isPrivate: Boolean!
-  isArchived: Boolean!
-  isDisabled: Boolean!
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
-  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+	id: ID
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	name: String!
+	description: String
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+	webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+	game: GameCreateOneWithoutRepositoryInput
+}
+
+input RepositoryCreateWithoutGameInput {
+	id: ID
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	name: String!
+	description: String
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+	appKey: AppKeyCreateOneWithoutRepositoriesInput!
+	webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
 }
 
 input RepositoryCreateWithoutWebhookEventsInput {
-  id: ID
-  idExternal: String!
-  createdAtExternal: DateTime!
-  updatedAtExternal: DateTime!
-  name: String!
-  description: String
-  homepageUrl: String
-  url: String!
-  owner: String!
-  isTracked: Boolean!
-  isFork: Boolean!
-  isLocked: Boolean!
-  isPrivate: Boolean!
-  isArchived: Boolean!
-  isDisabled: Boolean!
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
-  appKey: AppKeyCreateOneWithoutRepositoriesInput!
+	id: ID
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	name: String!
+	description: String
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+	appKey: AppKeyCreateOneWithoutRepositoriesInput!
+	game: GameCreateOneWithoutRepositoryInput
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type RepositoryEdge {
-  """The item at the end of the edge."""
-  node: Repository!
+	"""
+	The item at the end of the edge.
+	"""
+	node: Repository!
 
-  """A cursor for use in pagination."""
-  cursor: String!
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: String!
 }
 
 enum RepositoryOrderByInput {
-  id_ASC
-  id_DESC
-  idExternal_ASC
-  idExternal_DESC
-  createdAtExternal_ASC
-  createdAtExternal_DESC
-  updatedAtExternal_ASC
-  updatedAtExternal_DESC
-  name_ASC
-  name_DESC
-  description_ASC
-  description_DESC
-  homepageUrl_ASC
-  homepageUrl_DESC
-  url_ASC
-  url_DESC
-  owner_ASC
-  owner_DESC
-  isTracked_ASC
-  isTracked_DESC
-  isFork_ASC
-  isFork_DESC
-  isLocked_ASC
-  isLocked_DESC
-  isPrivate_ASC
-  isPrivate_DESC
-  isArchived_ASC
-  isArchived_DESC
-  isDisabled_ASC
-  isDisabled_DESC
-  sshUrl_ASC
-  sshUrl_DESC
-  stargazers_ASC
-  stargazers_DESC
-  collaborators_ASC
-  collaborators_DESC
-  watchers_ASC
-  watchers_DESC
-  issues_ASC
-  issues_DESC
-  pullRequests_ASC
-  pullRequests_DESC
+	id_ASC
+	id_DESC
+	idExternal_ASC
+	idExternal_DESC
+	createdAtExternal_ASC
+	createdAtExternal_DESC
+	updatedAtExternal_ASC
+	updatedAtExternal_DESC
+	name_ASC
+	name_DESC
+	description_ASC
+	description_DESC
+	homepageUrl_ASC
+	homepageUrl_DESC
+	url_ASC
+	url_DESC
+	owner_ASC
+	owner_DESC
+	isTracked_ASC
+	isTracked_DESC
+	isFork_ASC
+	isFork_DESC
+	isLocked_ASC
+	isLocked_DESC
+	isPrivate_ASC
+	isPrivate_DESC
+	isArchived_ASC
+	isArchived_DESC
+	isDisabled_ASC
+	isDisabled_DESC
+	sshUrl_ASC
+	sshUrl_DESC
+	stargazers_ASC
+	stargazers_DESC
+	collaborators_ASC
+	collaborators_DESC
+	watchers_ASC
+	watchers_DESC
+	issues_ASC
+	issues_DESC
+	pullRequests_ASC
+	pullRequests_DESC
 }
 
 type RepositoryPreviousValues {
-  id: ID!
-  idExternal: String!
-  createdAtExternal: DateTime!
-  updatedAtExternal: DateTime!
-  name: String!
-  description: String!
-  homepageUrl: String
-  url: String!
-  owner: String!
-  isTracked: Boolean!
-  isFork: Boolean!
-  isLocked: Boolean!
-  isPrivate: Boolean!
-  isArchived: Boolean!
-  isDisabled: Boolean!
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
+	id: ID!
+	idExternal: String!
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	name: String!
+	description: String!
+	homepageUrl: String
+	url: String!
+	owner: String!
+	isTracked: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
 }
 
 input RepositoryScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RepositoryScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RepositoryScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RepositoryScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  idExternal: String
-
-  """All values that are not equal to given value."""
-  idExternal_not: String
-
-  """All values that are contained in given list."""
-  idExternal_in: [String!]
-
-  """All values that are not contained in given list."""
-  idExternal_not_in: [String!]
-
-  """All values less than the given value."""
-  idExternal_lt: String
-
-  """All values less than or equal the given value."""
-  idExternal_lte: String
-
-  """All values greater than the given value."""
-  idExternal_gt: String
-
-  """All values greater than or equal the given value."""
-  idExternal_gte: String
-
-  """All values containing the given string."""
-  idExternal_contains: String
-
-  """All values not containing the given string."""
-  idExternal_not_contains: String
-
-  """All values starting with the given string."""
-  idExternal_starts_with: String
-
-  """All values not starting with the given string."""
-  idExternal_not_starts_with: String
-
-  """All values ending with the given string."""
-  idExternal_ends_with: String
-
-  """All values not ending with the given string."""
-  idExternal_not_ends_with: String
-  createdAtExternal: DateTime
-
-  """All values that are not equal to given value."""
-  createdAtExternal_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAtExternal_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAtExternal_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAtExternal_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAtExternal_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAtExternal_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAtExternal_gte: DateTime
-  updatedAtExternal: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAtExternal_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAtExternal_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAtExternal_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAtExternal_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAtExternal_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAtExternal_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAtExternal_gte: DateTime
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  homepageUrl: String
-
-  """All values that are not equal to given value."""
-  homepageUrl_not: String
-
-  """All values that are contained in given list."""
-  homepageUrl_in: [String!]
-
-  """All values that are not contained in given list."""
-  homepageUrl_not_in: [String!]
-
-  """All values less than the given value."""
-  homepageUrl_lt: String
-
-  """All values less than or equal the given value."""
-  homepageUrl_lte: String
-
-  """All values greater than the given value."""
-  homepageUrl_gt: String
-
-  """All values greater than or equal the given value."""
-  homepageUrl_gte: String
-
-  """All values containing the given string."""
-  homepageUrl_contains: String
-
-  """All values not containing the given string."""
-  homepageUrl_not_contains: String
-
-  """All values starting with the given string."""
-  homepageUrl_starts_with: String
-
-  """All values not starting with the given string."""
-  homepageUrl_not_starts_with: String
-
-  """All values ending with the given string."""
-  homepageUrl_ends_with: String
-
-  """All values not ending with the given string."""
-  homepageUrl_not_ends_with: String
-  url: String
-
-  """All values that are not equal to given value."""
-  url_not: String
-
-  """All values that are contained in given list."""
-  url_in: [String!]
-
-  """All values that are not contained in given list."""
-  url_not_in: [String!]
-
-  """All values less than the given value."""
-  url_lt: String
-
-  """All values less than or equal the given value."""
-  url_lte: String
-
-  """All values greater than the given value."""
-  url_gt: String
-
-  """All values greater than or equal the given value."""
-  url_gte: String
-
-  """All values containing the given string."""
-  url_contains: String
-
-  """All values not containing the given string."""
-  url_not_contains: String
-
-  """All values starting with the given string."""
-  url_starts_with: String
-
-  """All values not starting with the given string."""
-  url_not_starts_with: String
-
-  """All values ending with the given string."""
-  url_ends_with: String
-
-  """All values not ending with the given string."""
-  url_not_ends_with: String
-  owner: String
-
-  """All values that are not equal to given value."""
-  owner_not: String
-
-  """All values that are contained in given list."""
-  owner_in: [String!]
-
-  """All values that are not contained in given list."""
-  owner_not_in: [String!]
-
-  """All values less than the given value."""
-  owner_lt: String
-
-  """All values less than or equal the given value."""
-  owner_lte: String
-
-  """All values greater than the given value."""
-  owner_gt: String
-
-  """All values greater than or equal the given value."""
-  owner_gte: String
-
-  """All values containing the given string."""
-  owner_contains: String
-
-  """All values not containing the given string."""
-  owner_not_contains: String
-
-  """All values starting with the given string."""
-  owner_starts_with: String
-
-  """All values not starting with the given string."""
-  owner_not_starts_with: String
-
-  """All values ending with the given string."""
-  owner_ends_with: String
-
-  """All values not ending with the given string."""
-  owner_not_ends_with: String
-  isTracked: Boolean
-
-  """All values that are not equal to given value."""
-  isTracked_not: Boolean
-  isFork: Boolean
-
-  """All values that are not equal to given value."""
-  isFork_not: Boolean
-  isLocked: Boolean
-
-  """All values that are not equal to given value."""
-  isLocked_not: Boolean
-  isPrivate: Boolean
-
-  """All values that are not equal to given value."""
-  isPrivate_not: Boolean
-  isArchived: Boolean
-
-  """All values that are not equal to given value."""
-  isArchived_not: Boolean
-  isDisabled: Boolean
-
-  """All values that are not equal to given value."""
-  isDisabled_not: Boolean
-  sshUrl: String
-
-  """All values that are not equal to given value."""
-  sshUrl_not: String
-
-  """All values that are contained in given list."""
-  sshUrl_in: [String!]
-
-  """All values that are not contained in given list."""
-  sshUrl_not_in: [String!]
-
-  """All values less than the given value."""
-  sshUrl_lt: String
-
-  """All values less than or equal the given value."""
-  sshUrl_lte: String
-
-  """All values greater than the given value."""
-  sshUrl_gt: String
-
-  """All values greater than or equal the given value."""
-  sshUrl_gte: String
-
-  """All values containing the given string."""
-  sshUrl_contains: String
-
-  """All values not containing the given string."""
-  sshUrl_not_contains: String
-
-  """All values starting with the given string."""
-  sshUrl_starts_with: String
-
-  """All values not starting with the given string."""
-  sshUrl_not_starts_with: String
-
-  """All values ending with the given string."""
-  sshUrl_ends_with: String
-
-  """All values not ending with the given string."""
-  sshUrl_not_ends_with: String
-  stargazers: Int
-
-  """All values that are not equal to given value."""
-  stargazers_not: Int
-
-  """All values that are contained in given list."""
-  stargazers_in: [Int!]
-
-  """All values that are not contained in given list."""
-  stargazers_not_in: [Int!]
-
-  """All values less than the given value."""
-  stargazers_lt: Int
-
-  """All values less than or equal the given value."""
-  stargazers_lte: Int
-
-  """All values greater than the given value."""
-  stargazers_gt: Int
-
-  """All values greater than or equal the given value."""
-  stargazers_gte: Int
-  collaborators: Int
-
-  """All values that are not equal to given value."""
-  collaborators_not: Int
-
-  """All values that are contained in given list."""
-  collaborators_in: [Int!]
-
-  """All values that are not contained in given list."""
-  collaborators_not_in: [Int!]
-
-  """All values less than the given value."""
-  collaborators_lt: Int
-
-  """All values less than or equal the given value."""
-  collaborators_lte: Int
-
-  """All values greater than the given value."""
-  collaborators_gt: Int
-
-  """All values greater than or equal the given value."""
-  collaborators_gte: Int
-  watchers: Int
-
-  """All values that are not equal to given value."""
-  watchers_not: Int
-
-  """All values that are contained in given list."""
-  watchers_in: [Int!]
-
-  """All values that are not contained in given list."""
-  watchers_not_in: [Int!]
-
-  """All values less than the given value."""
-  watchers_lt: Int
-
-  """All values less than or equal the given value."""
-  watchers_lte: Int
-
-  """All values greater than the given value."""
-  watchers_gt: Int
-
-  """All values greater than or equal the given value."""
-  watchers_gte: Int
-  issues: Int
-
-  """All values that are not equal to given value."""
-  issues_not: Int
-
-  """All values that are contained in given list."""
-  issues_in: [Int!]
-
-  """All values that are not contained in given list."""
-  issues_not_in: [Int!]
-
-  """All values less than the given value."""
-  issues_lt: Int
-
-  """All values less than or equal the given value."""
-  issues_lte: Int
-
-  """All values greater than the given value."""
-  issues_gt: Int
-
-  """All values greater than or equal the given value."""
-  issues_gte: Int
-  pullRequests: Int
-
-  """All values that are not equal to given value."""
-  pullRequests_not: Int
-
-  """All values that are contained in given list."""
-  pullRequests_in: [Int!]
-
-  """All values that are not contained in given list."""
-  pullRequests_not_in: [Int!]
-
-  """All values less than the given value."""
-  pullRequests_lt: Int
-
-  """All values less than or equal the given value."""
-  pullRequests_lte: Int
-
-  """All values greater than the given value."""
-  pullRequests_gt: Int
-
-  """All values greater than or equal the given value."""
-  pullRequests_gte: Int
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [RepositoryScalarWhereInput!]
+
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [RepositoryScalarWhereInput!]
+
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [RepositoryScalarWhereInput!]
+	id: ID
+
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
+
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
+
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
+
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
+
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
+
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
+
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
+
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
+
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
+
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
+
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	idExternal: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	idExternal_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	idExternal_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	idExternal_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	idExternal_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	idExternal_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	idExternal_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	idExternal_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	idExternal_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	idExternal_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	idExternal_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	idExternal_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	idExternal_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	idExternal_not_ends_with: String
+	createdAtExternal: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAtExternal_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	createdAtExternal_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAtExternal_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	createdAtExternal_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAtExternal_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	createdAtExternal_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAtExternal_gte: DateTime
+	updatedAtExternal: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	updatedAtExternal_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	updatedAtExternal_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	updatedAtExternal_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	updatedAtExternal_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	updatedAtExternal_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	updatedAtExternal_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	updatedAtExternal_gte: DateTime
+	name: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	name_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	name_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	name_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	name_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	name_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	name_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	name_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	name_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	name_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	name_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	name_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	name_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	name_not_ends_with: String
+	description: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	description_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	description_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	description_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	description_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	description_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	description_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	description_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	description_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	description_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	description_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	description_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	description_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	description_not_ends_with: String
+	homepageUrl: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	homepageUrl_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	homepageUrl_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	homepageUrl_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	homepageUrl_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	homepageUrl_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	homepageUrl_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	homepageUrl_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	homepageUrl_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	homepageUrl_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	homepageUrl_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	homepageUrl_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	homepageUrl_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	homepageUrl_not_ends_with: String
+	url: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	url_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	url_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	url_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	url_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	url_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	url_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	url_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	url_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	url_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	url_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	url_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	url_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	url_not_ends_with: String
+	owner: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	owner_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	owner_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	owner_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	owner_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	owner_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	owner_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	owner_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	owner_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	owner_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	owner_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	owner_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	owner_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	owner_not_ends_with: String
+	isTracked: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isTracked_not: Boolean
+	isFork: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isFork_not: Boolean
+	isLocked: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isLocked_not: Boolean
+	isPrivate: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isPrivate_not: Boolean
+	isArchived: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isArchived_not: Boolean
+	isDisabled: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isDisabled_not: Boolean
+	sshUrl: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	sshUrl_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	sshUrl_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	sshUrl_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	sshUrl_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	sshUrl_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	sshUrl_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	sshUrl_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	sshUrl_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	sshUrl_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	sshUrl_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	sshUrl_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	sshUrl_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	sshUrl_not_ends_with: String
+	stargazers: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	stargazers_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	stargazers_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	stargazers_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	stargazers_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	stargazers_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	stargazers_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	stargazers_gte: Int
+	collaborators: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	collaborators_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	collaborators_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	collaborators_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	collaborators_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	collaborators_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	collaborators_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	collaborators_gte: Int
+	watchers: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	watchers_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	watchers_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	watchers_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	watchers_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	watchers_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	watchers_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	watchers_gte: Int
+	issues: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	issues_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	issues_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	issues_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	issues_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	issues_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	issues_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	issues_gte: Int
+	pullRequests: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	pullRequests_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	pullRequests_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	pullRequests_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	pullRequests_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	pullRequests_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	pullRequests_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	pullRequests_gte: Int
 }
 
 type RepositorySubscriptionPayload {
-  mutation: MutationType!
-  node: Repository
-  updatedFields: [String!]
-  previousValues: RepositoryPreviousValues
+	mutation: MutationType!
+	node: Repository
+	updatedFields: [String!]
+	previousValues: RepositoryPreviousValues
 }
 
 input RepositorySubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RepositorySubscriptionWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [RepositorySubscriptionWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [RepositorySubscriptionWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [RepositorySubscriptionWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RepositorySubscriptionWhereInput!]
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [RepositorySubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
-  mutation_in: [MutationType!]
+	"""
+	The subscription event gets dispatched when it's listed in mutation_in
+	"""
+	mutation_in: [MutationType!]
 
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
+	"""
+	The subscription event gets only dispatched when one of the updated fields names is included in this list
+	"""
+	updatedFields_contains: String
 
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
+	"""
+	The subscription event gets only dispatched when all of the field names included in this list have been updated
+	"""
+	updatedFields_contains_every: [String!]
 
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: RepositoryWhereInput
+	"""
+	The subscription event gets only dispatched when some of the field names included in this list have been updated
+	"""
+	updatedFields_contains_some: [String!]
+	node: RepositoryWhereInput
 }
 
 input RepositoryUpdateInput {
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl: String
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
-  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
-  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+	appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+	webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+	game: GameUpdateOneWithoutRepositoryInput
 }
 
 input RepositoryUpdateManyDataInput {
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl: String
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
 }
 
 input RepositoryUpdateManyMutationInput {
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl: String
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
 }
 
 input RepositoryUpdateManyWithoutAddedByInput {
-  create: [RepositoryCreateWithoutAddedByInput!]
-  connect: [RepositoryWhereUniqueInput!]
-  set: [RepositoryWhereUniqueInput!]
-  disconnect: [RepositoryWhereUniqueInput!]
-  delete: [RepositoryWhereUniqueInput!]
-  update: [RepositoryUpdateWithWhereUniqueWithoutAddedByInput!]
-  updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
-  deleteMany: [RepositoryScalarWhereInput!]
-  upsert: [RepositoryUpsertWithWhereUniqueWithoutAddedByInput!]
+	create: [RepositoryCreateWithoutAddedByInput!]
+	connect: [RepositoryWhereUniqueInput!]
+	set: [RepositoryWhereUniqueInput!]
+	disconnect: [RepositoryWhereUniqueInput!]
+	delete: [RepositoryWhereUniqueInput!]
+	update: [RepositoryUpdateWithWhereUniqueWithoutAddedByInput!]
+	updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
+	deleteMany: [RepositoryScalarWhereInput!]
+	upsert: [RepositoryUpsertWithWhereUniqueWithoutAddedByInput!]
 }
 
 input RepositoryUpdateManyWithoutAppKeyInput {
-  create: [RepositoryCreateWithoutAppKeyInput!]
-  connect: [RepositoryWhereUniqueInput!]
-  set: [RepositoryWhereUniqueInput!]
-  disconnect: [RepositoryWhereUniqueInput!]
-  delete: [RepositoryWhereUniqueInput!]
-  update: [RepositoryUpdateWithWhereUniqueWithoutAppKeyInput!]
-  updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
-  deleteMany: [RepositoryScalarWhereInput!]
-  upsert: [RepositoryUpsertWithWhereUniqueWithoutAppKeyInput!]
+	create: [RepositoryCreateWithoutAppKeyInput!]
+	connect: [RepositoryWhereUniqueInput!]
+	set: [RepositoryWhereUniqueInput!]
+	disconnect: [RepositoryWhereUniqueInput!]
+	delete: [RepositoryWhereUniqueInput!]
+	update: [RepositoryUpdateWithWhereUniqueWithoutAppKeyInput!]
+	updateMany: [RepositoryUpdateManyWithWhereNestedInput!]
+	deleteMany: [RepositoryScalarWhereInput!]
+	upsert: [RepositoryUpsertWithWhereUniqueWithoutAppKeyInput!]
 }
 
 input RepositoryUpdateManyWithWhereNestedInput {
-  where: RepositoryScalarWhereInput!
-  data: RepositoryUpdateManyDataInput!
+	where: RepositoryScalarWhereInput!
+	data: RepositoryUpdateManyDataInput!
+}
+
+input RepositoryUpdateOneRequiredWithoutGameInput {
+	create: RepositoryCreateWithoutGameInput
+	connect: RepositoryWhereUniqueInput
+	update: RepositoryUpdateWithoutGameDataInput
+	upsert: RepositoryUpsertWithoutGameInput
 }
 
 input RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
-  create: RepositoryCreateWithoutWebhookEventsInput
-  connect: RepositoryWhereUniqueInput
-  update: RepositoryUpdateWithoutWebhookEventsDataInput
-  upsert: RepositoryUpsertWithoutWebhookEventsInput
+	create: RepositoryCreateWithoutWebhookEventsInput
+	connect: RepositoryWhereUniqueInput
+	update: RepositoryUpdateWithoutWebhookEventsDataInput
+	upsert: RepositoryUpsertWithoutWebhookEventsInput
 }
 
 input RepositoryUpdateWithoutAddedByDataInput {
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl: String
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
-  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+	webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+	game: GameUpdateOneWithoutRepositoryInput
 }
 
 input RepositoryUpdateWithoutAppKeyDataInput {
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl: String
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
-  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+	webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+	game: GameUpdateOneWithoutRepositoryInput
+}
+
+input RepositoryUpdateWithoutGameDataInput {
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+	appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+	webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
 input RepositoryUpdateWithoutWebhookEventsDataInput {
-  idExternal: String
-  createdAtExternal: DateTime
-  updatedAtExternal: DateTime
-  name: String
-  description: String
-  homepageUrl: String
-  url: String
-  owner: String
-  isTracked: Boolean
-  isFork: Boolean
-  isLocked: Boolean
-  isPrivate: Boolean
-  isArchived: Boolean
-  isDisabled: Boolean
-  sshUrl: String
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
-  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
-  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+	idExternal: String
+	createdAtExternal: DateTime
+	updatedAtExternal: DateTime
+	name: String
+	description: String
+	homepageUrl: String
+	url: String
+	owner: String
+	isTracked: Boolean
+	isFork: Boolean
+	isLocked: Boolean
+	isPrivate: Boolean
+	isArchived: Boolean
+	isDisabled: Boolean
+	sshUrl: String
+	stargazers: Int
+	collaborators: Int
+	watchers: Int
+	issues: Int
+	pullRequests: Int
+	addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+	appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+	game: GameUpdateOneWithoutRepositoryInput
 }
 
 input RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
-  where: RepositoryWhereUniqueInput!
-  data: RepositoryUpdateWithoutAddedByDataInput!
+	where: RepositoryWhereUniqueInput!
+	data: RepositoryUpdateWithoutAddedByDataInput!
 }
 
 input RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
-  where: RepositoryWhereUniqueInput!
-  data: RepositoryUpdateWithoutAppKeyDataInput!
+	where: RepositoryWhereUniqueInput!
+	data: RepositoryUpdateWithoutAppKeyDataInput!
+}
+
+input RepositoryUpsertWithoutGameInput {
+	update: RepositoryUpdateWithoutGameDataInput!
+	create: RepositoryCreateWithoutGameInput!
 }
 
 input RepositoryUpsertWithoutWebhookEventsInput {
-  update: RepositoryUpdateWithoutWebhookEventsDataInput!
-  create: RepositoryCreateWithoutWebhookEventsInput!
+	update: RepositoryUpdateWithoutWebhookEventsDataInput!
+	create: RepositoryCreateWithoutWebhookEventsInput!
 }
 
 input RepositoryUpsertWithWhereUniqueWithoutAddedByInput {
-  where: RepositoryWhereUniqueInput!
-  update: RepositoryUpdateWithoutAddedByDataInput!
-  create: RepositoryCreateWithoutAddedByInput!
+	where: RepositoryWhereUniqueInput!
+	update: RepositoryUpdateWithoutAddedByDataInput!
+	create: RepositoryCreateWithoutAddedByInput!
 }
 
 input RepositoryUpsertWithWhereUniqueWithoutAppKeyInput {
-  where: RepositoryWhereUniqueInput!
-  update: RepositoryUpdateWithoutAppKeyDataInput!
-  create: RepositoryCreateWithoutAppKeyInput!
+	where: RepositoryWhereUniqueInput!
+	update: RepositoryUpdateWithoutAppKeyDataInput!
+	create: RepositoryCreateWithoutAppKeyInput!
 }
 
 input RepositoryWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RepositoryWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RepositoryWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RepositoryWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  idExternal: String
-
-  """All values that are not equal to given value."""
-  idExternal_not: String
-
-  """All values that are contained in given list."""
-  idExternal_in: [String!]
-
-  """All values that are not contained in given list."""
-  idExternal_not_in: [String!]
-
-  """All values less than the given value."""
-  idExternal_lt: String
-
-  """All values less than or equal the given value."""
-  idExternal_lte: String
-
-  """All values greater than the given value."""
-  idExternal_gt: String
-
-  """All values greater than or equal the given value."""
-  idExternal_gte: String
-
-  """All values containing the given string."""
-  idExternal_contains: String
-
-  """All values not containing the given string."""
-  idExternal_not_contains: String
-
-  """All values starting with the given string."""
-  idExternal_starts_with: String
-
-  """All values not starting with the given string."""
-  idExternal_not_starts_with: String
-
-  """All values ending with the given string."""
-  idExternal_ends_with: String
-
-  """All values not ending with the given string."""
-  idExternal_not_ends_with: String
-  createdAtExternal: DateTime
-
-  """All values that are not equal to given value."""
-  createdAtExternal_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAtExternal_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAtExternal_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAtExternal_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAtExternal_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAtExternal_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAtExternal_gte: DateTime
-  updatedAtExternal: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAtExternal_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAtExternal_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAtExternal_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAtExternal_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAtExternal_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAtExternal_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAtExternal_gte: DateTime
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  description: String
-
-  """All values that are not equal to given value."""
-  description_not: String
-
-  """All values that are contained in given list."""
-  description_in: [String!]
-
-  """All values that are not contained in given list."""
-  description_not_in: [String!]
-
-  """All values less than the given value."""
-  description_lt: String
-
-  """All values less than or equal the given value."""
-  description_lte: String
-
-  """All values greater than the given value."""
-  description_gt: String
-
-  """All values greater than or equal the given value."""
-  description_gte: String
-
-  """All values containing the given string."""
-  description_contains: String
-
-  """All values not containing the given string."""
-  description_not_contains: String
-
-  """All values starting with the given string."""
-  description_starts_with: String
-
-  """All values not starting with the given string."""
-  description_not_starts_with: String
-
-  """All values ending with the given string."""
-  description_ends_with: String
-
-  """All values not ending with the given string."""
-  description_not_ends_with: String
-  homepageUrl: String
-
-  """All values that are not equal to given value."""
-  homepageUrl_not: String
-
-  """All values that are contained in given list."""
-  homepageUrl_in: [String!]
-
-  """All values that are not contained in given list."""
-  homepageUrl_not_in: [String!]
-
-  """All values less than the given value."""
-  homepageUrl_lt: String
-
-  """All values less than or equal the given value."""
-  homepageUrl_lte: String
-
-  """All values greater than the given value."""
-  homepageUrl_gt: String
-
-  """All values greater than or equal the given value."""
-  homepageUrl_gte: String
-
-  """All values containing the given string."""
-  homepageUrl_contains: String
-
-  """All values not containing the given string."""
-  homepageUrl_not_contains: String
-
-  """All values starting with the given string."""
-  homepageUrl_starts_with: String
-
-  """All values not starting with the given string."""
-  homepageUrl_not_starts_with: String
-
-  """All values ending with the given string."""
-  homepageUrl_ends_with: String
-
-  """All values not ending with the given string."""
-  homepageUrl_not_ends_with: String
-  url: String
-
-  """All values that are not equal to given value."""
-  url_not: String
-
-  """All values that are contained in given list."""
-  url_in: [String!]
-
-  """All values that are not contained in given list."""
-  url_not_in: [String!]
-
-  """All values less than the given value."""
-  url_lt: String
-
-  """All values less than or equal the given value."""
-  url_lte: String
-
-  """All values greater than the given value."""
-  url_gt: String
-
-  """All values greater than or equal the given value."""
-  url_gte: String
-
-  """All values containing the given string."""
-  url_contains: String
-
-  """All values not containing the given string."""
-  url_not_contains: String
-
-  """All values starting with the given string."""
-  url_starts_with: String
-
-  """All values not starting with the given string."""
-  url_not_starts_with: String
-
-  """All values ending with the given string."""
-  url_ends_with: String
-
-  """All values not ending with the given string."""
-  url_not_ends_with: String
-  owner: String
-
-  """All values that are not equal to given value."""
-  owner_not: String
-
-  """All values that are contained in given list."""
-  owner_in: [String!]
-
-  """All values that are not contained in given list."""
-  owner_not_in: [String!]
-
-  """All values less than the given value."""
-  owner_lt: String
-
-  """All values less than or equal the given value."""
-  owner_lte: String
-
-  """All values greater than the given value."""
-  owner_gt: String
-
-  """All values greater than or equal the given value."""
-  owner_gte: String
-
-  """All values containing the given string."""
-  owner_contains: String
-
-  """All values not containing the given string."""
-  owner_not_contains: String
-
-  """All values starting with the given string."""
-  owner_starts_with: String
-
-  """All values not starting with the given string."""
-  owner_not_starts_with: String
-
-  """All values ending with the given string."""
-  owner_ends_with: String
-
-  """All values not ending with the given string."""
-  owner_not_ends_with: String
-  isTracked: Boolean
-
-  """All values that are not equal to given value."""
-  isTracked_not: Boolean
-  isFork: Boolean
-
-  """All values that are not equal to given value."""
-  isFork_not: Boolean
-  isLocked: Boolean
-
-  """All values that are not equal to given value."""
-  isLocked_not: Boolean
-  isPrivate: Boolean
-
-  """All values that are not equal to given value."""
-  isPrivate_not: Boolean
-  isArchived: Boolean
-
-  """All values that are not equal to given value."""
-  isArchived_not: Boolean
-  isDisabled: Boolean
-
-  """All values that are not equal to given value."""
-  isDisabled_not: Boolean
-  sshUrl: String
-
-  """All values that are not equal to given value."""
-  sshUrl_not: String
-
-  """All values that are contained in given list."""
-  sshUrl_in: [String!]
-
-  """All values that are not contained in given list."""
-  sshUrl_not_in: [String!]
-
-  """All values less than the given value."""
-  sshUrl_lt: String
-
-  """All values less than or equal the given value."""
-  sshUrl_lte: String
-
-  """All values greater than the given value."""
-  sshUrl_gt: String
-
-  """All values greater than or equal the given value."""
-  sshUrl_gte: String
-
-  """All values containing the given string."""
-  sshUrl_contains: String
-
-  """All values not containing the given string."""
-  sshUrl_not_contains: String
-
-  """All values starting with the given string."""
-  sshUrl_starts_with: String
-
-  """All values not starting with the given string."""
-  sshUrl_not_starts_with: String
-
-  """All values ending with the given string."""
-  sshUrl_ends_with: String
-
-  """All values not ending with the given string."""
-  sshUrl_not_ends_with: String
-  stargazers: Int
-
-  """All values that are not equal to given value."""
-  stargazers_not: Int
-
-  """All values that are contained in given list."""
-  stargazers_in: [Int!]
-
-  """All values that are not contained in given list."""
-  stargazers_not_in: [Int!]
-
-  """All values less than the given value."""
-  stargazers_lt: Int
-
-  """All values less than or equal the given value."""
-  stargazers_lte: Int
-
-  """All values greater than the given value."""
-  stargazers_gt: Int
-
-  """All values greater than or equal the given value."""
-  stargazers_gte: Int
-  collaborators: Int
-
-  """All values that are not equal to given value."""
-  collaborators_not: Int
-
-  """All values that are contained in given list."""
-  collaborators_in: [Int!]
-
-  """All values that are not contained in given list."""
-  collaborators_not_in: [Int!]
-
-  """All values less than the given value."""
-  collaborators_lt: Int
-
-  """All values less than or equal the given value."""
-  collaborators_lte: Int
-
-  """All values greater than the given value."""
-  collaborators_gt: Int
-
-  """All values greater than or equal the given value."""
-  collaborators_gte: Int
-  watchers: Int
-
-  """All values that are not equal to given value."""
-  watchers_not: Int
-
-  """All values that are contained in given list."""
-  watchers_in: [Int!]
-
-  """All values that are not contained in given list."""
-  watchers_not_in: [Int!]
-
-  """All values less than the given value."""
-  watchers_lt: Int
-
-  """All values less than or equal the given value."""
-  watchers_lte: Int
-
-  """All values greater than the given value."""
-  watchers_gt: Int
-
-  """All values greater than or equal the given value."""
-  watchers_gte: Int
-  issues: Int
-
-  """All values that are not equal to given value."""
-  issues_not: Int
-
-  """All values that are contained in given list."""
-  issues_in: [Int!]
-
-  """All values that are not contained in given list."""
-  issues_not_in: [Int!]
-
-  """All values less than the given value."""
-  issues_lt: Int
-
-  """All values less than or equal the given value."""
-  issues_lte: Int
-
-  """All values greater than the given value."""
-  issues_gt: Int
-
-  """All values greater than or equal the given value."""
-  issues_gte: Int
-  pullRequests: Int
-
-  """All values that are not equal to given value."""
-  pullRequests_not: Int
-
-  """All values that are contained in given list."""
-  pullRequests_in: [Int!]
-
-  """All values that are not contained in given list."""
-  pullRequests_not_in: [Int!]
-
-  """All values less than the given value."""
-  pullRequests_lt: Int
-
-  """All values less than or equal the given value."""
-  pullRequests_lte: Int
-
-  """All values greater than the given value."""
-  pullRequests_gt: Int
-
-  """All values greater than or equal the given value."""
-  pullRequests_gte: Int
-  addedBy: UserWhereInput
-  appKey: AppKeyWhereInput
-  webhookEvents_every: GitHubWebhookEventWhereInput
-  webhookEvents_some: GitHubWebhookEventWhereInput
-  webhookEvents_none: GitHubWebhookEventWhereInput
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [RepositoryWhereInput!]
+
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [RepositoryWhereInput!]
+
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [RepositoryWhereInput!]
+	id: ID
+
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
+
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
+
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
+
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
+
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
+
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
+
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
+
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
+
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
+
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
+
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	idExternal: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	idExternal_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	idExternal_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	idExternal_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	idExternal_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	idExternal_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	idExternal_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	idExternal_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	idExternal_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	idExternal_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	idExternal_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	idExternal_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	idExternal_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	idExternal_not_ends_with: String
+	createdAtExternal: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAtExternal_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	createdAtExternal_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAtExternal_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	createdAtExternal_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAtExternal_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	createdAtExternal_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAtExternal_gte: DateTime
+	updatedAtExternal: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	updatedAtExternal_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	updatedAtExternal_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	updatedAtExternal_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	updatedAtExternal_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	updatedAtExternal_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	updatedAtExternal_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	updatedAtExternal_gte: DateTime
+	name: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	name_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	name_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	name_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	name_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	name_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	name_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	name_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	name_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	name_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	name_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	name_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	name_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	name_not_ends_with: String
+	description: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	description_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	description_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	description_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	description_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	description_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	description_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	description_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	description_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	description_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	description_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	description_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	description_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	description_not_ends_with: String
+	homepageUrl: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	homepageUrl_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	homepageUrl_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	homepageUrl_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	homepageUrl_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	homepageUrl_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	homepageUrl_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	homepageUrl_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	homepageUrl_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	homepageUrl_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	homepageUrl_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	homepageUrl_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	homepageUrl_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	homepageUrl_not_ends_with: String
+	url: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	url_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	url_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	url_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	url_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	url_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	url_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	url_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	url_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	url_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	url_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	url_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	url_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	url_not_ends_with: String
+	owner: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	owner_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	owner_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	owner_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	owner_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	owner_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	owner_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	owner_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	owner_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	owner_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	owner_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	owner_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	owner_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	owner_not_ends_with: String
+	isTracked: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isTracked_not: Boolean
+	isFork: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isFork_not: Boolean
+	isLocked: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isLocked_not: Boolean
+	isPrivate: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isPrivate_not: Boolean
+	isArchived: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isArchived_not: Boolean
+	isDisabled: Boolean
+
+	"""
+	All values that are not equal to given value.
+	"""
+	isDisabled_not: Boolean
+	sshUrl: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	sshUrl_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	sshUrl_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	sshUrl_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	sshUrl_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	sshUrl_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	sshUrl_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	sshUrl_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	sshUrl_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	sshUrl_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	sshUrl_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	sshUrl_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	sshUrl_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	sshUrl_not_ends_with: String
+	stargazers: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	stargazers_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	stargazers_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	stargazers_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	stargazers_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	stargazers_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	stargazers_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	stargazers_gte: Int
+	collaborators: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	collaborators_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	collaborators_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	collaborators_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	collaborators_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	collaborators_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	collaborators_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	collaborators_gte: Int
+	watchers: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	watchers_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	watchers_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	watchers_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	watchers_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	watchers_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	watchers_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	watchers_gte: Int
+	issues: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	issues_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	issues_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	issues_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	issues_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	issues_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	issues_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	issues_gte: Int
+	pullRequests: Int
+
+	"""
+	All values that are not equal to given value.
+	"""
+	pullRequests_not: Int
+
+	"""
+	All values that are contained in given list.
+	"""
+	pullRequests_in: [Int!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	pullRequests_not_in: [Int!]
+
+	"""
+	All values less than the given value.
+	"""
+	pullRequests_lt: Int
+
+	"""
+	All values less than or equal the given value.
+	"""
+	pullRequests_lte: Int
+
+	"""
+	All values greater than the given value.
+	"""
+	pullRequests_gt: Int
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	pullRequests_gte: Int
+	addedBy: UserWhereInput
+	appKey: AppKeyWhereInput
+	webhookEvents_every: GitHubWebhookEventWhereInput
+	webhookEvents_some: GitHubWebhookEventWhereInput
+	webhookEvents_none: GitHubWebhookEventWhereInput
+	game: GameWhereInput
 }
 
 input RepositoryWhereUniqueInput {
-  id: ID
-  idExternal: String
-  name: String
+	id: ID
+	idExternal: String
+	name: String
 }
 
 enum Role {
-  USER
-  ADMIN
+	USER
+	ADMIN
 }
 
 type Subscription {
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  appKey(where: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload
-  repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
-  gitHubWebhookEvent(where: GitHubWebhookEventSubscriptionWhereInput): GitHubWebhookEventSubscriptionPayload
+	user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+	appKey(where: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload
+	repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
+	gitHubWebhookEvent(
+		where: GitHubWebhookEventSubscriptionWhereInput
+	): GitHubWebhookEventSubscriptionPayload
+	game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
 }
 
 type User implements Node {
-  id: ID!
-  email: String!
-  hash: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String
-  role: Role
-  keys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey!]
-  addedRepositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
-  gitLogin: String!
+	id: ID!
+	email: String!
+	hash: String!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	name: String
+	role: Role
+	keys(
+		where: AppKeyWhereInput
+		orderBy: AppKeyOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [AppKey!]
+	addedRepositories(
+		where: RepositoryWhereInput
+		orderBy: RepositoryOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [Repository!]
+	gitLogin: String!
+	gamesOwned(
+		where: GameWhereInput
+		orderBy: GameOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [Game!]
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type UserConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
 
-  """A list of edges."""
-  edges: [UserEdge]!
-  aggregate: AggregateUser!
+	"""
+	A list of edges.
+	"""
+	edges: [UserEdge]!
+	aggregate: AggregateUser!
 }
 
 input UserCreateInput {
-  id: ID
-  email: String!
-  hash: String!
-  name: String
-  role: Role
-  gitLogin: String!
-  keys: AppKeyCreateManyWithoutUserInput
-  addedRepositories: RepositoryCreateManyWithoutAddedByInput
+	id: ID
+	email: String!
+	hash: String!
+	name: String
+	role: Role
+	gitLogin: String!
+	keys: AppKeyCreateManyWithoutUserInput
+	addedRepositories: RepositoryCreateManyWithoutAddedByInput
+	gamesOwned: GameCreateManyWithoutOwnerInput
 }
 
 input UserCreateOneWithoutAddedRepositoriesInput {
-  create: UserCreateWithoutAddedRepositoriesInput
-  connect: UserWhereUniqueInput
+	create: UserCreateWithoutAddedRepositoriesInput
+	connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutGamesOwnedInput {
+	create: UserCreateWithoutGamesOwnedInput
+	connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutKeysInput {
-  create: UserCreateWithoutKeysInput
-  connect: UserWhereUniqueInput
+	create: UserCreateWithoutKeysInput
+	connect: UserWhereUniqueInput
 }
 
 input UserCreateWithoutAddedRepositoriesInput {
-  id: ID
-  email: String!
-  hash: String!
-  name: String
-  role: Role
-  gitLogin: String!
-  keys: AppKeyCreateManyWithoutUserInput
+	id: ID
+	email: String!
+	hash: String!
+	name: String
+	role: Role
+	gitLogin: String!
+	keys: AppKeyCreateManyWithoutUserInput
+	gamesOwned: GameCreateManyWithoutOwnerInput
+}
+
+input UserCreateWithoutGamesOwnedInput {
+	id: ID
+	email: String!
+	hash: String!
+	name: String
+	role: Role
+	gitLogin: String!
+	keys: AppKeyCreateManyWithoutUserInput
+	addedRepositories: RepositoryCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutKeysInput {
-  id: ID
-  email: String!
-  hash: String!
-  name: String
-  role: Role
-  gitLogin: String!
-  addedRepositories: RepositoryCreateManyWithoutAddedByInput
+	id: ID
+	email: String!
+	hash: String!
+	name: String
+	role: Role
+	gitLogin: String!
+	addedRepositories: RepositoryCreateManyWithoutAddedByInput
+	gamesOwned: GameCreateManyWithoutOwnerInput
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type UserEdge {
-  """The item at the end of the edge."""
-  node: User!
+	"""
+	The item at the end of the edge.
+	"""
+	node: User!
 
-  """A cursor for use in pagination."""
-  cursor: String!
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: String!
 }
 
 enum UserOrderByInput {
-  id_ASC
-  id_DESC
-  email_ASC
-  email_DESC
-  hash_ASC
-  hash_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  name_ASC
-  name_DESC
-  role_ASC
-  role_DESC
-  gitLogin_ASC
-  gitLogin_DESC
+	id_ASC
+	id_DESC
+	email_ASC
+	email_DESC
+	hash_ASC
+	hash_DESC
+	createdAt_ASC
+	createdAt_DESC
+	updatedAt_ASC
+	updatedAt_DESC
+	name_ASC
+	name_DESC
+	role_ASC
+	role_DESC
+	gitLogin_ASC
+	gitLogin_DESC
 }
 
 type UserPreviousValues {
-  id: ID!
-  email: String!
-  hash: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String
-  role: Role
-  gitLogin: String!
+	id: ID!
+	email: String!
+	hash: String!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	name: String
+	role: Role
+	gitLogin: String!
 }
 
 type UserSubscriptionPayload {
-  mutation: MutationType!
-  node: User
-  updatedFields: [String!]
-  previousValues: UserPreviousValues
+	mutation: MutationType!
+	node: User
+	updatedFields: [String!]
+	previousValues: UserPreviousValues
 }
 
 input UserSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [UserSubscriptionWhereInput!]
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [UserSubscriptionWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [UserSubscriptionWhereInput!]
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [UserSubscriptionWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [UserSubscriptionWhereInput!]
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [UserSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
-  mutation_in: [MutationType!]
+	"""
+	The subscription event gets dispatched when it's listed in mutation_in
+	"""
+	mutation_in: [MutationType!]
 
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
+	"""
+	The subscription event gets only dispatched when one of the updated fields names is included in this list
+	"""
+	updatedFields_contains: String
 
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
+	"""
+	The subscription event gets only dispatched when all of the field names included in this list have been updated
+	"""
+	updatedFields_contains_every: [String!]
 
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: UserWhereInput
+	"""
+	The subscription event gets only dispatched when some of the field names included in this list have been updated
+	"""
+	updatedFields_contains_some: [String!]
+	node: UserWhereInput
 }
 
 input UserUpdateInput {
-  email: String
-  hash: String
-  name: String
-  role: Role
-  gitLogin: String
-  keys: AppKeyUpdateManyWithoutUserInput
-  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+	email: String
+	hash: String
+	name: String
+	role: Role
+	gitLogin: String
+	keys: AppKeyUpdateManyWithoutUserInput
+	addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+	gamesOwned: GameUpdateManyWithoutOwnerInput
 }
 
 input UserUpdateManyMutationInput {
-  email: String
-  hash: String
-  name: String
-  role: Role
-  gitLogin: String
+	email: String
+	hash: String
+	name: String
+	role: Role
+	gitLogin: String
 }
 
 input UserUpdateOneRequiredWithoutAddedRepositoriesInput {
-  create: UserCreateWithoutAddedRepositoriesInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutAddedRepositoriesDataInput
-  upsert: UserUpsertWithoutAddedRepositoriesInput
+	create: UserCreateWithoutAddedRepositoriesInput
+	connect: UserWhereUniqueInput
+	update: UserUpdateWithoutAddedRepositoriesDataInput
+	upsert: UserUpsertWithoutAddedRepositoriesInput
+}
+
+input UserUpdateOneRequiredWithoutGamesOwnedInput {
+	create: UserCreateWithoutGamesOwnedInput
+	connect: UserWhereUniqueInput
+	update: UserUpdateWithoutGamesOwnedDataInput
+	upsert: UserUpsertWithoutGamesOwnedInput
 }
 
 input UserUpdateOneRequiredWithoutKeysInput {
-  create: UserCreateWithoutKeysInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutKeysDataInput
-  upsert: UserUpsertWithoutKeysInput
+	create: UserCreateWithoutKeysInput
+	connect: UserWhereUniqueInput
+	update: UserUpdateWithoutKeysDataInput
+	upsert: UserUpsertWithoutKeysInput
 }
 
 input UserUpdateWithoutAddedRepositoriesDataInput {
-  email: String
-  hash: String
-  name: String
-  role: Role
-  gitLogin: String
-  keys: AppKeyUpdateManyWithoutUserInput
+	email: String
+	hash: String
+	name: String
+	role: Role
+	gitLogin: String
+	keys: AppKeyUpdateManyWithoutUserInput
+	gamesOwned: GameUpdateManyWithoutOwnerInput
+}
+
+input UserUpdateWithoutGamesOwnedDataInput {
+	email: String
+	hash: String
+	name: String
+	role: Role
+	gitLogin: String
+	keys: AppKeyUpdateManyWithoutUserInput
+	addedRepositories: RepositoryUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutKeysDataInput {
-  email: String
-  hash: String
-  name: String
-  role: Role
-  gitLogin: String
-  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+	email: String
+	hash: String
+	name: String
+	role: Role
+	gitLogin: String
+	addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+	gamesOwned: GameUpdateManyWithoutOwnerInput
 }
 
 input UserUpsertWithoutAddedRepositoriesInput {
-  update: UserUpdateWithoutAddedRepositoriesDataInput!
-  create: UserCreateWithoutAddedRepositoriesInput!
+	update: UserUpdateWithoutAddedRepositoriesDataInput!
+	create: UserCreateWithoutAddedRepositoriesInput!
+}
+
+input UserUpsertWithoutGamesOwnedInput {
+	update: UserUpdateWithoutGamesOwnedDataInput!
+	create: UserCreateWithoutGamesOwnedInput!
 }
 
 input UserUpsertWithoutKeysInput {
-  update: UserUpdateWithoutKeysDataInput!
-  create: UserCreateWithoutKeysInput!
+	update: UserUpdateWithoutKeysDataInput!
+	create: UserCreateWithoutKeysInput!
 }
 
 input UserWhereInput {
-  """Logical AND on all given filters."""
-  AND: [UserWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [UserWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [UserWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  email: String
-
-  """All values that are not equal to given value."""
-  email_not: String
-
-  """All values that are contained in given list."""
-  email_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_not_in: [String!]
-
-  """All values less than the given value."""
-  email_lt: String
-
-  """All values less than or equal the given value."""
-  email_lte: String
-
-  """All values greater than the given value."""
-  email_gt: String
-
-  """All values greater than or equal the given value."""
-  email_gte: String
-
-  """All values containing the given string."""
-  email_contains: String
-
-  """All values not containing the given string."""
-  email_not_contains: String
-
-  """All values starting with the given string."""
-  email_starts_with: String
-
-  """All values not starting with the given string."""
-  email_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_ends_with: String
-
-  """All values not ending with the given string."""
-  email_not_ends_with: String
-  hash: String
-
-  """All values that are not equal to given value."""
-  hash_not: String
-
-  """All values that are contained in given list."""
-  hash_in: [String!]
-
-  """All values that are not contained in given list."""
-  hash_not_in: [String!]
-
-  """All values less than the given value."""
-  hash_lt: String
-
-  """All values less than or equal the given value."""
-  hash_lte: String
-
-  """All values greater than the given value."""
-  hash_gt: String
-
-  """All values greater than or equal the given value."""
-  hash_gte: String
-
-  """All values containing the given string."""
-  hash_contains: String
-
-  """All values not containing the given string."""
-  hash_not_contains: String
-
-  """All values starting with the given string."""
-  hash_starts_with: String
-
-  """All values not starting with the given string."""
-  hash_not_starts_with: String
-
-  """All values ending with the given string."""
-  hash_ends_with: String
-
-  """All values not ending with the given string."""
-  hash_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-  role: Role
-
-  """All values that are not equal to given value."""
-  role_not: Role
-
-  """All values that are contained in given list."""
-  role_in: [Role!]
-
-  """All values that are not contained in given list."""
-  role_not_in: [Role!]
-  gitLogin: String
-
-  """All values that are not equal to given value."""
-  gitLogin_not: String
-
-  """All values that are contained in given list."""
-  gitLogin_in: [String!]
-
-  """All values that are not contained in given list."""
-  gitLogin_not_in: [String!]
-
-  """All values less than the given value."""
-  gitLogin_lt: String
-
-  """All values less than or equal the given value."""
-  gitLogin_lte: String
-
-  """All values greater than the given value."""
-  gitLogin_gt: String
-
-  """All values greater than or equal the given value."""
-  gitLogin_gte: String
-
-  """All values containing the given string."""
-  gitLogin_contains: String
-
-  """All values not containing the given string."""
-  gitLogin_not_contains: String
-
-  """All values starting with the given string."""
-  gitLogin_starts_with: String
-
-  """All values not starting with the given string."""
-  gitLogin_not_starts_with: String
-
-  """All values ending with the given string."""
-  gitLogin_ends_with: String
-
-  """All values not ending with the given string."""
-  gitLogin_not_ends_with: String
-  keys_every: AppKeyWhereInput
-  keys_some: AppKeyWhereInput
-  keys_none: AppKeyWhereInput
-  addedRepositories_every: RepositoryWhereInput
-  addedRepositories_some: RepositoryWhereInput
-  addedRepositories_none: RepositoryWhereInput
+	"""
+	Logical AND on all given filters.
+	"""
+	AND: [UserWhereInput!]
+
+	"""
+	Logical OR on all given filters.
+	"""
+	OR: [UserWhereInput!]
+
+	"""
+	Logical NOT on all given filters combined by AND.
+	"""
+	NOT: [UserWhereInput!]
+	id: ID
+
+	"""
+	All values that are not equal to given value.
+	"""
+	id_not: ID
+
+	"""
+	All values that are contained in given list.
+	"""
+	id_in: [ID!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	id_not_in: [ID!]
+
+	"""
+	All values less than the given value.
+	"""
+	id_lt: ID
+
+	"""
+	All values less than or equal the given value.
+	"""
+	id_lte: ID
+
+	"""
+	All values greater than the given value.
+	"""
+	id_gt: ID
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	id_gte: ID
+
+	"""
+	All values containing the given string.
+	"""
+	id_contains: ID
+
+	"""
+	All values not containing the given string.
+	"""
+	id_not_contains: ID
+
+	"""
+	All values starting with the given string.
+	"""
+	id_starts_with: ID
+
+	"""
+	All values not starting with the given string.
+	"""
+	id_not_starts_with: ID
+
+	"""
+	All values ending with the given string.
+	"""
+	id_ends_with: ID
+
+	"""
+	All values not ending with the given string.
+	"""
+	id_not_ends_with: ID
+	email: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	email_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	email_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	email_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	email_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	email_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	email_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	email_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	email_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	email_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	email_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	email_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	email_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	email_not_ends_with: String
+	hash: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	hash_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	hash_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	hash_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	hash_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	hash_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	hash_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	hash_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	hash_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	hash_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	hash_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	hash_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	hash_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	hash_not_ends_with: String
+	createdAt: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	createdAt_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	createdAt_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	createdAt_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	createdAt_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	createdAt_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	createdAt_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	createdAt_gte: DateTime
+	updatedAt: DateTime
+
+	"""
+	All values that are not equal to given value.
+	"""
+	updatedAt_not: DateTime
+
+	"""
+	All values that are contained in given list.
+	"""
+	updatedAt_in: [DateTime!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	updatedAt_not_in: [DateTime!]
+
+	"""
+	All values less than the given value.
+	"""
+	updatedAt_lt: DateTime
+
+	"""
+	All values less than or equal the given value.
+	"""
+	updatedAt_lte: DateTime
+
+	"""
+	All values greater than the given value.
+	"""
+	updatedAt_gt: DateTime
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	updatedAt_gte: DateTime
+	name: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	name_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	name_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	name_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	name_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	name_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	name_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	name_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	name_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	name_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	name_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	name_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	name_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	name_not_ends_with: String
+	role: Role
+
+	"""
+	All values that are not equal to given value.
+	"""
+	role_not: Role
+
+	"""
+	All values that are contained in given list.
+	"""
+	role_in: [Role!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	role_not_in: [Role!]
+	gitLogin: String
+
+	"""
+	All values that are not equal to given value.
+	"""
+	gitLogin_not: String
+
+	"""
+	All values that are contained in given list.
+	"""
+	gitLogin_in: [String!]
+
+	"""
+	All values that are not contained in given list.
+	"""
+	gitLogin_not_in: [String!]
+
+	"""
+	All values less than the given value.
+	"""
+	gitLogin_lt: String
+
+	"""
+	All values less than or equal the given value.
+	"""
+	gitLogin_lte: String
+
+	"""
+	All values greater than the given value.
+	"""
+	gitLogin_gt: String
+
+	"""
+	All values greater than or equal the given value.
+	"""
+	gitLogin_gte: String
+
+	"""
+	All values containing the given string.
+	"""
+	gitLogin_contains: String
+
+	"""
+	All values not containing the given string.
+	"""
+	gitLogin_not_contains: String
+
+	"""
+	All values starting with the given string.
+	"""
+	gitLogin_starts_with: String
+
+	"""
+	All values not starting with the given string.
+	"""
+	gitLogin_not_starts_with: String
+
+	"""
+	All values ending with the given string.
+	"""
+	gitLogin_ends_with: String
+
+	"""
+	All values not ending with the given string.
+	"""
+	gitLogin_not_ends_with: String
+	keys_every: AppKeyWhereInput
+	keys_some: AppKeyWhereInput
+	keys_none: AppKeyWhereInput
+	addedRepositories_every: RepositoryWhereInput
+	addedRepositories_some: RepositoryWhereInput
+	addedRepositories_none: RepositoryWhereInput
+	gamesOwned_every: GameWhereInput
+	gamesOwned_some: GameWhereInput
+	gamesOwned_none: GameWhereInput
 }
 
 input UserWhereUniqueInput {
-  id: ID
-  email: String
+	id: ID
+	email: String
 }

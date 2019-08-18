@@ -1,5 +1,7 @@
 <template lang="pug">
-v-data-table(:headers="headers" :items="gitHubWebhookEvents" :items-per-age="5" class="elevation-1" dark)
+div
+	h4.display-1.mt-4.mb-2 GitHub Webhook Event Summary
+	v-data-table(:headers="headers" :items="gitHubWebhookEvents" :items-per-age="5" class="elevation-1" dark)
 </template>
 
 <script lang="ts">

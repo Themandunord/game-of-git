@@ -9,11 +9,12 @@ v-container(fluid)
         p This application is designed to add a sense of adventure to the development sprint and its related tasks utilizing the rich API provided through GitHub.
 
     Game
+
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Game from '../../components/game/Game.vue';
+import Game from '../../game/components/Game.vue';
 
 @Component({
 	components: {
