@@ -8,12 +8,17 @@ v-container(fluid)
             | The evolution of a codebase is an intricate dance that fascinates and inspires us to achieve more.
         p This application is designed to add a sense of adventure to the development sprint and its related tasks utilizing the rich API provided through GitHub.
 
-        
+    Game
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import Game from '../../components/game/Game.vue';
 
-@Component
+@Component({
+	components: {
+		Game
+	}
+})
 export default class Home extends Vue {}
 </script>
