@@ -10,13 +10,14 @@ export default class BootScene extends Scene {
 	}
 
 	preload() {
+		console.log('Booting Sim Game, Preloading');
 		this.load.image('sky', sky);
 		this.load.image('bomb', bomb);
 		this.load.audio('thud', [thudMp3, thudOgg]);
 	}
 
 	create() {
-		console.log('boot scene about to start PlayScene');
+		console.log('Booting Sim Game: Create. About to call scene.start on PlayScene.');
 		this.scene.start('PlayScene');
 	}
 }

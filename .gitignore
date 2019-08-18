@@ -5,3 +5,4 @@
 services/webapp-service/.env
 .env
 yarn-error.log
+*gource*
