@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RepositoriesModule } from './repositories/repositories.module';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app/app.controller';
+import { GameModule } from './game/game.module';
 
 @Module({
 	imports: [
@@ -21,7 +22,8 @@ import { AppController } from './app/app.controller';
 		MongooseModule.forRoot('mongodb://localhost/nest'),
 		PrismaModule,
 		RepositoriesModule,
-		forwardRef(() => UsersModule)
+		forwardRef(() => UsersModule),
+		GameModule
 	],
 	controllers: [AppController]
 })

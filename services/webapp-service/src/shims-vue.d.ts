@@ -6,3 +6,8 @@ declare module '*.vue' {
 declare module 'vuetify/lib';
 
 declare module 'vue-cli-plugin-apollo/graphql-client';
+
+declare module '*.jpg';
+declare module '*.png';
+declare module '*.ogg';
+declare module '*.mp3';

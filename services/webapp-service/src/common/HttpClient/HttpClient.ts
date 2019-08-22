@@ -1,3 +1,4 @@
+import { GamesClient } from './games/games.client';
 import { LOGIN } from './../../router/routes/login';
 import AppStateModule from '@/store/aspects/app';
 import { AxiosInstance } from 'axios';
@@ -14,11 +15,13 @@ import router from '@/router';
 export class HttpClient extends AbstractHttpClient {
 	public repositories!: RepositoriesClient;
 	public users!: UsersClient;
+	public games!: GamesClient;
 
 	constructor(client?: AxiosInstance) {
 		super(client);
 		this.repositories = new RepositoriesClient(this);
 		this.users = new UsersClient(this);
+		this.games = new GamesClient(this);
 
 		if (this.user) {
 			this.refreshUserData();
@@ -36,22 +39,26 @@ export class HttpClient extends AbstractHttpClient {
 	}
 
 	public async refreshUserData() {
-		const userData = await this.users.loadUserData();
-		this.user = {
-			...this.user,
-			...userData
-		};
-		AppStateModule.setUser({
-			...AppStateModule.user,
-			...userData
-		});
+		if (AppStateModule.user && AppStateModule.user.isAuthenticated) {
+			const userData = await this.users.loadUserData();
+			AppStateModule.setUser({
+				...AppStateModule.user,
+				...userData
+			});
+		}
 	}
 
 	public async validateJwtToken() {
 		try {
-			const userData = await this.users.loadUserData();
+			if (AppStateModule.user && AppStateModule.user.isAuthenticated) {
+				const userData = await this.users.loadUserData();
 
-			return true;
+				return true;
+			}
+
+			console.log('There was no user property in the store, was unable to loadUserData.');
+
+			return false;
 		} catch (e) {
 			console.error('There was an error querying for the usersData', e);
 

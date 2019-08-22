@@ -14,6 +14,7 @@ type User {
   keys: [AppKey!]! @relation(name: "UserAppKeys" onDelete: "CASCADE")
   addedRepositories: [Repository!]! @relation(name: "UserAddedRepositories" onDelete: "SET_NULL")
   gitLogin: String!
+  gamesOwned: [Game!]! @relation(name: "GameOwner")
 }
 
 type AppKey {
@@ -54,14 +55,27 @@ type Repository {
   pullRequests: Int
 
   webhookEvents: [GitHubWebhookEvent!]! @relation(name: "WebhooksByRepository" onDelete: "CASCADE")
+  game: Game @relation(name: "RepositoryGame" link:INLINE)
 }
 
 type GitHubWebhookEvent {
     id: ID! @id
     createdAt: DateTime! @createdAt
 
-    repository: Repository! @relation(name: "WebhooksByRepository")
+    repository: Repository! @relation(name: "WebhooksByRepository" onDelete: SET_NULL)
     eventType: String!
     action: String
     sender: String!
+}
+
+type Game {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+	updatedAt: DateTime! @updatedAt
+
+	repository: Repository! @relation(name: "RepositoryGame" onDelete: SET_NULL)
+
+	title: String!
+  	owner: User! @relation(name: "GameOwner" onDelete: SET_NULL)
+	type: String!
 }
