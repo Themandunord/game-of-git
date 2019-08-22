@@ -48,7 +48,7 @@ export default class NavBar extends Vue {
 	}
 
 	get shouldShowLogout() {
-		return AppStateModule.user.isAuthenticated;
+		return AppStateModule.user && AppStateModule.user.isAuthenticated;
 	}
 
 	logout() {

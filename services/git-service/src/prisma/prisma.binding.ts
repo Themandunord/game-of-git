@@ -56,6 +56,19 @@ export interface Query {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T>;
+	games: <T = Array<Game | null>>(
+		args: {
+			where?: GameWhereInput | null;
+			orderBy?: GameOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
 	user: <T = User | null>(
 		args: { where: UserWhereUniqueInput },
 		info?: GraphQLResolveInfo | string,
@@ -73,6 +86,11 @@ export interface Query {
 	) => Promise<T | null>;
 	gitHubWebhookEvent: <T = GitHubWebhookEvent | null>(
 		args: { where: GitHubWebhookEventWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	game: <T = Game | null>(
+		args: { where: GameWhereUniqueInput },
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T | null>;
@@ -128,6 +146,19 @@ export interface Query {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T>;
+	gamesConnection: <T = GameConnection>(
+		args: {
+			where?: GameWhereInput | null;
+			orderBy?: GameOrderByInput | null;
+			skip?: Int | null;
+			after?: String | null;
+			before?: String | null;
+			first?: Int | null;
+			last?: Int | null;
+		},
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
 	node: <T = Node | null>(
 		args: { id: ID_Output },
 		info?: GraphQLResolveInfo | string,
@@ -156,6 +187,11 @@ export interface Mutation {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T>;
+	createGame: <T = Game>(
+		args: { data: GameCreateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
 	updateUser: <T = User | null>(
 		args: { data: UserUpdateInput; where: UserWhereUniqueInput },
 		info?: GraphQLResolveInfo | string,
@@ -176,6 +212,11 @@ export interface Mutation {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T | null>;
+	updateGame: <T = Game | null>(
+		args: { data: GameUpdateInput; where: GameWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
 	deleteUser: <T = User | null>(
 		args: { where: UserWhereUniqueInput },
 		info?: GraphQLResolveInfo | string,
@@ -193,6 +234,11 @@ export interface Mutation {
 	) => Promise<T | null>;
 	deleteGitHubWebhookEvent: <T = GitHubWebhookEvent | null>(
 		args: { where: GitHubWebhookEventWhereUniqueInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T | null>;
+	deleteGame: <T = Game | null>(
+		args: { where: GameWhereUniqueInput },
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T | null>;
@@ -228,6 +274,11 @@ export interface Mutation {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T>;
+	upsertGame: <T = Game>(
+		args: { where: GameWhereUniqueInput; create: GameCreateInput; update: GameUpdateInput },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
 	updateManyUsers: <T = BatchPayload>(
 		args: { data: UserUpdateManyMutationInput; where?: UserWhereInput | null },
 		info?: GraphQLResolveInfo | string,
@@ -251,6 +302,11 @@ export interface Mutation {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T>;
+	updateManyGames: <T = BatchPayload>(
+		args: { data: GameUpdateManyMutationInput; where?: GameWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
 	deleteManyUsers: <T = BatchPayload>(
 		args: { where?: UserWhereInput | null },
 		info?: GraphQLResolveInfo | string,
@@ -268,6 +324,11 @@ export interface Mutation {
 	) => Promise<T>;
 	deleteManyGitHubWebhookEvents: <T = BatchPayload>(
 		args: { where?: GitHubWebhookEventWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<T>;
+	deleteManyGames: <T = BatchPayload>(
+		args: { where?: GameWhereInput | null },
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<T>;
@@ -299,6 +360,11 @@ export interface Subscription {
 		info?: GraphQLResolveInfo | string,
 		options?: Options
 	) => Promise<AsyncIterator<T | null>>;
+	game: <T = GameSubscriptionPayload | null>(
+		args: { where?: GameSubscriptionWhereInput | null },
+		info?: GraphQLResolveInfo | string,
+		options?: Options
+	) => Promise<AsyncIterator<T | null>>;
 }
 
 export interface Exists {
@@ -306,6 +372,7 @@ export interface Exists {
 	AppKey: (where?: AppKeyWhereInput) => Promise<boolean>;
 	Repository: (where?: RepositoryWhereInput) => Promise<boolean>;
 	GitHubWebhookEvent: (where?: GitHubWebhookEventWhereInput) => Promise<boolean>;
+	Game: (where?: GameWhereInput) => Promise<boolean>;
 }
 
 export interface Prisma {
@@ -342,6 +409,10 @@ export interface BindingConstructor<T> {
  */
 
 const typeDefs = `type AggregateAppKey {
+  count: Int!
+}
+
+type AggregateGame {
   count: Int!
 }
 
@@ -816,6 +887,554 @@ type BatchPayload {
 }
 
 scalar DateTime
+
+type Game implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  repository: Repository!
+  title: String!
+  owner: User!
+  type: String!
+}
+
+"""A connection to a list of items."""
+type GameConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [GameEdge]!
+  aggregate: AggregateGame!
+}
+
+input GameCreateInput {
+  id: ID
+  title: String!
+  type: String!
+  repository: RepositoryCreateOneWithoutGameInput!
+  owner: UserCreateOneWithoutGamesOwnedInput!
+}
+
+input GameCreateManyWithoutOwnerInput {
+  create: [GameCreateWithoutOwnerInput!]
+  connect: [GameWhereUniqueInput!]
+}
+
+input GameCreateOneWithoutRepositoryInput {
+  create: GameCreateWithoutRepositoryInput
+  connect: GameWhereUniqueInput
+}
+
+input GameCreateWithoutOwnerInput {
+  id: ID
+  title: String!
+  type: String!
+  repository: RepositoryCreateOneWithoutGameInput!
+}
+
+input GameCreateWithoutRepositoryInput {
+  id: ID
+  title: String!
+  type: String!
+  owner: UserCreateOneWithoutGamesOwnedInput!
+}
+
+"""An edge in a connection."""
+type GameEdge {
+  """The item at the end of the edge."""
+  node: Game!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum GameOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  title_ASC
+  title_DESC
+  type_ASC
+  type_DESC
+}
+
+type GamePreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  type: String!
+}
+
+input GameScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+}
+
+type GameSubscriptionPayload {
+  mutation: MutationType!
+  node: Game
+  updatedFields: [String!]
+  previousValues: GamePreviousValues
+}
+
+input GameSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: GameWhereInput
+}
+
+input GameUpdateInput {
+  title: String
+  type: String
+  repository: RepositoryUpdateOneRequiredWithoutGameInput
+  owner: UserUpdateOneRequiredWithoutGamesOwnedInput
+}
+
+input GameUpdateManyDataInput {
+  title: String
+  type: String
+}
+
+input GameUpdateManyMutationInput {
+  title: String
+  type: String
+}
+
+input GameUpdateManyWithoutOwnerInput {
+  create: [GameCreateWithoutOwnerInput!]
+  connect: [GameWhereUniqueInput!]
+  set: [GameWhereUniqueInput!]
+  disconnect: [GameWhereUniqueInput!]
+  delete: [GameWhereUniqueInput!]
+  update: [GameUpdateWithWhereUniqueWithoutOwnerInput!]
+  updateMany: [GameUpdateManyWithWhereNestedInput!]
+  deleteMany: [GameScalarWhereInput!]
+  upsert: [GameUpsertWithWhereUniqueWithoutOwnerInput!]
+}
+
+input GameUpdateManyWithWhereNestedInput {
+  where: GameScalarWhereInput!
+  data: GameUpdateManyDataInput!
+}
+
+input GameUpdateOneWithoutRepositoryInput {
+  create: GameCreateWithoutRepositoryInput
+  connect: GameWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: GameUpdateWithoutRepositoryDataInput
+  upsert: GameUpsertWithoutRepositoryInput
+}
+
+input GameUpdateWithoutOwnerDataInput {
+  title: String
+  type: String
+  repository: RepositoryUpdateOneRequiredWithoutGameInput
+}
+
+input GameUpdateWithoutRepositoryDataInput {
+  title: String
+  type: String
+  owner: UserUpdateOneRequiredWithoutGamesOwnedInput
+}
+
+input GameUpdateWithWhereUniqueWithoutOwnerInput {
+  where: GameWhereUniqueInput!
+  data: GameUpdateWithoutOwnerDataInput!
+}
+
+input GameUpsertWithoutRepositoryInput {
+  update: GameUpdateWithoutRepositoryDataInput!
+  create: GameCreateWithoutRepositoryInput!
+}
+
+input GameUpsertWithWhereUniqueWithoutOwnerInput {
+  where: GameWhereUniqueInput!
+  update: GameUpdateWithoutOwnerDataInput!
+  create: GameCreateWithoutOwnerInput!
+}
+
+input GameWhereInput {
+  """Logical AND on all given filters."""
+  AND: [GameWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [GameWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [GameWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  repository: RepositoryWhereInput
+  owner: UserWhereInput
+}
+
+input GameWhereUniqueInput {
+  id: ID
+}
 
 type GitHubWebhookEvent implements Node {
   id: ID!
@@ -1383,26 +2002,32 @@ type Mutation {
   createAppKey(data: AppKeyCreateInput!): AppKey!
   createRepository(data: RepositoryCreateInput!): Repository!
   createGitHubWebhookEvent(data: GitHubWebhookEventCreateInput!): GitHubWebhookEvent!
+  createGame(data: GameCreateInput!): Game!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateAppKey(data: AppKeyUpdateInput!, where: AppKeyWhereUniqueInput!): AppKey
   updateRepository(data: RepositoryUpdateInput!, where: RepositoryWhereUniqueInput!): Repository
   updateGitHubWebhookEvent(data: GitHubWebhookEventUpdateInput!, where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
+  updateGame(data: GameUpdateInput!, where: GameWhereUniqueInput!): Game
   deleteUser(where: UserWhereUniqueInput!): User
   deleteAppKey(where: AppKeyWhereUniqueInput!): AppKey
   deleteRepository(where: RepositoryWhereUniqueInput!): Repository
   deleteGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
+  deleteGame(where: GameWhereUniqueInput!): Game
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertAppKey(where: AppKeyWhereUniqueInput!, create: AppKeyCreateInput!, update: AppKeyUpdateInput!): AppKey!
   upsertRepository(where: RepositoryWhereUniqueInput!, create: RepositoryCreateInput!, update: RepositoryUpdateInput!): Repository!
   upsertGitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!, create: GitHubWebhookEventCreateInput!, update: GitHubWebhookEventUpdateInput!): GitHubWebhookEvent!
+  upsertGame(where: GameWhereUniqueInput!, create: GameCreateInput!, update: GameUpdateInput!): Game!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyAppKeys(data: AppKeyUpdateManyMutationInput!, where: AppKeyWhereInput): BatchPayload!
   updateManyRepositories(data: RepositoryUpdateManyMutationInput!, where: RepositoryWhereInput): BatchPayload!
   updateManyGitHubWebhookEvents(data: GitHubWebhookEventUpdateManyMutationInput!, where: GitHubWebhookEventWhereInput): BatchPayload!
+  updateManyGames(data: GameUpdateManyMutationInput!, where: GameWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyAppKeys(where: AppKeyWhereInput): BatchPayload!
   deleteManyRepositories(where: RepositoryWhereInput): BatchPayload!
   deleteManyGitHubWebhookEvents(where: GitHubWebhookEventWhereInput): BatchPayload!
+  deleteManyGames(where: GameWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -1442,14 +2067,17 @@ type Query {
   appKeys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey]!
   repositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository]!
   gitHubWebhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent]!
+  games(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game]!
   user(where: UserWhereUniqueInput!): User
   appKey(where: AppKeyWhereUniqueInput!): AppKey
   repository(where: RepositoryWhereUniqueInput!): Repository
   gitHubWebhookEvent(where: GitHubWebhookEventWhereUniqueInput!): GitHubWebhookEvent
+  game(where: GameWhereUniqueInput!): Game
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   appKeysConnection(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AppKeyConnection!
   repositoriesConnection(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RepositoryConnection!
   gitHubWebhookEventsConnection(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GitHubWebhookEventConnection!
+  gamesConnection(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GameConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1483,6 +2111,7 @@ type Repository implements Node {
   issues: Int
   pullRequests: Int
   webhookEvents(where: GitHubWebhookEventWhereInput, orderBy: GitHubWebhookEventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GitHubWebhookEvent!]
+  game: Game
 }
 
 """A connection to a list of items."""
@@ -1520,6 +2149,7 @@ input RepositoryCreateInput {
   addedBy: UserCreateOneWithoutAddedRepositoriesInput!
   appKey: AppKeyCreateOneWithoutRepositoriesInput!
   webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+  game: GameCreateOneWithoutRepositoryInput
 }
 
 input RepositoryCreateManyWithoutAddedByInput {
@@ -1530,6 +2160,11 @@ input RepositoryCreateManyWithoutAddedByInput {
 input RepositoryCreateManyWithoutAppKeyInput {
   create: [RepositoryCreateWithoutAppKeyInput!]
   connect: [RepositoryWhereUniqueInput!]
+}
+
+input RepositoryCreateOneWithoutGameInput {
+  create: RepositoryCreateWithoutGameInput
+  connect: RepositoryWhereUniqueInput
 }
 
 input RepositoryCreateOneWithoutWebhookEventsInput {
@@ -1561,6 +2196,7 @@ input RepositoryCreateWithoutAddedByInput {
   pullRequests: Int
   appKey: AppKeyCreateOneWithoutRepositoriesInput!
   webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+  game: GameCreateOneWithoutRepositoryInput
 }
 
 input RepositoryCreateWithoutAppKeyInput {
@@ -1586,6 +2222,34 @@ input RepositoryCreateWithoutAppKeyInput {
   issues: Int
   pullRequests: Int
   addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
+  game: GameCreateOneWithoutRepositoryInput
+}
+
+input RepositoryCreateWithoutGameInput {
+  id: ID
+  idExternal: String!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  name: String!
+  description: String
+  homepageUrl: String
+  url: String!
+  owner: String!
+  isTracked: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserCreateOneWithoutAddedRepositoriesInput!
+  appKey: AppKeyCreateOneWithoutRepositoriesInput!
   webhookEvents: GitHubWebhookEventCreateManyWithoutRepositoryInput
 }
 
@@ -1613,6 +2277,7 @@ input RepositoryCreateWithoutWebhookEventsInput {
   pullRequests: Int
   addedBy: UserCreateOneWithoutAddedRepositoriesInput!
   appKey: AppKeyCreateOneWithoutRepositoriesInput!
+  game: GameCreateOneWithoutRepositoryInput
 }
 
 """An edge in a connection."""
@@ -2265,6 +2930,7 @@ input RepositoryUpdateInput {
   addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
   appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
   webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+  game: GameUpdateOneWithoutRepositoryInput
 }
 
 input RepositoryUpdateManyDataInput {
@@ -2342,6 +3008,13 @@ input RepositoryUpdateManyWithWhereNestedInput {
   data: RepositoryUpdateManyDataInput!
 }
 
+input RepositoryUpdateOneRequiredWithoutGameInput {
+  create: RepositoryCreateWithoutGameInput
+  connect: RepositoryWhereUniqueInput
+  update: RepositoryUpdateWithoutGameDataInput
+  upsert: RepositoryUpsertWithoutGameInput
+}
+
 input RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
   create: RepositoryCreateWithoutWebhookEventsInput
   connect: RepositoryWhereUniqueInput
@@ -2372,6 +3045,7 @@ input RepositoryUpdateWithoutAddedByDataInput {
   pullRequests: Int
   appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
   webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+  game: GameUpdateOneWithoutRepositoryInput
 }
 
 input RepositoryUpdateWithoutAppKeyDataInput {
@@ -2396,6 +3070,33 @@ input RepositoryUpdateWithoutAppKeyDataInput {
   issues: Int
   pullRequests: Int
   addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
+  game: GameUpdateOneWithoutRepositoryInput
+}
+
+input RepositoryUpdateWithoutGameDataInput {
+  idExternal: String
+  createdAtExternal: DateTime
+  updatedAtExternal: DateTime
+  name: String
+  description: String
+  homepageUrl: String
+  url: String
+  owner: String
+  isTracked: Boolean
+  isFork: Boolean
+  isLocked: Boolean
+  isPrivate: Boolean
+  isArchived: Boolean
+  isDisabled: Boolean
+  sshUrl: String
+  stargazers: Int
+  collaborators: Int
+  watchers: Int
+  issues: Int
+  pullRequests: Int
+  addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
+  appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
   webhookEvents: GitHubWebhookEventUpdateManyWithoutRepositoryInput
 }
 
@@ -2422,6 +3123,7 @@ input RepositoryUpdateWithoutWebhookEventsDataInput {
   pullRequests: Int
   addedBy: UserUpdateOneRequiredWithoutAddedRepositoriesInput
   appKey: AppKeyUpdateOneRequiredWithoutRepositoriesInput
+  game: GameUpdateOneWithoutRepositoryInput
 }
 
 input RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
@@ -2432,6 +3134,11 @@ input RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
 input RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
   where: RepositoryWhereUniqueInput!
   data: RepositoryUpdateWithoutAppKeyDataInput!
+}
+
+input RepositoryUpsertWithoutGameInput {
+  update: RepositoryUpdateWithoutGameDataInput!
+  create: RepositoryCreateWithoutGameInput!
 }
 
 input RepositoryUpsertWithoutWebhookEventsInput {
@@ -2963,6 +3670,7 @@ input RepositoryWhereInput {
   webhookEvents_every: GitHubWebhookEventWhereInput
   webhookEvents_some: GitHubWebhookEventWhereInput
   webhookEvents_none: GitHubWebhookEventWhereInput
+  game: GameWhereInput
 }
 
 input RepositoryWhereUniqueInput {
@@ -2981,6 +3689,7 @@ type Subscription {
   appKey(where: AppKeySubscriptionWhereInput): AppKeySubscriptionPayload
   repository(where: RepositorySubscriptionWhereInput): RepositorySubscriptionPayload
   gitHubWebhookEvent(where: GitHubWebhookEventSubscriptionWhereInput): GitHubWebhookEventSubscriptionPayload
+  game(where: GameSubscriptionWhereInput): GameSubscriptionPayload
 }
 
 type User implements Node {
@@ -2994,6 +3703,7 @@ type User implements Node {
   keys(where: AppKeyWhereInput, orderBy: AppKeyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AppKey!]
   addedRepositories(where: RepositoryWhereInput, orderBy: RepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Repository!]
   gitLogin: String!
+  gamesOwned(where: GameWhereInput, orderBy: GameOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Game!]
 }
 
 """A connection to a list of items."""
@@ -3015,10 +3725,16 @@ input UserCreateInput {
   gitLogin: String!
   keys: AppKeyCreateManyWithoutUserInput
   addedRepositories: RepositoryCreateManyWithoutAddedByInput
+  gamesOwned: GameCreateManyWithoutOwnerInput
 }
 
 input UserCreateOneWithoutAddedRepositoriesInput {
   create: UserCreateWithoutAddedRepositoriesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutGamesOwnedInput {
+  create: UserCreateWithoutGamesOwnedInput
   connect: UserWhereUniqueInput
 }
 
@@ -3035,6 +3751,18 @@ input UserCreateWithoutAddedRepositoriesInput {
   role: Role
   gitLogin: String!
   keys: AppKeyCreateManyWithoutUserInput
+  gamesOwned: GameCreateManyWithoutOwnerInput
+}
+
+input UserCreateWithoutGamesOwnedInput {
+  id: ID
+  email: String!
+  hash: String!
+  name: String
+  role: Role
+  gitLogin: String!
+  keys: AppKeyCreateManyWithoutUserInput
+  addedRepositories: RepositoryCreateManyWithoutAddedByInput
 }
 
 input UserCreateWithoutKeysInput {
@@ -3045,6 +3773,7 @@ input UserCreateWithoutKeysInput {
   role: Role
   gitLogin: String!
   addedRepositories: RepositoryCreateManyWithoutAddedByInput
+  gamesOwned: GameCreateManyWithoutOwnerInput
 }
 
 """An edge in a connection."""
@@ -3133,6 +3862,7 @@ input UserUpdateInput {
   gitLogin: String
   keys: AppKeyUpdateManyWithoutUserInput
   addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+  gamesOwned: GameUpdateManyWithoutOwnerInput
 }
 
 input UserUpdateManyMutationInput {
@@ -3150,6 +3880,13 @@ input UserUpdateOneRequiredWithoutAddedRepositoriesInput {
   upsert: UserUpsertWithoutAddedRepositoriesInput
 }
 
+input UserUpdateOneRequiredWithoutGamesOwnedInput {
+  create: UserCreateWithoutGamesOwnedInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutGamesOwnedDataInput
+  upsert: UserUpsertWithoutGamesOwnedInput
+}
+
 input UserUpdateOneRequiredWithoutKeysInput {
   create: UserCreateWithoutKeysInput
   connect: UserWhereUniqueInput
@@ -3164,6 +3901,17 @@ input UserUpdateWithoutAddedRepositoriesDataInput {
   role: Role
   gitLogin: String
   keys: AppKeyUpdateManyWithoutUserInput
+  gamesOwned: GameUpdateManyWithoutOwnerInput
+}
+
+input UserUpdateWithoutGamesOwnedDataInput {
+  email: String
+  hash: String
+  name: String
+  role: Role
+  gitLogin: String
+  keys: AppKeyUpdateManyWithoutUserInput
+  addedRepositories: RepositoryUpdateManyWithoutAddedByInput
 }
 
 input UserUpdateWithoutKeysDataInput {
@@ -3173,11 +3921,17 @@ input UserUpdateWithoutKeysDataInput {
   role: Role
   gitLogin: String
   addedRepositories: RepositoryUpdateManyWithoutAddedByInput
+  gamesOwned: GameUpdateManyWithoutOwnerInput
 }
 
 input UserUpsertWithoutAddedRepositoriesInput {
   update: UserUpdateWithoutAddedRepositoriesDataInput!
   create: UserCreateWithoutAddedRepositoriesInput!
+}
+
+input UserUpsertWithoutGamesOwnedInput {
+  update: UserUpdateWithoutGamesOwnedDataInput!
+  create: UserCreateWithoutGamesOwnedInput!
 }
 
 input UserUpsertWithoutKeysInput {
@@ -3454,6 +4208,9 @@ input UserWhereInput {
   addedRepositories_every: RepositoryWhereInput
   addedRepositories_some: RepositoryWhereInput
   addedRepositories_none: RepositoryWhereInput
+  gamesOwned_every: GameWhereInput
+  gamesOwned_some: GameWhereInput
+  gamesOwned_none: GameWhereInput
 }
 
 input UserWhereUniqueInput {
@@ -3475,6 +4232,18 @@ export type AppKeyOrderByInput =
 	| 'key_DESC'
 	| 'name_ASC'
 	| 'name_DESC';
+
+export type GameOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'createdAt_ASC'
+	| 'createdAt_DESC'
+	| 'updatedAt_ASC'
+	| 'updatedAt_DESC'
+	| 'title_ASC'
+	| 'title_DESC'
+	| 'type_ASC'
+	| 'type_DESC';
 
 export type GitHubWebhookEventOrderByInput =
 	| 'id_ASC'
@@ -3782,6 +4551,260 @@ export interface AppKeyWhereUniqueInput {
 	key?: String | null;
 }
 
+export interface GameCreateInput {
+	id?: ID_Input | null;
+	title: String;
+	type: String;
+	repository: RepositoryCreateOneWithoutGameInput;
+	owner: UserCreateOneWithoutGamesOwnedInput;
+}
+
+export interface GameCreateManyWithoutOwnerInput {
+	create?: GameCreateWithoutOwnerInput[] | GameCreateWithoutOwnerInput | null;
+	connect?: GameWhereUniqueInput[] | GameWhereUniqueInput | null;
+}
+
+export interface GameCreateOneWithoutRepositoryInput {
+	create?: GameCreateWithoutRepositoryInput | null;
+	connect?: GameWhereUniqueInput | null;
+}
+
+export interface GameCreateWithoutOwnerInput {
+	id?: ID_Input | null;
+	title: String;
+	type: String;
+	repository: RepositoryCreateOneWithoutGameInput;
+}
+
+export interface GameCreateWithoutRepositoryInput {
+	id?: ID_Input | null;
+	title: String;
+	type: String;
+	owner: UserCreateOneWithoutGamesOwnedInput;
+}
+
+export interface GameScalarWhereInput {
+	AND?: GameScalarWhereInput[] | GameScalarWhereInput | null;
+	OR?: GameScalarWhereInput[] | GameScalarWhereInput | null;
+	NOT?: GameScalarWhereInput[] | GameScalarWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	createdAt?: DateTime | null;
+	createdAt_not?: DateTime | null;
+	createdAt_in?: DateTime[] | DateTime | null;
+	createdAt_not_in?: DateTime[] | DateTime | null;
+	createdAt_lt?: DateTime | null;
+	createdAt_lte?: DateTime | null;
+	createdAt_gt?: DateTime | null;
+	createdAt_gte?: DateTime | null;
+	updatedAt?: DateTime | null;
+	updatedAt_not?: DateTime | null;
+	updatedAt_in?: DateTime[] | DateTime | null;
+	updatedAt_not_in?: DateTime[] | DateTime | null;
+	updatedAt_lt?: DateTime | null;
+	updatedAt_lte?: DateTime | null;
+	updatedAt_gt?: DateTime | null;
+	updatedAt_gte?: DateTime | null;
+	title?: String | null;
+	title_not?: String | null;
+	title_in?: String[] | String | null;
+	title_not_in?: String[] | String | null;
+	title_lt?: String | null;
+	title_lte?: String | null;
+	title_gt?: String | null;
+	title_gte?: String | null;
+	title_contains?: String | null;
+	title_not_contains?: String | null;
+	title_starts_with?: String | null;
+	title_not_starts_with?: String | null;
+	title_ends_with?: String | null;
+	title_not_ends_with?: String | null;
+	type?: String | null;
+	type_not?: String | null;
+	type_in?: String[] | String | null;
+	type_not_in?: String[] | String | null;
+	type_lt?: String | null;
+	type_lte?: String | null;
+	type_gt?: String | null;
+	type_gte?: String | null;
+	type_contains?: String | null;
+	type_not_contains?: String | null;
+	type_starts_with?: String | null;
+	type_not_starts_with?: String | null;
+	type_ends_with?: String | null;
+	type_not_ends_with?: String | null;
+}
+
+export interface GameSubscriptionWhereInput {
+	AND?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput | null;
+	OR?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput | null;
+	NOT?: GameSubscriptionWhereInput[] | GameSubscriptionWhereInput | null;
+	mutation_in?: MutationType[] | MutationType | null;
+	updatedFields_contains?: String | null;
+	updatedFields_contains_every?: String[] | String | null;
+	updatedFields_contains_some?: String[] | String | null;
+	node?: GameWhereInput | null;
+}
+
+export interface GameUpdateInput {
+	title?: String | null;
+	type?: String | null;
+	repository?: RepositoryUpdateOneRequiredWithoutGameInput | null;
+	owner?: UserUpdateOneRequiredWithoutGamesOwnedInput | null;
+}
+
+export interface GameUpdateManyDataInput {
+	title?: String | null;
+	type?: String | null;
+}
+
+export interface GameUpdateManyMutationInput {
+	title?: String | null;
+	type?: String | null;
+}
+
+export interface GameUpdateManyWithoutOwnerInput {
+	create?: GameCreateWithoutOwnerInput[] | GameCreateWithoutOwnerInput | null;
+	connect?: GameWhereUniqueInput[] | GameWhereUniqueInput | null;
+	set?: GameWhereUniqueInput[] | GameWhereUniqueInput | null;
+	disconnect?: GameWhereUniqueInput[] | GameWhereUniqueInput | null;
+	delete?: GameWhereUniqueInput[] | GameWhereUniqueInput | null;
+	update?:
+		| GameUpdateWithWhereUniqueWithoutOwnerInput[]
+		| GameUpdateWithWhereUniqueWithoutOwnerInput
+		| null;
+	updateMany?: GameUpdateManyWithWhereNestedInput[] | GameUpdateManyWithWhereNestedInput | null;
+	deleteMany?: GameScalarWhereInput[] | GameScalarWhereInput | null;
+	upsert?:
+		| GameUpsertWithWhereUniqueWithoutOwnerInput[]
+		| GameUpsertWithWhereUniqueWithoutOwnerInput
+		| null;
+}
+
+export interface GameUpdateManyWithWhereNestedInput {
+	where: GameScalarWhereInput;
+	data: GameUpdateManyDataInput;
+}
+
+export interface GameUpdateOneWithoutRepositoryInput {
+	create?: GameCreateWithoutRepositoryInput | null;
+	connect?: GameWhereUniqueInput | null;
+	disconnect?: Boolean | null;
+	delete?: Boolean | null;
+	update?: GameUpdateWithoutRepositoryDataInput | null;
+	upsert?: GameUpsertWithoutRepositoryInput | null;
+}
+
+export interface GameUpdateWithoutOwnerDataInput {
+	title?: String | null;
+	type?: String | null;
+	repository?: RepositoryUpdateOneRequiredWithoutGameInput | null;
+}
+
+export interface GameUpdateWithoutRepositoryDataInput {
+	title?: String | null;
+	type?: String | null;
+	owner?: UserUpdateOneRequiredWithoutGamesOwnedInput | null;
+}
+
+export interface GameUpdateWithWhereUniqueWithoutOwnerInput {
+	where: GameWhereUniqueInput;
+	data: GameUpdateWithoutOwnerDataInput;
+}
+
+export interface GameUpsertWithoutRepositoryInput {
+	update: GameUpdateWithoutRepositoryDataInput;
+	create: GameCreateWithoutRepositoryInput;
+}
+
+export interface GameUpsertWithWhereUniqueWithoutOwnerInput {
+	where: GameWhereUniqueInput;
+	update: GameUpdateWithoutOwnerDataInput;
+	create: GameCreateWithoutOwnerInput;
+}
+
+export interface GameWhereInput {
+	AND?: GameWhereInput[] | GameWhereInput | null;
+	OR?: GameWhereInput[] | GameWhereInput | null;
+	NOT?: GameWhereInput[] | GameWhereInput | null;
+	id?: ID_Input | null;
+	id_not?: ID_Input | null;
+	id_in?: ID_Output[] | ID_Output | null;
+	id_not_in?: ID_Output[] | ID_Output | null;
+	id_lt?: ID_Input | null;
+	id_lte?: ID_Input | null;
+	id_gt?: ID_Input | null;
+	id_gte?: ID_Input | null;
+	id_contains?: ID_Input | null;
+	id_not_contains?: ID_Input | null;
+	id_starts_with?: ID_Input | null;
+	id_not_starts_with?: ID_Input | null;
+	id_ends_with?: ID_Input | null;
+	id_not_ends_with?: ID_Input | null;
+	createdAt?: DateTime | null;
+	createdAt_not?: DateTime | null;
+	createdAt_in?: DateTime[] | DateTime | null;
+	createdAt_not_in?: DateTime[] | DateTime | null;
+	createdAt_lt?: DateTime | null;
+	createdAt_lte?: DateTime | null;
+	createdAt_gt?: DateTime | null;
+	createdAt_gte?: DateTime | null;
+	updatedAt?: DateTime | null;
+	updatedAt_not?: DateTime | null;
+	updatedAt_in?: DateTime[] | DateTime | null;
+	updatedAt_not_in?: DateTime[] | DateTime | null;
+	updatedAt_lt?: DateTime | null;
+	updatedAt_lte?: DateTime | null;
+	updatedAt_gt?: DateTime | null;
+	updatedAt_gte?: DateTime | null;
+	title?: String | null;
+	title_not?: String | null;
+	title_in?: String[] | String | null;
+	title_not_in?: String[] | String | null;
+	title_lt?: String | null;
+	title_lte?: String | null;
+	title_gt?: String | null;
+	title_gte?: String | null;
+	title_contains?: String | null;
+	title_not_contains?: String | null;
+	title_starts_with?: String | null;
+	title_not_starts_with?: String | null;
+	title_ends_with?: String | null;
+	title_not_ends_with?: String | null;
+	type?: String | null;
+	type_not?: String | null;
+	type_in?: String[] | String | null;
+	type_not_in?: String[] | String | null;
+	type_lt?: String | null;
+	type_lte?: String | null;
+	type_gt?: String | null;
+	type_gte?: String | null;
+	type_contains?: String | null;
+	type_not_contains?: String | null;
+	type_starts_with?: String | null;
+	type_not_starts_with?: String | null;
+	type_ends_with?: String | null;
+	type_not_ends_with?: String | null;
+	repository?: RepositoryWhereInput | null;
+	owner?: UserWhereInput | null;
+}
+
+export interface GameWhereUniqueInput {
+	id?: ID_Input | null;
+}
+
 export interface GitHubWebhookEventCreateInput {
 	id?: ID_Input | null;
 	eventType: String;
@@ -4060,6 +5083,7 @@ export interface RepositoryCreateInput {
 	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
 	appKey: AppKeyCreateOneWithoutRepositoriesInput;
 	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
+	game?: GameCreateOneWithoutRepositoryInput | null;
 }
 
 export interface RepositoryCreateManyWithoutAddedByInput {
@@ -4070,6 +5094,11 @@ export interface RepositoryCreateManyWithoutAddedByInput {
 export interface RepositoryCreateManyWithoutAppKeyInput {
 	create?: RepositoryCreateWithoutAppKeyInput[] | RepositoryCreateWithoutAppKeyInput | null;
 	connect?: RepositoryWhereUniqueInput[] | RepositoryWhereUniqueInput | null;
+}
+
+export interface RepositoryCreateOneWithoutGameInput {
+	create?: RepositoryCreateWithoutGameInput | null;
+	connect?: RepositoryWhereUniqueInput | null;
 }
 
 export interface RepositoryCreateOneWithoutWebhookEventsInput {
@@ -4101,6 +5130,7 @@ export interface RepositoryCreateWithoutAddedByInput {
 	pullRequests?: Int | null;
 	appKey: AppKeyCreateOneWithoutRepositoriesInput;
 	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
+	game?: GameCreateOneWithoutRepositoryInput | null;
 }
 
 export interface RepositoryCreateWithoutAppKeyInput {
@@ -4126,6 +5156,34 @@ export interface RepositoryCreateWithoutAppKeyInput {
 	issues?: Int | null;
 	pullRequests?: Int | null;
 	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
+	game?: GameCreateOneWithoutRepositoryInput | null;
+}
+
+export interface RepositoryCreateWithoutGameInput {
+	id?: ID_Input | null;
+	idExternal: String;
+	createdAtExternal: DateTime;
+	updatedAtExternal: DateTime;
+	name: String;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url: String;
+	owner: String;
+	isTracked: Boolean;
+	isFork: Boolean;
+	isLocked: Boolean;
+	isPrivate: Boolean;
+	isArchived: Boolean;
+	isDisabled: Boolean;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
+	appKey: AppKeyCreateOneWithoutRepositoriesInput;
 	webhookEvents?: GitHubWebhookEventCreateManyWithoutRepositoryInput | null;
 }
 
@@ -4153,6 +5211,7 @@ export interface RepositoryCreateWithoutWebhookEventsInput {
 	pullRequests?: Int | null;
 	addedBy: UserCreateOneWithoutAddedRepositoriesInput;
 	appKey: AppKeyCreateOneWithoutRepositoriesInput;
+	game?: GameCreateOneWithoutRepositoryInput | null;
 }
 
 export interface RepositoryScalarWhereInput {
@@ -4376,6 +5435,7 @@ export interface RepositoryUpdateInput {
 	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
 	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
 	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
+	game?: GameUpdateOneWithoutRepositoryInput | null;
 }
 
 export interface RepositoryUpdateManyDataInput {
@@ -4471,6 +5531,13 @@ export interface RepositoryUpdateManyWithWhereNestedInput {
 	data: RepositoryUpdateManyDataInput;
 }
 
+export interface RepositoryUpdateOneRequiredWithoutGameInput {
+	create?: RepositoryCreateWithoutGameInput | null;
+	connect?: RepositoryWhereUniqueInput | null;
+	update?: RepositoryUpdateWithoutGameDataInput | null;
+	upsert?: RepositoryUpsertWithoutGameInput | null;
+}
+
 export interface RepositoryUpdateOneRequiredWithoutWebhookEventsInput {
 	create?: RepositoryCreateWithoutWebhookEventsInput | null;
 	connect?: RepositoryWhereUniqueInput | null;
@@ -4501,6 +5568,7 @@ export interface RepositoryUpdateWithoutAddedByDataInput {
 	pullRequests?: Int | null;
 	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
 	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
+	game?: GameUpdateOneWithoutRepositoryInput | null;
 }
 
 export interface RepositoryUpdateWithoutAppKeyDataInput {
@@ -4525,6 +5593,33 @@ export interface RepositoryUpdateWithoutAppKeyDataInput {
 	issues?: Int | null;
 	pullRequests?: Int | null;
 	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
+	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
+	game?: GameUpdateOneWithoutRepositoryInput | null;
+}
+
+export interface RepositoryUpdateWithoutGameDataInput {
+	idExternal?: String | null;
+	createdAtExternal?: DateTime | null;
+	updatedAtExternal?: DateTime | null;
+	name?: String | null;
+	description?: String | null;
+	homepageUrl?: String | null;
+	url?: String | null;
+	owner?: String | null;
+	isTracked?: Boolean | null;
+	isFork?: Boolean | null;
+	isLocked?: Boolean | null;
+	isPrivate?: Boolean | null;
+	isArchived?: Boolean | null;
+	isDisabled?: Boolean | null;
+	sshUrl?: String | null;
+	stargazers?: Int | null;
+	collaborators?: Int | null;
+	watchers?: Int | null;
+	issues?: Int | null;
+	pullRequests?: Int | null;
+	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
+	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
 	webhookEvents?: GitHubWebhookEventUpdateManyWithoutRepositoryInput | null;
 }
 
@@ -4551,6 +5646,7 @@ export interface RepositoryUpdateWithoutWebhookEventsDataInput {
 	pullRequests?: Int | null;
 	addedBy?: UserUpdateOneRequiredWithoutAddedRepositoriesInput | null;
 	appKey?: AppKeyUpdateOneRequiredWithoutRepositoriesInput | null;
+	game?: GameUpdateOneWithoutRepositoryInput | null;
 }
 
 export interface RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
@@ -4561,6 +5657,11 @@ export interface RepositoryUpdateWithWhereUniqueWithoutAddedByInput {
 export interface RepositoryUpdateWithWhereUniqueWithoutAppKeyInput {
 	where: RepositoryWhereUniqueInput;
 	data: RepositoryUpdateWithoutAppKeyDataInput;
+}
+
+export interface RepositoryUpsertWithoutGameInput {
+	update: RepositoryUpdateWithoutGameDataInput;
+	create: RepositoryCreateWithoutGameInput;
 }
 
 export interface RepositoryUpsertWithoutWebhookEventsInput {
@@ -4769,6 +5870,7 @@ export interface RepositoryWhereInput {
 	webhookEvents_every?: GitHubWebhookEventWhereInput | null;
 	webhookEvents_some?: GitHubWebhookEventWhereInput | null;
 	webhookEvents_none?: GitHubWebhookEventWhereInput | null;
+	game?: GameWhereInput | null;
 }
 
 export interface RepositoryWhereUniqueInput {
@@ -4786,10 +5888,16 @@ export interface UserCreateInput {
 	gitLogin: String;
 	keys?: AppKeyCreateManyWithoutUserInput | null;
 	addedRepositories?: RepositoryCreateManyWithoutAddedByInput | null;
+	gamesOwned?: GameCreateManyWithoutOwnerInput | null;
 }
 
 export interface UserCreateOneWithoutAddedRepositoriesInput {
 	create?: UserCreateWithoutAddedRepositoriesInput | null;
+	connect?: UserWhereUniqueInput | null;
+}
+
+export interface UserCreateOneWithoutGamesOwnedInput {
+	create?: UserCreateWithoutGamesOwnedInput | null;
 	connect?: UserWhereUniqueInput | null;
 }
 
@@ -4806,6 +5914,18 @@ export interface UserCreateWithoutAddedRepositoriesInput {
 	role?: Role | null;
 	gitLogin: String;
 	keys?: AppKeyCreateManyWithoutUserInput | null;
+	gamesOwned?: GameCreateManyWithoutOwnerInput | null;
+}
+
+export interface UserCreateWithoutGamesOwnedInput {
+	id?: ID_Input | null;
+	email: String;
+	hash: String;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin: String;
+	keys?: AppKeyCreateManyWithoutUserInput | null;
+	addedRepositories?: RepositoryCreateManyWithoutAddedByInput | null;
 }
 
 export interface UserCreateWithoutKeysInput {
@@ -4816,6 +5936,7 @@ export interface UserCreateWithoutKeysInput {
 	role?: Role | null;
 	gitLogin: String;
 	addedRepositories?: RepositoryCreateManyWithoutAddedByInput | null;
+	gamesOwned?: GameCreateManyWithoutOwnerInput | null;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -4837,6 +5958,7 @@ export interface UserUpdateInput {
 	gitLogin?: String | null;
 	keys?: AppKeyUpdateManyWithoutUserInput | null;
 	addedRepositories?: RepositoryUpdateManyWithoutAddedByInput | null;
+	gamesOwned?: GameUpdateManyWithoutOwnerInput | null;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -4854,6 +5976,13 @@ export interface UserUpdateOneRequiredWithoutAddedRepositoriesInput {
 	upsert?: UserUpsertWithoutAddedRepositoriesInput | null;
 }
 
+export interface UserUpdateOneRequiredWithoutGamesOwnedInput {
+	create?: UserCreateWithoutGamesOwnedInput | null;
+	connect?: UserWhereUniqueInput | null;
+	update?: UserUpdateWithoutGamesOwnedDataInput | null;
+	upsert?: UserUpsertWithoutGamesOwnedInput | null;
+}
+
 export interface UserUpdateOneRequiredWithoutKeysInput {
 	create?: UserCreateWithoutKeysInput | null;
 	connect?: UserWhereUniqueInput | null;
@@ -4868,6 +5997,17 @@ export interface UserUpdateWithoutAddedRepositoriesDataInput {
 	role?: Role | null;
 	gitLogin?: String | null;
 	keys?: AppKeyUpdateManyWithoutUserInput | null;
+	gamesOwned?: GameUpdateManyWithoutOwnerInput | null;
+}
+
+export interface UserUpdateWithoutGamesOwnedDataInput {
+	email?: String | null;
+	hash?: String | null;
+	name?: String | null;
+	role?: Role | null;
+	gitLogin?: String | null;
+	keys?: AppKeyUpdateManyWithoutUserInput | null;
+	addedRepositories?: RepositoryUpdateManyWithoutAddedByInput | null;
 }
 
 export interface UserUpdateWithoutKeysDataInput {
@@ -4877,11 +6017,17 @@ export interface UserUpdateWithoutKeysDataInput {
 	role?: Role | null;
 	gitLogin?: String | null;
 	addedRepositories?: RepositoryUpdateManyWithoutAddedByInput | null;
+	gamesOwned?: GameUpdateManyWithoutOwnerInput | null;
 }
 
 export interface UserUpsertWithoutAddedRepositoriesInput {
 	update: UserUpdateWithoutAddedRepositoriesDataInput;
 	create: UserCreateWithoutAddedRepositoriesInput;
+}
+
+export interface UserUpsertWithoutGamesOwnedInput {
+	update: UserUpdateWithoutGamesOwnedDataInput;
+	create: UserCreateWithoutGamesOwnedInput;
 }
 
 export interface UserUpsertWithoutKeysInput {
@@ -4989,6 +6135,9 @@ export interface UserWhereInput {
 	addedRepositories_every?: RepositoryWhereInput | null;
 	addedRepositories_some?: RepositoryWhereInput | null;
 	addedRepositories_none?: RepositoryWhereInput | null;
+	gamesOwned_every?: GameWhereInput | null;
+	gamesOwned_some?: GameWhereInput | null;
+	gamesOwned_none?: GameWhereInput | null;
 }
 
 export interface UserWhereUniqueInput {
@@ -5005,6 +6154,10 @@ export interface Node {
 }
 
 export interface AggregateAppKey {
+	count: Int;
+}
+
+export interface AggregateGame {
 	count: Int;
 }
 
@@ -5062,6 +6215,50 @@ export interface AppKeySubscriptionPayload {
 
 export interface BatchPayload {
 	count: Long;
+}
+
+export interface Game extends Node {
+	id: ID_Output;
+	createdAt: DateTime;
+	updatedAt: DateTime;
+	repository: Repository;
+	title: String;
+	owner: User;
+	type: String;
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface GameConnection {
+	pageInfo: PageInfo;
+	edges: Array<GameEdge | null>;
+	aggregate: AggregateGame;
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface GameEdge {
+	node: Game;
+	cursor: String;
+}
+
+export interface GamePreviousValues {
+	id: ID_Output;
+	createdAt: DateTime;
+	updatedAt: DateTime;
+	title: String;
+	type: String;
+}
+
+export interface GameSubscriptionPayload {
+	mutation: MutationType;
+	node?: Game | null;
+	updatedFields?: Array<String> | null;
+	previousValues?: GamePreviousValues | null;
 }
 
 export interface GitHubWebhookEvent extends Node {
@@ -5143,6 +6340,7 @@ export interface Repository extends Node {
 	issues?: Int | null;
 	pullRequests?: Int | null;
 	webhookEvents?: Array<GitHubWebhookEvent> | null;
+	game?: Game | null;
 }
 
 /*
@@ -5206,6 +6404,7 @@ export interface User extends Node {
 	keys?: Array<AppKey> | null;
 	addedRepositories?: Array<Repository> | null;
 	gitLogin: String;
+	gamesOwned?: Array<Game> | null;
 }
 
 /*

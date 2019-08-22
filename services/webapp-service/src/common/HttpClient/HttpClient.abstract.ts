@@ -6,6 +6,7 @@ import {
 } from './../../store/aspects/app/IAppState.interface';
 import router from '@/router';
 import AppStateModule from '@/store/aspects/app';
+import RepositoriesStateModule from '@/store/aspects/repositories';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import * as jwtClient from 'jsonwebtoken';
 import config from '../../config';
@@ -33,7 +34,9 @@ export default class AbstractHttpClient {
 	/**
 	 * Publically get/settable reference to the user object
 	 */
-	public user: any | null = {};
+	get user() {
+		return AppStateModule.user;
+	}
 
 	constructor(client?: AxiosInstance) {
 		connectionStateObservable.subscribe(x => AppStateModule.setConnectionState({ state: x }));
@@ -88,15 +91,17 @@ export default class AbstractHttpClient {
 			user instanceof Object
 				? { ...user, isAuthenticated: true }
 				: { isAuthenticated: false };
-		this.user = userData;
+		// this.user = userData;
+		AppStateModule.setUser(userData);
 		AppStateModule.setUser({ ...AppStateModule.user, ...userData });
 
 		router.push(destination);
 	}
 
 	public async logout() {
-		this.user = null;
-		AppStateModule.setUser({});
+		// this.user = null;
+		AppStateModule.resetUser();
+		RepositoriesStateModule.resetRepositories();
 		localStorage.setItem('jwt', '');
 		router.push({
 			name: LOGIN.name
@@ -122,7 +127,8 @@ export default class AbstractHttpClient {
 			if (tryJwt != null) {
 				this.setJwt(tryJwt);
 				const user = jwtClient.decode(tryJwt);
-				this.user = user;
+				// this.user = user;
+				AppStateModule.setUser(user);
 
 				AppStateModule.setUser(user);
 				if (user && !this.user.isAuthenticated) {
@@ -141,7 +147,9 @@ export default class AbstractHttpClient {
 			});
 
 			if (!result.data.accessToken) {
-				this.user = null;
+				// this.user = null;
+				AppStateModule.resetUser();
+				RepositoriesStateModule.resetRepositories();
 				this.setJwt('');
 
 				return;
@@ -156,7 +164,7 @@ export default class AbstractHttpClient {
 					? { ...user, isAuthenticated: true }
 					: { isAuthenticated: false };
 
-			this.user = userData;
+			// this.user = userData;
 			AppStateModule.setUser({ ...AppStateModule.user, ...userData });
 		} catch (e) {
 			console.error('There was an error refreshing the jwt: ', e);
