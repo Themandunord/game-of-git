@@ -1,4 +1,4 @@
-import { TGameType } from '@/game/game-types/game-type.types';
+import { GameType } from '@/../../game/game-types/game-type.types';
 import { AbstractHttpClient } from '@/common/HttpClient';
 
 /**
@@ -14,7 +14,7 @@ export class GamesClient {
 		return this.client.get(`${AbstractHttpClient.apiUrl}/game/${id}/load`);
 	}
 
-	public async createGame(type: TGameType) {
+	public async createGame(type: GameType) {
 		console.log('game client: create game ' + type);
 
 		return this.client.post(`${AbstractHttpClient.apiUrl}/game/create`, {

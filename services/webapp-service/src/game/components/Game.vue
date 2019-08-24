@@ -10,39 +10,36 @@ import Component from 'vue-class-component';
 import AppStateModule from '@/store/aspects/app';
 import HttpClient from '@/common/HttpClient';
 
-import { IGameConfig } from '../IGame.interface';
-import { GameType } from '../game-types/game-type.types';
+import { IPhaserGameConfig } from '../../../../../game/config/IPhaserGameConfig.interface';
+import { GameType } from '../../../../../game/game-types/game-type.types';
 
-import BootScene from '../scenes/BootScene';
-import PlayScene from '../scenes/PlayScene';
+import RpgBootScene from '../../../../../game/game-types/rpg/scenes/BootScene';
+import RpgPlayScene from '../../../../../game/game-types/rpg/scenes/PlayScene';
 
-import RpgBootScene from '../game-types/rpg/scenes/BootScene';
-import RpgPlayScene from '../game-types/rpg/scenes/PlayScene';
-
-import GameFactory from './../factory/game.factory';
-import BASE_CONFIG from '../BaseConfig';
+import GameFactory from './../../../../../game/factory/game.factory';
+import BASE_PHASER_GAME_CONFIG from './../../../../../game/config/BasePhaserGameConfig';
 
 /**
  * Demo Game, not a real game type just demonstrates setup for Phaser
  */
-const demoGameConfig: IGameConfig = {
+const demoGameConfig: IPhaserGameConfig = {
 	phaser: {
-		...BASE_CONFIG.phaser,
-		scene: [BootScene, PlayScene]
+		...BASE_PHASER_GAME_CONFIG.phaser,
+		scene: [RpgBootScene, RpgPlayScene]
 	},
 	base: {
-		type: GameType.RPG,
+		type: GameType.Rpg,
 		state: {}
 	}
 };
 
-const rpgGameConfig: IGameConfig = {
+const rpgGameConfig: IPhaserGameConfig = {
 	phaser: {
-		...BASE_CONFIG.phaser,
+		...BASE_PHASER_GAME_CONFIG.phaser,
 		scene: [RpgBootScene, RpgPlayScene]
 	},
 	base: {
-		type: GameType.RPG,
+		type: GameType.Rpg,
 		state: {}
 	}
 };
