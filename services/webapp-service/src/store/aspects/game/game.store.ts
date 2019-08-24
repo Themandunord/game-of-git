@@ -1,7 +1,6 @@
-import { IGameConfigBase } from '@/store/aspects/game/IGameConfig.base';
-import { IGameState } from './IGameState.interface';
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
-
+import { IGameState } from '../../../../../../game/IGameState.interface';
+import { IGameConfigBase } from '../../../../../../game/config/IGameConfig.base';
 import store from '@/store';
 
 @Module({
@@ -24,7 +23,7 @@ class GameState extends VuexModule implements IGameState {
 	}
 
 	@Mutation
-	public setGameData(data: IGameConfigBase) {
+	public setGameConfig(data: IGameConfigBase) {
 		this.gameConfig = data;
 	}
 }

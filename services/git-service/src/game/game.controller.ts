@@ -1,12 +1,11 @@
 import { Controller, Logger, Post, Body, Get, Param } from '@nestjs/common';
 
-const logger = new Logger('GameController');
-
 @Controller('game')
 export class GameController {
+	private logger = new Logger('GameController');
 	@Post('/create')
 	async createGame(@Body('type') type: string) {
-		logger.log(`Create Game ${type}!`);
+		this.logger.log(`Create Game ${type}!`);
 
 		// What happens in game creation?
 		// TODO: Save the base config for the game
@@ -21,7 +20,7 @@ export class GameController {
 
 	@Get(':id/load')
 	async loadGame(@Param('id') id: string) {
-		logger.log('load id game request ' + id);
+		this.logger.log('load id game request ' + id);
 
 		return id;
 	}

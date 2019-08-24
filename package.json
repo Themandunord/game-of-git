@@ -25,5 +25,10 @@
       "pre-commit": "echo pre-commit hook && pretty-quick --staged",
       "pre-push": "echo pre-push hook"
     }
-  }
+  },
+  "private": true,
+  "workspaces": [
+    "game*",
+    "services/*"
+  ]
 }

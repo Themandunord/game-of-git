@@ -1,0 +1,12 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "Common game library",
+  "main": "index.ts",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "phaser": "^3.19.0",
+    "vuex-module-decorators": "^0.10.1"
+  }
+}
