@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "game-of-git": {
+      "schemaPath": "nest-app/src/schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "dev": "http://localhost:3000/graphql"
+        }
+      }
+    }
+  }
+}

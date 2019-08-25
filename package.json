@@ -1,34 +1,27 @@
 {
-  "name": "aws-typescript",
-  "scripts": {
-    "go": "ts-node gog.ts"
-  },
-  "dependencies": {
-    "@pulumi/aws": "^0.18.20",
-    "@pulumi/awsx": "^0.18.6",
-    "@pulumi/pulumi": "^0.17.21",
-    "bcrypt": "^3.0.6",
-    "husky": "^3.0.2",
-    "lint-staged": "^9.2.1",
-    "mrm": "^1.2.2",
-    "pretty-quick": "^1.11.1",
-    "vuetify": "^1.5.5"
-  },
-  "devDependencies": {
-    "@types/node": "^12.6.2",
-    "prettier": "^1.18.2",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo pre-commit hook && pretty-quick --staged",
-      "pre-push": "echo pre-push hook"
+    "name": "game-of-git",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "git@github.com:miking-the-viking/game-of-git.git",
+    "author": "MikingTheViking <kingmi123@gmail.com>",
+    "license": "MIT",
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged -r"
+        }
+    },
+    "lint-staged": {
+        "./**/**.ts": [
+            "yarn run prettier --write",
+            "git add"
+        ]
+    },
+    "dependencies": {
+        "husky": "^3.0.9",
+        "lint-staged": "^9.4.3",
+        "prettier": "^1.19.1",
+        "rimraf": "^3.0.0",
+        "tslint": "^5.20.1",
+        "typescript": "^3.7.2"
     }
-  },
-  "private": true,
-  "workspaces": [
-    "game*",
-    "services/*"
-  ]
 }

@@ -1,13 +1,29 @@
-export LOG_LEVEL=info
+# General Env
 export APP_ENVIRONMENT=development
-export GIT_ACCESS_TOKEN=
-export GIT_TESTING_TOKEN=
-export GIT_TESTING_USER=
-export GIT_TESTING_REPOSITORY=
-export GIT_SERVICE_PORT=3000
+
+# Prisma
+export PRISMA_ENDPOINT=http://localhost
+export PRISMA_PORT=4466
+export PRISMA_SERVICE_NAME=game-of-git
+export PRISMA_SERVICE_STAGE=dev
+
+# Database
+export DB_USER=prisma
+export DB_PASSWORD=prisma
+
+# Nest
+export NEST_SERVER_PORT=3000
+# export GIT_TESTING_TOKEN=
+# export GIT_TESTING_USER=
+# export GIT_TESTING_REPOSITORY=
+# export GIT_SERVICE_DOMAIN=https://a64d8e1c.ngrok.io
+
+# Vue
+export VUE_APP_GRAPHQL_WS=ws://localhost:3000/graphql
 export GIT_SERVICE_HOST=http://localhost:3000
-export GIT_SERVICE_DOMAIN=https://a64d8e1c.ngrok.io
-export VUE_APP_GIT_SERVICE_HOST=http://localhost:3000
 export WEBAPP_SERVICE_PORT=8080
-export DB_USER=root
-export DB_PASSWORD=password
+
+
+# Old Below to review
+
+# export LOG_LEVEL=info
