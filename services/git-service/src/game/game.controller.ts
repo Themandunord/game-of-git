@@ -1,21 +1,21 @@
+import { GameService } from './game.service';
 import { Controller, Logger, Post, Body, Get, Param } from '@nestjs/common';
-
+import { GameType } from '../game-types/game-type.types';
 @Controller('game')
 export class GameController {
 	private logger = new Logger('GameController');
+
+	constructor(private readonly gameService: GameService) {}
 	@Post('/create')
-	async createGame(@Body('type') type: string) {
-		this.logger.log(`Create Game ${type}!`);
+	async createGame(@Body('type') type: GameType, @Body('repositoryId') repositoryId: string) {
+		this.logger.log(`This is Create Game ${type} for repositoryId ${repositoryId}!`);
 
-		// What happens in game creation?
-		// TODO: Save the base config for the game
-		// TODO: Add Listeners for Webhook Events concerning this Game's repository
-		// TODO: Storing the delta of the game config for playback, debugging, etc.
-		// TODO: Game Data storage (present world instance, rapid read/write)
-		// TODO: Type-Specific Requirements (World Generation)
-		// TODO: *Character Creator (DOWN THE LINE)
+		const res = await this.gameService.createGame(type, repositoryId);
+		this.logger.log(`res = ${res}`);
 
-		return type;
+		return res;
+
+		// return await this.gameService.createGame(type, repositoryId);
 	}
 
 	@Get(':id/load')

@@ -11,7 +11,7 @@ v-layout(row justify-center)
                 v-container(grid-list-md)
                     v-layout(wrap)
                         v-flex(xs12)
-                            v-text-field(label="GitHub Username" required v-model="username")
+                            v-text-field(label="GitHub Username" required v-model="email")
                         v-flex(xs12)
                             v-text-field(label="App Key Name" required v-model="name")
                         v-flex(xs12)
@@ -26,19 +26,75 @@ v-layout(row justify-center)
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
-import HttpClient from '@/common/HttpClient';
+// import HttpClient from '@/common/HttpClient';
+import gql from 'graphql-tag';
+import { GraphQLClient, ErrorHandlerVueComponent } from '../../common/GraphQLClient/GraphQLClient';
+
+const mutation = gql`
+	mutation($email: String!, $name: String!, $key: String!) {
+		createAppKey(
+			data: {
+				key: $key
+				name: $name
+				user: {
+					connect: {
+						# id: $id
+						email: $email
+					}
+				}
+			}
+		) {
+			id
+			user {
+				id
+				gitLogin
+			}
+			key
+			name
+		}
+	}
+`;
+
+const optimisticResponse = {
+	data: {
+		createAppKey: {
+			id: 'abc123123123abc',
+			user: {
+				id: 'abc123123123abcasd',
+				gitLogin: 'miking-the-viking'
+			},
+			key: 'asdfasdfasdfasdf123123123123',
+			name: 'my first app key'
+		}
+	}
+};
+
+interface AddAppKeyResponse {
+	createAppKey: {
+		id: string;
+		user: {
+			id: string;
+			gitLogin: string;
+		};
+		key: string;
+		name: string;
+	};
+}
+type AddAppKeyResponsePossibilities = AddAppKeyResponse | undefined;
 
 @Component
-export default class AddAppKeyForm extends Vue {
+export default class AddAppKeyForm extends ErrorHandlerVueComponent {
 	private dialog = false;
-	private username: string | null = null;
+	private email: string | null = null;
 	private name: string | null = null;
 	private key: string | null = null;
 	private appKeyIsValid: boolean = false;
 
+	apolloValidationKeys = ['username', 'name', 'key'];
+
 	@Watch('key')
 	private async validateKey() {
-		this.appKeyIsValid = await this.validateAppKey();
+		// this.appKeyIsValid = await this.validateAppKey();
 	}
 
 	get repositories() {
@@ -54,46 +110,40 @@ export default class AddAppKeyForm extends Vue {
 	}
 
 	private async validateAppKey() {
-		if (
-			this.username != null &&
-			this.username.length > 0 &&
-			this.name != null &&
-			this.name.length > 0 &&
-			this.key != null &&
-			this.key.length > 0
-		) {
-			const isValid = await HttpClient.users.validateAppKey(this.username, this.key);
-			console.log(`server returned: ${isValid} which is a ${typeof isValid}`);
-
-			return isValid;
-		}
-		console.log('Missing param, definitely not valid.');
-
-		return false;
+		// if (
+		// 	this.email != null &&
+		// 	this.email.length > 0 &&
+		// 	this.name != null &&
+		// 	this.name.length > 0 &&
+		// 	this.key != null &&
+		// 	this.key.length > 0
+		// ) {
+		// 	const isValid = await HttpClient.users.validateAppKey(this.email, this.key);
+		// 	console.log(`server returned: ${isValid} which is a ${typeof isValid}`);
+		// 	return isValid;
+		// }
+		// console.log('Missing param, definitely not valid.');
+		// return false;
 	}
 
 	private async save() {
-		if (!this.appKeyIsValid) {
-			console.log('App key is not valid, cannot save');
-
-			return;
-		}
-		if (!this.appKeyIsValid) {
-			console.log(
-				`Missing data, cannot save ${this.username} ${this.name} ${this.key} ${this.appKeyIsValid}`
-			);
-
-			return;
-		}
-
-		await HttpClient.users.addAppKey(
-			this.username!!,
-			this.name!!,
-			this.key!!,
-			AppStateModule.user.id!!
-		);
-
-		HttpClient.refreshUserData();
+		// if (!this.appKeyIsValid) {
+		// 	console.log('App key is not valid, cannot save');
+		// 	return;
+		// }
+		// if (!this.appKeyIsValid) {
+		// 	console.log(
+		// 		`Missing data, cannot save ${this.email} ${this.name} ${this.key} ${this.appKeyIsValid}`
+		// 	);
+		// 	return;
+		// }
+		// await HttpClient.users.addAppKey(
+		// 	this.email!!,
+		// 	this.name!!,
+		// 	this.key!!,
+		// 	AppStateModule.user.id!!
+		// );
+		// HttpClient.refreshUserData();
 	}
 }
 </script>

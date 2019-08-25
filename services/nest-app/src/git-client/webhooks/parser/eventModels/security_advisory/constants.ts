@@ -1,0 +1,15 @@
+const SECURITY_ADVISORY_ACTION_PUBLISHED = "published";
+const SECURITY_ADVISORY_ACTION_UPDATED = "updated";
+const SECURITY_ADVISORY_ACTION_PERFORMED = "performed";
+
+const SECURITY_ADVISORY_ACTION: {
+  [key: string]: SecurityAdvisoryActionType;
+} = {
+  PUBLISHED: SECURITY_ADVISORY_ACTION_PUBLISHED,
+  UPDATED: SECURITY_ADVISORY_ACTION_UPDATED,
+  PERFORMED: SECURITY_ADVISORY_ACTION_PERFORMED
+};
+
+export const SECURITY_ADVISORY = { ACTION: SECURITY_ADVISORY_ACTION };
+
+export type SecurityAdvisoryActionType = "published" | "updated" | "performed";

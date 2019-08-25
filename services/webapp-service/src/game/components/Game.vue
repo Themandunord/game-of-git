@@ -10,14 +10,14 @@ import Component from 'vue-class-component';
 import AppStateModule from '@/store/aspects/app';
 import HttpClient from '@/common/HttpClient';
 
-import { IPhaserGameConfig } from '../../../../../game/config/IPhaserGameConfig.interface';
-import { GameType } from '../../../../../game/game-types/game-type.types';
+import { IPhaserGameConfig } from '../../../game/config/IPhaserGameConfig.interface';
+import { GameType } from '../../../game/game-types/game-type.types';
 
-import RpgBootScene from '../../../../../game/game-types/rpg/scenes/BootScene';
-import RpgPlayScene from '../../../../../game/game-types/rpg/scenes/PlayScene';
+import RpgBootScene from '../../../game/game-types/rpg/scenes/BootScene';
+import RpgPlayScene from '../../../game/game-types/rpg/scenes/PlayScene';
 
-import GameFactory from './../../../../../game/factory/game.factory';
-import BASE_PHASER_GAME_CONFIG from './../../../../../game/config/BasePhaserGameConfig';
+import GameFactory from './../../../game/factory/game.factory';
+import BASE_PHASER_GAME_CONFIG from './../../../game/config/BasePhaserGameConfig';
 
 /**
  * Demo Game, not a real game type just demonstrates setup for Phaser

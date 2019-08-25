@@ -48,6 +48,8 @@ The entire stack is TypeScript (❤️), the back end is using the NestJs framew
 
 NestJs, out of the box, comes with clear npm scripts. So they will not all be listed here.
 
+- `/services/git-service` is deprecatedd, being migratedt o `nest-app`.
+
 The `services/git-service/` directory contains the NestJs App, run `yarn` to install the dependencies the `yarn start:dev` to begin serving the NestJs App at `localhost:3000` with live file watching.
 
 #### The Front End, Vue
@@ -73,4 +75,3 @@ read:org
 read:public_key
 read:gpg_key
 ```
-

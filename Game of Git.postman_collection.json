@@ -1,0 +1,568 @@
+{
+	"info": {
+		"_postman_id": "d31a42e1-e55d-423c-81d6-fa2b6d43c898",
+		"name": "Game of Git",
+		"description": "Samples of the API for Game of Git and its development",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Nest App",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($email: String!, $password: String!) {\n    login(data: { email: $email, password: $password }) {\n        token\n        user {\n            id\n            email\n            gitLogin\n            name\n            createdAt\n            updatedAt\n        }\n    }\n}\n",
+										"variables": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Signup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($email: String!, $password: String!, $name: String!, $gitLogin: String!) {\n  signup(data:{\n    email: $email\n    password: $password\n    name: $name\n    gitLogin: $gitLogin\n  })\n  {\n    token\n    user{\n      id\n      createdAt\n      updatedAt\n      email\n      name\n      role\n      password\n      gitLogin\n    } \n  }\n}",
+										"variables": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\",\n\t\"name\": \"{{name}}\",\n\t\"gitLogin\": \"{{gitLogin}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Me",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4e80c862-36a4-4a07-9a8a-592bd0e2fbed",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query{\n    me{\n        id\n        email\n        role\n        gitLogin\n        createdAt\n        updatedAt\n        posts{\n            id\n            title\n            published\n            createdAt\n            updatedAt\n        }\n    }\n}",
+										"variables": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "App-Key",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($user: String!, $key: String!, $name: String!) {\n    createAppKey(data: { user: {\n        email: $user\n        }, key: $key, name: $name }) {\n        id\n        name\n        key\n    }\n}\n",
+										"variables": "{\n\t\"user\": \"{{email}}\",\n\t\"key\": \"{{token}}\",\n\t\"name\": \"some key\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By User - Email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($email: String!) {\n    userAppKeys(email: $email){\n        id\n        name\n        key\n    }\n}",
+										"variables": "{\n\t\"email\": \"{{email}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By User - ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($id: ID!) {\n    userAppKeys(id: $id){\n        id\n        name\n        key\n    }\n}",
+										"variables": "{\n\t\"id\": \"{{userId}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($id: ID!) {\n    appKey(id: $id){\n        id\n        name\n        key\n    }\n}",
+										"variables": "{\n\t\"id\": \"{{appKeyId}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Key",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($key: String!) {\n    appKey(key: $key){\n        id\n        name\n        key\n    }\n}",
+										"variables": "{\n\t\"key\": \"{{key}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete By ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($id: ID!) {\n    deleteAppKey(id: $id){\n        id\n        name\n        key\n    }\n}",
+										"variables": "{\n\t\"id\": \"ck33fq7rg00du07959l0jree4\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete By Key",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($key: String!) {\n    deleteAppKey(key: $key){\n        id\n        name\n        key\n    }\n}",
+										"variables": "{\n\t\"key\": \"869047c55363745a78146ba86eaaa12ff167bbd8\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Repositories",
+					"item": [],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Games",
+					"item": [],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "(DEV) GraphQL Server",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Index",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query{\n    users{\n        id\n        name\n        gitLogin\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Show by Id",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($id: String!){\n    user(\n        where: {\n            id: $id\n        }\n    ){\n        id\n        name\n        gitLogin\n        email\n    }\n}",
+										"variables": "{\n\t\"id\": \"{{id}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Show by Email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($id: String!){\n    user(\n        where:\n        {\n            id: $id\n        }\n    ){\n        id\n        name\n        gitLogin\n        email\n    }\n}",
+										"variables": "{\n\t\"id\": \"{{id}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation{\n    createUser(data: {\n        name: \"Scooby Doo\"\n        password: \"Jimmy\"\n        gitLogin: \"test\"\n        email: \"test@test.com\"\n    }){\n        id\n        gitLogin\n        name\n        password\n        createdAt\n        updatedAt\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete by Id",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($id: String!){\n    deleteUser(where:{\n        id: $id\n    }){\n        id\n        gitLogin\n        email\n        createdAt\n        updatedAt\n    }\n}",
+										"variables": "{\n\t\"id\": \"{{idToDelete}}\",\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete by Email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($email: String!){\n    deleteUser(where:{\n        email: $email\n    }){\n        id\n        gitLogin\n        email\n        createdAt\n        updatedAt\n    }\n}",
+										"variables": "{\n\t\"email\": \"{{emailToDelete}}\",\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Repositories",
+					"item": [
+						{
+							"name": "Index",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query{\n    repositories{\n        id\n        name\n        description\n        owner\n        addedBy{\n            id\n            name\n            gitLogin\n        }\n        \n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation{\n    createRepository(\n        data:{\n            \n        }\n    ){\n        \n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "App Keys",
+					"item": [
+						{
+							"name": "Index",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query{\n    appKeys{\n        id\n        name\n        user{\n            id\n            gitLogin\n            name\n        }\n        repositories{\n            id\n            name\n            description\n            owner\n            addedBy{\n                id\n                gitLogin\n                name\n            }\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GitHub Webhook Events",
+					"item": [
+						{
+							"name": "Index",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query{\n    gitHubWebhookEvents{\n        id\n        action\n        repository{\n            id\n            name\n            addedBy{\n                id\n                gitLogin\n                name\n            }\n            owner\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Games",
+					"item": [
+						{
+							"name": "Index",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query{\n    games{\n        id\n        type\n        title\n        repository{\n            id\n            name\n            addedBy{\n                id\n                gitLogin\n                name\n            }\n            description\n            createdAtExternal\n            updatedAtExternal\n        }\n        createdAt\n        updatedAt\n        owner{\n            id\n            name\n            gitLogin\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($title: String!, $type: String!, $ownerId: ID!, $repositoryId: ID!){\n    createGame(\n        data:{\n            title: $title\n            type: $type\n            repository: {\n              connect:{\n                id: $repositoryId\n              }\n            }\n            owner:{\n              connect:{\n                id: $ownerId\n              }\n            }\n        }\n    ){\n        id\n        title\n        repository{\n            id\n            idExternal\n            name\n        }\n        createdAt\n        updatedAt\n        owner\n        type\n    }\n}",
+										"variables": "{\n\t\"title\": \"{{title}}\",\n\t\"type\": \"{{type}}\",\n\t\"ownerId\": \"{{owner}}\",\n\t\"repositoryId\": \"{{repository}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql_host}}",
+									"host": [
+										"{{graphql_host}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

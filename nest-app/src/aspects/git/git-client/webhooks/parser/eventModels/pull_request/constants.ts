@@ -1,0 +1,51 @@
+const PULL_REQUEST_ACTION_ASSIGNED = 'assigned';
+const PULL_REQUEST_ACTION_UNASSIGNED = 'unassigned';
+const PULL_REQUEST_ACTION_REVIEW_REQUESTED = 'review_requested';
+const PULL_REQUEST_ACTION_REVIEW_REQUEST_REMOVED = 'review_request_removed';
+const PULL_REQUEST_ACTION_LABELED = 'labeled';
+const PULL_REQUEST_ACTION_UNLABELED = 'unlabeled';
+const PULL_REQUEST_ACTION_OPENED = 'opened';
+const PULL_REQUEST_ACTION_EDITED = 'edited';
+const PULL_REQUEST_ACTION_CLOSED = 'closed';
+const PULL_REQUEST_ACTION_READY_FOR_REVIEW = 'ready_for_review';
+const PULL_REQUEST_ACTION_LOCKED = 'locked';
+const PULL_REQUEST_ACTION_UNLOCKED = 'unlocked';
+const PULL_REQUEST_ACTION_REOPENED = 'reopened';
+const PULL_REQUEST_ACTION_SYNCHRONIZE = 'synchronize';
+
+const PULL_REQUEST_ACTION: { [key: string]: PullRequestActionType } = {
+    ASSIGNED: PULL_REQUEST_ACTION_ASSIGNED,
+    UNASSIGNED: PULL_REQUEST_ACTION_UNASSIGNED,
+    REVIEW_REQUESTED: PULL_REQUEST_ACTION_REVIEW_REQUESTED,
+    REVIEW_REQUEST_REMOVED: PULL_REQUEST_ACTION_REVIEW_REQUEST_REMOVED,
+    LABELED: PULL_REQUEST_ACTION_LABELED,
+    UNLABELED: PULL_REQUEST_ACTION_UNLABELED,
+    OPENED: PULL_REQUEST_ACTION_OPENED,
+    EDITED: PULL_REQUEST_ACTION_EDITED,
+    CLOSED: PULL_REQUEST_ACTION_CLOSED,
+    READY_FOR_REVIEW: PULL_REQUEST_ACTION_READY_FOR_REVIEW,
+    LOCKED: PULL_REQUEST_ACTION_LOCKED,
+    UNLOCKED: PULL_REQUEST_ACTION_UNLOCKED,
+    REOPENED: PULL_REQUEST_ACTION_REOPENED,
+    SYNCHRONIZE: PULL_REQUEST_ACTION_SYNCHRONIZE
+};
+
+export const PULL_REQUEST = {
+    ACTION: PULL_REQUEST_ACTION
+};
+
+export type PullRequestActionType =
+    | 'assigned'
+    | 'unassigned'
+    | 'review_requested'
+    | 'review_request_removed'
+    | 'labeled'
+    | 'unlabeled'
+    | 'opened'
+    | 'edited'
+    | 'closed'
+    | 'ready_for_review'
+    | 'synchronize'
+    | 'locked'
+    | 'unlocked'
+    | 'reopened';

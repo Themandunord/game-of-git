@@ -88,6 +88,8 @@ export class RouteManager<T extends IRouteManagerContext> {
 			routes.push(...customRoutes);
 		}
 
+		console.log('myRoutes returning: ', routes);
+
 		return routes;
 	}
 }
