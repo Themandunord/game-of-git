@@ -23,53 +23,39 @@ import Component from 'vue-class-component';
 import AppStateModule from '@/store/aspects/app';
 import HttpClient, { AbstractHttpClient } from '@/common/HttpClient';
 
-import { IGameConfig } from '../IGame.interface';
-import { GameType, GAME_TYPES } from '../game-types/game-type.types';
+import BASE_PHASER_GAME_CONFIG from '../../../../../game/config/BasePhaserGameConfig';
+import { GameType, GAME_TYPES } from '../../../../../game/game-types/game-type.types';
+import { IPhaserGameConfig } from '../../../../../game/config/IPhaserGameConfig.interface';
+import { IGameConfigBase } from '../../../../../game/config/IGameConfig.base';
 
-import BootScene from '../scenes/BootScene';
-import PlayScene from '../scenes/PlayScene';
-
-import RpgBootScene from '../game-types/rpg/scenes/BootScene';
-import RpgPlayScene from '../game-types/rpg/scenes/PlayScene';
-
-import GameFactory from './../factory/game.factory';
-import { TGameType } from '@/game/game-types/game-type.types';
-import { IGameConfigBase } from '@/store/aspects/game/IGameConfig.base';
 import { BehaviorSubject } from 'rxjs';
-import BASE_CONFIG from '../BaseConfig';
+
+import RpgBootScene from '../../../../../game/game-types/rpg/scenes/BootScene';
+import RpgPlayScene from '../../../../../game/game-types/rpg/scenes/PlayScene';
 
 /**
  * Demo Game, not a real game type just demonstrates setup for Phaser
  */
-const DEMO_GAME_CONFIG: IGameConfig = {
-	phaser: {
-		...BASE_CONFIG.phaser,
-		scene: [BootScene, PlayScene]
-	},
-	base: {
-		type: GameType.RPG,
-		state: {}
-	}
-};
 
-const RPG_GAME_CONFIG: IGameConfig = {
+const RPG_GAME_CONFIG: IPhaserGameConfig = {
 	phaser: {
-		...BASE_CONFIG.phaser,
+		...BASE_PHASER_GAME_CONFIG.phaser,
 		scene: [RpgBootScene, RpgPlayScene]
 	},
 	base: {
-		type: GameType.RPG,
+		type: GameType.Rpg,
 		state: {}
 	}
 };
 
-const SIM_GAME_CONFIG: IGameConfig = {
+const SIM_GAME_CONFIG: IPhaserGameConfig = {
 	phaser: {
-		...BASE_CONFIG.phaser,
-		scene: [BootScene, PlayScene]
+		...BASE_PHASER_GAME_CONFIG.phaser,
+		// scene: [BootScene, PlayScene]
+		scene: [RpgBootScene, RpgPlayScene]
 	},
 	base: {
-		type: GameType.SIM,
+		type: GameType.Sim,
 		state: {}
 	}
 };
@@ -77,7 +63,7 @@ const SIM_GAME_CONFIG: IGameConfig = {
 @Component
 export default class CreateGame extends Vue {
 	private newGameForm!: IGameConfigBase;
-	private gameTypeSelect: TGameType | null = null;
+	private gameTypeSelect?: GameType;
 	private creatingGame: boolean = false;
 
 	// For now this is only accessible from the Repository menu when there is no game data,
