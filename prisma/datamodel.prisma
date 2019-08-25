@@ -4,25 +4,34 @@ enum Role {
 }
 
 type User {
-  id: ID! @unique @id
-  email: String! @unique @index
-  hash: String!
+  id: ID! @id
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
-  name: String
-  role: Role @default(value: USER)
+  posts: [Post!]! @relation(name: "UsersPosts" onDelete: "CASCADE")
   keys: [AppKey!]! @relation(name: "UserAppKeys" onDelete: "CASCADE")
   addedRepositories: [Repository!]! @relation(name: "UserAddedRepositories" onDelete: "SET_NULL")
+  email: String! @unique @index
+  name: String
+  password: String!
+  role: Role! @default(value: USER)
   gitLogin: String!
-  gamesOwned: [Game!]! @relation(name: "GameOwner")
+}
+
+type Post {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  title: String!
+  published: Boolean! @default(value: false)
+  author: User @relation(name: "UsersPosts" onDelete: "CASCADE")
 }
 
 type AppKey {
     id: ID! @unique @id
     user: User! @relation(name: "UserAppKeys")
+    repositories: [Repository!]! @relation(name: "RepositoryAppKey")
     key: String! @unique
     name: String
-    repositories: [Repository!]! @relation(name: "RepositoryAppKey")
 }
 
 type Repository {
@@ -47,12 +56,6 @@ type Repository {
   isArchived: Boolean!
   isDisabled: Boolean!
   sshUrl: String
-
-  stargazers: Int
-  collaborators: Int
-  watchers: Int
-  issues: Int
-  pullRequests: Int
 
   webhookEvents: [GitHubWebhookEvent!]! @relation(name: "WebhooksByRepository" onDelete: "CASCADE")
   game: Game @relation(name: "RepositoryGame" link:INLINE)
@@ -79,3 +82,216 @@ type Game {
   	owner: User! @relation(name: "GameOwner" onDelete: SET_NULL)
 	type: String!
 }
+
+type GitHubBranch {
+	id: ID! @id
+	name: String!
+	commits: [GitHubCommit!]! @relation(name: "BranchCommits" link:TABLE)
+	pullRequest: GitHubPullRequest @relation(name: "BranchPullRequest" link:INLINE)
+	merged: Boolean
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt}
+
+type GitHubComment {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	createdAtExternal: DateTime!
+	author: GitHubUser! @relation(name: "CommentAuthor" link:INLINE)
+	bodyText: String!
+	url: String!
+}
+
+type GitHubCommit {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	author: GitHubUser!@relation(name: "CommitAuthor" link:INLINE)
+	associatedPullRequests: [GitHubPullRequest!]! @relation(name: "CommitAssociatedPullRequests" link:TABLE)
+	committer: GitHubUser! @relation(name: "CommitCommitter" link:INLINE)
+	additions: Int!
+	authedDate: DateTime!
+	changedFiles: Int!
+	commitUrl: String!
+	deletions: Int!
+	message: String!
+	messageHeadline: String!
+	pushedDate: DateTime!
+	treeUrl: String!
+	url: String!
+}
+
+type GitHubFileDiff {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	additions: Int!
+	deletions: Int!
+	filepath: String!
+}
+
+type GitHubIssue {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	lastEditedAt: DateTime!
+	assignees: [GitHubUser!]! @relation(name: "IssueAssignees" link:TABLE)
+	author: GitHubUser! @relation(name: "IssueAuthor" link:INLINE)
+	comments: [GitHubComment!]!	@relation(name: "IssueComments" link:TABLE)
+	labels: [GitHubLabel!]! @relation(name: "IssueLabels" link:TABLE)
+	participants: [GitHubUser!]! @relation(name: "IssueParticipants" link:TABLE)
+	bodyText: String!
+	closed: DateTime
+	locked: Boolean!
+	number: Int!
+	state: String!
+	title: String!
+	url: String!
+}
+
+type GitHubLabel {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	updatedAtExternal: DateTime!
+	createdAtExternal: DateTime!
+	issues: [GitHubIssue!]! @relation(name: "LabelIssues" link:TABLE)
+	pullRequests: [GitHubPullRequest!]! @relation(name: "LabelPullRequests" link:TABLE)
+	color: String!
+	description: String!
+	name: String!
+	url: String!
+}
+
+type GitHubPullRequest {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	createdAtExternal: DateTime!
+	publishedAt: DateTime
+	closedAt: DateTime
+	mergedAt: DateTime
+	assignees: [GitHubUser!] @relation(name: "PullRequestAssignees" link:TABLE)
+	author: GitHubUser! @relation(name: "PullRequestAuthor" link:INLINE)
+	comments: [GitHubComment!]! @relation(name: "PullRequestComments" link:TABLE)
+	commits: [GitHubCommit!]! @relation(name: "PullRequestCommits" link:TABLE)
+	files: [GitHubFileDiff!] @relation(name: "PullRequestFileDiffs" link:TABLE)
+	labels: [GitHubLabel!]! @relation(name: "PullRequestLabels" link:TABLE)
+	participants: [GitHubUser!]! @relation(name: "PullRequestParticipants" link:TABLE)
+	reviewRequests: [GitHubReviewRequest!]! @relation(name: "PullRequestReviewRequests" link:TABLE)
+	reviews: [GitHubPullRequestReview!]! @relation(name: "PullRequestReviews" link:TABLE)
+	reviewThreads: [GitHubReviewThread!]! @relation(name: "PullRequestReviewThreads" link:TABLE)
+	mergedBy: GitHubUser @relation(name: "PullRequestMergedBy" link:INLINE)
+	number: Int!
+	closed: Boolean!
+	isCrossRepository: Boolean!
+	locked: Boolean!
+	merged: Boolean!
+	additions: Int!
+	changedFiles: Int!
+	deletions: Int!
+	bodyText: String!
+}
+
+type GitHubPullRequestReview {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	createdAtExternal: DateTime!
+	updatedAtExternal: DateTime!
+	submittedAt: DateTime!
+	lastEditedAt: DateTime!
+	publishedAt: DateTime!
+	author: GitHubUser! @relation(name: "RequestReview" link:INLINE)
+	comments: [GitHubComment!]! @relation(name: "PullRequestReviewComments" link:TABLE)
+	commit: [GitHubCommit!]! @relation(name: "PullRequestReviewCommits" link:TABLE)
+	pullRequest: GitHubPullRequest! @relation(name: "PullRequestReviewPullRequest" link:INLINE)
+	state: String!
+	bodyText: String!
+	url: String!
+}
+
+type GitHubRepository {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	updatedAtExternal: DateTime!
+	collaborators: [GitHubUser!]! @relation(name: "RepositoryCollaborators" link:TABLE)
+	owner: GitHubUser! @relation(name: "RepositoryOwner" link:INLINE)
+	repositoryTopics: [GitHubTopic!]! @relation(name: "RepositoryTopics" link:TABLE)
+	stargazers: [GitHubUser!]! @relation(name: "RepositoryStargazers" link:TABLE)
+	watchers: [GitHubUser!]! @relation(name: "RepositoryWatchers" link:TABLE)
+	hasBranchRules: Boolean!
+	hasContributingGuidelines: Boolean!
+	hasPullRequestTemplate: Boolean!
+	hasReadMe: Boolean!
+	hasWiki: Boolean!
+	isArchived: Boolean!
+	isDisabled: Boolean!
+	isFork: Boolean!
+	isLocked: Boolean!
+	isPrivate: Boolean!
+	description: String!
+	license: String
+	name: String!
+	primaryLanguage: String
+	sshUrl: String!
+	url: String!
+}
+
+type GitHubReviewRequest {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	pullRequest: GitHubPullRequest! @relation(name: "ReviewRequestPullRequest" link:INLINE)
+	requestedReviewer: GitHubUser! @relation(name: "ReviewRequestRequestedReviewer" link:INLINE)
+}
+
+type GitHubReviewThread {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	comments: [GitHubComment!]! @relation(name: "ReviewThreadComments" link:TABLE)
+	pullRequest: GitHubPullRequest! @relation(name: "ReviewThreadPullRequest" link:INLINE)
+	repository: GitHubRepository! @relation(name: "ReviewThreadRepository" link:INLINE)
+	resolvedBy: GitHubUser! @relation(name: "ReviewThreadResolvedBy" link:INLINE)
+	isResolved: Boolean!
+}
+
+type GitHubTopic {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	relatedTopics: [GitHubTopic!]! @relation(name: "TopicRelatedTopics" link:TABLE)
+	stargazers: [GitHubUser!]! @relation(name: "TopicStargazers" link:TABLE)
+	name: String!
+}
+
+type GitHubUser {
+	id: ID! @id
+	createdAt: DateTime! @createdAt
+  	updatedAt: DateTime! @updatedAt
+	createdAtExternal: DateTime!
+	followers: [GitHubUser!]! @relation(name: "UserFollowers" link:TABLE)
+	following: [GitHubUser!]! @relation(name: "UserFollowing" link:TABLE)
+	issueComments: [GitHubComment!]! @relation(name: "UserIssueComments" link:TABLE)
+	issues: [GitHubIssue!]! @relation(name: "UserIssues" link:TABLE)
+	pullRequests: [GitHubPullRequest!]! @relation(name: "UserPullRequests" link:TABLE)
+	isBountyHunter: Boolean!
+	isCampusExpert: Boolean!
+	isDeveloperProgramMember: Boolean!
+	isEmployee: Boolean!
+	isHireable: Boolean!
+	isSiteAdmin: Boolean!
+	isViewer: Boolean!
+	url: String!
+	name: String!
+	login: String!
+	avatarUrl: String!
+	bio: String
+	company: String
+	email: String
+}
+

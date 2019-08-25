@@ -5,6 +5,7 @@ import GET_REPOSITORIES from './gql/GET_REPOSITORIES.gql';
 import GET_REPOSITORY_DETAILS from './gql/GET_REPOSITORY_DETAILS.gql';
 import GET_USER_DATA from './gql/GET_USER_DATA.gql';
 import { WebhooksService } from './webhooks/webhooks.service';
+import GET_COMMITS from './gql/GET_COMMITS.gql';
 
 @Injectable()
 export class GitClientService {
@@ -114,5 +115,33 @@ export class GitClientService {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Retrieve paginated commit data via the GraphQL API
+	 * @param user
+	 * @param repo
+	 * @param owner
+	 * @param first
+	 * @param afterCursor
+	 */
+	async getCommits(
+		user: string,
+		repo: string,
+		owner: string,
+		first: number,
+		afterCursor?: string
+	) {
+		const appKeys = await this.appKeyService.getAllByUser(user);
+		const appKey = appKeys.length > 0 ? appKeys[0] : null;
+		const key = appKey ? appKey.key : null;
+
+		this.logger.log(`querying for ${repo} belonging to ${owner}`);
+
+		const result = await gitHubGql(key, {
+			query: GET_COMMITS(owner, repo, first, afterCursor)
+		});
+
+		return result;
 	}
 }
