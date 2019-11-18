@@ -30,7 +30,8 @@ import { Prop, Watch } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
 import AppStateModule from '@/store/aspects/app';
-import HttpClient from '@/common/HttpClient';
+// import HttpClient from '@/common/HttpClient';
+import routeManager, { RouteManager } from '@/router/RouteManager';
 
 @Component
 export default class NavBar extends Vue {
@@ -48,11 +49,12 @@ export default class NavBar extends Vue {
 	}
 
 	get shouldShowLogout() {
-		return AppStateModule.user && AppStateModule.user.isAuthenticated;
+		return AppStateModule.jwt;
 	}
 
 	logout() {
-		HttpClient.logout();
+		AppStateModule.logout();
+		// HttpClient.logout();
 	}
 
 	get drawer() {
@@ -62,9 +64,6 @@ export default class NavBar extends Vue {
 	set drawer(val: boolean) {
 		AppStateModule.setNavExpanded(val);
 	}
-
-	// use prop values for initial data
-	//   helloMsg = 'Hello, ' + this.propMessage
 }
 </script>
 

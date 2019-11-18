@@ -26,7 +26,7 @@ import RepositoriesList from '@/components/repositories/RepositoriesList.vue';
 })
 export default class Repositories extends Vue {
 	get hasAppKey() {
-		return AppStateModule.user.hasAppKey;
+		return AppStateModule.hasAppKey;
 	}
 	beforeMount() {
 		RepositoriesStateModule.syncStoredRepositories();

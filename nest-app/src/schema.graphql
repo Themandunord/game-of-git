@@ -10,6 +10,10 @@ type AppKey {
   name: String!
 }
 
+type AppKeyIsValid {
+  valid: Boolean!
+}
+
 type Auth {
   """JWT Beare token"""
   token: String!
@@ -17,7 +21,6 @@ type Auth {
 }
 
 input CreateAppKeyInput {
-  user: Email!
   key: String!
   name: String!
 }
@@ -110,6 +113,7 @@ type Query {
   me: User!
   appKey(id: ID, key: String): AppKey!
   userAppKeys(id: ID, email: String): [AppKey!]!
+  validateAppKey(appKey: String!): AppKeyIsValid!
   repository(repositoryId: String!): Repository!
   helloWorld: String!
   hello(name: String!): String!
@@ -158,6 +162,7 @@ type User {
   email: String!
   name: String
   role: Role!
+  appKeys: [AppKey!]!
   posts: [Post!]!
   password: String!
   gitLogin: String!

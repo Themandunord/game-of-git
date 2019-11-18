@@ -1,19 +1,13 @@
-import { ConnectionState, DISCONNECTED, IConnectionState } from './IAppState.interface';
+import {
+	ConnectionState,
+	DISCONNECTED,
+	IConnectionState,
+	IBaseUserData
+} from './IAppState.interface';
 import { IAppState } from '.';
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
-
+import routeManager from '@/router/RouteManager';
 import store from '@/store';
-
-interface IBaseUserData {
-	email: null;
-	exp: number;
-	gitLogin: string;
-	hasAppKey: boolean;
-	iat: number;
-	id: string;
-	name: string;
-	isAuthenticated: boolean;
-}
 
 interface StateUpdate {
 	state: ConnectionState;
@@ -37,6 +31,21 @@ class AppState extends VuexModule implements IAppState {
 	};
 
 	public user: Partial<IBaseUserData> = {};
+
+	public jwt: string | null = null;
+
+	@Mutation
+	public setJwt(jwt: string | null) {
+		this.jwt = jwt;
+		localStorage.setItem('jwt', jwt ? jwt : '');
+	}
+
+	@Mutation
+	public logout() {
+		this.jwt = null;
+		localStorage.clear();
+		window.location.reload();
+	}
 
 	@Mutation
 	public setNavExpanded(navExpanded?: boolean) {
@@ -65,11 +74,11 @@ class AppState extends VuexModule implements IAppState {
 	}
 
 	get hasAppKey() {
-		if (this.user == null) {
+		if (this.user == null || this.user.appKeys == null) {
 			return false;
 		}
 
-		return this.user.hasAppKey;
+		return this.user.appKeys.length > 0;
 	}
 
 	@Mutation

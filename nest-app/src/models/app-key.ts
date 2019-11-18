@@ -2,6 +2,12 @@ import { Field, ObjectType } from 'type-graphql';
 import { User } from './user';
 
 @ObjectType()
+export class AppKeyIsValid {
+    @Field()
+    valid: boolean;
+}
+
+@ObjectType()
 export class AppKey {
     @Field()
     id: string;

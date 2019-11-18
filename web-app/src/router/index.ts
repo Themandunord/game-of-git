@@ -15,7 +15,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 	const jwt = localStorage.getItem('jwt');
-	const hasJwt = jwt != null;
+	const hasJwt = jwt != undefined && jwt.length > 0;
 	let parsedJwt = null;
 
 	try {
@@ -30,6 +30,7 @@ router.beforeEach((to, from, next) => {
 
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 		if (!hasJwt || !parsedJwt) {
+			console.log('missing jwt, redirecting to login');
 			next({
 				name: 'login',
 				params: { nextUrl: to.fullPath }
@@ -52,7 +53,7 @@ router.beforeEach((to, from, next) => {
 		//     }
 		// }
 	} else if (to.matched.some(record => record.meta.guest)) {
-		if (localStorage.getItem('jwt') == null) {
+		if (!hasJwt) {
 			next();
 		} else {
 			next({ name: 'userboard' });

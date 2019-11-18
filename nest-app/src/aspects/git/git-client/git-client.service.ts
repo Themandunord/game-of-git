@@ -109,13 +109,9 @@ export class GitClientService {
             this.logger.log(
                 `About to query the gitHubGql using ${key} to get the user data for ${user}`
             );
-            console.log(GET_USER_DATA(user));
             const result = await gitHubGql(key, {
                 query: GET_USER_DATA(user)
             });
-
-            this.logger.log('RESULT:');
-            // console.log(result);
 
             if (result.data.errors) {
                 console.log('Detected errors: ', result.data.errors);
@@ -126,7 +122,6 @@ export class GitClientService {
                 result.data.data == null ||
                 result.data.data.user == null
             ) {
-                // tslint:disable:no-console
                 this.logger.error(
                     'Missing expected data to validate against in app key test.'
                 );

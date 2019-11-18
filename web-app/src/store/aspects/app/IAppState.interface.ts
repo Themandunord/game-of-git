@@ -16,7 +16,20 @@ export interface IConnectionState {
 	state: ConnectionState;
 }
 
+export interface IBaseUserData {
+	email: null;
+	exp: number;
+	gitLogin: string;
+	appKeys: any[];
+	iat: number;
+	id: string;
+	name: string;
+	isAuthenticated: boolean;
+}
+
 export interface IAppState {
 	navExpanded: boolean;
 	connection: IConnectionState;
+	jwt: string | null;
+	user: Partial<IBaseUserData>;
 }
