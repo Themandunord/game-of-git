@@ -1,0 +1,7 @@
+{
+    "search.exclude": {
+        "**/*.d.ts": true,
+        "**/*.js": true,
+        "**/dist": true
+    }
+}

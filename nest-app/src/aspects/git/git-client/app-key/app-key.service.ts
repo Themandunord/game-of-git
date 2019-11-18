@@ -1,3 +1,4 @@
+import { User } from './../../../../models/user';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { GitClientService } from '../git-client.service';
 import { AppKeyIdOrKeyArgs } from './../../../../models/args/appkeyidorkey-args';
@@ -43,24 +44,25 @@ export class AppKeyService {
      * @param name
      * @param email
      */
-    async store(input: CreateAppKeyInput) {
-        const {
-            key,
-            name,
-            user: { email }
-        } = input;
-        console.log('test');
+    async store(input: CreateAppKeyInput, user: User) {
+        const { key, name } = input;
 
-        const user = await this.prisma.client.user({ email });
+        // get email form authed jwt
+
+        const validUser = await this.prisma.client.user({ email: user.email });
+
+        if (!validUser) {
+            throw new Error('User did not exist???');
+        }
 
         const isValid = await this.validate(key, user.gitLogin);
         if (!isValid) {
-            throw new Error('App Key was invalid');
+            throw new Error('App Key failed validation');
             return;
         }
         const existing = await this.getByIdOrKey({ key });
         if (existing != null) {
-            console.log('getByKey was not null. unable to proceed');
+            throw new Error('App Key Already Registered');
             return;
         }
         const payload = {
@@ -68,7 +70,7 @@ export class AppKeyService {
             name,
             user: {
                 connect: {
-                    email
+                    email: user.email
                 }
             }
         };

@@ -99,7 +99,7 @@ export default class RepositoriesControlList extends Vue {
 	}
 
 	get hasAppKey() {
-		return AppStateModule.user.hasAppKey;
+		return AppStateModule.hasAppKey;
 	}
 
 	@Watch('hasAppKey')

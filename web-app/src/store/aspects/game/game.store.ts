@@ -1,6 +1,6 @@
 import { getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators';
-import { IGameState } from '../../../../../../game/IGameState.interface';
-import { IGameConfigBase } from '../../../../../../game/config/IGameConfig.base';
+import { IGameState } from '../../../../game/IGameState.interface';
+import { IGameConfigBase } from '../../../../game/config/IGameConfig.base';
 import store from '@/store';
 
 @Module({

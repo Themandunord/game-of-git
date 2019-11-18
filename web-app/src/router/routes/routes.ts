@@ -1,4 +1,3 @@
-import Home from '@/views/Home.vue';
 import { LOGIN } from './login';
 import { HOME } from './home';
 import { REPOSITORIES } from './repositories';

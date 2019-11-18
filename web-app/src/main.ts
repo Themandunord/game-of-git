@@ -17,6 +17,8 @@ new Vue({
 	router,
 	store,
 	vuetify,
-	apolloProvider: createProvider(),
+	apolloProvider: createProvider({
+		tokenName: 'jwt'
+	}),
 	render: h => h(App)
 }).$mount('#app');

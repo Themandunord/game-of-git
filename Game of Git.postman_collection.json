@@ -113,7 +113,7 @@
 									"mode": "graphql",
 									"graphql": {
 										"query": "mutation($user: String!, $key: String!, $name: String!) {\n    createAppKey(data: { user: {\n        email: $user\n        }, key: $key, name: $name }) {\n        id\n        name\n        key\n    }\n}\n",
-										"variables": "{\n\t\"user\": \"{{email}}\",\n\t\"key\": \"{{token}}\",\n\t\"name\": \"some key\"\n}"
+										"variables": "{\n\t\"user\": \"{{email}}\",\n\t\"key\": \"{{githubApiKey}}\",\n\t\"name\": \"some key\"\n}"
 									}
 								},
 								"url": {
@@ -197,7 +197,7 @@
 									"mode": "graphql",
 									"graphql": {
 										"query": "query($key: String!) {\n    appKey(key: $key){\n        id\n        name\n        key\n    }\n}",
-										"variables": "{\n\t\"key\": \"{{key}}\"\n}"
+										"variables": "{\n\t\"key\": \"{{githubApiKey}}\"\n}"
 									}
 								},
 								"url": {
@@ -239,7 +239,38 @@
 									"mode": "graphql",
 									"graphql": {
 										"query": "mutation($key: String!) {\n    deleteAppKey(key: $key){\n        id\n        name\n        key\n    }\n}",
-										"variables": "{\n\t\"key\": \"869047c55363745a78146ba86eaaa12ff167bbd8\"\n}"
+										"variables": "{\n\t\"key\": \"githubApiKey\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Validate Key",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($key: String!) {\n    validateAppKey(appKey: $key){\n        valid\n    }\n}",
+										"variables": "{\n\t\"key\": \"{{githubApiKey}}\"\n}"
 									}
 								},
 								"url": {

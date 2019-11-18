@@ -26,10 +26,10 @@ import AppStateModule from '@/store/aspects/app';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import HttpClient, { AbstractHttpClient } from '@/common/HttpClient';
 
-import BASE_PHASER_GAME_CONFIG from '../../../../../game/config/BasePhaserGameConfig';
-import { GameType, GAME_TYPES } from '../../../../../game/game-types/game-type.types';
-import { IPhaserGameConfig } from '../../../../../game/config/IPhaserGameConfig.interface';
-import { IGameConfigBase } from '../../../../../game/config/IGameConfig.base';
+import BASE_PHASER_GAME_CONFIG from '../../../game/config/BasePhaserGameConfig';
+import { GameType, GAME_TYPES } from '../../../game/game-types/game-type.types';
+import { IPhaserGameConfig } from '../../../game/config/IPhaserGameConfig.interface';
+import { IGameConfigBase } from '../../../game/config/IGameConfig.base';
 
 import {
 	Observable,
@@ -40,8 +40,8 @@ import {
 	Subscription
 } from 'rxjs';
 import { map } from 'rxjs/operators';
-import RpgBootScene from '../../../../../game/game-types/rpg/scenes/BootScene';
-import RpgPlayScene from '../../../../../game/game-types/rpg/scenes/PlayScene';
+import RpgBootScene from '../../../game/game-types/rpg/scenes/BootScene';
+import RpgPlayScene from '../../../game/game-types/rpg/scenes/PlayScene';
 
 /**
  * Demo Game, not a real game type just demonstrates setup for Phaser

@@ -76,134 +76,122 @@ export default class AbstractHttpClient {
 	 * @param password Password for the user's login
 	 * @param destination Desired route, likely before middleware redirection to the login page as an unauthenticated user
 	 */
-	public async login(email: string, password: string, destination: string) {
-		const route = `${AbstractHttpClient.apiUrl}/auth/login`;
+	// public async login(email: string, password: string, destination: string) {
+	// 	const route = `${AbstractHttpClient.apiUrl}/auth/login`;
 
-		const result = await this.axiosClient.post(route, {
-			email,
-			password
-		});
+	// 	const result = await this.axiosClient.post(route, {
+	// 		email,
+	// 		password
+	// 	});
 
-		this.setJwt(result.data.accessToken);
+	// 	this.setJwt(result.data.accessToken);
 
-		const user = jwtClient.decode(result.data.accessToken);
-		const userData =
-			user instanceof Object
-				? { ...user, isAuthenticated: true }
-				: { isAuthenticated: false };
-		// this.user = userData;
-		AppStateModule.setUser(userData);
-		AppStateModule.setUser({ ...AppStateModule.user, ...userData });
+	// 	const user = jwtClient.decode(result.data.accessToken);
+	// 	const userData =
+	// 		user instanceof Object
+	// 			? { ...user, isAuthenticated: true }
+	// 			: { isAuthenticated: false };
+	// 	// this.user = userData;
+	// 	AppStateModule.setUser(userData);
+	// 	AppStateModule.setUser({ ...AppStateModule.user, ...userData });
 
-		router.push(destination);
-	}
+	// 	router.push(destination);
+	// }
 
-	public async logout() {
-		// this.user = null;
-		AppStateModule.resetUser();
-		RepositoriesStateModule.resetRepositories();
-		localStorage.setItem('jwt', '');
-		router.push({
-			name: LOGIN.name
-		});
-	}
+	// public async logout() {
+	// 	// this.user = null;
+	// 	AppStateModule.resetUser();
+	// 	RepositoriesStateModule.resetRepositories();
+	// 	localStorage.setItem('jwt', '');
+	// 	router.push({
+	// 		name: LOGIN.name
+	// 	});
+	// }
 
 	/**
 	 * Checks if the jwt is set for local storage, indicating that the user "was" logged in
 	 */
 	public jwtIsSet() {
-		return localStorage.getItem('jwt') != null;
+		return AppStateModule.jwt;
 	}
 
 	/**
 	 * Initialize the axiosClient, set the auto token refresh middleware (WIP), try to load pre-saved jwt
 	 */
 	public initClient() {
-		const tryJwt = localStorage.getItem('jwt');
+		// const tryJwt = localStorage.getItem('jwt');
 		if (this.axiosClient == null) {
 			this.axiosClient = axios.create(this.axiosOptions);
-			this.setAutoTokenRefreshMiddleware();
-
-			if (tryJwt != null) {
-				this.setJwt(tryJwt);
-				const user = jwtClient.decode(tryJwt);
-				// this.user = user;
-				AppStateModule.setUser(user);
-
-				AppStateModule.setUser(user);
-				if (user && !this.user.isAuthenticated) {
-					this.refreshToken(tryJwt);
-				}
-			}
+			// this.setAutoTokenRefreshMiddleware();
 		}
 		this.ping();
 	}
 
-	private async refreshToken(jwt: string) {
-		try {
-			const route = `${AbstractHttpClient.apiUrl}/auth/refresh`;
-			const result = await this.axiosClient.post(route, {
-				jwt
-			});
+	// private async refreshToken(jwt: string) {
+	// 	try {
+	// 		const route = `${AbstractHttpClient.apiUrl}/auth/refresh`;
+	// 		const result = await this.axiosClient.post(route, {
+	// 			jwt
+	// 		});
 
-			if (!result.data.accessToken) {
-				// this.user = null;
-				AppStateModule.resetUser();
-				RepositoriesStateModule.resetRepositories();
-				this.setJwt('');
+	// 		if (!result.data.accessToken) {
+	// 			// this.user = null;
+	// 			AppStateModule.resetUser();
+	// 			RepositoriesStateModule.resetRepositories();
+	// 			this.setJwt('');
 
-				return;
-			}
+	// 			return;
+	// 		}
 
-			this.setJwt(result.data.accessToken);
+	// 		this.setJwt(result.data.accessToken);
 
-			const user = jwtClient.decode(result.data.accessToken);
+	// 		const user = jwtClient.decode(result.data.accessToken);
 
-			const userData =
-				user instanceof Object
-					? { ...user, isAuthenticated: true }
-					: { isAuthenticated: false };
+	// 		const userData =
+	// 			user instanceof Object
+	// 				? { ...user, isAuthenticated: true }
+	// 				: { isAuthenticated: false };
 
-			// this.user = userData;
-			AppStateModule.setUser({ ...AppStateModule.user, ...userData });
-		} catch (e) {
-			console.error('There was an error refreshing the jwt: ', e);
-			AppStateModule.setConnectionState({ state: DISCONNECTED });
+	// 		// this.user = userData;
+	// 		AppStateModule.setUser({ ...AppStateModule.user, ...userData });
+	// 	} catch (e) {
+	// 		console.error('There was an error refreshing the jwt: ', e);
+	// 		AppStateModule.setConnectionState({ state: DISCONNECTED });
 
-			if (e.response.status === 401) {
-				// unauthorized. Ensure there is no stored jwt and send to login.
-				this.setJwt('');
-				window.location.reload();
-			}
+	// 		if (e.response.status === 401) {
+	// 			// unauthorized. Ensure there is no stored jwt and send to login.
+	// 			this.setJwt('');
+	// 			window.location.reload();
+	// 		}
 
-			throw e;
-		}
-	}
+	// 		throw e;
+	// 	}
+	// }
 
-	private setAutoTokenRefreshMiddleware() {
-		// tslint:disable:no-console
-		console.log('setting auto token refresh middleware');
-		this.axiosClient.interceptors.response.use(
-			response => {
-				console.log('middleware intercepting response: ', response);
+	// private setAutoTokenRefreshMiddleware() {
+	// 	// tslint:disable:no-console
+	// 	console.log('setting auto token refresh middleware');
+	// 	this.axiosClient.interceptors.response.use(
+	// 		response => {
+	// 			console.log('middleware intercepting response: ', response);
 
-				return response;
-			},
-			error => {
-				console.log('middleware detected error');
-				console.log(error);
-				const errorResponse = error.response;
-				if (isTokenExpiredError(errorResponse)) {
-					// return this.resetTokenAndReattemptRequest(error);
-				}
-				console.log('Error in axiosclient interceptor: ', error);
+	// 			return response;
+	// 		},
+	// 		error => {
+	// 			console.log('middleware detected error');
+	// 			console.log(error);
+	// 			const errorResponse = error.response;
+	// 			if (isTokenExpiredError(errorResponse)) {
+	// 				// return this.resetTokenAndReattemptRequest(error);
+	// 			}
+	// 			console.log('Error in axiosclient interceptor: ', error);
 
-				return Promise.reject(error);
-			}
-		);
-	}
+	// 			return Promise.reject(error);
+	// 		}
+	// 	);
+	// }
 
-	private resetTokenAndReattemptRequest(error: any) {}
+	// private resetTokenAndReattemptRequest(error: any) {}
 
 	/**
 	 * Stores a jwt to the HttpClient,
@@ -211,17 +199,17 @@ export default class AbstractHttpClient {
 	 * and configures the HttpClient's underlying Rest Client to use that jwt as the `Authorization: Bearer` token
 	 * @param jwt
 	 */
-	public async setJwt(jwt: string) {
-		this.jwt = jwt;
-		localStorage.setItem('jwt', jwt);
-		this.axiosOptions = {
-			...this.axiosOptions,
-			headers: {
-				...(this.axiosOptions.headers ? this.axiosOptions.headers : {}),
-				Authentication: `Bearer ${this.jwt}`
-			}
-		};
-	}
+	// public async setJwt(jwt: string) {
+	// 	this.jwt = jwt;
+	// 	localStorage.setItem('jwt', jwt);
+	// 	this.axiosOptions = {
+	// 		...this.axiosOptions,
+	// 		headers: {
+	// 			...(this.axiosOptions.headers ? this.axiosOptions.headers : {}),
+	// 			Authentication: `Bearer ${this.jwt}`
+	// 		}
+	// 	};
+	// }
 
 	/**
 	 * Performs an HTTP GET request to the given url

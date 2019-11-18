@@ -33,10 +33,10 @@ class Email {
 
 @InputType()
 export class CreateAppKeyInput {
-    @Field(Field => Email)
-    @ValidateNested()
-    @Type(() => Email)
-    user: Email;
+    // @Field(Field => Email)
+    // @ValidateNested()
+    // @Type(() => Email)
+    // user: Email;
 
     @Field()
     @IsNotEmpty()

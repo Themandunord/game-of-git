@@ -1,7 +1,7 @@
 # Prisma
 export PRISMA_ENDPOINT=http://localhost
 export PRISMA_PORT=4466
-export PRISMA_SERVICE_NAME=blog
+export PRISMA_SERVICE_NAME=game-of-git
 export PRISMA_SERVICE_STAGE=dev
 
 # Database
