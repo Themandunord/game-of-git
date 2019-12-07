@@ -34,6 +34,8 @@ class AppState extends VuexModule implements IAppState {
 
 	public jwt: string | null = null;
 
+	public isAuthenticated: boolean = false;
+
 	@Mutation
 	public setJwt(jwt: string | null) {
 		this.jwt = jwt;
@@ -71,6 +73,11 @@ class AppState extends VuexModule implements IAppState {
 	@Mutation
 	public setUser(user: any) {
 		this.user = user;
+	}
+
+	@Mutation
+	public setAuthenticated(isAuthenticated: boolean) {
+		this.isAuthenticated = isAuthenticated;
 	}
 
 	get hasAppKey() {

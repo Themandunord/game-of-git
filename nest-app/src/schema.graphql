@@ -155,6 +155,10 @@ input SignupInput {
   gitLogin: String
 }
 
+type Subscription {
+  userMutated: User!
+}
+
 type User {
   id: String!
   createdAt: Date!

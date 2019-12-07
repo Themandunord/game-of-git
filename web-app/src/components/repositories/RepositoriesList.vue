@@ -95,7 +95,7 @@ export default class RepositoriesControlList extends Vue {
 	private userOfInterestObservable: string = '';
 
 	mounted() {
-		this.loadSelectableRepositories();
+		// this.loadSelectableRepositories();
 	}
 
 	get hasAppKey() {
@@ -105,7 +105,7 @@ export default class RepositoriesControlList extends Vue {
 	@Watch('hasAppKey')
 	@Watch('userOfInterestObservable')
 	reloadRepos() {
-		this.loadSelectableRepositories();
+		// this.loadSelectableRepositories();
 	}
 
 	private getRepoTrackingColor(isTracking: boolean) {
@@ -122,16 +122,16 @@ export default class RepositoriesControlList extends Vue {
 				`User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
 			);
 		}
-		const selectable = await HttpClient.repositories.loadSelectableRepositories(
-			this.userOfInterest
-		);
-		this.selectableRepositories = selectable;
+		// const selectable = await HttpClient.repositories.loadSelectableRepositories(
+		// 	this.userOfInterest
+		// );
+		// this.selectableRepositories = selectable;
 	}
 
 	private async toggleRepoTracking(repo: any) {
 		console.log('toggleRepoTracking: ', repo);
 		await HttpClient.repositories.toggleRepositoryTracking(repo);
-		this.loadSelectableRepositories();
+		// this.loadSelectableRepositories();
 		RepositoriesStateModule.syncStoredRepositories();
 	}
 
