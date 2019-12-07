@@ -29,7 +29,7 @@ export default class Repositories extends Vue {
 		return AppStateModule.hasAppKey;
 	}
 	beforeMount() {
-		RepositoriesStateModule.syncStoredRepositories();
+		// RepositoriesStateModule.syncStoredRepositories();
 	}
 }
 </script>

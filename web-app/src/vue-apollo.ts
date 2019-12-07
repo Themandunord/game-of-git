@@ -59,7 +59,7 @@ const defaultOptions = {
 	// You need to pass a `wsEndpoint` for this to work
 	websocketsOnly: false,
 	// Is being rendered on the server?
-	ssr: false
+	ssr: false,
 
 	// Override default apollo link
 	// note: don't override httpLink here, specify httpLink options in the
@@ -81,13 +81,25 @@ const defaultOptions = {
 
 // Call this in the Vue app file
 export function createProvider(options = {}) {
+	console.log('creating provider');
 	// Create apollo client
 	const { apolloClient, wsClient } = createApolloClient({
 		...defaultOptions,
 		...options
 	});
-	apolloClient.wsClient = wsClient;
-
+	wsClient.connectionParams = () => {
+		return {
+		  headers: {
+			Authorization: localStorage.getItem(AUTH_TOKEN) ? `Bearer ${localStorage.getItem(AUTH_TOKEN)}` : ''
+		  }
+		}
+	  }
+	  console.log('set wsClient connectionParams to have Authorization headers');
+	
+	  // Set apollo client's websocket client
+	  apolloClient.wsClient = wsClient
+	
+	
 	// Create vue apollo provider
 	const apolloProvider = new VueApollo({
 		defaultClient: apolloClient,
@@ -114,13 +126,28 @@ export const onLogin = async (
 	apolloClient: { wsClient: any; resetStore: () => void },
 	token: string
 ) => {
+	console.log('Vue-Apollo onLogin');
 	if (typeof localStorage !== 'undefined' && token) {
+		console.log(`Storing the jwt token ${token} in localStorage at ${AUTH_TOKEN}`)
 		localStorage.setItem(AUTH_TOKEN, token);
 	}
 	if (apolloClient.wsClient) {
+		console.log('apolloClient has wsClient');
+		apolloClient.wsClient.connectionParams = () => {
+			return {
+			  headers: {
+				Authorization: `Bearer ${token}`
+			  }
+			}
+		  }
+	
+		console.log(apolloClient.wsClient.connectionParams());
 		restartWebsockets(apolloClient.wsClient);
+	} else {
+		console.log('apolloClient does not have wsClient');
 	}
 	try {
+		console.log('calling apolloClient.resetStore');
 		await apolloClient.resetStore();
 	} catch (e) {
 		// eslint-disable-next-line no-console

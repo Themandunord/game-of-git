@@ -28,6 +28,7 @@ export interface IBaseUserData {
 }
 
 export interface IAppState {
+	isAuthenticated: boolean;
 	navExpanded: boolean;
 	connection: IConnectionState;
 	jwt: string | null;

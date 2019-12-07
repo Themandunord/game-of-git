@@ -11,16 +11,44 @@ import { RepositoriesModule } from './../repositories/repositories.module';
 import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
+import ps from '../../pubsub';
 
 @Module({
     imports: [
         // Core GraphQL/Prisma Setup
-        GraphQLModule.forRoot({
-            autoSchemaFile: './src/schema.graphql',
-            debug: true,
-            playground: true,
-            context: ({ req }) => ({ req })
+        GraphQLModule.forRootAsync({
+            useFactory: (...args: any[]) => {
+                return {
+                    autoSchemaFile: './src/schema.graphql',
+                    debug: true,
+                    playground: true,
+                    context: ({ req }) => ({ req }),
+                    installSubscriptionHandlers: true,
+                    subscriptions: {
+                        // path: '/subscriptions'
+                        onConnect: (connectionParams, ws, context) => {
+                            console.log('subscription onConnect');
+                        }
+                    }
+                };
+            }
         }),
+        // GraphQLModule.forRoot({
+        //     autoSchemaFile: './src/schema.graphql',
+        //     debug: true,
+        //     playground: true,
+        //     context: ({ req }) => ({ req }),
+        //     installSubscriptionHandlers: true,
+        //     subscriptions:{
+        //         // path: '/subscriptions'
+        //         onConnect: (connectionParams, ws, context) => {
+        //             console.log('subscription onConnect', connectionParams, ws, context);
+        //             // connectionParams.headers.Authorization
+        //             // context.socket?
+        //         }
+        //     }
+
+        // }),
         PrismaModule,
 
         // Auth Setup
@@ -37,6 +65,15 @@ import { AppService } from './app.service';
         RepositoriesModule
     ],
     controllers: [AppController],
-    providers: [AppService, AppResolver, DateScalar]
+    providers: [
+        AppService,
+        AppResolver,
+        DateScalar,
+        {
+            provide: 'PUB_SUB',
+            useValue: ps
+        }
+        // , AppGateway
+    ]
 })
 export class AppModule {}

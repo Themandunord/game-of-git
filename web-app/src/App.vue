@@ -22,24 +22,21 @@ import { REPOSITORY_DASHBOARD } from '@/router/routes';
 import { IRoute } from '@/router/routes';
 import ConnectionStatus from './components/notifications/ConnectionStatus.vue';
 import HttpClient from '@/common/HttpClient';
+import GQL_QUERIES from './common/gql.constants';
+import { refreshUserData } from './common/user';
 import gql from 'graphql-tag';
+import { Observable } from 'rxjs';
+import { FetchResult } from 'apollo-link';
 
-const meQuery = gql`
-	query{
-		me{
-			id
-			email
-			role
-			gitLogin
-			createdAt
-			updatedAt
-			appKeys{
-				id
-				name
-			}
-		}
-	}
-`;
+const USER_EDITED = gql`subscription{
+  userMutated{
+	  id
+	  name
+	  email
+	  gitLogin
+  }
+}`;
+
 
 @Component({
 	components: {
@@ -49,11 +46,11 @@ const meQuery = gql`
 })
 export default class App extends Vue {
 	public routeManager = routeManager;
+	// public userEditedSub: Observable<FetchResult<any, Record<string, any>, Record<string, any>>> | null = null;
+	public meObserver!: any;
 
 	async created() {
-		console.log('App createdm checking for localJwt');
 		const localJwt = localStorage.getItem('jwt');
-		console.log('localJwt: ', localJwt);
 		if (!localJwt || localJwt.length === 0) {
 			console.log('User is not authenticated, redirecting to login.');
 			router.push(LOGIN.name as string);
@@ -63,15 +60,7 @@ export default class App extends Vue {
 		// routeManager.setContext({
 		// 	hasJwt: true
 		// });
-		const userData = await this.$apollo.query({
-			query: meQuery
-		});
-
-		const user = {
-			...userData.data.me
-		};
-
-		AppStateModule.setUser(user);
+		refreshUserData();
 	}
 
 	get routes() {
@@ -99,6 +88,22 @@ export default class App extends Vue {
 		// console.log('App.vue calling on RepositoriesStateModule to sync stored repositories');
 		// const res = await RepositoriesStateModule.syncStoredRepositories();
 		// console.log('Done syncStoredRepositories', res);
+
+		this.meObserver = this.$apollo.subscribe({
+			query: USER_EDITED,
+			variables: {
+				$token: AppStateModule.jwt
+			}
+		});
+
+		this.meObserver.subscribe({
+			next (data: any) {
+				console.log(data);
+			},
+			error (err: any) {
+				console.error(err);
+			}
+		})
 	}
 
 	get trackedRepositories() {

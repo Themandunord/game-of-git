@@ -37,7 +37,9 @@ import gql from 'graphql-tag';
 import AppStateModule from '@/store/aspects/app';
 import router from '@/router';
 import { HOME } from '@/router/routes/home';
-
+import { refreshUserData } from '../../common/user';
+import { onLogin } from '../../vue-apollo';
+import { apolloClient } from '../../common/apollo.provider';
 import { GraphQLClient, ErrorHandlerVueComponent } from '../../common/GraphQLClient/GraphQLClient';
 
 const mutation = gql`
@@ -120,14 +122,12 @@ export default class Login extends ErrorHandlerVueComponent {
 	}
 
 	private async handleLogin(loginResp: LoginResponsePossibilities) {
-		console.log('handling login: ', loginResp);
 		if (!loginResp) throw new Error('loginResp is undefined');
 
 		const token = loginResp.login.token;
 		if (token === optimisticResponse.login.token) {
 			return;
 		}
-		const user = loginResp.login.user;
 
 		const destination = this.$route.params.nextUrl
 			? this.$route.params.nextUrl
@@ -135,16 +135,9 @@ export default class Login extends ErrorHandlerVueComponent {
 					name: HOME.name as string
 			  };
 
-		const userData =
-			user instanceof Object
-				? {
-						...user,
-						isAuthenticated: true
-				  }
-				: { isAuthenticated: false };
-
-		AppStateModule.setUser({ ...AppStateModule.user, ...userData, isAuthenticated: true });
 		AppStateModule.setJwt(token);
+		refreshUserData();
+		onLogin(apolloClient as any, token);
 
 		await router.push(destination);
 	}
