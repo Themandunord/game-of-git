@@ -1,14 +1,24 @@
 mutation {
-  first: createUser(
-    data: {
-      email: "kingmi123@gmail.com",
-      hash: "$2b$10$DUwox2M33BHBo1jo0ektLOWZ1crZ.2v31UOiKXPfElEcUbJfA4mG2",
-      gitLogin: "miking-the-viking"
+    user1: createUser(
+        data: {
+            email: "abby@normal.com"
+            name: "AbbyNormal"
+            gitLogin: ""
+            password: "$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm" # "secret42"
+        }
+    ) {
+        id
     }
-  ) {
-    id
-    hash
-    email
-    gitLogin
-  }
+
+    user2: createUser(
+        data: {
+            email: "kingmi123@gmail.com"
+            name: "MikingTheViking"
+            gitLogin: "miking-the-viking"
+            password: "$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm" # "secret42"
+            role: ADMIN
+        }
+    ) {
+        id
+    }
 }
