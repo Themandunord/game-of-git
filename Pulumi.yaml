@@ -1,3 +1,0 @@
-name: game-of-git
-runtime: nodejs
-description: A minimal AWS TypeScript Pulumi program

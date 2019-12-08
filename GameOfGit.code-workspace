@@ -1,0 +1,11 @@
+{
+    "folders": [
+        {
+            "name": "game-of-git",
+            "path": "."
+        },
+        {
+            "path": "nest-app"
+        }
+    ]
+}
