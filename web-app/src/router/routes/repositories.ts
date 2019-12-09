@@ -8,6 +8,7 @@ export const REPOSITORIES = {
 	component: () =>
 		import(/* webpackChunkName: "repositories" */ '@/views/repositories/Repositories.vue'),
 	meta: {
-		requiresAuth: true
+		requiresAuth: true,
+		requiresGitHubAuthToken: true
 	}
 };

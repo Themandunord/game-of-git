@@ -3,4 +3,5 @@
  */
 export interface IRouteManagerContext {
 	hasJwt?: boolean;
+	hasGitHubAuthToken?: boolean;
 }
