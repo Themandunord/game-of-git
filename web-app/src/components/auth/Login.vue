@@ -121,7 +121,7 @@ export default class Login extends ErrorHandlerVueComponent {
 		}
 	}
 
-	private async handleLogin(loginResp: LoginResponsePossibilities) {
+	private async handleLogin(loginResp: LoginResponsePossibilities | null) {
 		if (!loginResp) throw new Error('loginResp is undefined');
 
 		const token = loginResp.login.token;
