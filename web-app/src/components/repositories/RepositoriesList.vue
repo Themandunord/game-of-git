@@ -9,16 +9,17 @@ v-layout(row)
 		v-simple-table
 			thead
 				tr
-					th.text-left Owner
-					th.text-left Name
-					th.text-left Description
-					th.text-left Created At
-					th.text-left Updated At
-					th.text-left Fork
-					th.text-left Private
-					th.text-left Tracked
+					th.text-left(v-for="tableColumn in tableColumns") {{tableColumn.header}}
+					//- th.text-left Owner
+					//- th.text-left Name
+					//- th.text-left Description
+					//- th.text-left Created At
+					//- th.text-left Updated At
+					//- th.text-left Fork
+					//- th.text-left Private
+					//- th.text-left Tracked
 			tbody
-				tr(v-for="repo in selectableRepositories" :key="repo.name")
+				tr(v-for="repo in repos" :key="repo.name")
 					td
 						v-avatar.clickable(
 							:tile="false"
@@ -30,8 +31,8 @@ v-layout(row)
 							img(:src="repo.owner.avatarUrl")
 					td {{repo.name}}
 					td {{repo.description}}
-					td {{new Date(repo.createdAtExternal).toLocaleString()}}
-					td {{new Date(repo.updatedAtExternal).toLocaleString()}}
+					td {{new Date(repo.createdAt).toLocaleString()}}
+					td {{new Date(repo.updatedAt).toLocaleString()}}
 					td 
 						v-btn(
 							fab
@@ -78,6 +79,38 @@ import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
 import HttpClient from '../../common/HttpClient';
 import { pluck, switchMap, debounceTime } from 'rxjs/operators';
+import { repositoryList, trackRepository } from '@/common/repositories';
+
+interface RepositoryTableColumn {
+	header: string;
+	body: any;
+}
+
+const tableColumns: RepositoryTableColumn[] = [
+	{
+		header: 'Owner',
+		body: () => {
+			return Vue.component('my-checkbox', {
+				template: `<div class="checkbox-wrapper" @click="check"><div :class="{ checkbox: true, checked: checked }"></div><div class="title">{{ title }}</div></div>`,
+				data() {
+					return { checked: false, title: 'Check me' };
+				},
+				methods: {
+					check() {
+						this.checked = !this.checked;
+					}
+				}
+			});
+		}
+	},
+	{ header: 'Name', body: null },
+	{ header: 'Description', body: null },
+	{ header: 'Created At', body: null },
+	{ header: 'Updated At', body: null },
+	{ header: 'Fork', body: null },
+	{ header: 'Private', body: null },
+	{ header: 'Tracked', body: null }
+];
 
 @Component({
 	subscriptions() {
@@ -90,12 +123,21 @@ import { pluck, switchMap, debounceTime } from 'rxjs/operators';
 	}
 })
 export default class RepositoriesControlList extends Vue {
-	private selectableRepositories = [];
-	private userOfInterest: string = '';
+	private repos = new Array();
+	private userOfInterest: string = AppStateModule.user.gitLogin || '';
 	private userOfInterestObservable: string = '';
+	private tableColumns = tableColumns;
+
+	get selectableRepos() {
+		return this.repos;
+	}
+
+	set selectableRepos(newVal: any[]) {
+		this.repos = newVal;
+	}
 
 	mounted() {
-		// this.loadSelectableRepositories();
+		this.loadSelectableRepositories();
 	}
 
 	get hasAppKey() {
@@ -105,7 +147,7 @@ export default class RepositoriesControlList extends Vue {
 	@Watch('hasAppKey')
 	@Watch('userOfInterestObservable')
 	reloadRepos() {
-		// this.loadSelectableRepositories();
+		this.loadSelectableRepositories();
 	}
 
 	private getRepoTrackingColor(isTracking: boolean) {
@@ -122,6 +164,9 @@ export default class RepositoriesControlList extends Vue {
 				`User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
 			);
 		}
+		const repos = await repositoryList(this.userOfInterest);
+		console.log('returned: ', repos);
+		this.repos = repos;
 		// const selectable = await HttpClient.repositories.loadSelectableRepositories(
 		// 	this.userOfInterest
 		// );
@@ -130,9 +175,11 @@ export default class RepositoriesControlList extends Vue {
 
 	private async toggleRepoTracking(repo: any) {
 		console.log('toggleRepoTracking: ', repo);
-		await HttpClient.repositories.toggleRepositoryTracking(repo);
+		const addedRepo = await trackRepository();
+		this.loadSelectableRepositories();
+		// await HttpClient.repositories.toggleRepositoryTracking(repo);
 		// this.loadSelectableRepositories();
-		RepositoriesStateModule.syncStoredRepositories();
+		// RepositoriesStateModule.syncStoredRepositories();
 	}
 
 	private open(url: string) {

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
 import { GitHubUser } from './user';
+import { GitHubIssue } from './issue';
 
 @ObjectType()
 export class GitHubRepository {
@@ -51,7 +52,13 @@ export class GitHubRepository {
     @Field()
     isPrivate: boolean;
 
+    // Attempt at custom added field
     @Field()
+    isTracked: boolean;
+
+    @Field({
+        nullable: true
+    })
     description: string;
 
     @Field()
@@ -68,4 +75,7 @@ export class GitHubRepository {
 
     @Field()
     url: string;
+
+    // @Field(returns => [GitHubIssue])
+    // issues: GitHubIssue[];
 }

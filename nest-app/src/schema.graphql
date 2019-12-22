@@ -47,6 +47,32 @@ type Game {
   type: String!
 }
 
+type GitHubRepository {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  createdAtExternal: Date!
+  updatedAtExternal: Date!
+  owner: GitHubUser!
+  hasBranchRules: Boolean!
+  hasContributingGuidelines: Boolean!
+  hasPullRequestTemplate: Boolean!
+  hasReadMe: Boolean!
+  hasWiki: Boolean!
+  isArchived: Boolean!
+  isDisabled: Boolean!
+  isFork: Boolean!
+  isLocked: Boolean!
+  isPrivate: Boolean!
+  isTracked: Boolean!
+  description: String
+  license: String!
+  name: String!
+  primaryLanguage: String!
+  sshUrl: String!
+  url: String!
+}
+
 type GitHubUser {
   id: String!
   createdAt: Date!
@@ -94,6 +120,7 @@ type Mutation {
   create(gitHubWebhookEvent: GitHubWebhookEventInput!): GitHubWebhookEvent!
   createAppKey(data: CreateAppKeyInput!): AppKey!
   deleteAppKey(id: ID, key: String): AppKey!
+  trackRepository(data: TrackRepositoryInput!): Repository!
 }
 
 type Post {
@@ -106,15 +133,14 @@ type Post {
 }
 
 type Query {
-  post(postId: String!): Post!
+  post(postId: String!): Game!
   game(postId: String!): Game!
-  publishedPosts(skip: Int, after: String, before: String, first: Int, last: Int): [Post!]!
-  userPosts(userId: String!): [Post!]!
   me: User!
   appKey(id: ID, key: String): AppKey!
   userAppKeys(id: ID, email: String): [AppKey!]!
   validateAppKey(appKey: String!): AppKeyIsValid!
   repository(repositoryId: String!): Repository!
+  repositoryList(username: String!): [GitHubRepository!]!
   helloWorld: String!
   hello(name: String!): String!
 }
@@ -157,6 +183,11 @@ input SignupInput {
 
 type Subscription {
   userMutated: User!
+}
+
+input TrackRepositoryInput {
+  owner: String!
+  repository: String!
 }
 
 type User {

@@ -7,6 +7,7 @@ export const ADD_APP_KEY = {
 	// which is lazy-loaded when the route is visited.
 	component: () => import(/* webpackChunkName: "addAppKey" */ '@/views/AddAppKey.vue'),
 	meta: {
-		requiresAuth: true
+		requiresAuth: true,
+		noRegisteredAuthTokens: true
 	}
 };

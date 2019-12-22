@@ -84,7 +84,7 @@
 								"body": {
 									"mode": "graphql",
 									"graphql": {
-										"query": "query{\n    me{\n        id\n        email\n        role\n        gitLogin\n        createdAt\n        updatedAt\n        posts{\n            id\n            title\n            published\n            createdAt\n            updatedAt\n        }\n    }\n}",
+										"query": "query{\n    me{\n        id\n        email\n        role\n        gitLogin\n        createdAt\n        updatedAt\n        appKeys{\n            id\n            name\n        }\n    }\n}",
 										"variables": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}"
 									}
 								},
@@ -105,15 +105,46 @@
 					"name": "App-Key",
 					"item": [
 						{
-							"name": "Create",
+							"name": "Create (User Email)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($key: String!, $name: String!) {\n    createAppKey(data: {key: $key, name: $name }) {\n        id\n        name\n        key\n    }\n}\n",
+										"variables": "{\n\t\"user\": \"{{email}}\",\n\t\"key\": \"{{githubApiKey}}\",\n\t\"name\": \"some key\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create (User ID)",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
-										"query": "mutation($user: String!, $key: String!, $name: String!) {\n    createAppKey(data: { user: {\n        email: $user\n        }, key: $key, name: $name }) {\n        id\n        name\n        key\n    }\n}\n",
-										"variables": "{\n\t\"user\": \"{{email}}\",\n\t\"key\": \"{{githubApiKey}}\",\n\t\"name\": \"some key\"\n}"
+										"query": "mutation($user: String!, $key: String!, $name: String!) {\n    createAppKey(data: { user: {\n        id: $user\n        }, key: $key, name: $name }) {\n        id\n        name\n        key\n    }\n}\n",
+										"variables": "{\n\t\"user\": \"{{userId}}\",\n\t\"key\": \"{{githubApiKey}}\",\n\t\"name\": \"some key\"\n}"
 									}
 								},
 								"url": {
@@ -288,7 +319,70 @@
 				},
 				{
 					"name": "Repositories",
-					"item": [],
+					"item": [
+						{
+							"name": "Repository List by Username",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query($username: String!) {\n\trepositoryList(username: $username) {\n        id\n        name\n        createdAt\n        updatedAt\n        isFork\n        isPrivate\n        name\n        url\n\t}\n}",
+										"variables": "{\n\t\"username\": \"{{gitLogin}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Track Repository",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation($owner: String!, $repository: String!) {\n\ttrackRepository(data: {\n\t    owner: $owner, repository: $repository\n\t    }) {\n        id\n        isTracked\n\t}\n}",
+										"variables": "{\n\t\"owner\": \"{{gitLogin}}\",\n\t\"repository\": \"{{repository}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{graphql}}",
+									"host": [
+										"{{graphql}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
@@ -297,6 +391,49 @@
 					"item": [],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Subscription",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4e80c862-36a4-4a07-9a8a-592bd0e2fbed",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "subscription{\n  user{\n    createdAt\n    updatedAt\n    email\n    name\n    role\n    appKeys{\n      id\n      key\n      name\n    }\n    gitLogin\n  }\n}",
+								"variables": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql}}",
+							"host": [
+								"{{graphql}}"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
