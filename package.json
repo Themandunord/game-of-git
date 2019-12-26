@@ -7,7 +7,8 @@
     "license": "MIT",
     "husky": {
         "hooks": {
-            "pre-commit": "lint-staged -r"
+            "pre-commit": "lint-staged -r",
+            "prepare-commit-msg": "exec < /dev/tty && git cz --hook"
         }
     },
     "lint-staged": {
@@ -16,6 +17,9 @@
             "git add"
         ]
     },
+    "scripts": {
+        "commy": "git-cz"
+      },    
     "dependencies": {
         "husky": "^3.0.9",
         "lint-staged": "^9.4.3",
@@ -23,5 +27,14 @@
         "rimraf": "^3.0.0",
         "tslint": "^5.20.1",
         "typescript": "^3.7.2"
+    },
+    "devDependencies": {
+        "commitizen": "^4.0.3",
+        "cz-conventional-changelog": "^3.0.2"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
     }
 }
