@@ -1,5 +1,8 @@
 # A Game Of Git 👑 🤔 🎮 🏆 🔥
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+
 ## 🔨Heavily In Development, not close to final state yet.🛠️
 
 A Game of Git is intended to be an approach at gamifying the development experience by using efficient modern web development practices and advanced GitHub Webhooks and APIs.
