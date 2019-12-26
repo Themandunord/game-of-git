@@ -135,10 +135,10 @@ type Post {
 type Query {
   post(postId: String!): Game!
   game(postId: String!): Game!
-  me: User!
   appKey(id: ID, key: String): AppKey!
   userAppKeys(id: ID, email: String): [AppKey!]!
   validateAppKey(appKey: String!): AppKeyIsValid!
+  me: User!
   repository(repositoryId: String!): Repository!
   repositoryList(username: String!): [GitHubRepository!]!
   helloWorld: String!
