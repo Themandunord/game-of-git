@@ -1,5 +1,7 @@
 {
     "name": "game-of-git",
+    "private": true,
+    "workspaces": ["common", "nest-app", "web-app"],
     "version": "1.0.0",
     "main": "index.js",
     "repository": "git@github.com:miking-the-viking/game-of-git.git",

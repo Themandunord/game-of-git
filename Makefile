@@ -9,8 +9,38 @@ help: ## Show this help.
 
 .DEFAULT_GOAL := help
 
+
+#
+# CONFIG
+#
+
 copy_env: ## Copy the envrc.example to .envrc
 	cp .envrc.example .envrc
+
+#
+# YARN WORKSPACES
+#
+
+install: ## Install the node dependencies across all workspacess
+	yarn
+
+
+test: ## Run the tests across all the various workspaces
+	yarn workspaces run test
+
+test_ci: ## Run the tests with the --ci flag across all the various workspaces
+	yarn workspaces run test --ci
+
+
+build: ## Run build command across all the various workspaces
+	yarn workspaces run build
+
+build_ci: ## Run build command with the --ci flag across all the various workspaces
+	yarn workspaces run build --ci
+
+#
+# DOCKER
+#
 
 up: ## Run Docker Compose Up to start the dev stack of Prisma & Postgres
 	docker-compose up -d;
@@ -18,13 +48,16 @@ up: ## Run Docker Compose Up to start the dev stack of Prisma & Postgres
 up_build: ## Run Docker Compose Build to build the container images of the dev stack of Prisma & Postgres
 	docker-compose up -d --build;
 
+
 down: ## Run Docker Compose Down to stop the dev stack of Prisma & Postgres
 	docker-compose down;
 
 down_v: ## Run Docker Compose Down to stop the application's containers with the -v flag to drop the stored volumes
 	docker-compose down -v;
 
-
+#
+# PRISMA
+#
 
 prisma_deploy: ## Deploy the Prisma changes by running prisma deploy in the prisma/ directory
 	cd ${PRISMA_PROJECT_FOLDER} && prisma deploy;
