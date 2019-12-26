@@ -142,7 +142,7 @@ export default class AddAppKeyForm extends ErrorHandlerVueComponent {
 					key: this.key
 				},
 				update: async (store, { data }) => {
-					console.log('App key added!')
+					console.log('App key added!');
 					// this.handleKeyAdded(data);
 				},
 				optimisticResponse
@@ -152,6 +152,5 @@ export default class AddAppKeyForm extends ErrorHandlerVueComponent {
 			GraphQLClient.errorHandler(this, e.graphQLErrors);
 		}
 	}
-	
 }
 </script>

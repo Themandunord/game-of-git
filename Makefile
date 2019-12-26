@@ -38,6 +38,12 @@ build: ## Run build command across all the various workspaces
 build_ci: ## Run build command with the --ci flag across all the various workspaces
 	yarn workspaces run build --ci
 
+start_nest: ## Run yarn workspace nest-app start:dev
+	yarn workspace nest-app start:dev
+
+start_vue: ## Run yarn workspace web-app serve
+	yarn workspace web-app serve
+
 #
 # DOCKER
 #

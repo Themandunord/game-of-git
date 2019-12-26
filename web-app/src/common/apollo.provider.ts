@@ -1,7 +1,7 @@
 import { createProvider } from '../vue-apollo';
 
 const apolloProvider = createProvider({
-    tokenName: 'jwt'
+	tokenName: 'jwt'
 });
 
 export const apolloClient = apolloProvider.defaultClient;

@@ -10,13 +10,13 @@ import RepositoriesStateModule from '@/store/aspects/repositories';
 import RepositoriesList from '@/components/repositories/RepositoriesList.vue';
 
 @Component({
-    components: {
-        RepositoriesList
-    }
+	components: {
+		RepositoriesList
+	}
 })
 export default class Repositories extends Vue {
-    beforeMount() {
-        // RepositoriesStateModule.syncStoredRepositories();
-    }
+	beforeMount() {
+		// RepositoriesStateModule.syncStoredRepositories();
+	}
 }
 </script>
