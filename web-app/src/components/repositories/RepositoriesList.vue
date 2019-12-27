@@ -175,7 +175,7 @@ export default class RepositoriesControlList extends Vue {
 
 	private async toggleRepoTracking(repo: any) {
 		console.log('toggleRepoTracking: ', repo);
-		const addedRepo = await trackRepository();
+		// const addedRepo = await trackRepository();
 		this.loadSelectableRepositories();
 		// await HttpClient.repositories.toggleRepositoryTracking(repo);
 		// this.loadSelectableRepositories();
