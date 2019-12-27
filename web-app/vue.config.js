@@ -1,8 +1,18 @@
 module.exports = {
 	lintOnSave: false,
+	css: {
+		loaderOptions: {
+			postcss: {
+				autoprefixer: {}
+			}
+		}
+	},
 	chainWebpack: config => {
 		/* disable insertion of assets as data urls b/c Phaser doesn't support it */
-		const rules = [{ name: 'images', dir: 'img' }, { name: 'media', dir: 'media' }];
+		const rules = [
+			{ name: 'images', dir: 'img' },
+			{ name: 'media', dir: 'media' }
+		];
 		rules.forEach(rule => {
 			const ruleConf = config.module.rule(rule.name);
 

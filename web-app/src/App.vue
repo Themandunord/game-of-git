@@ -28,15 +28,16 @@ import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { FetchResult } from 'apollo-link';
 
-const USER_EDITED = gql`subscription{
-  userMutated{
-	  id
-	  name
-	  email
-	  gitLogin
-  }
-}`;
-
+const USER_EDITED = gql`
+	subscription {
+		userMutated {
+			id
+			name
+			email
+			gitLogin
+		}
+	}
+`;
 
 @Component({
 	components: {
@@ -97,13 +98,13 @@ export default class App extends Vue {
 		});
 
 		this.meObserver.subscribe({
-			next (data: any) {
+			next(data: any) {
 				console.log(data);
 			},
-			error (err: any) {
+			error(err: any) {
 				console.error(err);
 			}
-		})
+		});
 	}
 
 	get trackedRepositories() {

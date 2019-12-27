@@ -26,6 +26,10 @@ Copy the `.envrc.example` to `.envrc` from the root of the project by running th
 
 (If you want to expose a port to allow for GitHub webhooks, you'll need to open the NestJs port by using `ngrok http 3000` and copying the generated external url to the `GIT_SERVICE_DOMAIN` in the `.envrc`. This domain will be used when setting up webhooks on repositories allowing for GitHub webhooks to come into your local development environment.)
 
+#### Yarn Workspaces
+
+The project is setup using Yarn Workspaces with some common scripts being shared across the various workspaces such as `build` and `test`, allowing for easy package version concurrency and command execution.
+
 ### Container Orchestration
 
 To ensure development is snappy the only containers used locally are Prisma and Postgres, this has been setup with Docker Compose and some convenience functions.
