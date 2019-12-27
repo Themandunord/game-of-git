@@ -1,8 +1,12 @@
-import { User } from '../../../models/user';
+import {
+    User,
+    AppKeyKeyArgs,
+    AppKeyIdOrKeyArgs,
+    UserIdOrEmailArgs
+} from '@game-of-git/common';
 import { GqlAuthGuard } from '../../../guards/gql-auth.guard';
 import { UserEntity } from '../../../decorators/user.decorator';
-import { AppKeyKeyArgs } from '../../../models/args/appkeykey-args';
-import { AppKeyIsValid } from '../../../models/app-key';
+import { AppKeyIsValid } from '@game-of-git/common';
 import {
     Args,
     Mutation,
@@ -11,9 +15,7 @@ import {
     Info,
     Context
 } from '@nestjs/graphql';
-import { AppKey } from '../../../models/app-key';
-import { AppKeyIdOrKeyArgs } from '../../../models/args/appkeyidorkey-args';
-import { UserIdOrEmailArgs } from '../../../models/args/useridoremail-args';
+import { AppKey } from '@game-of-git/common';
 import { AppKeyService } from './app-key.service';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
 import { UseGuards } from '@nestjs/common';

@@ -7,7 +7,7 @@ import {
     Mutation,
     Subscription
 } from '@nestjs/graphql';
-import { GitHubUser } from '../../models/github/user';
+import { GitHubUser } from '@game-of-git/common';
 
 @Resolver(of => GitHubUser)
 export class UserResolver {

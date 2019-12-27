@@ -1,4 +1,4 @@
-import { User } from '../../../../models/user';
+// import { User } from '../../../../models/user';
 import { UserCreateOneWithoutKeysInput } from '../../../../generated/prisma-client/index';
 import {
     IsEmail,

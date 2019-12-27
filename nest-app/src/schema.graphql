@@ -15,7 +15,7 @@ type AppKeyIsValid {
 }
 
 type Auth {
-  """JWT Beare token"""
+  """JWT Bearer token"""
   token: String!
   user: User!
 }
@@ -47,6 +47,120 @@ type Game {
   type: String!
 }
 
+type GitHubBranch {
+  id: String!
+  repository: GitHubRepository!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  merged: Boolean!
+}
+
+type GitHubComment {
+  id: String!
+  author: GitHubUser!
+  createdAt: Date!
+  createdAtExternal: Date!
+  updatedAt: Date!
+  bodyText: String!
+  url: String!
+}
+
+type GitHubCommit {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  author: GitHubUser!
+  associatedPullRequests: [GitHubPullRequest!]!
+  committer: GitHubUser!
+  additions: Float!
+  authedDate: Date!
+  changedFiles: Float!
+  commitUrl: String!
+  deletions: Float!
+  message: String!
+  messageHeadline: String!
+  pushedDate: Date!
+  treeUrl: String!
+  url: String!
+}
+
+type GitHubFileDiff {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  additions: Float!
+  deletions: Float!
+  filepath: String!
+}
+
+type GitHubIssue {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  createdAtExternal: Date!
+  updatedAtExternal: Date!
+  lastEditedAt: Date!
+  assignees: [GitHubUser!]!
+  author: GitHubUser!
+  comments: [GitHubComment!]!
+  bodyText: String!
+  closed: Date!
+  locked: Boolean!
+  number: Float!
+  state: String!
+  title: String!
+  url: String!
+}
+
+type GitHubLabel {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  createdAtExternal: Date!
+  updatedAtExternal: Date!
+  color: String!
+  description: String!
+  name: String!
+  url: String!
+}
+
+type GitHubPullRequest {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  createdAtExternal: Date!
+  publishedAt: Date!
+  closedAt: Date!
+  mergedAt: Date!
+  author: GitHubUser!
+  mergedBy: GitHubUser!
+  number: Float!
+  closed: Boolean!
+  isCrossRepository: Boolean!
+  locked: Boolean!
+  merged: Boolean!
+  additions: Float!
+  deletions: Float!
+  bodyText: Float!
+}
+
+type GitHubPullRequestReview {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  createdAtExternal: Date!
+  updatedAtExternal: Date!
+  submittedAt: Date!
+  lastEditeddAt: Date!
+  publishedAt: Date!
+  author: GitHubUser!
+  pullRequest: GitHubPullRequest!
+  state: String!
+  bodyText: String!
+  url: String!
+}
+
 type GitHubRepository {
   id: String!
   createdAt: Date!
@@ -71,6 +185,31 @@ type GitHubRepository {
   primaryLanguage: String!
   sshUrl: String!
   url: String!
+}
+
+type GitHubReviewRequest {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  pullRequest: GitHubPullRequest!
+  requestedReviewer: GitHubUser!
+}
+
+type GitHubReviewThread {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  pullRequest: GitHubPullRequest!
+  repository: GitHubRepository!
+  resolvedBy: GitHubUser!
+  isResolved: Boolean!
+}
+
+type GitHubTopic {
+  id: String!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
 }
 
 type GitHubUser {
@@ -123,15 +262,6 @@ type Mutation {
   trackRepository(data: TrackRepositoryInput!): Repository!
 }
 
-type Post {
-  id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  title: String!
-  published: Boolean!
-  author: User!
-}
-
 type Query {
   post(postId: String!): Game!
   game(postId: String!): Game!
@@ -165,7 +295,6 @@ type Repository {
   isPrivate: Boolean!
   isDiabled: Boolean!
   sshUrl: String!
-  game: Game!
 }
 
 """User role"""
@@ -198,7 +327,6 @@ type User {
   name: String
   role: Role!
   appKeys: [AppKey!]!
-  posts: [Post!]!
   password: String!
   gitLogin: String!
 }

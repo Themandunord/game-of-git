@@ -7,7 +7,7 @@ import {
     Subscription
 } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
-import { GitHubFileDiff } from '../../models/github/file-diff';
+import { GitHubFileDiff } from '@game-of-git/common';
 
 @Resolver(of => GitHubFileDiff)
 export class FileDiffResolver {

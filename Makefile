@@ -38,11 +38,14 @@ build: ## Run build command across all the various workspaces
 build_ci: ## Run build command with the --ci flag across all the various workspaces
 	yarn workspaces run build --ci
 
+build_common: ## Run the build command in the @game-of-git/common library
+	yarn workspace @game-of-git/common run build
+
 start_nest: ## Run yarn workspace nest-app start:dev
-	yarn workspace nest-app start:dev
+	yarn workspace @game-of-git/nest-app start:dev
 
 start_vue: ## Run yarn workspace web-app serve
-	yarn workspace web-app serve
+	yarn workspace @game-of-git/web-app serve
 
 #
 # DOCKER

@@ -1,7 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
-import { User } from './user';
-import { AppKey } from './app-key';
-import { Game } from './game';
+import { User } from '../user/user';
+import { AppKey } from './app-key/app-key';
+// import { Game } from './game';
 
 @ObjectType()
 export class Repository {
@@ -62,6 +62,6 @@ export class Repository {
     @Field()
     sshUrl: string;
 
-    @Field(type => Game)
-    game: Game;
+    // @Field(type => Game)
+    // game: Game;
 }

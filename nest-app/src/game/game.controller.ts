@@ -1,6 +1,6 @@
 import { GameService } from './game.service';
 import { Controller, Logger, Post, Body, Get, Param } from '@nestjs/common';
-import { GameType } from './game-types';
+import { GameType } from '@game-of-git/common';
 
 @Controller('game')
 export class GameController {

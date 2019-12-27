@@ -1,6 +1,5 @@
 import { Field, ObjectType, registerEnumType, InputType } from 'type-graphql';
-import { Post } from './post';
-import { AppKey } from './app-key';
+import { AppKey } from '../git/app-key';
 
 @ObjectType()
 export class User {
@@ -24,9 +23,6 @@ export class User {
 
     @Field(type => [AppKey])
     appKeys: AppKey[];
-
-    @Field(type => [Post])
-    posts: Post[];
 
     @Field()
     password: string;

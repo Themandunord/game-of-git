@@ -1,5 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
-import { User } from '../user';
+import { GitHubUser } from './user';
 
 @ObjectType()
 export class GitHubComment {
@@ -9,8 +9,8 @@ export class GitHubComment {
     // @Field(type => Repository)
     // repository: Repository;
 
-    @Field(type => User)
-    author: User;
+    @Field(type => GitHubUser)
+    author: GitHubUser;
 
     @Field()
     createdAt: Date;

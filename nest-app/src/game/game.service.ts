@@ -1,4 +1,4 @@
-import { GameType } from './game-types';
+import { GameType } from '@game-of-git/common';
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()

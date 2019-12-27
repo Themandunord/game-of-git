@@ -1,4 +1,4 @@
-import { GitHubBranch } from '../../models/github/branch';
+import { GitHubBranch } from '@game-of-git/common';
 import {
     Resolver,
     Query,

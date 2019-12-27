@@ -11,7 +11,7 @@ import {
 import { GitHubWebhookEventInput } from './GitHubWebhookEvent.input';
 import { Arg } from 'type-graphql';
 import { plainToClass } from 'class-transformer';
-import { GitHubWebhookEvent as GitHubWebhookEventModel } from '../../../models/github-webhook-event';
+import { GitHubWebhookEvent as GitHubWebhookEventModel } from '@game-of-git/common';
 
 @Resolver(of => GitHubWebhookEventModel)
 export class WebhookEventsResolver {

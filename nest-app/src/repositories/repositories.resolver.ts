@@ -1,16 +1,16 @@
-import { UserIdArgs } from '../models/args/userid-args';
-import { RepositoryIdArgs } from '../models/args/repositoryid-args';
-import { Resolver, Query, Args, Mutation, Info } from '@nestjs/graphql';
-import { Repository } from '../models/repository';
-import { PrismaService } from '../prisma/prisma.service';
+import {
+    GitHubRepository,
+    Repository,
+    RepositoryIdArgs,
+    User,
+    UsernameArgs
+} from '@game-of-git/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
-import { GqlAuthGuard } from '../guards/gql-auth.guard';
-import { UsernameArgs } from '../models/args/username-args';
-import { GitClientService } from '../git/client/git-client.service';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserEntity } from '../decorators/user.decorator';
-import { User } from '../models/user';
-import { GitHubRepository } from '../models/github/repository';
-import { Arg } from 'type-graphql';
+import { GitClientService } from '../git/client/git-client.service';
+import { GqlAuthGuard } from '../guards/gql-auth.guard';
+import { PrismaService } from '../prisma/prisma.service';
 import { TrackRepositoryInput } from './dto/track-repository.input';
 
 @Resolver(of => Repository)
@@ -34,10 +34,12 @@ export class RepositoriesResolver {
     ): Promise<GitHubRepository[]> {
         console.log('repositoryList call for ', user);
 
-        const githubReposResult = (await this.gitClientService.getAll(
-            user.email,
-            usernameArgs.username
-        )).map(repo => ({ ...repo, isTracked: false }));
+        const githubReposResult = (
+            await this.gitClientService.getAll(
+                user.email,
+                usernameArgs.username
+            )
+        ).map(repo => ({ ...repo, isTracked: false }));
 
         const addedRepositories = await this.prisma.client
             .user({ id: user.id })

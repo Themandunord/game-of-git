@@ -1,6 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Repository } from '../repository';
-import { User } from '../user';
+import { GitHubRepository } from './repository';
 import { GitHubUser } from './user';
 import { GitHubPullRequest } from './pull-request';
 

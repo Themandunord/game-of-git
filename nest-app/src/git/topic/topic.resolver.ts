@@ -7,7 +7,7 @@ import {
     Subscription
 } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
-import { GitHubTopic } from '../../models/github/topic';
+import { GitHubTopic } from '@game-of-git/common';
 @Resolver(of => GitHubTopic)
 export class TopicResolver {
     constructor(private readonly prisma: PrismaService) {}

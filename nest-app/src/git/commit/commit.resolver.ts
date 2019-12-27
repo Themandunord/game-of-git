@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
 
-import { GitHubCommit } from '../../models/github/commit';
+import { GitHubCommit } from '@game-of-git/common';
 
 @Resolver(of => GitHubCommit)
 export class CommitResolver {

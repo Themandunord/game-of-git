@@ -1,4 +1,4 @@
-import { RepositoryIdArgs } from '../models/args/repositoryid-args';
+import { RepositoryIdArgs } from '@game-of-git/common';
 import { Injectable, Logger } from '@nestjs/common';
 import GET_REPOSITORIES from './GET_REPOSITORIES.gql';
 import { RepositoriesResolver } from './repositories.resolver';

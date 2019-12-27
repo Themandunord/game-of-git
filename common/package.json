@@ -1,10 +1,10 @@
 {
-  "name": "common",
+  "name": "@game-of-git/common",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "echo \"Building the Common Lib\"",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
     "test": "jest"
   },
   "dependencies": {
@@ -13,6 +13,8 @@
   "devDependencies": {
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
-    "ts-node": "^8.5.4"
+    "ts-node": "^8.5.4",
+    "@types/node": "^12.12.22"
+
   }
 }

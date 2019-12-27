@@ -1,8 +1,10 @@
-import { User } from '../../../models/user';
+import {
+    User,
+    AppKeyIdOrKeyArgs,
+    UserIdOrEmailArgs
+} from '@game-of-git/common';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { GitClientService } from '../git-client.service';
-import { AppKeyIdOrKeyArgs } from '../../../models/args/appkeyidorkey-args';
-import { UserIdOrEmailArgs } from '../../../models/args/useridoremail-args';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
 

@@ -7,7 +7,7 @@ import {
     Subscription
 } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
-import { GitHubComment } from '../../models/github/comment';
+import { GitHubComment } from '@game-of-git/common';
 
 @Resolver(of => GitHubComment)
 export class CommentResolver {

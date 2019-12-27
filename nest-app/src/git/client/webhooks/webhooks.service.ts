@@ -10,7 +10,7 @@ import { IRepositoryWebhook } from './IRepositoryWebhook.interface';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { ParserService } from './parser/parser.service';
 import { WebhooksRepository } from './webhooks.repository';
-import { Repository } from '../../../models/repository';
+import { Repository } from '@game-of-git/common';
 
 @Injectable()
 export class WebhooksService {

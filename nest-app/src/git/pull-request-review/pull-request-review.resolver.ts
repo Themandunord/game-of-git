@@ -7,7 +7,7 @@ import {
     Subscription
 } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
-import { GitHubPullRequestReview } from '../../models/github/pull-request-review';
+import { GitHubPullRequestReview } from '@game-of-git/common';
 @Resolver(of => GitHubPullRequestReview)
 export class PullRequestReviewResolver {
     constructor(private readonly prisma: PrismaService) {}

@@ -1,5 +1,5 @@
 import { createParamDecorator } from '@nestjs/common';
-import { User } from './../models/user';
+import { User } from '@game-of-git/common';
 
 export const UserEntity = createParamDecorator(
     (data, [root, args, ctx, info]) => getUser(ctx)

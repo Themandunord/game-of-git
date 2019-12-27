@@ -1,5 +1,4 @@
-import { UserIdArgs } from '../models/args/userid-args';
-import { GameIdArgs } from '../models/args/gameif-args';
+import { Game, GameIdArgs, UserIdArgs } from '@game-of-git/common';
 import {
     Query,
     Resolver,
@@ -10,7 +9,6 @@ import {
     Parent
 } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
-import { Game } from '../models/game';
 
 @Resolver(of => Game)
 export class GameResolver {

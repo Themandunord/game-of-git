@@ -1,4 +1,3 @@
-import { Post } from '../models/post';
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
 import {
@@ -14,8 +13,8 @@ import {
 } from '@nestjs/graphql';
 import { UseGuards, Inject, ExecutionContext } from '@nestjs/common';
 import { UserEntity } from '../decorators/user.decorator';
-import { User } from '../models/user';
-import { AppKey } from '../models/app-key';
+import { User } from '@game-of-git/common';
+import { AppKey } from '@game-of-git/common';
 import { PubSubEngine } from 'type-graphql';
 
 const USER_MUTATED_EVENT_NAME = 'userMutated';
@@ -44,10 +43,10 @@ export class UserResolver {
         return user;
     }
 
-    @ResolveProperty('posts')
-    posts(@Parent() author: User): Promise<Post[]> {
-        return this.prisma.client.user({ id: author.id }).posts();
-    }
+    // @ResolveProperty('posts')
+    // posts(@Parent() author: User): Promise<Post[]> {
+    //     return this.prisma.client.user({ id: author.id }).posts();
+    // }
 
     @ResolveProperty('appKeys')
     appKeys(@Parent() owner: User): Promise<AppKey[]> {

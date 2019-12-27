@@ -7,7 +7,7 @@ import {
     Subscription
 } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
-import { GitHubLabel } from '../../models/github/label';
+import { GitHubLabel } from '@game-of-git/common';
 
 @Resolver(of => GitHubLabel)
 export class LabelResolver {

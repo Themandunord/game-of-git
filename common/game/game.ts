@@ -1,6 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Repository } from './repository';
-import { User } from './user';
+import { Repository } from '../git/repository';
+import { User } from '../user';
 
 @ObjectType()
 export class Game {

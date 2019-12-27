@@ -1,4 +1,4 @@
-import { Auth } from '../models/auth';
+import { Auth } from '@game-of-git/common';
 import { LoginInput } from './dto/login.input';
 import {
     Resolver,

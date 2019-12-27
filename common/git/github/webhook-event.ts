@@ -1,7 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
-import { User } from './user';
-import { AppKey } from './app-key';
-import { Repository } from './repository';
+import { User } from '../../user/user';
+import { AppKey } from '../app-key/app-key';
+import { Repository } from '../repository';
 
 @ObjectType()
 export class GitHubWebhookEvent {

@@ -1,10 +1,13 @@
 import { Field, ObjectType } from 'type-graphql';
-import { User } from './user';
+import { GitHubRepository } from './repository';
 
 @ObjectType()
-export class Post {
+export class GitHubBranch {
     @Field()
     id: string;
+
+    @Field(type => GitHubRepository)
+    repository: GitHubRepository;
 
     @Field()
     createdAt: Date;
@@ -13,11 +16,8 @@ export class Post {
     updatedAt: Date;
 
     @Field()
-    title: string;
+    name: string;
 
     @Field()
-    published: boolean;
-
-    @Field(type => User)
-    author: User;
+    merged: boolean;
 }
