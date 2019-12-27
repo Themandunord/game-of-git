@@ -24,6 +24,12 @@ export class AppKeyService {
         return await this.prisma.client.user(args).keys({ first: 30 });
     }
 
+    async getByUserIdOrEmail(args: UserIdOrEmailArgs) {
+        const keys = await this.prisma.client.user(args).keys({ first: 1 });
+
+        return keys.length > 0 ? keys[0] : null;
+    }
+
     // user(appKeyId: string) {
     //     return this.prisma.client.appKey({ id: appKeyId }).user();
     // }

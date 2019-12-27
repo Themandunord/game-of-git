@@ -10,14 +10,6 @@ v-layout(row)
 			thead
 				tr
 					th.text-left(v-for="tableColumn in tableColumns") {{tableColumn.header}}
-					//- th.text-left Owner
-					//- th.text-left Name
-					//- th.text-left Description
-					//- th.text-left Created At
-					//- th.text-left Updated At
-					//- th.text-left Fork
-					//- th.text-left Private
-					//- th.text-left Tracked
 			tbody
 				tr(v-for="repo in repos" :key="repo.name")
 					td
@@ -67,19 +59,20 @@ v-layout(row)
 							center
 							right
 							relative
-							@click.stop="toggleRepoTracking(repo)"
+							@click.stop="toggleRepoTracking(repo.name, userOfInterest)"
 							:title="repo.isTracked ? 'Turn Tracking off' : 'Turn Tracking on'"
 						)
 							v-icon {{repo.isTracked ? "star" : "star_border"}}
 </template>
 
-<script lang="ts">
+<script lang="tsx">
 import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
 import HttpClient from '../../common/HttpClient';
 import { pluck, switchMap, debounceTime } from 'rxjs/operators';
 import { repositoryList, trackRepository } from '@/common/repositories';
+import gql from 'graphql-tag';
 
 interface RepositoryTableColumn {
 	header: string;
@@ -89,19 +82,7 @@ interface RepositoryTableColumn {
 const tableColumns: RepositoryTableColumn[] = [
 	{
 		header: 'Owner',
-		body: () => {
-			return Vue.component('my-checkbox', {
-				template: `<div class="checkbox-wrapper" @click="check"><div :class="{ checkbox: true, checked: checked }"></div><div class="title">{{ title }}</div></div>`,
-				data() {
-					return { checked: false, title: 'Check me' };
-				},
-				methods: {
-					check() {
-						this.checked = !this.checked;
-					}
-				}
-			});
-		}
+		body: null
 	},
 	{ header: 'Name', body: null },
 	{ header: 'Description', body: null },
@@ -111,6 +92,17 @@ const tableColumns: RepositoryTableColumn[] = [
 	{ header: 'Private', body: null },
 	{ header: 'Tracked', body: null }
 ];
+
+const REPOSITORY_EDITED = gql`
+	subscription {
+		repositoryMutated {
+			id
+			idExternal
+			name
+			isTracked
+		}
+	}
+`;
 
 @Component({
 	subscriptions() {
@@ -127,6 +119,7 @@ export default class RepositoriesControlList extends Vue {
 	private userOfInterest: string = AppStateModule.user.gitLogin || '';
 	private userOfInterestObservable: string = '';
 	private tableColumns = tableColumns;
+	private repositoryListObserver!: any;
 
 	get selectableRepos() {
 		return this.repos;
@@ -136,8 +129,37 @@ export default class RepositoriesControlList extends Vue {
 		this.repos = newVal;
 	}
 
-	mounted() {
-		this.loadSelectableRepositories();
+	private updateRepository(repoData: any) {
+		const updatedRepos = this.selectableRepos.map(repo => {
+			return {
+				...repo,
+				isTracked: repo.id === repoData.idExternal ? repoData.isTracked : repo.isTracked
+			};
+		});
+		this.selectableRepos = updatedRepos;
+	}
+
+	private configureRepositoryMutatedSubscription() {
+		this.repositoryListObserver = this.$apollo.subscribe({
+			query: REPOSITORY_EDITED,
+			variables: {
+				$token: AppStateModule.jwt
+			}
+		});
+		this.repositoryListObserver.subscribe({
+			next: (data: any) => {
+				const repositoryData = data.data.repositoryMutated;
+				this.updateRepository(repositoryData);
+			},
+			error(err: any) {
+				// TODO: handle better
+				console.error('repositoryListObserver error: ', err);
+			}
+		});
+	}
+
+	async mounted() {
+		this.configureRepositoryMutatedSubscription();
 	}
 
 	get hasAppKey() {
@@ -164,22 +186,11 @@ export default class RepositoriesControlList extends Vue {
 				`User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
 			);
 		}
-		const repos = await repositoryList(this.userOfInterest);
-		console.log('returned: ', repos);
-		this.repos = repos;
-		// const selectable = await HttpClient.repositories.loadSelectableRepositories(
-		// 	this.userOfInterest
-		// );
-		// this.selectableRepositories = selectable;
+		this.selectableRepos = await repositoryList(this.userOfInterest);
 	}
 
-	private async toggleRepoTracking(repo: any) {
-		console.log('toggleRepoTracking: ', repo);
-		// const addedRepo = await trackRepository();
-		this.loadSelectableRepositories();
-		// await HttpClient.repositories.toggleRepositoryTracking(repo);
-		// this.loadSelectableRepositories();
-		// RepositoriesStateModule.syncStoredRepositories();
+	private async toggleRepoTracking(repo: string, owner: string) {
+		await trackRepository(repo, owner);
 	}
 
 	private open(url: string) {

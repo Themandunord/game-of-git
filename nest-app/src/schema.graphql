@@ -312,6 +312,7 @@ input SignupInput {
 
 type Subscription {
   userMutated: User!
+  repositoryMutated: Repository!
 }
 
 input TrackRepositoryInput {

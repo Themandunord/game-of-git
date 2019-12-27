@@ -28,6 +28,7 @@ export const GQL_QUERIES = {
 					id
 					isFork
 					isPrivate
+					isTracked
 					name
 					owner {
 						avatarUrl
@@ -41,8 +42,8 @@ export const GQL_QUERIES = {
 			}
 		`,
 		trackRepository: gql`
-			query($repository: String!) {
-				trackRepository(repository: $repository) {
+			mutation($repository: String!, $owner: String!) {
+				trackRepository(data: { repository: $repository, owner: $owner }) {
 					id
 					isTracked
 					url

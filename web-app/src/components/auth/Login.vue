@@ -97,10 +97,6 @@ export default class Login extends ErrorHandlerVueComponent {
 	public password: string = '';
 	protected apolloValidationKeys = ['email', 'password'];
 
-	created() {
-		console.log('login.vue created');
-	}
-
 	// new GQL Way
 	async login() {
 		try {
@@ -136,7 +132,7 @@ export default class Login extends ErrorHandlerVueComponent {
 			  };
 
 		AppStateModule.setJwt(token);
-		refreshUserData();
+		await refreshUserData();
 		onLogin(apolloClient as any, token);
 
 		await router.push(destination);

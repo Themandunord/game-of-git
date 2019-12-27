@@ -6,18 +6,32 @@ import {
     UsernameArgs
 } from '@game-of-git/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+    Args,
+    Mutation,
+    Query,
+    Resolver,
+    Subscription,
+    Context
+} from '@nestjs/graphql';
 import { UserEntity } from '../decorators/user.decorator';
 import { GitClientService } from '../git/client/git-client.service';
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
 import { TrackRepositoryInput } from './dto/track-repository.input';
+import { PubSubEngine } from 'type-graphql';
+import { Inject, ExecutionContext, Logger } from '@nestjs/common';
+
+const REPOSITORY_MUTATED_EVENT_NAME = 'repositoryMutated';
 
 @Resolver(of => Repository)
 export class RepositoriesResolver {
+    private readonly logger = new Logger('RepositoriesResolver');
+
     constructor(
         private readonly prisma: PrismaService,
-        private readonly gitClientService: GitClientService
+        private readonly gitClientService: GitClientService,
+        @Inject('PUB_SUB') private pubSub: PubSubEngine
     ) {}
 
     @Query(returns => Repository)
@@ -32,7 +46,7 @@ export class RepositoriesResolver {
         @UserEntity() user: User,
         @Args() usernameArgs: UsernameArgs
     ): Promise<GitHubRepository[]> {
-        console.log('repositoryList call for ', user);
+        this.logger.log(`repositoryList call for ${usernameArgs}`);
 
         const githubReposResult = (
             await this.gitClientService.getAll(
@@ -45,10 +59,17 @@ export class RepositoriesResolver {
             .user({ id: user.id })
             .addedRepositories();
 
-        const repos = githubReposResult.map(repo => repo);
+        const repos = githubReposResult.map(repo => {
+            const addedRepo = addedRepositories.find(
+                addedRepo => addedRepo.idExternal === repo.id
+            );
 
-        console.log('added repos: ', addedRepositories);
-        console.log('returning repos: ', repos);
+            return {
+                ...repo,
+                isTracked: addedRepo ? addedRepo.isTracked : false
+            };
+        });
+
         return repos;
     }
 
@@ -58,42 +79,112 @@ export class RepositoriesResolver {
         @UserEntity() user: User,
         @Args('data') trackRepositoryData: TrackRepositoryInput
     ) {
-        console.log('Track Repository', trackRepositoryData);
+        this.logger.log(
+            `Track Repository ${trackRepositoryData.owner} ${trackRepositoryData.repository}`
+        );
 
-        // load repository from GitHub
+        // Load repository data from GitHub
         const githubRepositoryData = await this.gitClientService.get(
             user.email,
             trackRepositoryData.repository,
             trackRepositoryData.owner
         );
 
-        console.log('Loaded data from GitHub: ', githubRepositoryData);
+        this.logger.log(
+            `Loaded data from GitHub: ${githubRepositoryData.name}`
+        );
 
-        const existingRecord = await this.prisma.client.repository({
+        // Retrieve the existing local repository record (if exists)
+        let existingRecord = await this.prisma.client.repository({
             name: trackRepositoryData.repository
         });
+        let createdRecord = null;
 
+        // Determine if the toggle is to turn tracking ON or OFF
+        const isTracked = existingRecord ? !existingRecord.isTracked : true;
+
+        this.logger.log(
+            `${isTracked ? `Creating` : `Destroying`} Repository Record`
+        );
+
+        // If there is no existing record, then we are going to start tracking the repository
         if (!existingRecord) {
-            console.log('Creating Repository Record');
-            // create
-            // await this.prisma.client.createRepository({
-            //     addedBy: {
-            //         connect: {
-            //             id: user.id
-            //         }
-            //     },
-            //     appKey: {
-            //         connect: {
-            //             id: user.appKeys[0].id
-            //         }
-            //     },
-            //     createdAtExternal
+            const createData = {
+                addedBy: {
+                    connect: {
+                        id: user.id
+                    }
+                },
+                appKey: {
+                    connect: {
+                        id: (
+                            await this.prisma.client
+                                .user({ id: user.id })
+                                .keys()
+                        )[0].id
+                    }
+                },
+                createdAtExternal: githubRepositoryData.createdAt,
+                updatedAtExternal: githubRepositoryData.updatedAt,
+                idExternal: githubRepositoryData.id,
+                isArchived: githubRepositoryData.isArchived,
+                isDisabled: githubRepositoryData.isDisabled,
+                isFork: githubRepositoryData.isFork,
+                isLocked: githubRepositoryData.isLocked,
+                isPrivate: githubRepositoryData.isPrivate,
+                isTracked: true,
+                name: githubRepositoryData.name,
+                owner: trackRepositoryData.owner,
+                url: githubRepositoryData.url,
+                description: githubRepositoryData.description,
+                homepageUrl: githubRepositoryData.homepageUrl || null,
+                sshUrl: githubRepositoryData.sshUrl || null
+            };
 
-            // })
-        } else {
-            console.log('Updating repository record');
-            // update
+            createdRecord = await this.prisma.client.createRepository(
+                createData
+            );
+            existingRecord = createdRecord;
         }
+
+        if (isTracked) {
+            this.logger.log('Initializing webhooks');
+            await this.gitClientService.webhooks.initializeWebhooks(
+                existingRecord as any,
+                user.email
+            );
+            // TODO: better handling of the repository record when webhook initialization fails
+        } else {
+            this.logger.log('Destroying webhooks');
+            await this.gitClientService.webhooks.destroyWebhooks(
+                existingRecord as any,
+                user.email
+            );
+        }
+
+        if (!createdRecord) {
+            existingRecord = await this.prisma.client.updateRepository({
+                where: {
+                    id: existingRecord.id
+                },
+                data: {
+                    isTracked
+                }
+            });
+        }
+
+        return existingRecord;
+    }
+
+    @Subscription(() => Repository, {
+        name: REPOSITORY_MUTATED_EVENT_NAME
+    })
+    async repositoryMutated(@Context() context: ExecutionContext) {
+        console.log(
+            `${REPOSITORY_MUTATED_EVENT_NAME} subscription call!`,
+            context
+        );
+        return this.pubSub.asyncIterator(REPOSITORY_MUTATED_EVENT_NAME);
     }
 
     // @Mutation()

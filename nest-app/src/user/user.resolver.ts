@@ -31,16 +31,21 @@ export class UserResolver {
     @UseGuards(GqlAuthGuard)
     async me(@UserEntity() user: User): Promise<User> {
         console.log('me call', user);
-        this.pubSub.publish(USER_MUTATED_EVENT_NAME, {
-            [USER_MUTATED_EVENT_NAME]: {
-                id: '1',
-                name: 'test',
-                email: 'tests',
-                gitLogin: 'testse'
-            }
-        });
-        console.log('returning user: ', user);
-        return user;
+        // this.pubSub.publish(USER_MUTATED_EVENT_NAME, {
+        //     [USER_MUTATED_EVENT_NAME]: {
+        //         id: '1',
+        //         name: 'test',
+        //         email: 'tests',
+        //         gitLogin: 'testse'
+        //     }
+        // });
+        const keys = await this.prisma.client.user({ id: user.id }).keys();
+        const meData = {
+            ...user,
+            appKeys: keys as AppKey[]
+        };
+        console.log('returning user: ', meData);
+        return meData;
     }
 
     // @ResolveProperty('posts')
@@ -50,6 +55,10 @@ export class UserResolver {
 
     @ResolveProperty('appKeys')
     appKeys(@Parent() owner: User): Promise<AppKey[]> {
+        console.log(`resolving user app keys for id ${owner.id}`);
+        // const keysData = await this.prisma.client.user({ id: owner.id }).keys();
+        // console.log('resolved keys data: ', keysData);
+        // return keysData;
         return this.prisma.client.user({ id: owner.id }).keys();
     }
 

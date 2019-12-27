@@ -47,15 +47,19 @@ export class AuthService {
             throw new BadRequestException('Invalid password');
         }
 
-        return this.jwtService.sign({ userId: user.id });
+        const userKeys = await this.prisma.client.user({ email }).keys();
+
+        return this.jwtService.sign({ userId: user.id, appKeys: userKeys });
     }
 
     validateUser(userId: string): Promise<User> {
         return this.prisma.client.user({ id: userId });
     }
 
-    getUserFromToken(token: string): Promise<User> {
+    async getUserFromToken(token: string): Promise<User> {
         const id = this.jwtService.decode(token)['userId'];
-        return this.prisma.client.user({ id });
+        const userData = await this.prisma.client.user({ id });
+        console.log('getUserFromToken returning: ', userData);
+        return userData;
     }
 }
