@@ -6,6 +6,7 @@ import { RepositoriesService } from './repositories.service';
 import { GitClientModule } from '../git/client/git-client.module';
 import { AppKeyModule } from '../git/client/app-key/app-key.module';
 import { WebhooksModule } from '../git/client/webhooks/webhooks.module';
+import ps from '../pubsub';
 
 @Module({
     imports: [
@@ -14,7 +15,14 @@ import { WebhooksModule } from '../git/client/webhooks/webhooks.module';
         // forwardRef(() => AppKeyModule)
         // WebhooksModule
     ],
-    providers: [RepositoriesService, RepositoriesResolver],
+    providers: [
+        RepositoriesService,
+        RepositoriesResolver,
+        {
+            provide: 'PUB_SUB',
+            useValue: ps
+        }
+    ],
     controllers: [RepositoriesController]
 })
 export class RepositoriesModule {}

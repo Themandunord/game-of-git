@@ -29,7 +29,19 @@ export class AppKeyResolver {
         @Args('data') data: CreateAppKeyInput,
         @UserEntity() user: User
     ) {
-        return await this.appKeyService.store(data, user);
+        const appKey = await this.appKeyService.store(data, user);
+
+        const appKeyWithUser = {
+            ...appKey,
+            user: {
+                gitLogin: user.gitLogin,
+                id: user.id
+            }
+        };
+
+        console.log('returning from createAppKey: ', appKeyWithUser);
+
+        return appKeyWithUser;
     }
     @Query(returns => AppKey)
     async appKey(@Args() data: AppKeyIdOrKeyArgs) {

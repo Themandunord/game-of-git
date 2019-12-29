@@ -38,6 +38,7 @@ import RepositoriesStateModule from '@/store/aspects/repositories';
 import AppStateModule from '@/store/aspects/app';
 import gql from 'graphql-tag';
 import { GraphQLClient, ErrorHandlerVueComponent } from '../../common/GraphQLClient/GraphQLClient';
+import { refreshUserData } from '../../common/user';
 
 const query = gql`
 	query($key: String!) {
@@ -125,13 +126,15 @@ export default class AddAppKeyForm extends ErrorHandlerVueComponent {
 			const isValid = isValidResponse.data.validateAppKey.valid;
 			return isValid;
 		}
-		console.log('Missing param, definitely not valid.');
+		console.error('Missing param, definitely not valid.');
 		return false;
 	}
 
 	private async save() {
 		if (!this.appKeyIsValid) {
-			console.log(`Missing data, cannot save ${this.name} ${this.key} ${this.appKeyIsValid}`);
+			console.error(
+				`Missing data, cannot save ${this.name} ${this.key} ${this.appKeyIsValid}`
+			);
 			return;
 		}
 		try {
@@ -142,8 +145,7 @@ export default class AddAppKeyForm extends ErrorHandlerVueComponent {
 					key: this.key
 				},
 				update: async (store, { data }) => {
-					console.log('App key added!');
-					// this.handleKeyAdded(data);
+					refreshUserData();
 				},
 				optimisticResponse
 			});
