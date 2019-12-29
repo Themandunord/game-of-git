@@ -11,6 +11,7 @@ import { RepositoriesModule } from './../repositories/repositories.module';
 import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
+import { AppEventModule } from '../app-event/app-event.module';
 
 @Module({
     imports: [
@@ -43,7 +44,8 @@ import { AppService } from './app.service';
         GameModule,
 
         GitClientModule,
-        RepositoriesModule
+        RepositoriesModule,
+        AppEventModule
     ],
     controllers: [AppController],
     providers: [

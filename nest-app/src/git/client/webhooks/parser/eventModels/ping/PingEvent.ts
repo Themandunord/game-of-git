@@ -1,5 +1,6 @@
-import { AGitHubEvent } from '../AGitHubEvent.abstract';
+import { SendAppEvent } from '../../../../../../app-event/events/send-app-event/send-app-event.event';
 import { IRepository } from '../../common/IRepository.interface';
+import { AGitHubEvent } from '../AGitHubEvent.abstract';
 
 interface IRepositoryHook {
     type: string;
@@ -29,4 +30,11 @@ export class PingEvent extends AGitHubEvent {
     hookId: number; // hook_id
     hook: IRepositoryHook;
     repository: IRepository;
+
+    public events = [
+        () =>
+            new SendAppEvent('congratulations', {
+                type: 'tracking-successful'
+            })
+    ];
 }

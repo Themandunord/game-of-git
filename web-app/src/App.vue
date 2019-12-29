@@ -4,6 +4,7 @@
 		v-content
 			router-view
 		ConnectionStatus
+		AppEvent(timeout="2000" v-model="snackbar" :data="appEvent")
 </template>
 
 <script lang="ts">
@@ -21,6 +22,7 @@ import AppStateModule from '@/store/aspects/app';
 import { REPOSITORY_DASHBOARD } from '@/router/routes';
 import { IRoute } from '@/router/routes';
 import ConnectionStatus from './components/notifications/ConnectionStatus.vue';
+import AppEvent from './components/notifications/AppEvent.vue';
 import HttpClient from '@/common/HttpClient';
 import GQL_QUERIES from './common/gql.constants';
 import { refreshUserData } from './common/user';
@@ -39,16 +41,28 @@ const USER_EDITED = gql`
 	}
 `;
 
+const APP_EVENT = gql`
+	subscription {
+		appEvent {
+			type
+			data
+		}
+	}
+`;
+
 @Component({
 	components: {
 		NavBar,
-		ConnectionStatus
+		ConnectionStatus,
+		AppEvent
 	}
 })
 export default class App extends Vue {
 	public routeManager = routeManager;
-	// public userEditedSub: Observable<FetchResult<any, Record<string, any>, Record<string, any>>> | null = null;
 	public meObserver!: any;
+	public appEventObserver!: any;
+	public appEvent: any = {};
+	public snackbar = false;
 
 	async created() {
 		const localJwt = localStorage.getItem('jwt');
@@ -58,9 +72,6 @@ export default class App extends Vue {
 			return;
 		}
 		AppStateModule.setJwt(localJwt);
-		// routeManager.setContext({
-		// 	hasJwt: true
-		// });
 		refreshUserData();
 	}
 
@@ -72,24 +83,7 @@ export default class App extends Vue {
 		return AppStateModule.user;
 	}
 
-	// @Watch('user', {
-	// 	deep: true,
-	// 	immediate: true
-	// })
-	// private async handleUserUpdate() {
-	// 	console.log('user update!', this.user);
-	// 	console.log('App.vue calling on RepositoriesStateModule to sync stored repositories');
-	// 	const res = await RepositoriesStateModule.syncStoredRepositories();
-	// 	console.log('Done syncStoredRepositories', res);
-	// }
-
 	async mounted() {
-		// tslint:disable-next-line:no-console
-		// console.log(this.routeManager.myRoutes);
-		// console.log('App.vue calling on RepositoriesStateModule to sync stored repositories');
-		// const res = await RepositoriesStateModule.syncStoredRepositories();
-		// console.log('Done syncStoredRepositories', res);
-
 		this.meObserver = this.$apollo.subscribe({
 			query: USER_EDITED,
 			variables: {
@@ -103,6 +97,27 @@ export default class App extends Vue {
 			},
 			error(err: any) {
 				console.error(err);
+			}
+		});
+
+		this.appEventObserver = this.$apollo.subscribe({
+			query: APP_EVENT,
+			variables: {
+				$token: AppStateModule.jwt
+			}
+		});
+		this.appEventObserver.subscribe({
+			next: (data: any) => {
+				console.log('App event!', data);
+				const parsedData = {
+					...data.data.appEvent,
+					data: data.data.appEvent.data ? JSON.parse(data.data.appEvent.data) : null
+				};
+				this.appEvent = parsedData;
+				this.snackbar = true;
+			},
+			error(error: any) {
+				console.log('App event error: ', error);
 			}
 		});
 	}
