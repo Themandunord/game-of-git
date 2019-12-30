@@ -26,7 +26,8 @@ export const trackRepository = async (repository: string, owner: string): Promis
 		variables: {
 			repository,
 			owner
-		}
+		},
+		fetchPolicy: 'no-cache'
 	});
 
 	console.log(addedRepo);

@@ -25,5 +25,9 @@ services:
             POSTGRES_PASSWORD: ${DB_PASSWORD}
         volumes:
             - postgres:/var/lib/postgresql/data
+    dynamo:
+        image: amazon/dynamodb-local
+        ports:
+            - "8000:8000"
 volumes:
     postgres:

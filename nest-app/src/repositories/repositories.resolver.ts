@@ -173,6 +173,10 @@ export class RepositoriesResolver {
             });
         }
 
+        this.pubSub.publish(REPOSITORY_MUTATED_EVENT_NAME, {
+            [REPOSITORY_MUTATED_EVENT_NAME]: existingRecord
+        });
+
         return existingRecord;
     }
 

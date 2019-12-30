@@ -3,6 +3,11 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AppEvent {
+  type: String!
+  data: String!
+}
+
 type AppKey {
   id: String!
   user: User!
@@ -311,6 +316,7 @@ input SignupInput {
 }
 
 type Subscription {
+  appEvent: AppEvent!
   userMutated: User!
   repositoryMutated: Repository!
 }

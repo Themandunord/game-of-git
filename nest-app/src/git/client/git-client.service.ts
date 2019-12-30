@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
-import { gitHubGql } from '../utilities/gitHubGql';
+import { gitHubGql } from '../utilities/GitHubGql';
 import { AppKeyService } from './app-key/app-key.service';
 import GET_REPOSITORIES from './gql/GET_REPOSITORIES.gql';
 import GET_REPOSITORY_DETAILS from './gql/GET_REPOSITORY_DETAILS.gql';
