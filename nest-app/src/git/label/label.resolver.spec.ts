@@ -3,7 +3,7 @@ import { PrismaModule } from '../../prisma/prisma.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LabelResolver } from './label.resolver';
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
-    '../../../../prisma/prisma.service'
+    '../../prisma/prisma.service'
 );
 
 describe('LabelResolver', () => {

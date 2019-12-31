@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BranchResolver } from './branch.resolver';
 
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
-    '../../../prisma/prisma.service'
+    '../../prisma/prisma.service'
 );
 
 describe('BranchResolver', () => {

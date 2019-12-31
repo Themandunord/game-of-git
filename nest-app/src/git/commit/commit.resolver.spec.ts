@@ -4,7 +4,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { PrismaModule } from '../../prisma/prisma.module';
 
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
-    '../../../../prisma/prisma.service'
+    '../../prisma/prisma.service'
 );
 
 describe('CommitResolver', () => {

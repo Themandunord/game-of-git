@@ -2,8 +2,6 @@ import { RepositoriesResolver } from './repositories.resolver';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepositoriesService } from './repositories.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RepositoryWebhookSchema } from '../git-client/webhooks/RepositoryWebhook.schema';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { GitClientModule } from '../git/client/git-client.module';
 import { WebhooksModule } from '../git/client/webhooks/webhooks.module';
 import { GitClientService } from '../git/client/git-client.service';
@@ -17,20 +15,10 @@ const repositoriesResolverMock = jest.mock('./repositories.resolver');
 
 describe('RepositoriesService', () => {
     let service: RepositoriesService;
-    let mongod: MongoMemoryServer;
 
     beforeEach(async () => {
-        mongod = new MongoMemoryServer();
-        const uri = await mongod.getConnectionString();
-
-        // MongooseModule.forFeature([{ name: 'RepositoryWebhook', schema: RepositoryWebhookSchema }]);
-
         const module: TestingModule = await Test.createTestingModule({
-            imports: [
-                GitClientModule,
-                WebhooksModule,
-                MongooseModule.forRoot(uri)
-            ],
+            imports: [GitClientModule, WebhooksModule],
             providers: [RepositoriesService, RepositoriesResolver]
         })
             .overrideProvider(GitClientService)

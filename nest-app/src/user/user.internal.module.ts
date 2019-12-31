@@ -2,6 +2,7 @@ import { UserResolver } from './user.resolver';
 import { PrismaModule } from '../prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import ps from '../pubsub';
+import { UserInternalResolver } from './user.internal.resolver';
 
 @Module({
     imports: [PrismaModule],
@@ -10,7 +11,9 @@ import ps from '../pubsub';
         {
             provide: 'PUB_SUB',
             useValue: ps
-        }
-    ]
+        },
+        UserInternalResolver
+    ],
+    exports: [UserInternalResolver]
 })
-export class UserModule {}
+export class UserInternalModule {}

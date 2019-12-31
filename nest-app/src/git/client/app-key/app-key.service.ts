@@ -7,32 +7,33 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { GitClientService } from '../git-client.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
+import { AppKeyInternalResolver } from './app-key.internal.resolver';
+import { UserInternalResolver } from '../../../user/user.internal.resolver';
+import { AppKeyCreateInput } from 'src/generated/prisma-client';
 
 @Injectable()
 export class AppKeyService {
     constructor(
         @Inject(forwardRef(() => GitClientService))
         private readonly gitClient: GitClientService,
-        private readonly prisma: PrismaService
+        private readonly appKeyInternalResolver: AppKeyInternalResolver,
+        private readonly userInternalResolver: UserInternalResolver
     ) {}
 
     async getByIdOrKey(idOrKey: AppKeyIdOrKeyArgs) {
-        return this.prisma.client.appKey(idOrKey);
+        // TODO: validate args
+        return this.appKeyInternalResolver.getByIdOrKey(idOrKey);
     }
 
     async getAllByUserIdOrEmail(args: UserIdOrEmailArgs) {
-        return await this.prisma.client.user(args).keys({ first: 30 });
+        // TODO: validate args
+        return this.appKeyInternalResolver.getAllByUserIdOrEmail(args);
     }
 
     async getByUserIdOrEmail(args: UserIdOrEmailArgs) {
-        const keys = await this.prisma.client.user(args).keys({ first: 1 });
-
-        return keys.length > 0 ? keys[0] : null;
+        // TODO: validate args
+        return this.appKeyInternalResolver.getByUserIdOrEmail(args);
     }
-
-    // user(appKeyId: string) {
-    //     return this.prisma.client.appKey({ id: appKeyId }).user();
-    // }
 
     /**
      * Validate a given key by checking a username
@@ -56,8 +57,9 @@ export class AppKeyService {
         const { key, name } = input;
 
         // get email form authed jwt
-
-        const validUser = await this.prisma.client.user({ email: user.email });
+        const validUser = await this.userInternalResolver.getByIdOrEmail({
+            email: user.email
+        });
 
         if (!validUser) {
             throw new Error('User did not exist???');
@@ -66,14 +68,12 @@ export class AppKeyService {
         const isValid = await this.validate(key, user.gitLogin);
         if (!isValid) {
             throw new Error('App Key failed validation');
-            return;
         }
         const existing = await this.getByIdOrKey({ key });
         if (existing != null) {
             throw new Error('App Key Already Registered');
-            return;
         }
-        const payload = {
+        const payload: AppKeyCreateInput = {
             key,
             name,
             user: {
@@ -82,11 +82,11 @@ export class AppKeyService {
                 }
             }
         };
-        const result = await this.prisma.client.createAppKey(payload);
+        const result = await this.appKeyInternalResolver.create(payload);
         return result;
     }
 
-    async deleteByIdOrKey(input: AppKeyIdOrKeyArgs) {
-        return await this.prisma.client.deleteAppKey(input);
+    async deleteByIdOrKey(idOrKeyArgs: AppKeyIdOrKeyArgs) {
+        return await this.appKeyInternalResolver.deleteByIdOrKey(idOrKeyArgs);
     }
 }

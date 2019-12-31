@@ -4,7 +4,7 @@ import { FileDiffResolver } from './file-diff.resolver';
 import { PrismaService } from '../../prisma/prisma.service';
 
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
-    '../../../../prisma/prisma.service'
+    '../../prisma/prisma.service'
 );
 
 describe('FileDiffResolver', () => {

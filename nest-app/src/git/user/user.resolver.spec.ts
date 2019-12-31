@@ -4,7 +4,7 @@ import { UserResolver } from './user.resolver';
 import { PrismaService } from '../../prisma/prisma.service';
 
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
-    '../../../../prisma/prisma.service'
+    '../../prisma/prisma.service'
 );
 
 describe('UserResolver', () => {

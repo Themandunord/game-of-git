@@ -6,7 +6,7 @@ import { GameModule } from '../game/game.module';
 import { GitClientModule } from '../git/client/git-client.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import ps from '../pubsub';
-import { UserModule } from '../user/user.module';
+import { UserInternalModule } from '../user/user.internal.module';
 import { RepositoriesModule } from './../repositories/repositories.module';
 import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
@@ -38,7 +38,7 @@ import { AppEventModule } from '../app-event/app-event.module';
 
         // Auth Setup
         AuthModule,
-        UserModule,
+        UserInternalModule,
 
         // Game Setup
         GameModule,

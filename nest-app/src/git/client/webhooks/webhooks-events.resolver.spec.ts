@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
-    '../../prisma/prisma.service'
+    '../../../prisma/prisma.service'
 );
 
 describe('WebhookEventsResolver', () => {

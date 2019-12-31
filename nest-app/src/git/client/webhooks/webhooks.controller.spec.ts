@@ -1,6 +1,5 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as path from 'path';
 import * as request from 'supertest';
 import TestingUtilities from '../../../utilities/testing';
@@ -10,7 +9,6 @@ import { GitClientModule } from '../git-client.module';
 import { GitClientService } from '../git-client.service';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
-import { RepositoryWebhookSchema } from './RepositoryWebhook.schema';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksModule } from './webhooks.module';
@@ -50,36 +48,9 @@ const validateWebhookResponseBody = (
 
 describe('Webhooks Controller', () => {
     let app;
-
-    let mongod: MongoMemoryServer;
-
-    mockWebhookEventsResolver.createWebhookEvent = async (
-        args: any,
-        info: any
-    ) => {
-        return {} as any;
-    };
-
     beforeEach(async () => {
-        mongod = new MongoMemoryServer();
-        const uri = await mongod.getConnectionString();
-
         const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [
-                WebhooksModule,
-                GitClientModule,
-                // GitClientService,
-                AppKeyModule,
-                // AppKeyService,
-                MongooseModule.forFeature([
-                    {
-                        name: 'RepositoryWebhook',
-                        schema: RepositoryWebhookSchema
-                    }
-                ]),
-                MongooseModule.forRoot(uri)
-            ],
-            // providers: [WebhooksRepository],
+            imports: [WebhooksModule, GitClientModule, AppKeyModule],
             controllers: [WebhooksController]
         })
             .overrideProvider(GitClientService)
@@ -88,8 +59,6 @@ describe('Webhooks Controller', () => {
             .useValue(mockAppKeyService)
             .overrideProvider(WebhookEventsResolver)
             .useValue(mockWebhookEventsResolver)
-            // .overrideProvider(WebhooksRepository)
-            // .useValue(mockWebhooksRepository)
             .compile();
 
         app = moduleFixture.createNestApplication();

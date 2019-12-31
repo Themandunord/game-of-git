@@ -65,27 +65,4 @@ export class AppKeyResolver {
             valid: await this.appKeyService.validate(data.appKey, user.gitLogin)
         };
     }
-
-    // @Mutation(returns => AppKey)
-    // async createAppKey(@Args('data') { user, key, name }: CreateAppKeyInput) {
-    //     // return await this.appKeyService.create;
-    // }
-
-    // @ResolveProperty('user')
-    // user(@Parent() appKey: AppKey) {
-    //     return this.appKeyService.getById(data.Id)
-    //     // return this.prisma.client.appKey({ id: appKey.id }).user();
-    // }
-    // @Query('appKeys')
-    // async getAppKeys(@Args() args, @Info() info): Promise<AppKey[]> {
-    //     return await this.prisma.query.appKeys(args, info);
-    // }
-    // @Query('appKey')
-    // async getAppKey(@Args() args, @Info() info): Promise<AppKey> {
-    //     return await this.prisma.query.appKey(args, info);
-    // }
-    // @Mutation('updateAppKey')
-    // async updateAppKey(@Args() args, @Info() info): Promise<AppKey> {
-    //     return await this.prisma.mutation.updateAppKey(args, info);
-    // }
 }

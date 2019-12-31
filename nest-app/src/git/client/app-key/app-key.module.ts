@@ -1,17 +1,18 @@
+import { forwardRef, Module } from '@nestjs/common';
 import { PrismaModule } from '../../../prisma/prisma.module';
-import { Module, forwardRef } from '@nestjs/common';
-import { AppKeyService } from './app-key.service';
-import { AppKeyResolver } from './app-key.resolver';
+import { UserInternalModule } from '../../../user/user.internal.module';
 import { GitClientModule } from '../git-client.module';
-import { UserModule } from '../../user/user.module';
+import { AppKeyInternalResolver } from './app-key.internal.resolver';
+import { AppKeyResolver } from './app-key.resolver';
+import { AppKeyService } from './app-key.service';
 
 @Module({
     imports: [
         PrismaModule,
-        forwardRef(() => UserModule),
-        forwardRef(() => GitClientModule)
+        forwardRef(() => GitClientModule),
+        UserInternalModule
     ],
-    providers: [AppKeyService, AppKeyResolver],
+    providers: [AppKeyService, AppKeyResolver, AppKeyInternalResolver],
     exports: [AppKeyResolver, AppKeyService]
 })
 export class AppKeyModule {}

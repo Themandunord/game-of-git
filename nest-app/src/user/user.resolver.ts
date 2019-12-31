@@ -1,27 +1,29 @@
-import { GqlAuthGuard } from '../guards/gql-auth.guard';
-import { PrismaService } from '../prisma/prisma.service';
+import { AppKey, User } from '@game-of-git/common';
 import {
-    Root,
-    Resolver,
+    ExecutionContext,
+    Inject,
+    UseGuards,
+    NotFoundException
+} from '@nestjs/common';
+import {
+    Context,
+    Parent,
     Query,
     ResolveProperty,
-    Parent,
-    Subscription,
-    Args,
-    Info,
-    Context
+    Resolver,
+    Subscription
 } from '@nestjs/graphql';
-import { UseGuards, Inject, ExecutionContext } from '@nestjs/common';
-import { UserEntity } from '../decorators/user.decorator';
-import { User } from '@game-of-git/common';
-import { AppKey } from '@game-of-git/common';
 import { PubSubEngine } from 'type-graphql';
-
-const USER_MUTATED_EVENT_NAME = 'userMutated';
+import { UserEntity } from '../decorators/user.decorator';
+import { GqlAuthGuard } from '../guards/gql-auth.guard';
+import { PrismaService } from '../prisma/prisma.service';
+import { USER_MUTATED_EVENT_NAME } from './user.internal.resolver';
 
 @Resolver(of => User)
 // @UseGuards(GqlAuthGuard)
 export class UserResolver {
+    public static USER_NOT_FOUND = 'User Not Found';
+
     constructor(
         private prisma: PrismaService,
         @Inject('PUB_SUB') private pubSub: PubSubEngine
@@ -30,35 +32,33 @@ export class UserResolver {
     @Query(returns => User)
     @UseGuards(GqlAuthGuard)
     async me(@UserEntity() user: User): Promise<User> {
-        console.log('me call', user);
-        // this.pubSub.publish(USER_MUTATED_EVENT_NAME, {
-        //     [USER_MUTATED_EVENT_NAME]: {
-        //         id: '1',
-        //         name: 'test',
-        //         email: 'tests',
-        //         gitLogin: 'testse'
-        //     }
-        // });
-        const keys = await this.prisma.client.user({ id: user.id }).keys();
+        let userArgs = {};
+        if (user.id) {
+            userArgs = {
+                id: user.id
+            };
+        } else if (user.email) {
+            userArgs = {
+                email: user.email
+            };
+        }
+
+        const userData = await this.prisma.client.user(userArgs);
+
+        if (!userData) {
+            throw new NotFoundException(UserResolver.USER_NOT_FOUND);
+        }
+        const keys = await this.prisma.client.user(userArgs).keys();
         const meData = {
             ...user,
+            ...userData,
             appKeys: keys as AppKey[]
         };
-        console.log('returning user: ', meData);
-        return meData;
+        return meData as User;
     }
-
-    // @ResolveProperty('posts')
-    // posts(@Parent() author: User): Promise<Post[]> {
-    //     return this.prisma.client.user({ id: author.id }).posts();
-    // }
 
     @ResolveProperty('appKeys')
     appKeys(@Parent() owner: User): Promise<AppKey[]> {
-        console.log(`resolving user app keys for id ${owner.id}`);
-        // const keysData = await this.prisma.client.user({ id: owner.id }).keys();
-        // console.log('resolved keys data: ', keysData);
-        // return keysData;
         return this.prisma.client.user({ id: owner.id }).keys();
     }
 
