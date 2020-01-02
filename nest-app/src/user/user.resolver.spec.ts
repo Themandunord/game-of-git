@@ -4,7 +4,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import ps from '../pubsub';
-import { createOrRetrieveUser } from '../utilities/user.prisma';
+import {
+    createOrRetrieveUser,
+    clearUser
+} from '../utilities/testing/user.prisma';
 import { UserResolver } from './user.resolver';
 import { USER_MUTATED_EVENT_NAME } from './user.internal.resolver';
 
@@ -53,6 +56,10 @@ describe('UserResolver', () => {
         prisma = module.get<PrismaService>(PrismaService);
 
         user = await createOrRetrieveUser(prisma);
+    });
+
+    afterAll(async () => {
+        await clearUser(prisma, { id: user.id });
     });
 
     it('should be defined', () => {

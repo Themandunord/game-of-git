@@ -1,6 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
 import { User } from '../../user/user';
-
+import 'reflect-metadata';
 @ObjectType()
 export class AppKey {
     @Field()

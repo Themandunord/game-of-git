@@ -1,4 +1,3 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as path from 'path';
 import * as request from 'supertest';
@@ -15,7 +14,6 @@ import { WebhooksModule } from './webhooks.module';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
-// const mockWebhooksRepository = jest.genMockFromModule<WebhooksRepository>('./webhooks.repository');
 const mockWebhookEventsResolver = jest.genMockFromModule<WebhookEventsResolver>(
     './webhooks-events.resolver'
 );
@@ -48,6 +46,7 @@ const validateWebhookResponseBody = (
 
 describe('Webhooks Controller', () => {
     let app;
+
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [WebhooksModule, GitClientModule, AppKeyModule],
@@ -79,56 +78,54 @@ describe('Webhooks Controller', () => {
                     .expect(404));
         });
 
-        describe('Valid GitHub Events', async () => {
-            await Promise.all(
-                GITHUB_WEBHOOK_EVENT_TYPES.map(async eventTypeKey => {
-                    // ['CheckRun'].map(async eventTypeKey => {
-                    describe(`${eventTypeKey}`, () => {
-                        const eventType = GitHubWebhookEvents[eventTypeKey];
+        describe('Valid GitHub Events', () => {
+            GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {
+                // ['CheckRun'].map(async eventTypeKey => {
+                describe(`${eventTypeKey}`, () => {
+                    const eventType = GitHubWebhookEvents[eventTypeKey];
 
-                        let sampleJson: any;
-                        let expectedData;
+                    let sampleJson: any;
+                    let expectedData;
 
-                        beforeAll(async () => {
-                            sampleJson = await TestingUtilities.loadJson(
-                                path.join(
-                                    __dirname,
-                                    `parser/eventModels/${eventType}/sample.json`
-                                )
-                            );
-                            // expectedData = {
-                            // 	id: repoId,
-                            // 	createdAt: new Date(),
-                            // 	eventType: GitHubWebhookEvents[eventTypeKey],
-                            // 	action: sampleJson.action,
-                            // 	sender: sampleJson.sender ? sampleJson.sender.login : 'unknown'
-                            // };
-                            // mockWebhooksRepository.store = jest.fn(async () => expectedData);
-                        });
-
-                        it('Should store the webhook and respond with a 201', async () => {
-                            return request(app.getHttpServer())
-                                .post(`/webhook/${repoId}`)
-                                .send(sampleJson)
-                                .set(
-                                    'x-github-event',
-                                    GitHubWebhookEvents[eventTypeKey]
-                                )
-                                .expect(201)
-                                .expect(res =>
-                                    expect(
-                                        validateWebhookResponseBody(
-                                            repoId,
-                                            GitHubWebhookEvents[eventTypeKey],
-                                            sampleJson,
-                                            res.body
-                                        )
-                                    ).toBeTruthy()
-                                );
-                        });
+                    beforeAll(async () => {
+                        sampleJson = await TestingUtilities.loadJson(
+                            path.join(
+                                __dirname,
+                                `parser/eventModels/${eventType}/sample.json`
+                            )
+                        );
+                        // expectedData = {
+                        // 	id: repoId,
+                        // 	createdAt: new Date(),
+                        // 	eventType: GitHubWebhookEvents[eventTypeKey],
+                        // 	action: sampleJson.action,
+                        // 	sender: sampleJson.sender ? sampleJson.sender.login : 'unknown'
+                        // };
+                        // mockWebhooksRepository.store = jest.fn(async () => expectedData);
                     });
-                })
-            );
+
+                    it('Should store the webhook and respond with a 201', async () => {
+                        return request(app.getHttpServer())
+                            .post(`/webhook/${repoId}`)
+                            .send(sampleJson)
+                            .set(
+                                'x-github-event',
+                                GitHubWebhookEvents[eventTypeKey]
+                            )
+                            .expect(201)
+                            .expect(res =>
+                                expect(
+                                    validateWebhookResponseBody(
+                                        repoId,
+                                        GitHubWebhookEvents[eventTypeKey],
+                                        sampleJson,
+                                        res.body
+                                    )
+                                ).toBeTruthy()
+                            );
+                    });
+                });
+            });
         });
     });
 });

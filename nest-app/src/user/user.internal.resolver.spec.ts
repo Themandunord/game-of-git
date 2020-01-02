@@ -7,7 +7,10 @@ import {
     NotFoundException,
     UnprocessableEntityException
 } from '@nestjs/common';
-import { createOrRetrieveUser } from '../utilities/user.prisma';
+import {
+    createOrRetrieveUser,
+    clearUser
+} from '../utilities/testing/user.prisma';
 
 const INVALID_INPUT_SCENARIOS = [
     {
@@ -31,6 +34,10 @@ describe('UserInternalResolver', () => {
         resolver = module.get<UserInternalResolver>(UserInternalResolver);
         prisma = module.get<PrismaService>(PrismaService);
         user = await createOrRetrieveUser(prisma);
+    });
+
+    afterAll(async () => {
+        await clearUser(prisma, { id: user.id });
     });
 
     it('should be defined', () => {

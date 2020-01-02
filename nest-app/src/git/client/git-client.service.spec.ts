@@ -1,12 +1,11 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { AppKeyService } from './app-key/app-key.service';
 import { AppKeyModule } from './app-key/app-key.module';
 import { GitClientModule } from './git-client.module';
 import { GitClientService } from './git-client.service';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { WebhooksService } from './webhooks/webhooks.service';
+import { AppKey } from '@game-of-git/common';
 
 // const appKeyServiceMock = jest.mock('./../app-key/app-key.service');
 const appKeyServiceMock = jest.genMockFromModule<AppKeyService>(
@@ -16,22 +15,13 @@ const webhooksServiceMock = jest.mock('./webhooks/webhooks.service');
 
 describe('GitClientService', () => {
     let service: GitClientService;
-    let mongod: MongoMemoryServer;
     const VALID_GIT_APP_KEY = process.env.GIT_TESTING_TOKEN;
     const GIT_USER = process.env.GIT_TESTING_USER;
     const GIT_REPO = process.env.GIT_TESTING_REPOSITORY;
 
     beforeEach(async () => {
-        mongod = new MongoMemoryServer();
-        const uri = await mongod.getConnectionString();
-
         const module: TestingModule = await Test.createTestingModule({
-            imports: [
-                AppKeyModule,
-                WebhooksModule,
-                GitClientModule,
-                MongooseModule.forRoot(uri)
-            ],
+            imports: [AppKeyModule, WebhooksModule, GitClientModule],
             providers: [WebhooksService, GitClientService]
         })
             .overrideProvider(AppKeyService)
@@ -68,7 +58,7 @@ describe('GitClientService', () => {
 
     describe("Retrieving a user's repositories", () => {
         it('Should return an array of repositories from the API cal', async () => {
-            appKeyServiceMock.getAllByUser = jest.fn(async () => [
+            appKeyServiceMock.getAllByUserIdOrEmail = jest.fn(async () => [
                 {
                     key: VALID_GIT_APP_KEY
                 } as AppKey
@@ -87,7 +77,7 @@ describe('GitClientService', () => {
         it('Should retrieve the details for a repository', async () => {
             const repositoryName = GIT_REPO;
             const repositoryOwner = GIT_USER;
-            appKeyServiceMock.getAllByUser = jest.fn(async () => [
+            appKeyServiceMock.getAllByUserIdOrEmail = jest.fn(async () => [
                 {
                     key: VALID_GIT_APP_KEY
                 } as AppKey

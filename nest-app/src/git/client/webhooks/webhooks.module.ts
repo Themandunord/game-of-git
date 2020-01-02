@@ -10,8 +10,8 @@ import EventHandlers from './events';
 import { ParserService } from './parser/parser.service';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksController } from './webhooks.controller';
-import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
+import { WebhooksRepository } from './webhooks.repository';
 
 @Module({
     imports: [

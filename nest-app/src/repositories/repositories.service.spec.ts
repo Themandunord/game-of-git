@@ -1,15 +1,15 @@
 import { RepositoriesResolver } from './repositories.resolver';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepositoriesService } from './repositories.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { GitClientModule } from '../git/client/git-client.module';
 import { WebhooksModule } from '../git/client/webhooks/webhooks.module';
 import { GitClientService } from '../git/client/git-client.service';
 import { WebhooksService } from '../git/client/webhooks/webhooks.service';
+import { PrismaModule } from '../prisma/prisma.module';
 
-const gitClientServiceMock = jest.mock('./../git-client/git-client.service');
+const gitClientServiceMock = jest.mock('./../git/client/git-client.service');
 const webhooksServiceMock = jest.mock(
-    './../git-client/webhooks/webhooks.service'
+    './../git/client/webhooks/webhooks.service'
 );
 const repositoriesResolverMock = jest.mock('./repositories.resolver');
 
@@ -18,7 +18,7 @@ describe('RepositoriesService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [GitClientModule, WebhooksModule],
+            imports: [GitClientModule, WebhooksModule, PrismaModule],
             providers: [RepositoriesService, RepositoriesResolver]
         })
             .overrideProvider(GitClientService)
