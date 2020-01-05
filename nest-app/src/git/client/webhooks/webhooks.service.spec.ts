@@ -34,6 +34,7 @@ import {
     clearRepository,
     createOrRetrieveRepository
 } from '../../../utilities/testing/git.repository.prisma';
+import { clearTestData } from '../../../utilities/testing/teardown';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
@@ -125,11 +126,7 @@ describe('WebhooksService', () => {
     });
 
     afterAll(async () => {
-        await clearAppKey(prisma, { id: appKey.id });
-        await clearUserAppKeys(prisma, { email: user.email });
-        await clearUser(prisma, { id: user.id });
-        await clearUser(prisma, { id: userWithoutAppKeys.id });
-        await clearRepository(prisma, repository.name);
+        await clearTestData(prisma, { email: user.email });
     });
 
     it('should be defined', () => {

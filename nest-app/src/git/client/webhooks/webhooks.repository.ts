@@ -29,7 +29,7 @@ AWS.config.update({
 });
 
 const WEBHOOK_EVENTS_TABLE_NAME = 'WebhookEvents';
-
+const PAGE_SIZE_LIMIT = 10;
 @Injectable()
 export class WebhooksRepository {
     private dynamoDb: AWS.DynamoDB;
@@ -87,11 +87,20 @@ export class WebhooksRepository {
         const webhookEventData = await this.prisma.client.gitHubWebhookEvent({
             id: webhookEventId
         });
+
+        if (!webhookEventData) {
+            return webhookEventData;
+        }
+
         const webhookRepository = await this.prisma.client
             .gitHubWebhookEvent({ id: webhookEventId })
             .repository();
 
-        const webhookData = await this.loadEventData(
+        if (!webhookRepository) {
+            return webhookEventData;
+        }
+
+        const webhookData = await this.loadDynamoData(
             this.repositoryEventKey(
                 webhookRepository.id,
                 webhookEventData.eventType as GitHubWebhookEventType,
@@ -112,7 +121,40 @@ export class WebhooksRepository {
         return model;
     }
 
-    async loadEventData(eventKey: string) {
+    async loadEvents(loadEventsData: {
+        repository: string;
+        index?: number;
+        pageSize: number;
+    }) {
+        const repository = loadEventsData.repository;
+        const index = loadEventsData.index ? loadEventsData.index : 0;
+        const pageSize =
+            loadEventsData.pageSize &&
+            loadEventsData.pageSize <= PAGE_SIZE_LIMIT
+                ? loadEventsData.pageSize
+                : PAGE_SIZE_LIMIT;
+
+        console.log(
+            'loading events for repository: ',
+            repository,
+            index,
+            pageSize
+        );
+
+        const events = await this.prisma.client.gitHubWebhookEvents({
+            where: {
+                repository: {
+                    name: repository
+                }
+            },
+            skip: index,
+            first: pageSize
+        });
+
+        return events;
+    }
+
+    async loadDynamoData(eventKey: string) {
         return await this.dynamoDocumentClient
             .get({
                 TableName: WEBHOOK_EVENTS_TABLE_NAME,
@@ -181,7 +223,7 @@ export class WebhooksRepository {
         this.logger.log('successfully put it to dynamo');
 
         // Retrieve it and return it.
-        const dynamoRecord = await this.loadEventData(eventKey);
+        const dynamoRecord = await this.loadDynamoData(eventKey);
 
         const result = {
             ...webhookData,

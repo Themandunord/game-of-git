@@ -26,6 +26,7 @@ import { GitClientModule } from '../git-client.module';
 import { AppKeyInternalResolver } from './app-key.internal.resolver';
 import { AppKeyService } from './app-key.service';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
+import { clearTestData } from '../../../utilities/testing/teardown';
 
 const GIT_TESTING_TOKEN = process.env.GIT_TESTING_TOKEN;
 const GIT_TESTING_USER = process.env.GIT_TESTING_USER;
@@ -163,10 +164,8 @@ describe('AppKeyService', () => {
     });
 
     afterAll(async () => {
-        await clearAppKey(prisma, { id: appKey.id });
-        await clearUserAppKeys(prisma, { email: user.email });
-        await clearUser(prisma, { id: user.id });
-        await clearUser(prisma, { id: userWithoutAppKeys.id });
+        await clearTestData(prisma, { id: user.id });
+        await clearTestData(prisma, { id: userWithoutAppKeys.id });
     });
 
     it('The AppKeyService should be defined', () => {

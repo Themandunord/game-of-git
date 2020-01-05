@@ -14,7 +14,7 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
 import { AppKeyInternalResolver } from './app-key.internal.resolver';
 import { UserInternalResolver } from '../../../user/user.internal.resolver';
-import { AppKeyCreateInput } from 'src/generated/prisma-client';
+import { AppKeyCreateInput } from '../../../generated/prisma-client';
 import 'reflect-metadata';
 
 @Injectable()

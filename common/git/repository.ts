@@ -57,7 +57,10 @@ export class Repository {
     isPrivate: boolean;
 
     @Field()
-    isDiabled: boolean;
+    isDisabled: boolean;
+
+    @Field()
+    isArchived: boolean;
 
     @Field()
     sshUrl: string;

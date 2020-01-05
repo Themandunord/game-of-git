@@ -18,6 +18,7 @@ import {
 import { AppKeyInternalResolver } from './app-key.internal.resolver';
 import { AppKeyCreateInput } from '../../../generated/prisma-client';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
+import { clearTestData } from '../../../utilities/testing/teardown';
 
 export const TEST_APP_KEY = 'mamamamamamamamama';
 
@@ -50,10 +51,8 @@ describe('Internal App Key Resolver', () => {
     });
 
     afterAll(async () => {
-        await clearAppKey(prisma, { id: appKey.id });
-        await clearUserAppKeys(prisma, { email: user.email });
-        await clearUser(prisma, { id: user.id });
-        await clearUser(prisma, { id: userWithoutAppKeys.id });
+        await clearTestData(prisma, { id: user.id });
+        await clearTestData(prisma, { id: userWithoutAppKeys.id });
     });
 
     it('should be defined', () => {

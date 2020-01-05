@@ -29,6 +29,9 @@ import { ParserService } from './parser/parser.service';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
+import { clearTestData } from '../../../utilities/testing/teardown';
+import ps from '../../../pubsub';
+import { Repository } from '@game-of-git/common';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
@@ -55,6 +58,7 @@ describe('Webhooks Repository', () => {
     let userWithoutAppKeys;
     let appKey;
     let repo;
+    let repoWithoutWebhookEvents;
 
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -63,13 +67,17 @@ describe('Webhooks Repository', () => {
                 WebhooksService,
                 GitClientService,
                 ParserService,
-                HandleWebhookHandler
+                HandleWebhookHandler,
+                WebhooksRepository,
+                WebhookEventsResolver,
+                {
+                    provide: 'PUB_SUB',
+                    useValue: ps
+                }
             ]
         })
             .overrideProvider(CommandBus)
             .useValue(mockCommandBus)
-            .overrideProvider(WebhooksService)
-            .useValue(mockWebhooksService)
             .overrideProvider(GitClientService)
             .useValue(mockGitClientService)
             .overrideProvider(AppKeyService)
@@ -88,30 +96,81 @@ describe('Webhooks Repository', () => {
                 email: user.email
             }
         });
-        repo = await createOrRetrieveRepository(prisma, user, appKey, {
-            name: REPOSITORY,
-            idExternal: 'someIdExternal',
-            createdAtExternal: new Date().toISOString(),
-            updatedAtExternal: new Date().toISOString(),
-            description: '',
-            homepageUrl: '',
-            url: '',
-            owner: '',
-            isTracked: false,
-            isFork: false,
-            isLocked: false,
-            isPrivate: false,
-            isArchived: false,
-            isDisabled: false
-        });
+
+        const repositoryFactory = (repoData?: Partial<Repository>) => {
+            const name =
+                repoData && repoData.name
+                    ? repoData.name
+                    : 'Some Repository Default Name';
+            const idExternal =
+                repoData && repoData.name ? repoData.name : 'someIdExternal';
+            const createdAtExternal =
+                repoData && repoData.createdAtExternal
+                    ? repoData.createdAtExternal.toISOString()
+                    : new Date().toISOString();
+            const updatedAtExternal =
+                repoData && repoData.updatedAtExternal
+                    ? repoData.updatedAtExternal.toISOString()
+                    : new Date().toISOString();
+            const description =
+                repoData && repoData.description ? repoData.description : '';
+            const homepageUrl =
+                repoData && repoData.homepageUrl ? repoData.homepageUrl : '';
+            const url = repoData && repoData.url ? repoData.url : '';
+            const owner = repoData && repoData.owner ? repoData.owner : '';
+            const isTracked =
+                repoData && repoData.isTracked ? repoData.isTracked : false;
+            const isFork =
+                repoData && repoData.isFork ? repoData.isFork : false;
+            const isLocked =
+                repoData && repoData.isLocked ? repoData.isLocked : false;
+            const isPrivate =
+                repoData && repoData.isPrivate ? repoData.isPrivate : false;
+            const isArchived =
+                repoData && repoData.isArchived ? repoData.isArchived : false;
+            const isDisabled =
+                repoData && repoData.isDisabled ? repoData.isDisabled : false;
+
+            return {
+                name,
+                idExternal,
+                createdAtExternal,
+                updatedAtExternal,
+                description,
+                homepageUrl,
+                url,
+                owner,
+                isTracked,
+                isFork,
+                isLocked,
+                isPrivate,
+                isArchived,
+                isDisabled
+            };
+        };
+        repo = await createOrRetrieveRepository(
+            prisma,
+            user,
+            appKey,
+            repositoryFactory({
+                name: REPOSITORY,
+                idExternal: 'someIdExternal'
+            })
+        );
+        repoWithoutWebhookEvents = await createOrRetrieveRepository(
+            prisma,
+            user,
+            appKey,
+            repositoryFactory({
+                name: REPOSITORY,
+                idExternal: 'someIdExternalWithoutWebhooks'
+            })
+        );
     });
 
     afterAll(async () => {
-        await clearAppKey(prisma, { id: appKey.id });
-        await clearUserAppKeys(prisma, { email: user.email });
-        await clearUser(prisma, { id: user.id });
-        await clearUser(prisma, { id: userWithoutAppKeys.id });
-        await clearRepository(prisma, repo.name);
+        await clearTestData(prisma, { email: user.email });
+        await clearTestData(prisma, { email: userWithoutAppKeys.email });
     });
 
     it('should be defined', () => {
@@ -119,21 +178,36 @@ describe('Webhooks Repository', () => {
     });
 
     describe('Retrieval', () => {
-        it('Should return null for a non-existant webhook', async () => {
-            // const res = await repository.getById('56e6dd2eb4494ed008d595bd');
-            // expect(res).toBeNull();
+        describe('METHOD: loadEvent', () => {
+            it('Should return null for a non-existant webhook', async () => {
+                const res = await repository.loadEvent(
+                    '56e6dd2eb4494ed008d595bd'
+                );
+                expect(res).toBeNull();
+            });
         });
 
-        it('Should return an empty array for a repo with no events', async () => {
-            // const res = await repository.getAll({
-            //     repository: REPOSITORY
-            // });
-            // expect(res).toHaveLength(0);
+        describe('METHOD: loadEvents', () => {
+            it('Should return an empty array for a repo with no events', async () => {
+                const res = await repository.loadEvents({
+                    // repository: REPOSITORY,
+                    repository: repo.name,
+                    pageSize: 20
+                });
+                expect(res).toHaveLength(0);
+            });
+        });
+
+        describe('METHOD: loadDynamoData', () => {
+            it('stubs', async () => {
+                expect(true).toBeTruthy();
+            });
         });
     });
 
     describe('Creation', () => {
-        GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {
+        // GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {
+        ['Ping'].map(eventTypeKey => {
             const eventType = GitHubWebhookEvents[eventTypeKey];
 
             describe(`${eventType}`, () => {

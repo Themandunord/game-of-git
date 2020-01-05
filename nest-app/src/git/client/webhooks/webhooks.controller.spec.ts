@@ -66,7 +66,7 @@ describe('Webhooks Controller', () => {
 
     xdescribe('Retrieving all stored events for a repository', () => {});
 
-    describe('Handling Webhook Events for a given Repository', async () => {
+    describe('Handling Webhook Events for a given Repository', () => {
         const repoId = 'someId';
 
         describe('Unsupported Webhook Event Types', () => {
