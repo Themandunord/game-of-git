@@ -3,21 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as path from 'path';
 import { PrismaModule } from '../../../prisma/prisma.module';
 import { PrismaService } from '../../../prisma/prisma.service';
+import ps from '../../../pubsub';
+import { repositoryFactory } from '../../../repositories/repositories.factory';
 import { MockCommandBus } from '../../../utilities/MockCommandBus';
 import TestingUtilities from '../../../utilities/testing';
-import {
-    clearAppKey,
-    clearUserAppKeys,
-    createOrRetrieveAppKey
-} from '../../../utilities/testing/git.app-key.prisma';
-import {
-    clearRepository,
-    createOrRetrieveRepository
-} from '../../../utilities/testing/git.repository.prisma';
-import {
-    clearUser,
-    createOrRetrieveUser
-} from '../../../utilities/testing/user.prisma';
+import { createOrRetrieveAppKey } from '../../../utilities/testing/git.app-key.prisma';
+import { createOrRetrieveRepository } from '../../../utilities/testing/git.repository.prisma';
+import { clearTestData } from '../../../utilities/testing/teardown';
+import { createOrRetrieveUser } from '../../../utilities/testing/user.prisma';
 import { AppKeyModule } from '../app-key/app-key.module';
 import { AppKeyService } from '../app-key/app-key.service';
 import { GitClientModule } from '../git-client.module';
@@ -29,10 +22,6 @@ import { ParserService } from './parser/parser.service';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
-import { clearTestData } from '../../../utilities/testing/teardown';
-import ps from '../../../pubsub';
-import { Repository } from '@game-of-git/common';
-import { AWSError } from 'aws-sdk';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
@@ -49,56 +38,6 @@ const GITHUB_WEBHOOK_EVENT_TYPES = Object.keys(
 ) as GitHubWebhookEventType[];
 
 const TEST_APP_KEY = 'asdfasgmgmgkgkgkgilweuhflskjfdng;adnvicky';
-
-const repositoryFactory = (repoData?: Partial<Repository>) => {
-    const name =
-        repoData && repoData.name
-            ? repoData.name
-            : 'Some Repository Default Name';
-    const idExternal =
-        repoData && repoData.name ? repoData.name : 'someIdExternal';
-    const createdAtExternal =
-        repoData && repoData.createdAtExternal
-            ? repoData.createdAtExternal.toISOString()
-            : new Date().toISOString();
-    const updatedAtExternal =
-        repoData && repoData.updatedAtExternal
-            ? repoData.updatedAtExternal.toISOString()
-            : new Date().toISOString();
-    const description =
-        repoData && repoData.description ? repoData.description : '';
-    const homepageUrl =
-        repoData && repoData.homepageUrl ? repoData.homepageUrl : '';
-    const url = repoData && repoData.url ? repoData.url : '';
-    const owner = repoData && repoData.owner ? repoData.owner : '';
-    const isTracked =
-        repoData && repoData.isTracked ? repoData.isTracked : false;
-    const isFork = repoData && repoData.isFork ? repoData.isFork : false;
-    const isLocked = repoData && repoData.isLocked ? repoData.isLocked : false;
-    const isPrivate =
-        repoData && repoData.isPrivate ? repoData.isPrivate : false;
-    const isArchived =
-        repoData && repoData.isArchived ? repoData.isArchived : false;
-    const isDisabled =
-        repoData && repoData.isDisabled ? repoData.isDisabled : false;
-
-    return {
-        name,
-        idExternal,
-        createdAtExternal,
-        updatedAtExternal,
-        description,
-        homepageUrl,
-        url,
-        owner,
-        isTracked,
-        isFork,
-        isLocked,
-        isPrivate,
-        isArchived,
-        isDisabled
-    };
-};
 
 const loadJsonSampleDataFromEventType = async (
     eventType: GitHubWebhookEventType

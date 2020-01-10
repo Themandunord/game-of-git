@@ -133,16 +133,6 @@ describe('WebhooksService', () => {
         expect(service).toBeDefined();
     });
 
-    xdescribe('Repository Webhook Retrieval', () => {});
-
-    xdescribe('Repository Webhook Creation', () => {});
-
-    xdescribe('Repository Webhook Deletion', () => {});
-
-    xdescribe("Retrieving a Repository's locally stored events", () => {});
-
-    xdescribe("Retrieving a Repository's local stored event count", () => {});
-
     describe('Inbound Webhook Handling', () => {
         // for each event type suported...
         GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {

@@ -51,7 +51,7 @@ export class WebhooksController {
             body
         );
 
-        return result;
+        return null;
     }
 
     // @Get()

@@ -31,6 +31,7 @@ import { clearTestData } from '../../../utilities/testing/teardown';
 const GIT_TESTING_TOKEN = process.env.GIT_TESTING_TOKEN;
 const GIT_TESTING_USER = process.env.GIT_TESTING_USER;
 const GIT_TESTING_REPOSITORY = process.env.GIT_TESTING_REPOSITORY;
+const GIT_TESTING_USER_EMAIL = process.env.GIT_TESTING_USER_EMAIL;
 
 // const gitClientServiceMock = jest.genMockFromModule<GitClientService>(
 //     '../git-client.service'
@@ -149,7 +150,8 @@ describe('AppKeyService', () => {
         service = module.get<AppKeyService>(AppKeyService);
         prisma = module.get<PrismaService>(PrismaService);
         user = await createOrRetrieveUser(prisma, {
-            gitLogin: GIT_TESTING_USER
+            gitLogin: GIT_TESTING_USER,
+            email: GIT_TESTING_USER_EMAIL
         });
         userWithoutAppKeys = await createOrRetrieveUser(prisma, {
             email: 'someOtherUserMyDude@testetetst.com'
@@ -401,6 +403,14 @@ describe('AppKeyService', () => {
             });
         });
     });
+    const validCreateAppKeyData = {
+        key: GIT_TESTING_TOKEN,
+        name: 'appKeyServiceTestToken'
+    };
+    const validUserData = {
+        email: GIT_TESTING_USER_EMAIL,
+        gitLogin: GIT_TESTING_USER
+    };
 
     describe('METHOD: store', () => {
         describe('Create App Key Input Validation', () => {
@@ -437,175 +447,50 @@ describe('AppKeyService', () => {
                 })
             );
 
-            describe('An already registered App Key', () => {
-                let appKeyInternalResolverCreateSpy;
-                let gitClientTestAppKeySpy;
-
-                beforeAll(async () => {
-                    appKeyInternalResolverCreateSpy = jest.spyOn(
-                        './app-key.internal.resolver',
-                        'create'
-                    );
-                    gitClientTestAppKeySpy = jest.spyOn(
-                        '../git-client.service',
-                        'testAppKey'
-                    );
-
-                    try {
-                        // test run
-                        const createAppKeyData = {
-                            key: appKey.key,
-                            name: 'AlreadyReigsteredAppKeyTest'
-                        };
-                        const userData = {
-                            email: user.email
-                        };
-                        await service.store(createAppKeyData, userData as User);
-                    } catch (e) {
-                        console.error(
-                            'Error setting up the already registered AppKey test'
-                        );
-                        fail('Shit');
-                    }
-                });
-
-                it("Doesn't invoke the `validate` function", () => {
-                    // expect(true).toBeTruthy();
-                    expect(gitClientTestAppKeySpy).not.toBeCalled();
-                });
-
-                it('Throws an error', () => {
-                    expect(true).toBeTruthy();
-                });
-
-                it("Does not invoke the internal resolver's create function", () => {
-                    expect(appKeyInternalResolverCreateSpy).not.toBeCalled();
+            describe('An already registered App Key Throw', () => {
+                it('Throws an error', async () => {
+                    const createAppKeyData = {
+                        key: appKey.key,
+                        name: 'AlreadyReigsteredAppKeyTest'
+                    };
+                    const userData = {
+                        email: user.email
+                    };
+                    expect(
+                        service.store(createAppKeyData, userData as User)
+                    ).rejects.toThrowError('App Key Already Registered');
                 });
             });
         });
 
-        describe('Existing App Key', () => {
-            it('stubs', () => {
-                expect(true).toBeTruthy();
-            });
-        });
-
+        let result;
         describe('Valid App Key Creation', () => {
-            it('stubs', () => {
-                expect(true).toBeTruthy();
+            describe('Creates an App Key', () => {
+                beforeAll(async () => {
+                    result = await service.store(
+                        validCreateAppKeyData,
+                        validUserData as User
+                    );
+                });
+
+                it('Returns a valid App Key Model', () => {
+                    expect(result).toMatchObject({
+                        key: '84dc870c0eb656631a3a8e7dc087d1e396530b71',
+                        name: 'appKeyServiceTestToken'
+                    });
+                    expect(result.id).toBeDefined();
+                });
             });
         });
-    });
 
-    describe('METHOD: deleteByIdOrKey', () => {
-        it('stubs', () => {
-            expect(true).toBeTruthy();
-        });
-    });
+        describe('METHOD: deleteByIdOrKey', () => {
+            it('can delete by id', async () => {
+                await service.deleteByIdOrKey({ id: result.id });
 
-    xdescribe('Retrieving a AppKey by User ID', () => {
-        it('Executes getAppKeys once on the AppKeyResolver', async () => {
-            // const getAppKeysMock = jest.fn(async () => {
-            //     console.log('MOCKED');
-            //     return [];
-            // });
-            // appKeyInternalResolverMock.userAppKeys = getAppKeysMock;
-
-            await expect(
-                service.getAllByUserIdOrEmail({ email: 'someUser' })
-            ).resolves.toEqual([]);
-
-            // expect(getAppKeysMock).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    // xdescribe('Validating an AppKey', () => {
-    //     xdescribe('Scenarios with populated values', async () => {
-    //         await Promise.all(
-    //             TEST_APP_KEY_SCENARIOS.map(async config => {
-    //                 const scenario = config.scenario;
-    //                 it(config.it, async () => {
-    //                     const testAppKeyMock = scenario.testAppKeyMock;
-    //                     gitClientServiceMock.testAppKey = testAppKeyMock;
-
-    //                     const key = scenario.key;
-    //                     const user = scenario.user;
-
-    //                     await expect(
-    //                         service.validate(key, user)
-    //                     ).resolves.toEqual(scenario.toEqual);
-    //                     expect(testAppKeyMock).toHaveBeenCalledTimes(
-    //                         scenario.testAppKeyMockTimes
-    //                     );
-    //                     expect(testAppKeyMock).toHaveBeenCalledWith(
-    //                         scenario.key,
-    //                         scenario.user
-    //                     );
-    //                 });
-    //             })
-    //         );
-    //     });
-    // });
-
-    xdescribe('Storing an AppKey', () => {
-        const key = 'somekey';
-        const user = 'someuser';
-
-        // describe('Scenarios', async () => {
-        //     STORE_APP_KEY_SCENARIOS.map(async config => {
-        //         await it(config.it, async () => {
-        //             const scenario = config.scenario;
-        //             const testAppKeyMock = scenario.testAppKeyMock;
-        //             gitClientServiceMock.testAppKey = testAppKeyMock;
-
-        //             const getAppKeyMock = scenario.getAppKeyMock;
-        //             appKeyResolverMock.appKey = getAppKeyMock;
-
-        //             const createAppKeyMock = scenario.createAppKeyMock;
-        //             appKeyResolverMock.createAppKey = createAppKeyMock;
-
-        //             const name = 'some repo';
-        //             const username = 'miking-the-viking';
-
-        //             await expect(
-        //                 service.store(key, user, name, username)
-        //             ).resolves.toEqual(scenario.storeKeyResult);
-
-        //             const mocks = [
-        //                 {
-        //                     func: testAppKeyMock,
-        //                     times: scenario.testAppKeyMockTimes
-        //                 },
-        //                 {
-        //                     func: getAppKeyMock,
-        //                     times: scenario.getAppKeyMockTimes
-        //                 },
-        //                 {
-        //                     func: createAppKeyMock,
-        //                     times: scenario.createAppKeyMockTimes
-        //                 }
-        //             ];
-        //             mocks.map(mock => {
-        //                 if (mock.times > 0) {
-        //                     expect(mock.func).toHaveBeenCalledTimes(mock.times);
-        //                 } else {
-        //                     expect(mock.func).not.toHaveBeenCalled();
-        //                 }
-        //             });
-        //         });
-        //     });
-        // });
-
-        it('Executes testAppKey once on the GitClient', async () => {
-            const testAppKeyMock = jest.fn(async () => {
-                return true;
+                expect(
+                    service.getByIdOrKey({ id: result.id })
+                ).resolves.toBeNull();
             });
-            // gitClientServiceMock.testAppKey = testAppKeyMock;
-
-            await service.validate(key, user);
-
-            expect(testAppKeyMock).toHaveBeenCalledTimes(1);
-            expect(testAppKeyMock).toHaveBeenCalledWith(key, user);
         });
     });
 });

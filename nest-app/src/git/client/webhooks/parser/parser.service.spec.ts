@@ -48,46 +48,44 @@ describe('ParserService', () => {
             );
         });
 
-        describe('Returns the valid and correct WebhookEventHandler Instance corresponding for all supported EventTypes', async () => {
-            await Promise.all(
-                GITHUB_WEBHOOK_EVENT_TYPES.map(async eventTypeKey => {
-                    describe(`${eventTypeKey}`, () => {
-                        let sampleJson: any;
-                        let expectedCtor: new (...args: any) => AGitHubEvent;
+        describe('Returns the valid and correct WebhookEventHandler Instance corresponding for all supported EventTypes', () => {
+            GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {
+                describe(`${eventTypeKey}`, () => {
+                    let sampleJson: any;
+                    let expectedCtor: new (...args: any) => AGitHubEvent;
 
-                        const eventType = GitHubWebhookEvents[eventTypeKey];
+                    const eventType = GitHubWebhookEvents[eventTypeKey];
 
-                        beforeAll(async () => {
-                            sampleJson = await TestingUtilities.loadJson(
-                                path.join(
-                                    __dirname,
-                                    `eventModels/${eventType}/sample.json`
-                                )
-                            );
+                    beforeAll(async () => {
+                        sampleJson = await TestingUtilities.loadJson(
+                            path.join(
+                                __dirname,
+                                `eventModels/${eventType}/sample.json`
+                            )
+                        );
 
-                            expectedCtor = EventModelFactory.getModelConstructor(
-                                eventType
-                            );
-                        });
-
-                        it('Has a sample payload JSON file available for using as a mocked GitHub Webhook', async () => {
-                            expect(sampleJson).toBeInstanceOf(Object);
-                        });
-
-                        it('Can retrieve and initialize a corresponding Event Handler class instance for the given eventType', async () => {
-                            const resultModel = await service.getWebhookEventHandlerInstance(
-                                '',
-                                eventType,
-                                sampleJson
-                            );
-
-                            // result instance should be an instance of AGitHubEvent extended implementation
-                            expect(resultModel).toBeInstanceOf(AGitHubEvent);
-                            expect(resultModel).toBeInstanceOf(expectedCtor);
-                        });
+                        expectedCtor = EventModelFactory.getModelConstructor(
+                            eventType
+                        );
                     });
-                })
-            );
+
+                    it('Has a sample payload JSON file available for using as a mocked GitHub Webhook', async () => {
+                        expect(sampleJson).toBeInstanceOf(Object);
+                    });
+
+                    it('Can retrieve and initialize a corresponding Event Handler class instance for the given eventType', async () => {
+                        const resultModel = await service.getWebhookEventHandlerInstance(
+                            '',
+                            eventType,
+                            sampleJson
+                        );
+
+                        // result instance should be an instance of AGitHubEvent extended implementation
+                        expect(resultModel).toBeInstanceOf(AGitHubEvent);
+                        expect(resultModel).toBeInstanceOf(expectedCtor);
+                    });
+                });
+            });
         });
     });
 });
