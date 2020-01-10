@@ -3,5 +3,6 @@
         "**/*.d.ts": true,
         "**/*.js": true,
         "**/dist": true
-    }
+    },
+    "debug.node.autoAttach": "on"
 }

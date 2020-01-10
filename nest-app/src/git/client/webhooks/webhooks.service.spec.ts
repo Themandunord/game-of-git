@@ -161,6 +161,10 @@ describe('WebhooksService', () => {
                     );
                 });
 
+                beforeEach(() => {
+                    jest.resetAllMocks();
+                });
+
                 it('Should dispatch a HandleWebhookCommand with the webhook event id', async () => {
                     mockCommandBus.execute = jest.fn(async val => {
                         return expect(val).toBeInstanceOf(HandleWebhookCommand);

@@ -36,6 +36,9 @@ export class WebhooksRepository {
     private dynamoDocumentClient: AWS.DynamoDB.DocumentClient;
     private readonly logger = new Logger('WebhooksRepository');
 
+    public static readonly PageSizeLimit = PAGE_SIZE_LIMIT;
+    public static readonly WebhookEventsTableName = WEBHOOK_EVENTS_TABLE_NAME;
+
     constructor(
         @Inject(forwardRef(() => WebhooksService))
         private readonly webhooksService: WebhooksService,
@@ -123,8 +126,8 @@ export class WebhooksRepository {
 
     async loadEvents(loadEventsData: {
         repository: string;
+        pageSize?: number;
         index?: number;
-        pageSize: number;
     }) {
         const repository = loadEventsData.repository;
         const index = loadEventsData.index ? loadEventsData.index : 0;
@@ -133,13 +136,6 @@ export class WebhooksRepository {
             loadEventsData.pageSize <= PAGE_SIZE_LIMIT
                 ? loadEventsData.pageSize
                 : PAGE_SIZE_LIMIT;
-
-        console.log(
-            'loading events for repository: ',
-            repository,
-            index,
-            pageSize
-        );
 
         const events = await this.prisma.client.gitHubWebhookEvents({
             where: {
@@ -155,7 +151,7 @@ export class WebhooksRepository {
     }
 
     async loadDynamoData(eventKey: string) {
-        return await this.dynamoDocumentClient
+        const dynamoData = await this.dynamoDocumentClient
             .get({
                 TableName: WEBHOOK_EVENTS_TABLE_NAME,
                 Key: {
@@ -163,6 +159,42 @@ export class WebhooksRepository {
                 }
             })
             .promise();
+
+        return dynamoData;
+    }
+
+    async deleteDynamoData(eventKey: string) {
+        return await this.dynamoDocumentClient.delete({
+            TableName: WEBHOOK_EVENTS_TABLE_NAME,
+            Key: {
+                eventKey
+            }
+        });
+    }
+
+    async deleteEvent(id: string) {
+        const webhook = await this.prisma.client.gitHubWebhookEvent({
+            id
+        });
+
+        const repository = await this.prisma.client.gitHubWebhookEvent({ id });
+
+        const eventKey = this.repositoryEventKey(
+            repository.id,
+            webhook.eventType as GitHubWebhookEventType,
+            webhook as any
+        );
+
+        await this.prisma.client.deleteGitHubWebhookEvent({
+            id
+        });
+
+        await this.dynamoDocumentClient.delete({
+            TableName: WEBHOOK_EVENTS_TABLE_NAME,
+            Key: {
+                eventKey
+            }
+        });
     }
 
     async storeEvent(
@@ -233,7 +265,7 @@ export class WebhooksRepository {
         return result;
     }
 
-    private repositoryEventKey = (
+    public repositoryEventKey = (
         repositoryId: string,
         eventType: GitHubWebhookEventType,
         webhookData: GitHubWebhookEvent
