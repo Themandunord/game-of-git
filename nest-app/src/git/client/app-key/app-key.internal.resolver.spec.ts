@@ -1,24 +1,12 @@
-import {
-    AppKey,
-    AppKeyIdOrKeyArgs,
-    UserIdOrEmailArgs
-} from '@game-of-git/common';
+import { AppKeyIdOrKeyArgs, UserIdOrEmailArgs } from '@game-of-git/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AppKeyCreateInput } from '../../../generated/prisma-client';
 import { PrismaModule } from '../../../prisma/prisma.module';
 import { PrismaService } from '../../../prisma/prisma.service';
-import {
-    createOrRetrieveAppKey,
-    clearAppKey,
-    clearUserAppKeys
-} from '../../../utilities/testing/git.app-key.prisma';
-import {
-    createOrRetrieveUser,
-    clearUser
-} from '../../../utilities/testing/user.prisma';
-import { AppKeyInternalResolver } from './app-key.internal.resolver';
-import { AppKeyCreateInput } from '../../../generated/prisma-client';
-import { CreateAppKeyInput } from './dto/create-app-key.input';
+import { createOrRetrieveAppKey } from '../../../utilities/testing/git.app-key.prisma';
 import { clearTestData } from '../../../utilities/testing/teardown';
+import { createOrRetrieveUser } from '../../../utilities/testing/user.prisma';
+import { AppKeyInternalResolver } from './app-key.internal.resolver';
 
 export const TEST_APP_KEY = 'mamamamamamamamama';
 

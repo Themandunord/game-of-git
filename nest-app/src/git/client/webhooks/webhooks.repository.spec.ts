@@ -112,7 +112,7 @@ describe('Webhooks Repository', () => {
             appKey,
             repositoryFactory({
                 name: REPOSITORY,
-                idExternal: 'someIdExternal'
+                idExternal: 'someIdExternalWebhooksRepository'
             })
         );
 
@@ -228,7 +228,8 @@ describe('Webhooks Repository', () => {
             describe('Should return a sized populated array for a repo with events', () => {
                 it('single event', async () => {
                     const singleRes = await repository.loadEvents({
-                        repository: repo.name
+                        repository: repo.name,
+                        pageSize: 1
                     });
                     expect(singleRes).toHaveLength(1);
                 });

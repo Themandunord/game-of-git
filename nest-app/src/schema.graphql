@@ -298,7 +298,8 @@ type Repository {
   isFork: Boolean!
   isLocked: Boolean!
   isPrivate: Boolean!
-  isDiabled: Boolean!
+  isDisabled: Boolean!
+  isArchived: Boolean!
   sshUrl: String!
 }
 

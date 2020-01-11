@@ -7,7 +7,7 @@ export class AppEventService {
     constructor(@Inject('PUB_SUB') private pubSub: PubSubEngine) {}
 
     async sendAppEvent(data: any) {
-        this.pubSub.publish(APP_EVENT_NAME, {
+        return this.pubSub.publish(APP_EVENT_NAME, {
             appEvent: data
         });
     }

@@ -17,6 +17,7 @@ import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksModule } from './webhooks.module';
 import { WebhooksService } from './webhooks.service';
+import { clearTestData } from '../../../utilities/testing/teardown';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
@@ -53,14 +54,7 @@ describe('Webhooks Controller', () => {
                 RepositoriesModule
             ],
             controllers: [WebhooksController]
-        })
-            // .overrideProvider(GitClientService)
-            // .useValue(mockGitClientService)
-            // .overrideProvider(AppKeyService)
-            // .useValue(mockAppKeyService)
-            // .overrideProvider(WebhookEventsResolver)
-            // .useValue(mockWebhookEventsResolver)
-            .compile();
+        }).compile();
 
         app = moduleFixture.createNestApplication();
         repositoriesService = moduleFixture.get<RepositoriesService>(
@@ -72,11 +66,12 @@ describe('Webhooks Controller', () => {
 
         user = await createOrRetrieveUser(prisma, {
             gitLogin: GIT_TESTING_USER,
-            email: GIT_TESTING_USER_EMAIL
+            email: GIT_TESTING_USER_EMAIL,
+            name: 'WebhooksControllerTestUser'
         });
         appKey = await createOrRetrieveAppKey(prisma, {
             key: GIT_TESTING_TOKEN,
-            name: 'webhooksController',
+            name: 'webhooksControllerTestAppKey',
             user: {
                 email: user.email
             }
@@ -86,10 +81,14 @@ describe('Webhooks Controller', () => {
             user,
             appKey,
             repositoryFactory({
-                name: GIT_TESTING_REPOSITORY,
-                idExternal: 'someIdExternal'
+                name: GIT_TESTING_REPOSITORY + 'webhooksController',
+                idExternal: 'someIdExternalWebhooksController'
             })
         );
+    });
+
+    afterEach(async () => {
+        await clearTestData(prisma, { id: user.id });
     });
 
     xdescribe('Retrieving all stored events for a repository', () => {});
@@ -105,8 +104,8 @@ describe('Webhooks Controller', () => {
         });
 
         describe('Valid GitHub Events', () => {
-            // GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {
-            ['CheckRun'].map(async eventTypeKey => {
+            GITHUB_WEBHOOK_EVENT_TYPES.map(eventTypeKey => {
+                // ['CheckRun'].map(async eventTypeKey => {
                 describe(`${eventTypeKey}`, () => {
                     const eventType = GitHubWebhookEvents[eventTypeKey];
 
@@ -120,24 +119,14 @@ describe('Webhooks Controller', () => {
                                 `parser/eventModels/${eventType}/sample.json`
                             )
                         );
-
-                        // expectedData = {
-                        // 	id: GIT_TESTING_REPOSITORY,
-                        // 	createdAt: new Date(),
-                        // 	eventType: GitHubWebhookEvents[eventTypeKey],
-                        // 	action: sampleJson.action,
-                        // 	sender: sampleJson.sender ? sampleJson.sender.login : 'unknown'
-                        // };
-                        // mockWebhooksRepository.store = jest.fn(async () => expectedData);
                     });
 
                     it('Should store the webhook and respond with a 201', async () => {
-                        console.log(`GIT_TESTING_REPOSITORY = ${repo.id}`);
                         const originalWebhooks = await webhooksService.getAll(
                             repo,
                             GIT_TESTING_USER_EMAIL
                         );
-                        return request(app.getHttpServer())
+                        return await request(app.getHttpServer())
                             .post(`/webhook/${repo.id}`)
                             .send(sampleJson)
                             .set(
@@ -145,16 +134,7 @@ describe('Webhooks Controller', () => {
                                 GitHubWebhookEvents[eventTypeKey]
                             )
                             .expect(201)
-                            .expect(res => expect(res.body).toStrictEqual({}))
-                            .expect(async () => {
-                                const webhooks = await webhooksService.getAll(
-                                    repo,
-                                    GIT_TESTING_USER_EMAIL
-                                );
-                                return expect(webhooks.length).toEqual(
-                                    originalWebhooks.length + 1
-                                );
-                            });
+                            .expect(res => expect(res.body).toStrictEqual({}));
                     });
                 });
             });

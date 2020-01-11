@@ -24,6 +24,4 @@ describe('AppEventResolver', () => {
     it('should be defined', () => {
         expect(resolver).toBeDefined();
     });
-
-    // TODO: How to test subscription?
 });

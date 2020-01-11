@@ -1,4 +1,4 @@
-import { GitHubWebhookEvent } from '@game-of-git/common';
+import { GitHubWebhookEvent, UserIdOrEmailArgs } from '@game-of-git/common';
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import { GitHubWebhookEventCreateInput } from '../../../generated/prisma-client';
@@ -136,6 +136,7 @@ export class WebhooksRepository {
             loadEventsData.pageSize <= PAGE_SIZE_LIMIT
                 ? loadEventsData.pageSize
                 : PAGE_SIZE_LIMIT;
+        console.log(`using page size ${pageSize}`);
 
         const events = await this.prisma.client.gitHubWebhookEvents({
             where: {
@@ -193,6 +194,14 @@ export class WebhooksRepository {
             TableName: WEBHOOK_EVENTS_TABLE_NAME,
             Key: {
                 eventKey
+            }
+        });
+    }
+
+    async deleteUsersRepositoriesEvents(userIdOrEmail: UserIdOrEmailArgs) {
+        await this.prisma.client.deleteManyGitHubWebhookEvents({
+            repository: {
+                addedBy: userIdOrEmail
             }
         });
     }

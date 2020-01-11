@@ -1,10 +1,16 @@
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as path from 'path';
+import { PubSubEngine } from 'type-graphql';
 import { GitHubWebhookEvent } from '../../../generated/prisma-client';
 import { PrismaModule } from '../../../prisma/prisma.module';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { MockCommandBus } from '../../../utilities/MockCommandBus';
 import TestingUtilities from '../../../utilities/testing';
+import { createOrRetrieveAppKey } from '../../../utilities/testing/git.app-key.prisma';
+import { createOrRetrieveRepository } from '../../../utilities/testing/git.repository.prisma';
+import { clearTestData } from '../../../utilities/testing/teardown';
+import { createOrRetrieveUser } from '../../../utilities/testing/user.prisma';
 import { AppKeyModule } from '../app-key/app-key.module';
 import { AppKeyService } from '../app-key/app-key.service';
 import { GitClientModule } from '../git-client.module';
@@ -18,23 +24,6 @@ import { ParserService } from './parser/parser.service';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksRepository } from './webhooks.repository';
 import { WebhooksService } from './webhooks.service';
-import ps from '../../../pubsub';
-import { PubSubEngine } from 'type-graphql';
-import { PrismaService } from '../../../prisma/prisma.service';
-import {
-    clearAppKey,
-    clearUserAppKeys,
-    createOrRetrieveAppKey
-} from '../../../utilities/testing/git.app-key.prisma';
-import {
-    clearUser,
-    createOrRetrieveUser
-} from '../../../utilities/testing/user.prisma';
-import {
-    clearRepository,
-    createOrRetrieveRepository
-} from '../../../utilities/testing/git.repository.prisma';
-import { clearTestData } from '../../../utilities/testing/teardown';
 
 const mockGitClientService = jest.mock('./../git-client.service');
 const mockAppKeyService = jest.mock('./../app-key/app-key.service');
@@ -100,7 +89,10 @@ describe('WebhooksService', () => {
         prisma = module.get<PrismaService>(PrismaService);
 
         // create or retrieve user, appKey, and repository?
-        user = await createOrRetrieveUser(prisma);
+        user = await createOrRetrieveUser(prisma, {
+            email: 'someTestEmailForWebhooksService@gmail.com',
+            name: 'someTestUserForWebhooksService'
+        });
         appKey = await createOrRetrieveAppKey(prisma, {
             key: TEST_APP_KEY,
             user: {
@@ -109,7 +101,7 @@ describe('WebhooksService', () => {
         });
         repository = await createOrRetrieveRepository(prisma, user, appKey, {
             name: REPOSITORY,
-            idExternal: 'someIdExternal',
+            idExternal: 'someIdExternalWebhooksServiceTest',
             createdAtExternal: new Date().toISOString(),
             updatedAtExternal: new Date().toISOString(),
             description: '',
@@ -126,7 +118,8 @@ describe('WebhooksService', () => {
     });
 
     afterAll(async () => {
-        await clearTestData(prisma, { email: user.email });
+        await clearTestData(prisma, user);
+        console.log('Webhooks Service cleared user data for ', user);
     });
 
     it('should be defined', () => {

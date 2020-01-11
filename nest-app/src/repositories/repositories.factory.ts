@@ -6,7 +6,9 @@ export const repositoryFactory = (repoData?: Partial<Repository>) => {
             ? repoData.name
             : 'Some Repository Default Name';
     const idExternal =
-        repoData && repoData.name ? repoData.name : 'someIdExternal';
+        repoData && repoData.name
+            ? repoData.name
+            : 'someIdExternalRepositoriesFactory';
     const createdAtExternal =
         repoData && repoData.createdAtExternal
             ? (repoData.createdAtExternal as any).toISOString()

@@ -1,7 +1,11 @@
 {
     "name": "game-of-git",
     "private": true,
-    "workspaces": ["common", "nest-app", "web-app"],
+    "workspaces": [
+        "common",
+        "nest-app",
+        "web-app"
+    ],
     "version": "1.0.0",
     "main": "index.js",
     "repository": "git@github.com:miking-the-viking/game-of-git.git",
@@ -9,7 +13,7 @@
     "license": "MIT",
     "husky": {
         "hooks": {
-            "pre-commit": "lint-staged -r",
+            "pre-commit": "lint-staged",
             "prepare-commit-msg": "exec < /dev/tty && git cz --hook"
         }
     },
@@ -21,7 +25,7 @@
     },
     "scripts": {
         "commy": "git-cz"
-      },    
+    },
     "dependencies": {
         "husky": "^3.0.9",
         "lint-staged": "^9.4.3",

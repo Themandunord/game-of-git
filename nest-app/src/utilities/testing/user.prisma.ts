@@ -28,7 +28,8 @@ export const createOrRetrieveUser = async (
             userData.password || TEST_PASSWORD
         ),
         gitLogin: userData.gitLogin || TEST_GIT_LOGIN,
-        role: userData.role || Role.ADMIN
+        role: userData.role || Role.ADMIN,
+        name: userData.name || null
     };
 
     const createdUser = await prisma.client.createUser(createUserData);
@@ -43,5 +44,6 @@ export const clearUser = async (
     prisma: PrismaService,
     userIdOrEmailArgs: UserIdOrEmailArgs
 ) => {
+    console.log(userIdOrEmailArgs);
     return await prisma.client.deleteUser(userIdOrEmailArgs);
 };

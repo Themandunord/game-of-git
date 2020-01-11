@@ -223,13 +223,13 @@ describe('AppKeyService', () => {
                 {
                     it: 'on id',
                     data: {
-                        id: 'asdfasdfqwer3242raegv45wgw45'
+                        id: 'asdfasdfqwer3242raegv45wgw45aassdddf'
                     }
                 },
                 {
                     it: 'on key',
                     data: {
-                        key: 'asdfasdfqwer3242raegv45wgw45'
+                        key: 'asdfasdfqwer3242raegv45wgw4rrrrrrfff5'
                     }
                 }
             ];
@@ -475,8 +475,8 @@ describe('AppKeyService', () => {
 
                 it('Returns a valid App Key Model', () => {
                     expect(result).toMatchObject({
-                        key: '84dc870c0eb656631a3a8e7dc087d1e396530b71',
-                        name: 'appKeyServiceTestToken'
+                        key: validCreateAppKeyData.key,
+                        name: validCreateAppKeyData.name
                     });
                     expect(result.id).toBeDefined();
                 });

@@ -17,6 +17,7 @@ describe('GitClientService', () => {
     let service: GitClientService;
     const VALID_GIT_APP_KEY = process.env.GIT_TESTING_TOKEN;
     const GIT_USER = process.env.GIT_TESTING_USER;
+    const GIT_USER_EMAIL = process.env.GIT_TESTING_USER_EMAIL;
     const GIT_REPO = process.env.GIT_TESTING_REPOSITORY;
 
     beforeEach(async () => {
@@ -57,14 +58,14 @@ describe('GitClientService', () => {
     });
 
     describe("Retrieving a user's repositories", () => {
-        it('Should return an array of repositories from the API cal', async () => {
+        it('Should return an array of repositories from the API call', async () => {
             appKeyServiceMock.getAllByUserIdOrEmail = jest.fn(async () => [
                 {
                     key: VALID_GIT_APP_KEY
                 } as AppKey
             ]);
 
-            const result = await service.getAll('123123123', GIT_USER, 1);
+            const result = await service.getAll(GIT_USER_EMAIL, GIT_USER, 1);
 
             // should be an array
             expect(result).toBeInstanceOf(Array);

@@ -46,7 +46,6 @@ export class GitClientService {
         const key = appKey ? appKey.key : null;
 
         const query = GET_REPOSITORIES(owner, count);
-
         const result = await gitHubGql(key, {
             query
         });

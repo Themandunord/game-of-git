@@ -50,6 +50,9 @@ describe('AppEventService', () => {
 
                 service.sendAppEvent(payload);
                 expect(psMock.publish).toBeCalledTimes(1);
+                expect(psMock.publish).toBeCalledWith(APP_EVENT_NAME, {
+                    appEvent: payload
+                });
             });
         });
     });
