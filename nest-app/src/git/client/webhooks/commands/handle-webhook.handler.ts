@@ -19,12 +19,11 @@ export class HandleWebhookHandler
         this.logger.log(
             `Executing Handler HandleWebhookCommandHandler for webhook id ${command.webhookId}`
         );
-        // console.log(command);
 
         const webhook: AGitHubEvent = this.eventPublisher.mergeObjectContext(
             await this.webhooksRepository.loadEvent(command.webhookId)
         );
-        // console.log('merged object context: ', webhook);
+
         webhook.beginProcessing();
 
         if (webhook.events.length > 0) {

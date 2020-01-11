@@ -8,8 +8,6 @@ import { PrismaService } from '../prisma/prisma.service';
 
 export const USER_MUTATED_EVENT_NAME = 'userMutated';
 
-// @Resolver(of => User)
-// @UseGuards(GqlAuthGuard)
 @Injectable()
 export class UserInternalResolver {
     constructor(private prisma: PrismaService) {}

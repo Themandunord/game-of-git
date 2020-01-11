@@ -13,8 +13,6 @@ export class AppEventResolver {
         name: APP_EVENT_NAME
     })
     async appEvent(@Context() context: ExecutionContext) {
-        console.log('SUBSCRIPTION CALL');
-        console.log('appEvent subscription', context);
         return this.pubSub.asyncIterator(APP_EVENT_NAME);
     }
 }
