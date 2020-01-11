@@ -12,33 +12,20 @@ import { AppKey } from '../../../generated/prisma-client/index';
 import { PrismaModule } from '../../../prisma/prisma.module';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { UserInternalModule } from '../../../user/user.internal.module';
-import {
-    clearAppKey,
-    clearUserAppKeys,
-    createOrRetrieveAppKey
-} from '../../../utilities/testing/git.app-key.prisma';
-import {
-    clearUser,
-    createOrRetrieveUser
-} from '../../../utilities/testing/user.prisma';
+import { createOrRetrieveAppKey } from '../../../utilities/testing/git.app-key.prisma';
+import { clearTestData } from '../../../utilities/testing/teardown';
+import { createOrRetrieveUser } from '../../../utilities/testing/user.prisma';
 import { UserService } from '../../user/user.service';
 import { GitClientModule } from '../git-client.module';
 import { AppKeyInternalResolver } from './app-key.internal.resolver';
 import { AppKeyService } from './app-key.service';
 import { CreateAppKeyInput } from './dto/create-app-key.input';
-import { clearTestData } from '../../../utilities/testing/teardown';
 
 const GIT_TESTING_TOKEN = process.env.GIT_TESTING_TOKEN;
 const GIT_TESTING_USER = process.env.GIT_TESTING_USER;
 const GIT_TESTING_REPOSITORY = process.env.GIT_TESTING_REPOSITORY;
 const GIT_TESTING_USER_EMAIL = process.env.GIT_TESTING_USER_EMAIL;
 
-// const gitClientServiceMock = jest.genMockFromModule<GitClientService>(
-//     '../git-client.service'
-// );
-// const appKeyInternalResolverMock = jest.genMockFromModule<
-//     AppKeyInternalResolver
-// >('./app-key.internal.resolver');
 const userServiceMock = jest.mock('../../user/user.service');
 
 const TEST_APP_KEY_SCENARIOS = [
@@ -141,8 +128,6 @@ describe('AppKeyService', () => {
             imports: [PrismaModule, GitClientModule, UserInternalModule],
             providers: [AppKeyService, AppKeyInternalResolver]
         })
-            // .overrideProvider(GitClientService)
-            // .useValue(gitClientServiceMock)
             .overrideProvider(UserService)
             .useValue(userServiceMock)
             .compile();

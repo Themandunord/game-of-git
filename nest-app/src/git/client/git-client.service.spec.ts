@@ -7,7 +7,6 @@ import { WebhooksModule } from './webhooks/webhooks.module';
 import { WebhooksService } from './webhooks/webhooks.service';
 import { AppKey } from '@game-of-git/common';
 
-// const appKeyServiceMock = jest.mock('./../app-key/app-key.service');
 const appKeyServiceMock = jest.genMockFromModule<AppKeyService>(
     './app-key/app-key.service'
 );

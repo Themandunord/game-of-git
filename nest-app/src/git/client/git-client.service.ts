@@ -130,7 +130,6 @@ export class GitClientService {
 
             return true;
         } catch (e) {
-            console.log('ERROR TESTING THE APP KEY');
             this.logger.error(
                 'Error testing the app key: ' + e + ' likely invalid.'
             );

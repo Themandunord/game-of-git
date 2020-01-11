@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppEventResolver } from './app-event.resolver';
 import ps from '../pubsub';
-import { PubSubEngine } from 'type-graphql';
-// const psMock = (jest.genMockFromModule<jest.Mocked<PubSubEngine>>('../pubsub') as any).default as jest.Mocked<PubSubEngine>;
 
 describe('AppEventResolver', () => {
     let resolver: AppEventResolver;

@@ -54,11 +54,11 @@ describe('WebhooksService', () => {
     beforeAll(async () => {
         mockCommandBus = new MockCommandBus();
 
-        mockWebhookEventsResolver.create = async (
-            gitHubWebhookEventInput: GitHubWebhookEventInput
-        ) => {
-            return {} as GitHubWebhookEvent;
-        };
+        // mockWebhookEventsResolver.create = async (
+        //     gitHubWebhookEventInput: GitHubWebhookEventInput
+        // ) => {
+        //     return {} as GitHubWebhookEvent;
+        // };
 
         const module: TestingModule = await Test.createTestingModule({
             imports: [GitClientModule, AppKeyModule, CqrsModule, PrismaModule],
@@ -81,8 +81,8 @@ describe('WebhooksService', () => {
             .useValue(mockGitClientService)
             .overrideProvider(AppKeyService)
             .useValue(mockAppKeyService)
-            .overrideProvider(WebhookEventsResolver)
-            .useValue(mockWebhookEventsResolver)
+            // .overrideProvider(WebhookEventsResolver)
+            // .useValue(mockWebhookEventsResolver)
             .compile();
 
         service = module.get<WebhooksService>(WebhooksService);
@@ -90,25 +90,25 @@ describe('WebhooksService', () => {
 
         // create or retrieve user, appKey, and repository?
         user = await createOrRetrieveUser(prisma, {
-            email: 'someTestEmailForWebhooksService@gmail.com',
-            name: 'someTestUserForWebhooksService'
+            email: 'someTestEmailForWebhooksService123@gmail.com',
+            name: 'someTestUserForWebhooksService123'
         });
         appKey = await createOrRetrieveAppKey(prisma, {
-            key: TEST_APP_KEY,
+            key: TEST_APP_KEY + 'webhooksServiceAppKey123',
             user: {
                 email: user.email
             }
         });
         repository = await createOrRetrieveRepository(prisma, user, appKey, {
-            name: REPOSITORY,
-            idExternal: 'someIdExternalWebhooksServiceTest',
+            name: REPOSITORY + 'webhooksServiceTest123',
+            idExternal: 'someIdExternalWebhooksServiceTest123',
             createdAtExternal: new Date().toISOString(),
             updatedAtExternal: new Date().toISOString(),
             description: '',
             homepageUrl: '',
             url: '',
             owner: '',
-            isTracked: false,
+            isTracked: true,
             isFork: false,
             isLocked: false,
             isPrivate: false,
@@ -118,7 +118,13 @@ describe('WebhooksService', () => {
     });
 
     afterAll(async () => {
-        await clearTestData(prisma, user);
+        try {
+            await clearTestData(prisma, {
+                email: user.email
+            });
+        } catch (e) {
+            console.error('ERROR CLEARING DATA FOR WEBHOOKS SERVICE', e);
+        }
         console.log('Webhooks Service cleared user data for ', user);
     });
 
