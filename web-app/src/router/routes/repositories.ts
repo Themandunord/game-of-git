@@ -1,7 +1,7 @@
 export const REPOSITORIES = {
 	path: '/repositories',
 	name: 'repositories',
-	displayName: 'Repositories by User',
+	displayName: 'My GitHub Repositories',
 	// route level code-splitting
 	// this generates a separate chunk (about.[hash].js) for this route
 	// which is lazy-loaded when the route is visited.

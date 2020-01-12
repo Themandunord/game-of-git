@@ -5,13 +5,14 @@ v-layout(row)
 			v-container
 				v-layout
 					v-flex(xs-12 md4)
-						v-text-field(v-model="userOfInterest" label="GitHub User" :placeholder="myUsername")
+						//- v-text-field(v-model="repoOfInterest" label="GitHub User" :placeholder="myUsername")
+						v-text-field(v-model="repoOfInterest" label="Repository Filter")
 		v-simple-table
 			thead
 				tr
 					th.text-left(v-for="tableColumn in tableColumns") {{tableColumn.header}}
 			tbody
-				tr(v-for="repo in repos" :key="repo.name")
+				tr(v-for="repo in selectableRepos" :key="repo.name")
 					td
 						v-avatar.clickable(
 							:tile="false"
@@ -51,18 +52,20 @@ v-layout(row)
 							:title="repo.isPrivate ? 'Repository is Private' : 'Repository is Public'"
 						)
 							v-icon {{repo.isPrivate ? 'lock' : 'lock_open'}}
-					td 
-						v-btn(
-							fab
-							small
-							:color="repo.isTracked ? 'cyan' : 'grey'"
-							center
-							right
-							relative
-							@click.stop="toggleRepoTracking(repo.name, userOfInterest)"
-							:title="repo.isTracked ? 'Turn Tracking off' : 'Turn Tracking on'"
-						)
-							v-icon {{repo.isTracked ? "star" : "star_border"}}
+					td
+						v-btn-toggle
+							v-btn(
+								:color="repo.isTracked ? 'cyan' : 'lightgrey'"
+								center
+								right
+								relative
+								@click.stop="repo.isTracked ? goToGame(repo) : createGame(repo)"
+								:title="repo.isTracked ? 'Enter Game' : 'Turn Tracking on'"
+							)
+								v-icon {{repo.isTracked ? "star" : "star_border"}}
+								| {{repo.isTracked ? "Game On!" : "Start Game!"}}
+							v-btn(v-if="repo.isTracked" color="red" @click.stop="endGame(repo)" :title="'Stop Tracking and end the Game'")
+								v-icon close
 </template>
 
 <script lang="tsx">
@@ -90,7 +93,7 @@ const tableColumns: RepositoryTableColumn[] = [
 	{ header: 'Updated At', body: null },
 	{ header: 'Fork', body: null },
 	{ header: 'Private', body: null },
-	{ header: 'Tracked', body: null }
+	{ header: 'Game State', body: null }
 ];
 
 const REPOSITORY_EDITED = gql`
@@ -107,7 +110,7 @@ const REPOSITORY_EDITED = gql`
 @Component({
 	subscriptions() {
 		return {
-			userOfInterestObservable: this.$fromDOMEvent('input', 'keyup').pipe(
+			repoOfInterestObservable: this.$fromDOMEvent('input', 'keyup').pipe(
 				debounceTime(300),
 				pluck<Event, string>('target', 'value')
 			)
@@ -115,28 +118,24 @@ const REPOSITORY_EDITED = gql`
 	}
 })
 export default class RepositoriesControlList extends Vue {
-	private repos = new Array();
-	private userOfInterest: string = AppStateModule.user.gitLogin || '';
-	private userOfInterestObservable: string = '';
+	private userRepos = new Array();
+
+	private repoOfInterest: string = '';
+	private repoOfInterestObservable: string = '';
 	private tableColumns = tableColumns;
 	private repositoryListObserver!: any;
 
 	get selectableRepos() {
-		return this.repos;
-	}
-
-	set selectableRepos(newVal: any[]) {
-		this.repos = newVal;
+		return this.userRepos.filter(val => val.name.indexOf(this.repoOfInterest) >= 0);
 	}
 
 	private updateRepository(repoData: any) {
-		const updatedRepos = this.selectableRepos.map(repo => {
+		this.userRepos = this.userRepos.map(repo => {
 			return {
 				...repo,
 				isTracked: repo.id === repoData.idExternal ? repoData.isTracked : repo.isTracked
 			};
 		});
-		this.selectableRepos = updatedRepos;
 	}
 
 	private configureRepositoryMutatedSubscription() {
@@ -160,15 +159,6 @@ export default class RepositoriesControlList extends Vue {
 
 	async mounted() {
 		this.configureRepositoryMutatedSubscription();
-	}
-
-	get hasAppKey() {
-		return AppStateModule.hasAppKey;
-	}
-
-	@Watch('hasAppKey')
-	@Watch('userOfInterestObservable')
-	reloadRepos() {
 		this.loadSelectableRepositories();
 	}
 
@@ -180,17 +170,48 @@ export default class RepositoriesControlList extends Vue {
 		return AppStateModule.user.gitLogin;
 	}
 
+	get hasAppKey() {
+		return AppStateModule.hasAppKey;
+	}
+
+	get userGitLogin() {
+		return AppStateModule.user ? AppStateModule.user.gitLogin : null;
+	}
+
+	@Watch('hasAppKey', {
+		immediate: true
+	})
 	private async loadSelectableRepositories() {
 		if (!this.hasAppKey) {
 			throw new Error(
 				`User ${AppStateModule.user.email} has no AppKey, unable to query GitHub API`
 			);
 		}
-		this.selectableRepos = await repositoryList(this.userOfInterest);
+		this.userRepos = await repositoryList(this.userGitLogin || '');
+
+		RepositoriesStateModule.setRepositories(this.userRepos);
 	}
 
-	private async toggleRepoTracking(repo: string, owner: string) {
-		await trackRepository(repo, owner);
+	private goToGame(repo: any) {
+		this.$router.push({
+			name: 'repository-dashboard',
+			params: {
+				id: repo.id
+			}
+		});
+	}
+
+	private createGame(repo: any) {
+		this.$router.push({
+			name: 'setup-game',
+			params: {
+				repository: repo.name
+			}
+		});
+	}
+
+	private async endGame(repo: any) {
+		// endGame()
 	}
 
 	private open(url: string) {

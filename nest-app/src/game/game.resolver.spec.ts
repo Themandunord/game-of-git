@@ -2,6 +2,8 @@ import { PrismaModule } from './../prisma/prisma.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { GameResolver } from './game.resolver';
 import { PrismaService } from '../prisma/prisma.service';
+import { GameService } from './game.service';
+import { RepositoriesModule } from '../repositories/repositories.module';
 
 const mockPrismaService = jest.genMockFromModule<PrismaService>(
     '../prisma/prisma.service'
@@ -12,8 +14,8 @@ describe('GameResolver', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [PrismaModule],
-            providers: [GameResolver]
+            imports: [PrismaModule, RepositoriesModule],
+            providers: [GameResolver, GameService]
         })
             .overrideProvider(PrismaService)
             .useValue(mockPrismaService)

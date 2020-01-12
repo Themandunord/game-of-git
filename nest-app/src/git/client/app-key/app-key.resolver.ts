@@ -61,8 +61,14 @@ export class AppKeyResolver {
         @Args() data: AppKeyKeyArgs,
         @UserEntity() user: User
     ) {
+        console.log('invoking validate');
+        const valid = await this.appKeyService.validate(
+            data.appKey,
+            user.gitLogin
+        );
+        console.log('validate returned: ', valid);
         return {
-            valid: await this.appKeyService.validate(data.appKey, user.gitLogin)
+            valid
         };
     }
 }

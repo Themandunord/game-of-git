@@ -6,6 +6,7 @@ import { WebhooksModule } from '../git/client/webhooks/webhooks.module';
 import { GitClientService } from '../git/client/git-client.service';
 import { WebhooksService } from '../git/client/webhooks/webhooks.service';
 import { PrismaModule } from '../prisma/prisma.module';
+import ps from '../pubsub';
 
 const gitClientServiceMock = jest.mock('./../git/client/git-client.service');
 const webhooksServiceMock = jest.mock(
@@ -19,7 +20,14 @@ describe('RepositoriesService', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [GitClientModule, WebhooksModule, PrismaModule],
-            providers: [RepositoriesService, RepositoriesResolver]
+            providers: [
+                RepositoriesService,
+                RepositoriesResolver,
+                {
+                    provide: 'PUB_SUB',
+                    useValue: ps
+                }
+            ]
         })
             .overrideProvider(GitClientService)
             .useValue(gitClientServiceMock)

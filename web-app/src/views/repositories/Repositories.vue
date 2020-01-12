@@ -1,6 +1,6 @@
 <template lang="pug">
 v-container(fluid)
-    h2.display-3 GitHub Repositories
+    h2.display-3 My GitHub Repositories
     RepositoriesList
 </template>
 
@@ -14,9 +14,5 @@ import RepositoriesList from '@/components/repositories/RepositoriesList.vue';
 		RepositoriesList
 	}
 })
-export default class Repositories extends Vue {
-	beforeMount() {
-		// RepositoriesStateModule.syncStoredRepositories();
-	}
-}
+export default class Repositories extends Vue {}
 </script>

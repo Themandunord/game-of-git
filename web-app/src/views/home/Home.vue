@@ -1,21 +1,16 @@
 <template lang="pug">
 v-container(fluid)
-    blockquote.blockquote
-        h2.display-3 A Game of Git
-
-        p Git is Love. Git is Life
-        p We code because we love to and we love to have fun.
-            | The evolution of a codebase is an intricate dance that fascinates and inspires us to achieve more.
-        p This application is designed to add a sense of adventure to the development sprint and its related tasks utilizing the rich API provided through GitHub.
+    v-content
+        router-view
 
     //- Game
-
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import Game from '../../game/components/Game.vue';
 import RepositoriesStateModule from '@/store/aspects/repositories';
+import AppStateModule from '@/store/aspects/app';
 
 @Component({
 	components: {
@@ -25,6 +20,19 @@ import RepositoriesStateModule from '@/store/aspects/repositories';
 export default class Home extends Vue {
 	beforeMount() {
 		RepositoriesStateModule.syncStoredRepositories();
+	}
+
+	get hasAppKey() {
+		return AppStateModule.hasAppKey;
+	}
+
+	@Watch('hasAppKey', {
+		immediate: true
+	})
+	private redirect() {
+		if (!this.hasAppKey && !(this.$router.currentRoute.name === 'no-app-key')) {
+			this.$router.push('no-app-key');
+		}
 	}
 }
 </script>

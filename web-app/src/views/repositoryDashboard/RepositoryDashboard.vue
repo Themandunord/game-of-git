@@ -61,7 +61,7 @@ export default class RepositoryDashboard extends Vue {
 		immediate: true
 	})
 	private async keepRepositoryDataFresh() {
-		if (!this.shouldRefresh) {
+		if (!this.shouldRefresh || !this.repository) {
 			return;
 		}
 

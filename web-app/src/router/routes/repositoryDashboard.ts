@@ -1,7 +1,11 @@
 export const REPOSITORY_DASHBOARD = {
 	path: '/repositories/:id/dashboard',
-	name: 'repository dashboard',
-	props: true,
+	name: 'repository-dashboard',
+	props: {
+		id: {
+			type: String
+		}
+	},
 	displayName: 'Repository Dashboard',
 	// route level code-splitting
 	// this generates a separate chunk (about.[hash].js) for this route
