@@ -1,35 +1,32 @@
 <template lang="pug">
 
 v-layout(row justify-center)
-    v-dialog(v-model="dialog" persistent max-width="600px")
-        template(v-slot:activator="{ on }")
-            v-btn(color="success" dark v-on="on") Add App Key
-        v-card
-            v-card-title
-                span(class="headline") New GitHub App Key
-            v-card-text
-                v-container(grid-list-md)
-                    v-layout(wrap)
-                        v-flex(xs12)
-                            v-text-field(
-								label="App Key Name"
-								required
-								v-model="name"
-								:errorMessages="errorMessages.name"
-                           	 	@keypress.enter="save"
-								)
-                        v-flex(xs12)
-                            v-text-field(
-								label="GitHub App Key"
-								required
-								v-model="key"
-								:errorMessages="errorMessages.key"
-                            	@keypress.enter="save"
-							)
+    v-card
+        v-card-title
+            span.headline New GitHub App Key
+        v-card-text
+            v-container(grid-list-md)
+                v-layout(wrap)
+                    v-flex(xs12)
+                        v-text-field(
+                            label="App Key Name"
+                            required
+                            v-model="name"
+                            :errorMessages="errorMessages.name"
+                            @keypress.enter="save"
+                            )
+                    v-flex(xs12)
+                        v-text-field(
+                            label="GitHub App Key"
+                            required
+                            v-model="key"
+                            :errorMessages="errorMessages.key"
+                            @keypress.enter="save"
+                        )
         v-card-actions
-          v-spacer
-          v-btn(color="blue darken-1" @click="dialog = false") Close
-          v-btn(color="blue darken-1" @click="save" :disabled="!appKeyIsValid") Save
+            v-spacer
+            v-btn(color="blue darken-1" @click="dialog = false") Close
+            v-btn(color="blue darken-1" @click="save" :disabled="!appKeyIsValid") Save
 </template>
 
 <script lang="ts">
@@ -91,7 +88,6 @@ type AddAppKeyResponsePossibilities = AddAppKeyResponse | undefined;
 
 @Component
 export default class AddAppKeyForm extends ErrorHandlerVueComponent {
-	private dialog = false;
 	private name: string | null = null;
 	private key: string | null = null;
 	private appKeyIsValid: boolean = false;

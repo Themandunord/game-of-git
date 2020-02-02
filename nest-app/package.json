@@ -57,7 +57,7 @@
         "rxjs": "6.5.3",
         "subscriptions-transport-ws": "^0.9.16",
         "swagger-ui-express": "4.0.7",
-        "type-graphql": "0.17.5",
+        "type-graphql": "^0.17.6",
         "typeorm": "^0.2.20",
         "typescript": "^3.7.4",
         "winston": "^3.2.1"

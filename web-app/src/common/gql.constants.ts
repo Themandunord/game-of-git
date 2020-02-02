@@ -19,6 +19,35 @@ export const GQL_QUERIES = {
 			}
 		`
 	},
+	GAME: {
+		createGame: gql`
+			mutation($gameType: String!, $owner: String!, $repository: String!) {
+				createGame(data: { gameType: $gameType, owner: $owner, repository: $repository }) {
+					id
+					createdAt
+					updatedAt
+					title
+					owner {
+						id
+						email
+						name
+					}
+					type
+				}
+			}
+		`,
+		endGame: gql`
+			mutation($gameId: String!) {
+				endGame(data: $gameId) {
+					id
+					createdAt
+					updatedAt
+					title
+					type
+				}
+			}
+		`
+	},
 	REPOSITORIES: {
 		repositoryList: gql`
 			query($username: String!) {
@@ -30,6 +59,9 @@ export const GQL_QUERIES = {
 					isPrivate
 					isTracked
 					name
+					game {
+						id
+					}
 					owner {
 						avatarUrl
 						id

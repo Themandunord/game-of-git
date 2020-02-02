@@ -1,21 +1,88 @@
-import { GameType } from '@game-of-git/common';
+import { GameType, CreateGameInput, User } from '@game-of-git/common';
 import { Injectable, Logger } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { RepositoriesService } from '../repositories/repositories.service';
 
 @Injectable()
 export class GameService {
     private logger = new Logger('GameService');
-    public createGame(type: GameType, repositoryId: string) {
+
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly repositoriesService: RepositoriesService
+    ) {}
+    public async createGame(user: User, createGameInput: CreateGameInput) {
         this.logger.log(
-            `create game in game service of type ${type} for repo ${repositoryId}`
+            `create game in game service of type ${createGameInput.gameType} for ${createGameInput.owner}'s repo ${createGameInput.repository}`
         );
 
-        // What happens in game creation?
-        // TODO: Save the base config for the game
-        // TODO: Add Listeners for Webhook Events concerning this Game's repository
+        // Start Tracking the Repository
+        const repository = await this.repositoriesService.trackRepository(
+            user,
+            {
+                owner: createGameInput.owner,
+                repository: createGameInput.repository
+            }
+        );
+
+        this.logger.log(
+            `Tracking repository ${repository.name}   (${repository.id})`
+        );
+
+        // Save Game & Config
+        let game = await this.prisma.client
+            .repository({ id: repository.id })
+            .game();
+
+        if (!game) {
+            this.logger.log(
+                'Game did not exist for repository, creating new one.'
+            );
+            game = await this.prisma.client.createGame({
+                owner: {
+                    connect: {
+                        email: user.email
+                    }
+                },
+                repository: {
+                    connect: {
+                        id: repository.id
+                    }
+                },
+                title: 'Some Game',
+                type: createGameInput.gameType
+            });
+        }
+
+        // TODO: How to track Game Delta?
+
         // TODO: Storing the delta of the game config for playback, debugging, etc.
         // TODO: Game Data storage (present world instance, rapid read/write)
         // TODO: Type-Specific Requirements (World Generation)
         // TODO: *Character Creator (DOWN THE LINE)
-        return `Creating game of type ${type} for repository ${repositoryId}`;
+
+        // ***** EPIC ***** Initialize Repository Scrape
+        // Scrapes the repository for its entire history, then builds up a knowledge base of the repository to generate the game from.
+        console.log(
+            `Creating game of type ${createGameInput.gameType} for repository ${createGameInput.repository}`
+        );
+
+        return game;
+    }
+
+    public async endGame(user: User, gameId: string) {
+        this.logger.log(`end game in game service ${gameId}`);
+
+        const repository = await this.prisma.client
+            .game({ id: gameId })
+            .repository();
+
+        await this.repositoriesService.setRepositoryTracking(
+            user,
+            { id: repository.id },
+            false
+        );
+
+        return await this.prisma.client.deleteGame({ id: gameId });
     }
 }

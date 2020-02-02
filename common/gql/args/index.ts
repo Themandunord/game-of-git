@@ -9,3 +9,5 @@ export * from './user.email';
 export * from './user.id';
 export * from './user.idoremail';
 export * from './user.name';
+
+export * from './IdOrName.args';

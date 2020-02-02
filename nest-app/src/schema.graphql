@@ -30,6 +30,12 @@ input CreateAppKeyInput {
   name: String!
 }
 
+input CreateGameInput {
+  gameType: String!
+  owner: String!
+  repository: String!
+}
+
 """Date custom scalar type"""
 scalar Date
 
@@ -262,20 +268,22 @@ type Mutation {
   signup(data: SignupInput!): Auth!
   login(data: LoginInput!): Auth!
   create(gitHubWebhookEvent: GitHubWebhookEventInput!): GitHubWebhookEvent!
+  createGame(data: CreateGameInput!): Game!
+  endGame(data: String!): Game!
+  trackRepository(data: TrackRepositoryInput!): Repository!
   createAppKey(data: CreateAppKeyInput!): AppKey!
   deleteAppKey(id: ID, key: String): AppKey!
-  trackRepository(data: TrackRepositoryInput!): Repository!
 }
 
 type Query {
   post(postId: String!): Game!
   game(postId: String!): Game!
+  repository(repositoryId: String!): Repository!
+  repositoryList(username: String!): [GitHubRepository!]!
   me: User!
   appKey(id: ID, key: String): AppKey!
   userAppKeys(id: ID, email: String): [AppKey!]!
   validateAppKey(appKey: String!): AppKeyIsValid!
-  repository(repositoryId: String!): Repository!
-  repositoryList(username: String!): [GitHubRepository!]!
   helloWorld: String!
   hello(name: String!): String!
 }
@@ -317,9 +325,9 @@ input SignupInput {
 }
 
 type Subscription {
+  repositoryMutated: Repository!
   userMutated: User!
   appEvent: AppEvent!
-  repositoryMutated: Repository!
 }
 
 input TrackRepositoryInput {

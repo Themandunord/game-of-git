@@ -16,13 +16,14 @@ import ps from '../pubsub';
         // WebhooksModule
     ],
     providers: [
-        RepositoriesService,
         RepositoriesResolver,
+        RepositoriesService,
         {
             provide: 'PUB_SUB',
             useValue: ps
         }
     ],
-    controllers: [RepositoriesController]
+    controllers: [RepositoriesController],
+    exports: [RepositoriesService]
 })
 export class RepositoriesModule {}

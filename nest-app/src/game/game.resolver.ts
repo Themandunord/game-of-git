@@ -1,4 +1,10 @@
-import { Game, GameIdArgs, UserIdArgs } from '@game-of-git/common';
+import {
+    CreateGameInput,
+    Game,
+    GameIdArgs,
+    UserIdArgs,
+    User
+} from '@game-of-git/common';
 import {
     Query,
     Resolver,
@@ -9,10 +15,19 @@ import {
     Parent
 } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
+import { UseGuards, Logger } from '@nestjs/common';
+import { GqlAuthGuard } from '../guards/gql-auth.guard';
+import { GameService } from './game.service';
+import { UserEntity } from '../decorators/user.decorator';
 
 @Resolver(of => Game)
 export class GameResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    private readonly logger = new Logger('GameResolver');
+
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly gameService: GameService
+    ) {}
 
     @Query(returns => Game)
     post(@Args() id: GameIdArgs) {
@@ -34,23 +49,21 @@ export class GameResolver {
         return this.prisma.client.game({ id: id.postId });
     }
 
-    // @Query('games')
-    // async getGames(@Args() args, @Info() info): Promise<Game[]> {
-    //     return await this.prisma.client.games(args);
-    // }
+    @Mutation(returns => Game)
+    @UseGuards(GqlAuthGuard)
+    async createGame(
+        @UserEntity() user: User,
+        @Args('data') createGameInput: CreateGameInput
+    ) {
+        this.logger.log('createGame');
 
-    // @Query('game')
-    // async getGame(@Args() args, @Info() info): Promise<Game> {
-    //     return await this.prisma.query.game(args, info);
-    // }
+        return this.gameService.createGame(user, createGameInput);
+    }
 
-    // @Mutation('createGame')
-    // async createGame(@Args() args, @Info() info): Promise<Game> {
-    //     return await this.prisma.mutation.createRepository(args, info);
-    // }
-
-    // @Mutation('updateGame')
-    // async updateGame(@Args() args, @Info() info): Promise<Game> {
-    //     return await this.prisma.mutation.updateGame(args, info);
-    // }
+    @Mutation(returns => Game)
+    @UseGuards(GqlAuthGuard)
+    async endGame(@UserEntity() user: User, @Args('data') gameId: string) {
+        this.logger.log('endGame');
+        return this.gameService.endGame(user, gameId);
+    }
 }

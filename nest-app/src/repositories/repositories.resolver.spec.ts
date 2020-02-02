@@ -4,6 +4,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from './../prisma/prisma.service';
 import { GitClientModule } from '../git/client/git-client.module';
 import ps from '../pubsub';
+import { RepositoriesService } from './repositories.service';
 
 // Set all module functions to jest.fn
 const prismaServiceMock = jest.mock('./../prisma/prisma.service');
@@ -19,7 +20,8 @@ describe('RepositoriesResolver', () => {
                 {
                     provide: 'PUB_SUB',
                     useValue: ps
-                }
+                },
+                RepositoriesService
             ]
         })
             .overrideProvider(PrismaService)

@@ -4,7 +4,7 @@
     "workspaces": [
         "common",
         "nest-app",
-        "web-app"
+        "react-app"
     ],
     "version": "1.0.0",
     "main": "index.js",
