@@ -7,6 +7,18 @@ const useStyle = makeStyles(theme =>
         root: {
             display: 'flex',
         },
+        logoutButton: {
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+        },
+        toolbarIcon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            padding: '0 8px',
+            ...theme.mixins.toolbar,
+        },
         content: {
             flexGrow: 1,
             height: '100vh',

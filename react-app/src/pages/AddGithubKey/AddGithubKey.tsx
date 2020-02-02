@@ -4,7 +4,7 @@ import React, { useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useHistory } from 'react-router';
 import AddGithubKeyForm from '../../components/forms/AddGithubKeyForm/AddGithubKeyForm';
-import { PATH } from '../../router/routes';
+import PATH from '../../router/routes';
 import { UserContext } from '../../store/user';
 import useStyle from './styles';
 

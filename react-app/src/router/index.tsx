@@ -19,7 +19,6 @@ const IndexRouter = () => {
     );
 
     const { dispatch: dispatchUser } = globalUserState;
-    // const { dispatch: dispatchSystem } = globalSystemState;
 
     const loading = globalSystemState.state.loading;
     const loggedIn = globalUserState.state.loggedIn;

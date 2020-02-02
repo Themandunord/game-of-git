@@ -7,7 +7,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { HelmetProvider } from 'react-helmet-async';
 import { render } from '@testing-library/react';
 import AddGithubKey from '../AddGithubKey';
-import { PATH } from '../../../router/routes';
+import PATH from '../../../router/routes';
 import { setUserData } from '../../../store/user/userData';
 import appKeyUserState from '../../../store/user/testUtils/AppKeyUserState';
 import { Button } from '@material-ui/core';

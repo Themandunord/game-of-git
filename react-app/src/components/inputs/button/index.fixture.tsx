@@ -1,10 +1,21 @@
 import React from 'react';
 
 import { Button, ButtonColor, ButtonVariant, ButtonSize } from './Button';
+import GameButton from './GameButton';
+
+const SetupGameButton: React.FC<{
+    repositoryName: string;
+    isTracked: boolean;
+}> = ({ repositoryName, isTracked }) => (
+    <GameButton
+        repositoryName={repositoryName}
+        action={isTracked ? 'play' : 'create'}
+    />
+);
 
 export default {
-    default: <Button size={ButtonSize.Small}>Totally Default Button</Button>,
-    primary: (
+    Default: <Button size={ButtonSize.Small}>Totally Default Button</Button>,
+    Primary: (
         <Button
             color={ButtonColor.Primary}
             disabled={false}
@@ -14,7 +25,7 @@ export default {
             Primary
         </Button>
     ),
-    secondary: (
+    Secondary: (
         <Button
             color={ButtonColor.Secondary}
             disabled={false}
@@ -23,5 +34,8 @@ export default {
         >
             Secondary
         </Button>
+    ),
+    'Game Button': (
+        <SetupGameButton repositoryName={'Some Repository'} isTracked={false} />
     ),
 };

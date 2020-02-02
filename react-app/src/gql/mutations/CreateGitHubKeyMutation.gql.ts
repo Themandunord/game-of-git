@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const CREATE_GITHUB_KEY = gql`
+const CreateGitHubKeyMutation = gql`
     mutation($name: String!, $key: String!) {
         createAppKey(data: { key: $key, name: $name }) {
             id
@@ -14,4 +14,4 @@ const CREATE_GITHUB_KEY = gql`
     }
 `;
 
-export default CREATE_GITHUB_KEY;
+export default CreateGitHubKeyMutation;

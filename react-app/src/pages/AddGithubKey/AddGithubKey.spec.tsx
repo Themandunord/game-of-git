@@ -2,7 +2,7 @@ import React from 'react';
 import AddGithubKeySetup from './testUtils/AddGithubKeySetup';
 import noAppKeyUserState from '../../store/user/testUtils/NoAppKeyUserState';
 import { act } from '@testing-library/react';
-import { PATH } from '../../router/routes';
+import PATH from '../../router/routes';
 
 const ADD_GITHUB_KEY_FORM = 'add-github-key-form' as const;
 

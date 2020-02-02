@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
-import { PATH } from '../routes';
+import PATH from '../routes';
 import AppLayout from '../../components/layouts/AppLayout/AppLayout';
 import { UserContext } from '../../store/user';
 import LOGGED_IN_ROUTES from './LoggedInRoutes';

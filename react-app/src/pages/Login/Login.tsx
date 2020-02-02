@@ -2,7 +2,7 @@ import { Avatar, Container, CssBaseline, Typography } from '@material-ui/core';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import LoginForm from '../../components/forms/LoginForm/LoginForm';
-import { PATH } from '../../router/routes';
+import PATH from '../../router/routes';
 import useStyle from './styles';
 
 const title = PATH.LOGIN.name;

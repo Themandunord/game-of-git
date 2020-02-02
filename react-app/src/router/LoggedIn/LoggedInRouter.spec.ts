@@ -1,16 +1,16 @@
-import React from 'react';
 import appKeyUserState from '../../store/user/testUtils/AppKeyUserState';
 import noAppKeyUserState from '../../store/user/testUtils/NoAppKeyUserState';
-import { PATH } from '../routes';
+import jestMockTestComponentFactory from '../../testUtils/jestMockFactory';
+import PATH from '../routes';
 import LOGGED_IN_ROUTES from './LoggedInRoutes';
 import LoggedInRouterSetup from './testUtils/LoggedInRouterSetup';
 
 Object.entries(PATH).map(([key, value]) =>
-    jest.mock(`../../pages${value.page}`, () => {
-        return () => {
-            return <div data-testid={`${value.name}`}></div>;
-        };
-    }),
+    jestMockTestComponentFactory(
+        jest.mock,
+        `../../pages${value.page}`,
+        value.name,
+    ),
 );
 
 describe('LoggedInRouter', () => {

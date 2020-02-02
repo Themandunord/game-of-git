@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { PATH } from '../../router/routes';
+import PATH from '../../router/routes';
 
 const title = PATH.NOT_FOUND.name;
 

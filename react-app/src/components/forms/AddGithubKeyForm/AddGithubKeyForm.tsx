@@ -3,8 +3,8 @@ import { Button, Container, Grid, Typography } from '@material-ui/core';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
-import CREATE_GITHUB_KEY from '../../../gql/mutations/CreateGitHubKey.gql';
-import VALIDATE_GITHUB_KEY from '../../../gql/queries/ValidateGitHubKey.gql';
+import CreateGitHubKeyMutation from '../../../gql/mutations/CreateGitHubKeyMutation.gql';
+import ValidateGitHubKeyQuery from '../../../gql/queries/ValidateGitHubKeyQuery.gql';
 import { SystemContext } from '../../../store/system';
 import { setIsLoading, setNotLoading } from '../../../store/system/loading';
 import { UserContext } from '../../../store/user';
@@ -25,7 +25,7 @@ const AddGithubKeyForm: React.FC = () => {
     const [valid, setValid] = useState<boolean>(false);
 
     const [createAppKey] = useMutation<any, AddGithubKeyFormData>(
-        CREATE_GITHUB_KEY,
+        CreateGitHubKeyMutation,
     );
 
     const form = useForm<AddGithubKeyFormData>({
@@ -39,7 +39,7 @@ const AddGithubKeyForm: React.FC = () => {
     const [
         validateKey,
         { data: isValidData, loading: isValidLoading },
-    ] = useLazyQuery(VALIDATE_GITHUB_KEY);
+    ] = useLazyQuery(ValidateGitHubKeyQuery);
 
     const handleSubmit = useCallback(
         async (value: AddGithubKeyFormData) => {

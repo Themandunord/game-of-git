@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const VALIDATE_GITHUB_KEY = gql`
+const ValidateGitHubKeyQuery = gql`
     query($key: String!) {
         validateAppKey(appKey: $key) {
             valid
@@ -8,4 +8,4 @@ const VALIDATE_GITHUB_KEY = gql`
     }
 `;
 
-export default VALIDATE_GITHUB_KEY;
+export default ValidateGitHubKeyQuery;

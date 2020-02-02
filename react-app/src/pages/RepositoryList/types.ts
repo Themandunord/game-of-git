@@ -12,7 +12,7 @@ export interface RepositoryListDataItem {
         login: string;
         url: string;
     };
-    game: {
+    game: null | {
         id: string;
         name: string;
     };

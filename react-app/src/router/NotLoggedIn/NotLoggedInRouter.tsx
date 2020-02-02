@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { PATH } from '../routes';
+import PATH from '../routes';
 
 const NotLoggedInRouter: React.FC = () => {
     return (
