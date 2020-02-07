@@ -1,8 +1,8 @@
 import React from 'react';
-import { InputProps } from '../../../InputProps.type';
+import { TextInputProps } from '../../InputProps.type';
 import { TextInput } from '../TextInput';
 
-export const EmailInput = <Form extends {}>(Props: InputProps<Form>) => {
+export const EmailInput = <Form extends {}>(Props: TextInputProps<Form>) => {
     return (
         <TextInput<Form>
             {...Props}

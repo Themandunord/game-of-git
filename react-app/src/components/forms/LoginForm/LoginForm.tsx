@@ -11,7 +11,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { object, string } from 'yup';
-import { PATH } from '../../../router/routes';
+import PATH from '../../../router/routes';
 import { SystemContext } from '../../../store/system';
 import { setIsLoading, setNotLoading } from '../../../store/system/loading';
 import { UserContext } from '../../../store/user';

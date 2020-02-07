@@ -1,4 +1,3 @@
-import { useLazyQuery } from '@apollo/react-hooks';
 import {
     Grid,
     Table,
@@ -10,37 +9,26 @@ import {
 } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import GameButton from '../../components/inputs/button/GameButton';
-import RepositoriesListQuery from '../../gql/queries/RepositoriesListQuery.gql';
-import { PATH } from '../../router/routes';
+import PATH from '../../router/routes';
+import { RepositoriesContext } from '../../store/repositories';
 import { UserContext } from '../../store/user';
-import { RepositoryListDataItem } from './types';
 import RepositoryListTableRow from './components/RepositoryListTableRow';
 
 const title = PATH.REPOSITORY_LIST.name;
 
 const RepositoryList = () => {
     const globalUserState = useContext(UserContext);
-
-    const [
-        getRepositories,
-        {
-            data: retrievedRepositories,
-            // loading: loadingRepositories
-        },
-    ] = useLazyQuery<{
-        repositoryList: RepositoryListDataItem[];
-    }>(RepositoriesListQuery);
+    const { state, loadRepos } = useContext(RepositoriesContext);
 
     const [searchKey, setSearchKey] = useState<string>('');
 
     useEffect(() => {
-        getRepositories({
+        loadRepos({
             variables: {
                 username: globalUserState.state.user?.gitLogin,
             },
         });
-    }, [getRepositories, globalUserState.state.user]);
+    }, [loadRepos, globalUserState.state.user]);
 
     return (
         <div>
@@ -72,8 +60,8 @@ const RepositoryList = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {retrievedRepositories &&
-                                retrievedRepositories.repositoryList
+                            {state.repositories &&
+                                state.repositories
                                     .filter(
                                         repo =>
                                             searchKey === '' ||

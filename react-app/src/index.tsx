@@ -10,20 +10,23 @@ import AppRouter from './router';
 import * as serviceWorker from './serviceWorker';
 import CoreContextProvider from './store/CoreContextProvider';
 import ThemeProvider from './theme/ThemeProvider';
+import ToastProvider from './components/system/ToastProvider/ToastProvider';
 
 const themedApp = (
     <BrowserRouter>
-        <CoreContextProvider>
-            <ThemeProvider>
-                <React.Suspense fallback={<LoadingBar show />}>
-                    <HelmetProvider>
-                        <ApolloProvider client={client}>
-                            <AppRouter />
-                        </ApolloProvider>
-                    </HelmetProvider>
-                </React.Suspense>
-            </ThemeProvider>
-        </CoreContextProvider>
+        <HelmetProvider>
+            <ApolloProvider client={client}>
+                <CoreContextProvider>
+                    <ThemeProvider>
+                        <React.Suspense fallback={<LoadingBar show />}>
+                            <ToastProvider>
+                                <AppRouter />
+                            </ToastProvider>
+                        </React.Suspense>
+                    </ThemeProvider>
+                </CoreContextProvider>
+            </ApolloProvider>
+        </HelmetProvider>
     </BrowserRouter>
 );
 

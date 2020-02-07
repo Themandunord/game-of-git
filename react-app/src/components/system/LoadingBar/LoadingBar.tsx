@@ -3,27 +3,7 @@
  */
 import React from 'react';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from '@material-ui/styles';
-
-const useStyles = makeStyles({
-    progressBar: {
-        backgroundColor: 'rgba(0,0,0,0)',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 10000,
-        width: '100%',
-    },
-    blurOverly: {
-        filter: 'blur(10px)',
-        backgroundColor: 'rgba(0,0,0,0)',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 10000,
-        width: '100%',
-    },
-});
+import useStyle from './styles';
 
 export interface LoadingBarProps {
     show: boolean;
@@ -31,7 +11,7 @@ export interface LoadingBarProps {
 
 const LoadingBar: React.FC<LoadingBarProps> = props => {
     const { show } = props;
-    const classes = useStyles(props);
+    const classes = useStyle(props);
     return (
         <>
             {show && (

@@ -19,10 +19,8 @@ const RepositoryListTableRow: React.FC<RepositoryListTableRowProps> = ({
             <TableCell align="right">
                 <GameButton
                     repositoryName={rowData.name}
-                    action={rowData.game ? 'play' : 'create'}
-                >
-                    {rowData.game ? 'Play Game' : 'Create Game'}
-                </GameButton>
+                    action={rowData.isTracked ? 'play' : 'create'}
+                />
             </TableCell>
         </TableRow>
     );

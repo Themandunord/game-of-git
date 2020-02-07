@@ -1,13 +1,8 @@
-import React from 'react';
-import { PATH } from '../routes';
+import PATH from '../routes';
 import NotLoggedInRouterSetup from './testUtils/NotLoggedInRouterSetup';
+import jestMockTestComponentFactory from '../../testUtils/jestMockFactory';
 
-// Mock the Login component to verify that's the one that gets rendered
-jest.mock('../../pages/Login/Login', () => {
-    return function DummyLogin() {
-        return <div data-testid="login"></div>;
-    };
-});
+jestMockTestComponentFactory(jest.mock, '../../pages/Login/Login', 'login');
 
 describe('NotLoggedInRouter', () => {
     describe('Will always redirect to the login path', () => {

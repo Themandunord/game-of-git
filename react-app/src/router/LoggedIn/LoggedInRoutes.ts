@@ -1,4 +1,4 @@
-import { PATH } from '../routes';
+import PATH from '../routes';
 
 /**
  * Routes available to a logged in user (simple)

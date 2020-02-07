@@ -15,6 +15,7 @@ export interface LoginUserData {
     email: string;
     gitLogin: string;
     name: string;
+    role: string;
     createdAt: string;
     updatedAt: string;
     appKeys: {

@@ -1,17 +1,23 @@
 import React, { createContext, useReducer } from 'react';
 import { LoadingActions } from './loading';
 import { NavActions } from './nav';
+import { ToastActions, ToastState } from './toast';
 
-type SystemActions = LoadingActions | NavActions;
+type SystemActions = LoadingActions | NavActions | ToastActions;
 
 interface SystemState {
     loading: boolean;
     expanded: boolean;
+
+    toast: ToastState;
 }
 
 const initialState: SystemState = {
     loading: false,
     expanded: false,
+    toast: {
+        toasts: [],
+    },
 };
 
 const reducer: React.Reducer<SystemState, SystemActions> = (
@@ -23,6 +29,26 @@ const reducer: React.Reducer<SystemState, SystemActions> = (
             return { ...state, loading: action.loading };
         case 'SET_NAV_EXPANDED':
             return { ...state, expanded: action.expanded };
+        case 'ADD_TOAST': {
+            return {
+                ...state,
+                toast: {
+                    ...state.toast,
+                    toasts: [...state.toast.toasts, action.toast],
+                },
+            };
+        }
+        case 'CLOSE_TOAST': {
+            return {
+                ...state,
+                toast: {
+                    ...state.toast,
+                    toasts: state.toast.toasts.filter(
+                        toast => toast.id !== action.id,
+                    ),
+                },
+            };
+        }
         default:
             throw new Error();
     }

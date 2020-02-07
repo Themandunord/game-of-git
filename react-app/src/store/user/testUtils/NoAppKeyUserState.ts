@@ -5,6 +5,7 @@ const noAppKeyUserState: UserState = {
     user: {
         id: 'abc 123',
         name: 'someone',
+        role: 'ADMIN',
         createdAt: new Date().toISOString(),
         email: 'something@somewhere.com',
         gitLogin: 'something',

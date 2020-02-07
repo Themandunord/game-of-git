@@ -1,8 +1,8 @@
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
-import { InputProps } from '../../InputProps.type';
+import { TextInputProps } from '../InputProps.type';
 
-export const TextInput = <Form extends {}>(Props: InputProps<Form>) => {
+export const TextInput = <Form extends {}>(Props: TextInputProps<Form>) => {
     const { formRef, ...inputProps } = Props;
 
     const { register, errors, formState } = formRef;
