@@ -10,22 +10,9 @@ export interface LoginFormData {
     password: string;
 }
 
-export interface LoginUserData {
-    id: string;
-    email: string;
-    gitLogin: string;
-    name: string;
-    role: string;
-    createdAt: string;
-    updatedAt: string;
-    appKeys: {
-        id: string;
-    }[];
-}
-
-export interface LoginResponse {
-    login: {
-        token: string;
-        user: LoginUserData;
-    };
-}
+// export interface LoginResponse {
+//     login: {
+//         token: string;
+//         user: LoginUserData;
+//     };
+// }

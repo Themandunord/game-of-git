@@ -1,8 +1,8 @@
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useMeLazyQuery } from '@game-of-git/graphql-nest';
 import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Switch, useHistory, useLocation } from 'react-router-dom';
 import LoadingBar from '../components/system/LoadingBar/LoadingBar';
-import ME from '../gql/queries/Me.gql';
+import client from '../gql/apolloClient';
 import { SystemContext } from '../store/system';
 import { UserContext } from '../store/user';
 import { setIsLoggedIn, setNotLoggedIn } from '../store/user/loggedIn';
@@ -26,7 +26,9 @@ const IndexRouter = () => {
     const router = useHistory();
     useLocation();
 
-    const [loadMe, { loading: meLoading, data: meData }] = useLazyQuery(ME);
+    const [loadMe, { loading: meLoading, data: meData }] = useMeLazyQuery({
+        client,
+    });
 
     useEffect(() => {
         if (!meLoading) {
@@ -34,7 +36,7 @@ const IndexRouter = () => {
                 dispatchUser(setUserData(meData.me));
                 dispatchUser(setIsLoggedIn());
             } else if (!meData && hasCheckedUserData) {
-                dispatchUser(setUserData(null));
+                dispatchUser(setUserData());
                 dispatchUser(setNotLoggedIn());
             }
         }

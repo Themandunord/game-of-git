@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."issue_labels"("issue_id" uuid NOT NULL, "label_id"
+      uuid NOT NULL, PRIMARY KEY ("issue_id","label_id") , FOREIGN KEY ("issue_id")
+      REFERENCES "public"."issues"("id") ON UPDATE cascade ON DELETE cascade, FOREIGN
+      KEY ("label_id") REFERENCES "public"."labels"("id") ON UPDATE cascade ON DELETE
+      cascade);
+  type: run_sql
+- args:
+    name: issue_labels
+    schema: public
+  type: add_existing_table_or_view

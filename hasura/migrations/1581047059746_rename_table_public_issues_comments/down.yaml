@@ -1,0 +1,3 @@
+- args:
+    sql: alter table "public"."issue_comments" rename to "issues_comments";
+  type: run_sql

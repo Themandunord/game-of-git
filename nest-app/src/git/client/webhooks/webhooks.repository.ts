@@ -1,8 +1,7 @@
 import { GitHubWebhookEvent, UserIdOrEmailArgs } from '@game-of-git/common';
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
-import { GitHubWebhookEventCreateInput } from '../../../generated/prisma-client';
-import { PrismaService } from '../../../prisma/prisma.service';
+
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksService } from './webhooks.service';
@@ -42,8 +41,7 @@ export class WebhooksRepository {
     constructor(
         @Inject(forwardRef(() => WebhooksService))
         private readonly webhooksService: WebhooksService,
-        private readonly webhookEventsResolver: WebhookEventsResolver,
-        private readonly prisma: PrismaService
+        private readonly webhookEventsResolver: WebhookEventsResolver
     ) {
         this.dynamoDb = new AWS.DynamoDB();
         this.dynamoDocumentClient = new AWS.DynamoDB.DocumentClient();
@@ -87,41 +85,42 @@ export class WebhooksRepository {
     }
 
     async loadEvent(webhookEventId: string) {
-        const webhookEventData = await this.prisma.client.gitHubWebhookEvent({
-            id: webhookEventId
-        });
+        throw new Error('Not implemented yet');
+        // const webhookEventData = await this.prisma.client.gitHubWebhookEvent({
+        //     id: webhookEventId
+        // });
 
-        if (!webhookEventData) {
-            return webhookEventData;
-        }
+        // if (!webhookEventData) {
+        //     return webhookEventData;
+        // }
 
-        const webhookRepository = await this.prisma.client
-            .gitHubWebhookEvent({ id: webhookEventId })
-            .repository();
+        // const webhookRepository = await this.prisma.client
+        //     .gitHubWebhookEvent({ id: webhookEventId })
+        //     .repository();
 
-        if (!webhookRepository) {
-            return webhookEventData;
-        }
+        // if (!webhookRepository) {
+        //     return webhookEventData;
+        // }
 
-        const webhookData = await this.loadDynamoData(
-            this.repositoryEventKey(
-                webhookRepository.id,
-                webhookEventData.eventType as GitHubWebhookEventType,
-                webhookEventData as any
-            )
-        );
-        const data = {
-            ...webhookEventData,
-            data: JSON.parse(webhookData.Item.data),
-            eventKey: webhookData.Item.eventKey
-        };
+        // const webhookData = await this.loadDynamoData(
+        //     this.repositoryEventKey(
+        //         webhookRepository.id,
+        //         webhookEventData.eventType as GitHubWebhookEventType,
+        //         webhookEventData as any
+        //     )
+        // );
+        // const data = {
+        //     ...webhookEventData,
+        //     data: JSON.parse(webhookData.Item.data),
+        //     eventKey: webhookData.Item.eventKey
+        // };
 
-        const model = await this.webhooksService.validateAndParseWebhookEvent(
-            webhookRepository.id,
-            data.eventType,
-            data
-        );
-        return model;
+        // const model = await this.webhooksService.validateAndParseWebhookEvent(
+        //     webhookRepository.id,
+        //     data.eventType,
+        //     data
+        // );
+        // return model;
     }
 
     async loadEvents(loadEventsData: {
@@ -129,39 +128,40 @@ export class WebhooksRepository {
         pageSize?: number;
         index?: number;
     }) {
-        const repository = loadEventsData.repository;
-        const index = loadEventsData.index ? loadEventsData.index : 0;
-        const pageSize =
-            loadEventsData.pageSize &&
-            loadEventsData.pageSize <= PAGE_SIZE_LIMIT
-                ? loadEventsData.pageSize
-                : PAGE_SIZE_LIMIT;
-        console.log(`using page size ${pageSize}`);
+        throw new Error('Not implemented yet');
+        //     const repository = loadEventsData.repository;
+        //     const index = loadEventsData.index ? loadEventsData.index : 0;
+        //     const pageSize =
+        //         loadEventsData.pageSize &&
+        //         loadEventsData.pageSize <= PAGE_SIZE_LIMIT
+        //             ? loadEventsData.pageSize
+        //             : PAGE_SIZE_LIMIT;
+        //     console.log(`using page size ${pageSize}`);
 
-        const events = await this.prisma.client.gitHubWebhookEvents({
-            where: {
-                repository: {
-                    name: repository
-                }
-            },
-            skip: index,
-            first: pageSize
-        });
+        //     const events = await this.prisma.client.gitHubWebhookEvents({
+        //         where: {
+        //             repository: {
+        //                 name: repository
+        //             }
+        //         },
+        //         skip: index,
+        //         first: pageSize
+        //     });
 
-        return events;
-    }
+        //     return events;
+        // }
 
-    async loadDynamoData(eventKey: string) {
-        const dynamoData = await this.dynamoDocumentClient
-            .get({
-                TableName: WEBHOOK_EVENTS_TABLE_NAME,
-                Key: {
-                    eventKey
-                }
-            })
-            .promise();
+        // async loadDynamoData(eventKey: string) {
+        //     const dynamoData = await this.dynamoDocumentClient
+        //         .get({
+        //             TableName: WEBHOOK_EVENTS_TABLE_NAME,
+        //             Key: {
+        //                 eventKey
+        //             }
+        //         })
+        //         .promise();
 
-        return dynamoData;
+        //     return dynamoData;
     }
 
     async deleteDynamoData(eventKey: string) {
@@ -174,36 +174,38 @@ export class WebhooksRepository {
     }
 
     async deleteEvent(id: string) {
-        const webhook = await this.prisma.client.gitHubWebhookEvent({
-            id
-        });
+        throw new Error('Not implemented yet');
+        // const webhook = await this.prisma.client.gitHubWebhookEvent({
+        //     id
+        // });
 
-        const repository = await this.prisma.client.gitHubWebhookEvent({ id });
+        // const repository = await this.prisma.client.gitHubWebhookEvent({ id });
 
-        const eventKey = this.repositoryEventKey(
-            repository.id,
-            webhook.eventType as GitHubWebhookEventType,
-            webhook as any
-        );
+        // const eventKey = this.repositoryEventKey(
+        //     repository.id,
+        //     webhook.eventType as GitHubWebhookEventType,
+        //     webhook as any
+        // );
 
-        await this.prisma.client.deleteGitHubWebhookEvent({
-            id
-        });
+        // await this.prisma.client.deleteGitHubWebhookEvent({
+        //     id
+        // });
 
-        await this.dynamoDocumentClient.delete({
-            TableName: WEBHOOK_EVENTS_TABLE_NAME,
-            Key: {
-                eventKey
-            }
-        });
+        // await this.dynamoDocumentClient.delete({
+        //     TableName: WEBHOOK_EVENTS_TABLE_NAME,
+        //     Key: {
+        //         eventKey
+        //     }
+        // });
     }
 
     async deleteUsersRepositoriesEvents(userIdOrEmail: UserIdOrEmailArgs) {
-        await this.prisma.client.deleteManyGitHubWebhookEvents({
-            repository: {
-                addedBy: userIdOrEmail
-            }
-        });
+        throw new Error('Not implemented yet');
+        // await this.prisma.client.deleteManyGitHubWebhookEvents({
+        //     repository: {
+        //         addedBy: userIdOrEmail
+        //     }
+        // });
     }
 
     async storeEvent(
@@ -211,67 +213,68 @@ export class WebhooksRepository {
         eventType: GitHubWebhookEventType,
         webhookEvent: any
     ) {
+        throw new Error('Not implemented yet');
         // Extract and Validate Event Model
-        const model = await this.webhooksService.validateAndParseWebhookEvent(
-            repository,
-            eventType,
-            webhookEvent
-        );
+        // const model = await this.webhooksService.validateAndParseWebhookEvent(
+        //     repository,
+        //     eventType,
+        //     webhookEvent
+        // );
 
-        // Fill in blanks with defaults
-        const action = webhookEvent.action ? webhookEvent.action : eventType;
-        const sender =
-            webhookEvent.sender && webhookEvent.sender.login
-                ? webhookEvent.sender.login
-                : 'UNKNOWN';
+        // // Fill in blanks with defaults
+        // const action = webhookEvent.action ? webhookEvent.action : eventType;
+        // const sender =
+        //     webhookEvent.sender && webhookEvent.sender.login
+        //         ? webhookEvent.sender.login
+        //         : 'UNKNOWN';
 
-        // SQL
-        const githubWebhookEventData: GitHubWebhookEventCreateInput = {
-            eventType,
-            action,
-            repository: {
-                connect: {
-                    id: repository
-                }
-            },
-            sender
-        };
+        // // SQL
+        // const githubWebhookEventData: GitHubWebhookEventCreateInput = {
+        //     eventType,
+        //     action,
+        //     repository: {
+        //         connect: {
+        //             id: repository
+        //         }
+        //     },
+        //     sender
+        // };
 
-        this.logger.log('Creating GitHub Webhook Event in Prisma DB');
+        // this.logger.log('Creating GitHub Webhook Event in Prisma DB');
 
-        const webhookData = await this.prisma.client.createGitHubWebhookEvent(
-            githubWebhookEventData
-        );
+        // const webhookData = await this.prisma.client.createGitHubWebhookEvent(
+        //     githubWebhookEventData
+        // );
 
-        // Store raw webhook event data to Dynamo
-        const eventKey = this.repositoryEventKey(
-            repository,
-            eventType,
-            webhookData as any
-        );
+        // // Store raw webhook event data to Dynamo
+        // const eventKey = this.repositoryEventKey(
+        //     repository,
+        //     eventType,
+        //     webhookData as any
+        // );
 
-        const params: AWS.DynamoDB.DocumentClient.PutItemInput = {
-            TableName: WEBHOOK_EVENTS_TABLE_NAME,
-            Item: {
-                eventKey,
-                data: JSON.stringify(webhookEvent)
-            }
-        };
+        // const params: AWS.DynamoDB.DocumentClient.PutItemInput = {
+        //     TableName: WEBHOOK_EVENTS_TABLE_NAME,
+        //     Item: {
+        //         eventKey,
+        //         data: JSON.stringify(webhookEvent)
+        //     }
+        // };
 
-        this.logger.log('Insert webhook event to dynamo');
+        // this.logger.log('Insert webhook event to dynamo');
 
-        await this.dynamoDocumentClient.put(params).promise();
-        this.logger.log('successfully put it to dynamo');
+        // await this.dynamoDocumentClient.put(params).promise();
+        // this.logger.log('successfully put it to dynamo');
 
-        // Retrieve it and return it.
-        const dynamoRecord = await this.loadDynamoData(eventKey);
+        // // Retrieve it and return it.
+        // const dynamoRecord = await this.loadDynamoData(eventKey);
 
-        const result = {
-            ...webhookData,
-            ...dynamoRecord.Item
-        };
+        // const result = {
+        //     ...webhookData,
+        //     ...dynamoRecord.Item
+        // };
 
-        return result;
+        // return result;
     }
 
     public repositoryEventKey = (

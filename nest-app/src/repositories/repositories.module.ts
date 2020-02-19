@@ -1,29 +1,18 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { PrismaModule } from '../prisma/prisma.module';
-import { RepositoriesController } from './repositories.controller';
+import { Module, forwardRef } from '@nestjs/common';
 import { RepositoriesResolver } from './repositories.resolver';
 import { RepositoriesService } from './repositories.service';
-import { GitClientModule } from '../git/client/git-client.module';
-import { AppKeyModule } from '../git/client/app-key/app-key.module';
-import { WebhooksModule } from '../git/client/webhooks/webhooks.module';
-import ps from '../pubsub';
+import { GraphqlModule } from '../graphql/graphql.module';
+import { RepositoryProvidersModule } from './providers/repository-providers.module';
+import { ApiKeyModule } from './entities/api-key/api-key.module';
+import { RepositoryModule } from './entities/repository/repository.module';
 
 @Module({
     imports: [
-        PrismaModule,
-        forwardRef(() => GitClientModule)
-        // forwardRef(() => AppKeyModule)
-        // WebhooksModule
+        GraphqlModule,
+        RepositoryProvidersModule.forRoot(),
+        forwardRef(() => ApiKeyModule),
+        RepositoryModule
     ],
-    providers: [
-        RepositoriesResolver,
-        RepositoriesService,
-        {
-            provide: 'PUB_SUB',
-            useValue: ps
-        }
-    ],
-    controllers: [RepositoriesController],
-    exports: [RepositoriesService]
+    providers: [RepositoriesResolver, RepositoriesService]
 })
 export class RepositoriesModule {}

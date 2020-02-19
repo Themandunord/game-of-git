@@ -1,21 +1,16 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from '../auth/auth.module';
-import { DateScalar } from '../common/scalars/date.scalar';
-import { GameModule } from '../game/game.module';
-import { GitClientModule } from '../git/client/git-client.module';
-import { PrismaModule } from '../prisma/prisma.module';
+import { GraphqlModule } from '../graphql/graphql.module';
 import ps from '../pubsub';
-import { UserInternalModule } from '../user/user.internal.module';
-import { RepositoriesModule } from './../repositories/repositories.module';
+import { ApiKeyModule } from '../repositories/entities/api-key/api-key.module';
+import { UserModule } from '../user/user.module';
 import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
-import { AppEventModule } from '../app-event/app-event.module';
 
 @Module({
     imports: [
-        // Core GraphQL/Prisma Setup
         GraphQLModule.forRootAsync({
             useFactory: (...args: any[]) => {
                 return {
@@ -34,24 +29,26 @@ import { AppEventModule } from '../app-event/app-event.module';
             }
         }),
 
-        PrismaModule,
+        GraphqlModule,
 
         // Auth Setup
+        UserModule,
         AuthModule,
-        UserInternalModule,
+        ApiKeyModule
+        // UserInternalModule,
 
         // Game Setup
-        GameModule,
+        // GameModule,
 
-        GitClientModule,
-        RepositoriesModule,
-        AppEventModule
+        // GitClientModule
+        // RepositoriesModule,
+        // AppEventModule
     ],
     controllers: [AppController],
     providers: [
         AppService,
         AppResolver,
-        DateScalar,
+        // DateScalar,
         {
             provide: 'PUB_SUB',
             useValue: ps

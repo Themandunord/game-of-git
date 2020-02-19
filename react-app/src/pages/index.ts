@@ -26,10 +26,8 @@ export const Login = React.lazy(() =>
     import(/* webpackChunkName: "Login" */ './Login/Login'),
 );
 
-export const AddGithubKey = React.lazy(() =>
-    import(
-        /* webpackChunkName: "AddGithubKey" */ './AddGithubKey/AddGithubKey'
-    ),
+export const AddApiKey = React.lazy(() =>
+    import(/* webpackChunkName: "AddApiKey" */ './AddApiKey/AddApiKey'),
 );
 
 export const CreateGame = React.lazy(() =>

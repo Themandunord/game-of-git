@@ -19,20 +19,20 @@ export class HandleWebhookHandler
         this.logger.log(
             `Executing Handler HandleWebhookCommandHandler for webhook id ${command.webhookId}`
         );
+        throw new Error('Not implemented yet');
+        // const webhook: AGitHubEvent = this.eventPublisher.mergeObjectContext(
+        //     await this.webhooksRepository.loadEvent(command.webhookId)
+        // );
 
-        const webhook: AGitHubEvent = this.eventPublisher.mergeObjectContext(
-            await this.webhooksRepository.loadEvent(command.webhookId)
-        );
+        // webhook.beginProcessing();
 
-        webhook.beginProcessing();
+        // if (webhook.events.length > 0) {
+        //     this.logger.log(
+        //         `handling events, there are ${webhook.events.length}`
+        //     );
+        //     webhook.events.map(func => webhook.apply(func(command)));
+        // }
 
-        if (webhook.events.length > 0) {
-            this.logger.log(
-                `handling events, there are ${webhook.events.length}`
-            );
-            webhook.events.map(func => webhook.apply(func(command)));
-        }
-
-        webhook.completeProcessing();
+        // webhook.completeProcessing();
     }
 }

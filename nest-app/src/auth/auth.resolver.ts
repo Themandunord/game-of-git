@@ -1,13 +1,13 @@
 import { Auth } from '@game-of-git/common';
-import { LoginInput } from './dto/login.input';
 import {
-    Resolver,
-    Mutation,
     Args,
+    Mutation,
+    Parent,
     ResolveProperty,
-    Parent
+    Resolver
 } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
+import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
 
 @Resolver(of => Auth)

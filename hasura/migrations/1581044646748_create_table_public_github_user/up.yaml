@@ -1,0 +1,26 @@
+- args:
+    sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  type: run_sql
+- args:
+    sql: "CREATE TABLE \"public\".\"github_user\"(\"id\" uuid NOT NULL DEFAULT gen_random_uuid(),
+      \"created_at\" timestamptz NOT NULL DEFAULT now(), \"updated_at\" timestamptz
+      NOT NULL DEFAULT now(), \"created_at_external\" timetz NOT NULL, \"is_bounty_hunter\"
+      boolean NOT NULL, \"is_campus_expert\" boolean NOT NULL, \"is_developer_preogram_mentor\"
+      boolean NOT NULL, \"is_employee\" boolean NOT NULL, \"is_hireable\" boolean
+      NOT NULL, \"is_site_admin\" boolean NOT NULL, \"is_viewer\" boolean NOT NULL,
+      \"url\" text NOT NULL, \"name\" text NOT NULL, \"login\" text NOT NULL, \"avatar_url\"
+      text NOT NULL, \"bio\" text NOT NULL, \"company\" text NOT NULL, \"email\" text
+      NOT NULL, PRIMARY KEY (\"id\") , UNIQUE (\"login\"), UNIQUE (\"email\")); COMMENT
+      ON TABLE \"public\".\"github_user\" IS E'GitHub User';\nCREATE OR REPLACE FUNCTION
+      \"public\".\"set_current_timestamp_updated_at\"()\nRETURNS TRIGGER AS $$\nDECLARE\n
+      \ _new record;\nBEGIN\n  _new := NEW;\n  _new.\"updated_at\" = NOW();\n  RETURN
+      _new;\nEND;\n$$ LANGUAGE plpgsql;\nCREATE TRIGGER \"set_public_github_user_updated_at\"\nBEFORE
+      UPDATE ON \"public\".\"github_user\"\nFOR EACH ROW\nEXECUTE PROCEDURE \"public\".\"set_current_timestamp_updated_at\"();\nCOMMENT
+      ON TRIGGER \"set_public_github_user_updated_at\" ON \"public\".\"github_user\"
+      \nIS 'trigger to set value of column \"updated_at\" to current timestamp on
+      row update';\n"
+  type: run_sql
+- args:
+    name: github_user
+    schema: public
+  type: add_existing_table_or_view

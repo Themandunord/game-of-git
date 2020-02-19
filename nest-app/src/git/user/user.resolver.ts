@@ -1,4 +1,3 @@
-import { PrismaService } from '../../prisma/prisma.service';
 import {
     Resolver,
     Query,
@@ -11,7 +10,7 @@ import { GitHubUser } from '@game-of-git/common';
 
 @Resolver(of => GitHubUser)
 export class UserResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     // @Query('gitHubUsers')
     // async getGitHubUsers(@Args() args, @Info() info): Promise<GitHubUser[]> {

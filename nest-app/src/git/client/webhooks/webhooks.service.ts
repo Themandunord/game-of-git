@@ -3,9 +3,8 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import axios from 'axios';
 import { PubSubEngine } from 'type-graphql';
-import { PrismaService } from '../../../prisma/prisma.service';
+
 import config from '../../config';
-import { GitClientService } from '../git-client.service';
 import { HandleWebhookCommand } from './commands/handle-webhook.command';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { ParserService } from './parser/parser.service';
@@ -14,17 +13,15 @@ import { WebhooksRepository } from './webhooks.repository';
 @Injectable()
 export class WebhooksService {
     private readonly logger = new Logger('WebhooksService');
-    constructor(
-        @Inject(forwardRef(() => GitClientService))
-        private readonly gitClientService: GitClientService,
+    constructor() // @Inject(forwardRef(() => GitClientService))
+    // private readonly gitClientService: GitClientService,
 
-        private readonly commandBus: CommandBus,
-        private readonly prisma: PrismaService,
-        @Inject(forwardRef(() => WebhooksRepository))
-        private readonly webhooksRepository: WebhooksRepository,
-        private readonly parserService: ParserService,
-        @Inject('PUB_SUB') private pubSub: PubSubEngine
-    ) {}
+    // private readonly commandBus: CommandBus,
+    // @Inject(forwardRef(() => WebhooksRepository))
+    // private readonly webhooksRepository: WebhooksRepository,
+    // private readonly parserService: ParserService,
+    // @Inject('PUB_SUB') private pubSub: PubSubEngine
+    {}
 
     /**
      * Initialize required webhooks on a Repository via the GitHub Webhook API
@@ -39,17 +36,19 @@ export class WebhooksService {
             `Initializing Repository webhooks ${repository.owner} - ${repository.name} on behalf of ${email}`
         );
 
-        const appKey = await this.gitClientService.appKey.getByUserIdOrEmail({
-            email
-        });
+        throw new Error('Not implemented yet');
 
-        // TODO: Handle if there is no app key
+        // const appKey = await this.gitClientService.appKey.getByUserIdOrEmail({
+        //     email
+        // });
 
-        // create the webhook
-        const result = await this.initialize(appKey.key, repository);
-        // tslint:disable-next-line:no-console
-        console.log('result from webhook creation: ', result);
-        // TODO: Error handling
+        // // TODO: Handle if there is no app key
+
+        // // create the webhook
+        // const result = await this.initialize(appKey.key, repository);
+        // // tslint:disable-next-line:no-console
+        // console.log('result from webhook creation: ', result);
+        // // TODO: Error handling
     }
 
     /**
@@ -64,19 +63,19 @@ export class WebhooksService {
         this.logger.log(
             `Destroying Repository webhooks ${repository.owner} - ${repository.name} on behalf of ${userEmail}`
         );
-
+        throw new Error('Not implemented yet');
         // check for existing webhooks for this repo, if they exist alreday we'll need to either update or delete them.
         // Implementation, TBD!
-        const existingWebhooks = await this.getAll(repository, userEmail);
-        this.logger.log(
-            `There are ${existingWebhooks.length} existing webhooks in this repository`
-        );
+        // const existingWebhooks = await this.getAll(repository, userEmail);
+        // this.logger.log(
+        //     `There are ${existingWebhooks.length} existing webhooks in this repository`
+        // );
 
-        const appKey = await this.gitClientService.appKey.getByUserIdOrEmail({
-            email: userEmail
-        });
+        // const appKey = await this.gitClientService.appKey.getByUserIdOrEmail({
+        //     email: userEmail
+        // });
 
-        await this.destroy(appKey.key, repository, existingWebhooks[0].id);
+        // await this.destroy(appKey.key, repository, existingWebhooks[0].id);
     }
 
     /**
@@ -88,24 +87,25 @@ export class WebhooksService {
             `listing webhooks currently configured on the repository for user ${userEmail} and repo ${repository.name}`
         );
 
-        const appKey = await this.gitClientService.appKey.getByUserIdOrEmail({
-            email: userEmail
-        });
+        throw new Error('Not implemented yet');
+        // const appKey = await this.gitClientService.appKey.getByUserIdOrEmail({
+        //     email: userEmail
+        // });
 
-        const route = `${config.GITHUB_REST_URL}repos/${repository.owner}/${repository.name}/hooks`;
-        this.logger.log(`requesting ${route} with ${appKey.key}`);
+        // const route = `${config.GITHUB_REST_URL}repos/${repository.owner}/${repository.name}/hooks`;
+        // this.logger.log(`requesting ${route} with ${appKey.key}`);
 
-        try {
-            const result = await axios.get(route, {
-                headers: {
-                    Authorization: `Bearer ${appKey.key}`
-                }
-            });
+        // try {
+        //     const result = await axios.get(route, {
+        //         headers: {
+        //             Authorization: `Bearer ${appKey.key}`
+        //         }
+        //     });
 
-            return result.data;
-        } catch (e) {
-            this.logger.error('Error Querying for the users webhooks: ' + e);
-        }
+        //     return result.data;
+        // } catch (e) {
+        //     this.logger.error('Error Querying for the users webhooks: ' + e);
+        // }
     }
 
     /**
@@ -202,20 +202,21 @@ export class WebhooksService {
         this.logger.log(
             `Storing (${eventType}) Event for repository ${repository} ${Date.now()}`
         );
-        const event = await this.webhooksRepository.storeEvent(
-            repository,
-            eventType,
-            webhookEvent
-        );
-        this.logger.log(
-            `Initializing HandleWebhookCommand for webhook id ${event.id}`
-        );
+        throw new Error('Not implemented');
+        // const event = await this.webhooksRepository.storeEvent(
+        //     repository,
+        //     eventType,
+        //     webhookEvent
+        // );
+        // this.logger.log(
+        //     `Initializing HandleWebhookCommand for webhook id ${event.id}`
+        // );
 
-        const command = new HandleWebhookCommand(event.id, repository);
-        // passively execute the command
-        this.logger.log(`Executing the Handle Webhook Command`);
-        await this.commandBus.execute(command);
-        return event;
+        // const command = new HandleWebhookCommand(event.id, repository);
+        // // passively execute the command
+        // this.logger.log(`Executing the Handle Webhook Command`);
+        // await this.commandBus.execute(command);
+        // return event;
     }
 
     public async validateAndParseWebhookEvent(
@@ -223,21 +224,21 @@ export class WebhooksService {
         eventType,
         webhookEvent
     ) {
-        let model;
-        try {
-            // model = await this.parseWebhookEventModel(repository, eventType, webhookEvent);
-            model = await this.parserService.getWebhookEventHandlerInstance(
-                repository,
-                eventType,
-                webhookEvent
-            );
-        } catch (e) {
-            this.logger.error(
-                `There was an error making the Model ${eventType} ${repository}`
-            );
-            console.error(e);
-            throw e;
-        }
-        return model;
+        // let model;
+        // try {
+        //     // model = await this.parseWebhookEventModel(repository, eventType, webhookEvent);
+        //     model = await this.parserService.getWebhookEventHandlerInstance(
+        //         repository,
+        //         eventType,
+        //         webhookEvent
+        //     );
+        // } catch (e) {
+        //     this.logger.error(
+        //         `There was an error making the Model ${eventType} ${repository}`
+        //     );
+        //     console.error(e);
+        //     throw e;
+        // }
+        // return model;
     }
 }

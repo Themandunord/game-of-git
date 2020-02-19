@@ -7,15 +7,15 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Router } from 'react-router';
 import { RepositoriesProvider } from '../../../store/repositories';
 import { UserContext, userReducer, UserState } from '../../../store/user';
-import appKeyUserState from '../../../store/user/testUtils/AppKeyUserState';
+import apiKeyUserState from '../../../store/user/testUtils/ApiKeyUserState';
 import { setUserData } from '../../../store/user/userData';
 import RepositoryList from '../RepositoryList';
 
-const SetUserHasAppKeysButton = () => {
+const SetUserHasApiKeysButton = () => {
     const globalUserState = useContext(UserContext);
     const { dispatch: dispatchUser } = globalUserState;
 
-    const setUser = () => dispatchUser(setUserData(appKeyUserState.user));
+    const setUser = () => dispatchUser(setUserData(apiKeyUserState.user));
 
     return (
         <Button
@@ -49,7 +49,7 @@ const RepositoryListSetup = (
             <MockedProvider mocks={apolloProviderMocks} addTypename={false}>
                 <RepositoriesProvider>
                     <UserContextProvider>
-                        <SetUserHasAppKeysButton />
+                        <SetUserHasApiKeysButton />
                         <HelmetProvider>
                             <Suspense fallback={null}>
                                 <RepositoryList />

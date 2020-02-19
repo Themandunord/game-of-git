@@ -1,6 +1,5 @@
 # NEST_PROJECT_FOLDER=services/nest-app
 # WEB_APP_PROJECT_FOLDER=services/webapp-service
-PRISMA_PROJECT_FOLDER=prisma/
 
 help: ## Show this help.
 	@grep -h "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/\\$$//' | sed -e 's/##//'
@@ -9,6 +8,16 @@ help: ## Show this help.
 
 .DEFAULT_GOAL := help
 
+
+#
+# Dev
+#
+dev: ## Start up the local dev setup - spin up docker-compose, open code instances for common, nest and react, start hasura console
+	docker-compose up -d \
+	&& code ./common \
+	&& code ./nest-app \
+	&& code ./react-app \
+	&& make hasura_console \
 
 #
 # CONFIG
@@ -44,9 +53,6 @@ build_common: ## Run the build command in the @game-of-git/common library
 start_nest: ## Run yarn workspace nest-app start:dev
 	yarn workspace @game-of-git/nest-app start:dev
 
-start_vue: ## Run yarn workspace web-app serve
-	yarn workspace @game-of-git/web-app serve
-
 #
 # DOCKER
 #
@@ -64,18 +70,19 @@ down: ## Run Docker Compose Down to stop the dev stack of Prisma & Postgres
 down_v: ## Run Docker Compose Down to stop the application's containers with the -v flag to drop the stored volumes
 	docker-compose down -v;
 
+
 #
-# PRISMA
+# HASURA
 #
 
-prisma_deploy: ## Deploy the Prisma changes by running prisma deploy in the prisma/ directory
-	cd ${PRISMA_PROJECT_FOLDER} && prisma deploy;
+hasura_seed: ## Seeds Hasura with data that is not required on every migration
+	./hasura/seed_admin.bash
 
-prisma_generate: ## Generate the prisma schema based on the generators config
-	cd ${PRISMA_PROJECT_FOLDER} && prisma generate;
+hasura_migrate: ## Run Hasura Migrations
+	cd ./hasura && hasura migrate apply
 
-prisma_seed: ## Run Seed the Prisma data set by running prisma seed in the prisma/ directory
-	cd ${PRISMA_PROJECT_FOLDER} && prisma seed;
+hasura_console: ## Open Hasura Console
+	cd ./hasura && hasura console
 
-prisma_reset: ## Reset the Prisma deployment by running prisma reset in the prisma/ directory
-	cd ${PRISMA_PROJECT_FOLDER} && prisma reset;
+hasura_generate: ## Generate the GraphQL/TypeScript schema
+	cd ./common && yarn hasura:generate

@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."issue_comments"("issue_id" uuid NOT NULL, "comment_id"
+      uuid NOT NULL, PRIMARY KEY ("issue_id","comment_id") , FOREIGN KEY ("issue_id")
+      REFERENCES "public"."issues"("id") ON UPDATE cascade ON DELETE cascade, FOREIGN
+      KEY ("comment_id") REFERENCES "public"."comments"("id") ON UPDATE cascade ON
+      DELETE cascade);
+  type: run_sql
+- args:
+    name: issue_comments
+    schema: public
+  type: add_existing_table_or_view

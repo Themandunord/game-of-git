@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."issue_comments"
+  type: run_sql

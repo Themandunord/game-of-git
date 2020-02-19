@@ -7,11 +7,10 @@ import {
     Mutation,
     Subscription
 } from '@nestjs/graphql';
-import { PrismaService } from '../../prisma/prisma.service';
 
 @Resolver(of => GitHubBranch)
 export class BranchResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     // @Query('gitHubBranches')
     // async getBranches(@Args() args, @Info() info): Promise<GitHubBranch[]> {

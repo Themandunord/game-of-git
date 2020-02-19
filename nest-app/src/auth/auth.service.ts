@@ -1,42 +1,45 @@
-import {
-    Injectable,
-    NotFoundException,
-    BadRequestException
-} from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../generated/prisma-client';
-import { PasswordService } from './password.service';
+import { UserService } from '../user/user.service';
 import { SignupInput } from './dto/signup.input';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly jwtService: JwtService,
-        private readonly prisma: PrismaService,
-        private readonly passwordService: PasswordService
+        private readonly passwordService: PasswordService,
+        private readonly userService: UserService
     ) {}
 
-    async createUser(payload: SignupInput): Promise<string> {
+    public async createUser(payload: SignupInput): Promise<string> {
+        const existingUser = await this.userService.getUserByEmail(
+            payload.email
+        );
+
+        if (existingUser) {
+            throw new UnprocessableEntityException(
+                `User already exists ${payload.email}`
+            );
+        }
+
         const hashedPassword = await this.passwordService.hashPassword(
             payload.password
         );
 
-        const user = await this.prisma.client.createUser({
+        const createdUser = await this.userService.createUser({
+            role: 'USER',
             ...payload,
-            password: hashedPassword,
-            gitLogin: payload.gitLogin || ''
+            password: hashedPassword
         });
 
-        return this.jwtService.sign({ userId: user.id });
+        return this.jwtService.sign({ userId: createdUser.id });
     }
 
-    async login(email: string, password: string): Promise<string> {
-        const user = await this.prisma.client.user({ email });
+    public async login(email: string, password: string): Promise<string> {
+        const user = await this.userService.getUserByEmail(email);
 
-        if (!user) {
-            throw new NotFoundException(`No user found for email: ${email}`);
-        }
+        if (!user) throw new UnprocessableEntityException(`Invalid Login`);
 
         const passwordValid = await this.passwordService.validatePassword(
             password,
@@ -44,22 +47,20 @@ export class AuthService {
         );
 
         if (!passwordValid) {
-            throw new BadRequestException('Invalid password');
+            throw new UnprocessableEntityException('Invalid Login');
         }
-
-        const userKeys = await this.prisma.client.user({ email }).keys();
-
-        return this.jwtService.sign({ userId: user.id, appKeys: userKeys });
+        return this.jwtService.sign({
+            userId: user.id,
+            apiKeys: user.api_keys
+        });
     }
 
-    validateUser(userId: string): Promise<User> {
-        return this.prisma.client.user({ id: userId });
-    }
-
-    async getUserFromToken(token: string): Promise<User> {
-        const id = this.jwtService.decode(token)['userId'];
-        const userData = await this.prisma.client.user({ id });
-        console.log('getUserFromToken returning: ', userData);
-        return userData;
+    public async getUserFromToken(token: string) {
+        const decoded = this.jwtService.decode(token);
+        if (!decoded || !decoded['userId']) {
+            return null;
+        }
+        const id = decoded['userId'];
+        return await this.userService.getUserById(id);
     }
 }

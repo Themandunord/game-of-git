@@ -4,3 +4,4 @@ export * from './git';
 export * from './gql';
 export * from './user';
 export * from './app-event';
+export * from './repository/providers';

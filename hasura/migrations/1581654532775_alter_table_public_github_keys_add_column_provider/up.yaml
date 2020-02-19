@@ -1,0 +1,4 @@
+- args:
+    sql: ALTER TABLE "public"."github_keys" ADD COLUMN "provider" text NOT NULL DEFAULT
+      'github';
+  type: run_sql

@@ -1,6 +1,5 @@
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 import { InputType, Field } from 'type-graphql';
-
 @InputType()
 export class SignupInput {
     @Field()
@@ -12,9 +11,11 @@ export class SignupInput {
     @MinLength(8)
     password: string;
 
-    @Field({ nullable: true })
-    name?: string;
+    @Field()
+    @MinLength(1)
+    name: string;
 
-    @Field({ nullable: true })
-    gitLogin?: string;
+    @Field()
+    @MinLength(1)
+    gitLogin: string;
 }

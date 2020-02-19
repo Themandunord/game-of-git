@@ -1,6 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
 import { User } from '../../user/user';
-import { AppKey } from '../app-key/app-key';
+import { ApiKey } from '../api-key/api-key';
 import { Repository } from '../repository';
 
 @ObjectType()

@@ -1,0 +1,20 @@
+query Me {
+    me {
+        id
+        email
+        name
+        role
+        apiKeys {
+            id
+            name
+            provider
+        }
+        gitLogin
+        createdAt
+        updatedAt
+    }
+}
+
+query ValidateApiKey($provider: String!, $key: String!) {
+    validateApiKey(provider: $provider, key: $key)
+}

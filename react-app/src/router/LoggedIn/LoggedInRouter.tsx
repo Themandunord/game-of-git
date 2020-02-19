@@ -13,9 +13,9 @@ const LoggedInRouter: React.FC = () => {
     useEffect(() => {
         if (
             state.user &&
-            (!state.user.appKeys || state.user.appKeys.length === 0)
+            (!state.user.apiKeys || state.user.apiKeys.length === 0)
         ) {
-            push(PATH.ADD_GITHUB_KEY.path);
+            push(PATH.ADD_API_KEY.path);
         }
     }, [state.user, push]);
 

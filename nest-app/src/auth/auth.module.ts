@@ -1,21 +1,24 @@
 import { PasswordService } from './password.service';
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
-import { PrismaModule } from '../prisma/prisma.module';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { Module, Scope, forwardRef } from '@nestjs/common';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { authConstants } from '../common/auth/constants';
+import { GraphqlModule } from '../graphql/graphql.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
     imports: [
+        GraphqlModule,
         PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
-            secret: authConstants.jwtSecret
+            secret: authConstants.jwtSecret,
+            signOptions: { expiresIn: '180s' }
         }),
-        PrismaModule
+        forwardRef(() => UserModule)
     ],
     providers: [
         AuthService,
@@ -24,6 +27,6 @@ import { authConstants } from '../common/auth/constants';
         GqlAuthGuard,
         PasswordService
     ],
-    exports: [GqlAuthGuard]
+    exports: [AuthService, GqlAuthGuard]
 })
 export class AuthModule {}

@@ -1,0 +1,25 @@
+- args:
+    sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  type: run_sql
+- args:
+    sql: "CREATE TABLE \"public\".\"pull_request_reviews\"(\"id\" uuid NOT NULL DEFAULT
+      gen_random_uuid(), \"created_at\" timestamptz NOT NULL DEFAULT now(), \"updated_at\"
+      timestamptz NOT NULL DEFAULT now(), \"created_at_external\" timetz NOT NULL,
+      \"updated_at_external\" timetz NOT NULL, \"submitted_at\" timetz NOT NULL, \"last_edited_at\"
+      timetz NOT NULL, \"published_at\" timetz, \"author_id\" uuid NOT NULL, \"pull_request_id\"
+      uuid NOT NULL, \"state\" text NOT NULL, \"body_text\" text NOT NULL, \"url\"
+      text NOT NULL, PRIMARY KEY (\"id\") , FOREIGN KEY (\"author_id\") REFERENCES
+      \"public\".\"github_user\"(\"id\") ON UPDATE cascade ON DELETE cascade, FOREIGN
+      KEY (\"pull_request_id\") REFERENCES \"public\".\"pull_requests\"(\"id\") ON
+      UPDATE cascade ON DELETE cascade);\nCREATE OR REPLACE FUNCTION \"public\".\"set_current_timestamp_updated_at\"()\nRETURNS
+      TRIGGER AS $$\nDECLARE\n  _new record;\nBEGIN\n  _new := NEW;\n  _new.\"updated_at\"
+      = NOW();\n  RETURN _new;\nEND;\n$$ LANGUAGE plpgsql;\nCREATE TRIGGER \"set_public_pull_request_reviews_updated_at\"\nBEFORE
+      UPDATE ON \"public\".\"pull_request_reviews\"\nFOR EACH ROW\nEXECUTE PROCEDURE
+      \"public\".\"set_current_timestamp_updated_at\"();\nCOMMENT ON TRIGGER \"set_public_pull_request_reviews_updated_at\"
+      ON \"public\".\"pull_request_reviews\" \nIS 'trigger to set value of column
+      \"updated_at\" to current timestamp on row update';\n"
+  type: run_sql
+- args:
+    name: pull_request_reviews
+    schema: public
+  type: add_existing_table_or_view

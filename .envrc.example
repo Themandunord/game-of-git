@@ -1,3 +1,7 @@
+##
+# PERSONAL
+export PERSONAL_TOKEN=asdfasdfasdfasdfasdfasdfasdf
+
 # General Env
 export APP_ENVIRONMENT=development
 
@@ -10,20 +14,40 @@ export PRISMA_SERVICE_STAGE=dev
 # Database
 export DB_USER=prisma
 export DB_PASSWORD=prisma
+export DB_HOST=postgres
+export DB_PORT=5432
+export DB_NAME=prisma
+
+
 
 # Nest
 export NEST_SERVER_PORT=3000
-# export GIT_TESTING_TOKEN=
-# export GIT_TESTING_USER=
-# export GIT_TESTING_USER_EMAIL=
-# export GIT_TESTING_REPOSITORY=
-# export GIT_SERVICE_DOMAIN=https://a64d8e1c.ngrok.io
+export GIT_TESTING_TOKEN=asdfasdfasdfasdfasdfasdfasdf
+export GIT_TESTING_USER=asdfasdfasdf
+export GIT_TESTING_USER_EMAIL=asdfsadf@gmaitestl.com
+export GIT_TESTING_REPOSITORY=test
+export GIT_SERVICE_DOMAIN=https://bab368c0.ngrok.io
 
 # Vue
 export VUE_APP_GRAPHQL_WS=ws://localhost:3000/graphql
 export GIT_SERVICE_HOST=http://localhost:3000
 export WEBAPP_SERVICE_PORT=8080
 
+# React
+export REACT_APP_PORT=8080
+
+# Hasura
+
+export HASURA_GRAPHQL_DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+export HASURA_GRAPHQL_ENABLE_CONSOLE=true
+export HASURA_GRAPHQL_ENABLED_LOG_TYPES='startup, http-log, webhook-log, websocket-log, query-log'
+export HASURA_GRAPHQL_MIGRATIONS_DIR=$PWD/hasura/migrations
+
+export ADMIN_EMAIL=asdfasdfasdf@test.com
+export ADMIN_GIT_LOGIN=asdfasdfasdf
+export ADMIN_NAME='Game of Git Lover'
+export ADMIN_PASSWORD='$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm' #secret42
+export SEED_ADMIN_SQL="INSERT into users(email, git_login, name, role, password) VALUES ('${ADMIN_EMAIL}','${ADMIN_GIT_LOGIN}', '${ADMIN_NAME}', 'ADMIN', '${ADMIN_PASSWORD}');"
 
 # Old Below to review
 

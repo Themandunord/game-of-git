@@ -1,5 +1,5 @@
-import { Field, ObjectType, registerEnumType, InputType } from 'type-graphql';
-import { AppKey } from '../git/app-key';
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
+import { ApiKey } from '../git/api-key';
 
 @ObjectType()
 export class User {
@@ -21,8 +21,8 @@ export class User {
     @Field(type => Role)
     role: Role;
 
-    @Field(type => [AppKey])
-    appKeys: AppKey[];
+    @Field(type => [ApiKey])
+    apiKeys: ApiKey[];
 
     @Field()
     password: string;

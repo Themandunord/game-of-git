@@ -39,7 +39,7 @@ const me = {
     role: 'ADMIN',
     createdAt: Date.now(),
     updatedAt: Date.now(),
-    appKeys: [
+    apiKeys: [
         {
             id: 'abc123',
             name: 'some key',

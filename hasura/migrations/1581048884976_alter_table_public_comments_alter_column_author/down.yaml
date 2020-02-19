@@ -1,0 +1,6 @@
+- args:
+    sql: COMMENT ON COLUMN "public"."comments"."author" IS E'null'
+  type: run_sql
+- args:
+    sql: alter table "public"."comments" rename column "author_id" to "author";
+  type: run_sql

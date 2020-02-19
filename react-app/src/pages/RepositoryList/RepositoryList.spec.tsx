@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedResponse, wait } from '@apollo/react-testing';
 import RepositoriesListQuery from '../../gql/queries/RepositoriesListQuery.gql';
 import RepositoryListSetup from './testUtils/RepositoryListSetup';
-import appKeyUserState from '../../store/user/testUtils/AppKeyUserState';
+import apiKeyUserState from '../../store/user/testUtils/ApiKeyUserState';
 import { UserState } from '../../store/user';
 import { LoginUserData } from '../../components/forms/LoginForm/types';
 import { act } from '@testing-library/react';
@@ -27,9 +27,9 @@ const repositoryListResponse = {
 };
 
 const user: UserState = {
-    ...appKeyUserState,
+    ...apiKeyUserState,
     user: {
-        ...(appKeyUserState.user as LoginUserData),
+        ...(apiKeyUserState.user as LoginUserData),
         gitLogin,
     },
 };

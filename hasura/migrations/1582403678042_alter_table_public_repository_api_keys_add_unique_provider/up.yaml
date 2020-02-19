@@ -1,0 +1,6 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: alter table "public"."repository_api_keys" add constraint "repository_api_keys_provider_key"
+      unique ("provider");
+  type: run_sql

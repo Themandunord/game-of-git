@@ -1,6 +1,6 @@
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {
-    AddGithubKey,
+    AddApiKey,
     CreateGame,
     Dashboard,
     Game,
@@ -12,16 +12,16 @@ import {
 import { CreateGameIcon, RepositoryListIcon, SettingsIcon } from './icons';
 import RequiresAuth from './RouteManager/rules/RequiresAuth';
 import RequiresGame from './RouteManager/rules/RequiresGame';
-import RequiresGitHubAppKey from './RouteManager/rules/RequiresGitHubAppKey';
+import RequiresApiKey from './RouteManager/rules/RequiresApiKey';
 import { RepositoriesState } from '../store/repositories';
 
-const ADD_GITHUB_KEY = () =>
+const ADD_API_KEY = () =>
     ({
-        path: '/add-github-key',
+        path: '/add-api-key',
         icon: DashboardIcon,
-        render: AddGithubKey,
-        name: 'Add GitHub Key',
-        page: '/AddGithubKey/AddGithubKey',
+        render: AddApiKey,
+        name: 'Add Api Key',
+        page: '/AddApiKey/AddApiKey',
         rule: [RequiresAuth],
     } as const);
 const CREATE_GAME = () =>
@@ -31,7 +31,7 @@ const CREATE_GAME = () =>
         render: CreateGame,
         name: 'Create Game',
         page: '/CreateGame/CreateGame',
-        rules: [RequiresAuth, RequiresGitHubAppKey],
+        rules: [RequiresAuth, RequiresApiKey],
     } as const);
 const DASHBOARD = () =>
     ({
@@ -81,7 +81,7 @@ const REPOSITORY_LIST = () =>
         render: RepositoryList,
         name: 'Repository List',
         page: '/RepositoryList/RepositoryList',
-        rules: [RequiresAuth, RequiresGitHubAppKey],
+        rules: [RequiresAuth, RequiresApiKey],
     } as const);
 const SETTINGS = () =>
     ({
@@ -94,7 +94,7 @@ const SETTINGS = () =>
     } as const);
 
 const PATH = {
-    ADD_GITHUB_KEY: ADD_GITHUB_KEY(),
+    ADD_API_KEY: ADD_API_KEY(),
     CREATE_GAME: CREATE_GAME(),
     DASHBOARD: DASHBOARD(),
     GAME: GAME(),

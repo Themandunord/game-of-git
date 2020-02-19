@@ -4,7 +4,9 @@
     "workspaces": [
         "common",
         "nest-app",
-        "react-app"
+        "react-app",
+        "graphql-nest",
+        "graphql-hasura"
     ],
     "version": "1.0.0",
     "main": "index.js",

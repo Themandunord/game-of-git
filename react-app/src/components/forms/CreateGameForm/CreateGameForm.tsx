@@ -8,11 +8,11 @@ import { RepositoryListDataItem } from '../../../pages/RepositoryList/types';
 import { SystemContext } from '../../../store/system';
 import { setIsLoading, setNotLoading } from '../../../store/system/loading';
 import SelectInput from '../../inputs/select/SelectInput';
-import useStyles from '../AddGithubKeyForm/styles';
-import { LoginUserData } from '../LoginForm/types';
+import useStyles from '../AddApiKeyForm/styles';
+import { MeQuery } from '@game-of-git/graphql-nest';
 
 interface CreateGameProps {
-    user: LoginUserData;
+    user: MeQuery['me'];
     repository: RepositoryListDataItem;
 }
 

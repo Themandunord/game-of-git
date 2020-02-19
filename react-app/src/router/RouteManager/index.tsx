@@ -11,7 +11,7 @@ import {
     RepositoriesState,
 } from '../../store/repositories';
 import { UserContext } from '../../store/user';
-import PATH from '../routes';
+import NAV_ROUTES from './NAV_ROUTES.const';
 import { RouteManagerActions } from './routes';
 import { IRouteRule } from './rules/types';
 
@@ -36,13 +36,6 @@ export interface IComputedRoute extends IRouteBase {
 export interface RouteManagerState {
     routes: IRoute[];
 }
-
-const NAV_ROUTES = [
-    PATH.DASHBOARD,
-    PATH.GAME,
-    PATH.REPOSITORY_LIST,
-    PATH.SETTINGS,
-];
 
 const initialRouteManagerState = {
     routes: NAV_ROUTES as IRoute[],

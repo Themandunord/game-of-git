@@ -1,5 +1,5 @@
+import { MeQuery } from '@game-of-git/graphql-nest';
 import React, { createContext, useReducer } from 'react';
-import { LoginUserData } from '../../components/forms/LoginForm/types';
 import { LoggedInActions } from './loggedIn';
 import { TokenActions } from './token';
 import { UserDataActions } from './userData';
@@ -14,7 +14,7 @@ type UserActions = LoggedInActions | UserDataActions | TokenActions;
 
 export interface UserState {
     loggedIn: boolean;
-    user: null | LoginUserData;
+    user: undefined | MeQuery['me'];
     token: string | null;
 }
 
@@ -22,7 +22,7 @@ const loggedIn = token ? true : false;
 
 const initialState: UserState = {
     loggedIn,
-    user: null,
+    user: undefined,
     token,
 };
 

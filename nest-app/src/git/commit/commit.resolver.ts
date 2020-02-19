@@ -6,13 +6,12 @@ import {
     Mutation,
     Subscription
 } from '@nestjs/graphql';
-import { PrismaService } from '../../prisma/prisma.service';
 
 import { GitHubCommit } from '@game-of-git/common';
 
 @Resolver(of => GitHubCommit)
 export class CommitResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     // @Query('gitHubCommits')
     // async getGitHubCommits(

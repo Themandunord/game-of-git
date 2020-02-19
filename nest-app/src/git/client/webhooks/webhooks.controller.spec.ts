@@ -1,26 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as path from 'path';
 import * as request from 'supertest';
-import { PrismaService } from '../../../prisma/prisma.service';
-import { repositoryFactory } from '../../../repositories/repositories.factory';
-import { RepositoriesModule } from '../../../repositories/repositories.module';
-import { RepositoriesService } from '../../../repositories/repositories.service';
+
 import TestingUtilities from '../../../utilities/testing';
-import { createOrRetrieveAppKey } from '../../../utilities/testing/git.app-key.prisma';
-import { createOrRetrieveRepository } from '../../../utilities/testing/git.repository.prisma';
-import { createOrRetrieveUser } from '../../../utilities/testing/user.prisma';
-import { AppKeyModule } from '../app-key/app-key.module';
-import { GitClientModule } from '../git-client.module';
 import { GitHubWebhookEvents } from './parser/eventModels/EventType.constants';
 import { GitHubWebhookEventType } from './parser/eventModels/EventType.types';
 import { WebhookEventsResolver } from './webhooks-events.resolver';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksModule } from './webhooks.module';
 import { WebhooksService } from './webhooks.service';
-import { clearTestData } from '../../../utilities/testing/teardown';
 
-const mockGitClientService = jest.mock('./../git-client.service');
-const mockAppKeyService = jest.mock('./../app-key/app-key.service');
 const mockWebhookEventsResolver = jest.genMockFromModule<WebhookEventsResolver>(
     './webhooks-events.resolver'
 );
@@ -37,58 +26,48 @@ const GIT_TESTING_USER_EMAIL = process.env.GIT_TESTING_USER_EMAIL;
 
 describe('Webhooks Controller', () => {
     let app;
-    let prisma: PrismaService;
-    let repositoriesService: RepositoriesService;
+
     let webhooksService: WebhooksService;
 
     let user;
     let repo;
-    let appKey;
+    let apiKey;
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [
-                WebhooksModule,
-                GitClientModule,
-                AppKeyModule,
-                RepositoriesModule
-            ],
+            imports: [WebhooksModule],
             controllers: [WebhooksController]
         }).compile();
 
         app = moduleFixture.createNestApplication();
-        repositoriesService = moduleFixture.get<RepositoriesService>(
-            RepositoriesService
-        );
-        webhooksService = moduleFixture.get<WebhooksService>(WebhooksService);
-        prisma = moduleFixture.get<PrismaService>(PrismaService);
+        // webhooksService = moduleFixture.get<WebhooksService>(WebhooksService);
         await app.init();
 
-        user = await createOrRetrieveUser(prisma, {
-            gitLogin: GIT_TESTING_USER,
-            email: GIT_TESTING_USER_EMAIL,
-            name: 'WebhooksControllerTestUser'
-        });
-        appKey = await createOrRetrieveAppKey(prisma, {
-            key: GIT_TESTING_TOKEN,
-            name: 'webhooksControllerTestAppKey',
-            user: {
-                email: user.email
-            }
-        });
-        repo = await createOrRetrieveRepository(
-            prisma,
-            user,
-            appKey,
-            repositoryFactory({
-                name: GIT_TESTING_REPOSITORY + 'webhooksController',
-                idExternal: 'someIdExternalWebhooksController'
-            })
-        );
+        // user = await createOrRetrieveUser(prisma, {
+        //     gitLogin: GIT_TESTING_USER,
+        //     email: GIT_TESTING_USER_EMAIL,
+        //     name: 'WebhooksControllerTestUser'
+        // });
+        // appKey = await createOrRetrieveAppKey(prisma, {
+        //     key: GIT_TESTING_TOKEN,
+        //     name: 'webhooksControllerTestAppKey',
+        //     user: {
+        //         email: user.email
+        //     }
+        // });
+        // repo = await createOrRetrieveRepository(
+        //     prisma,
+        //     user,
+        //     appKey,
+        //     repositoryFactory({
+        //         name: GIT_TESTING_REPOSITORY + 'webhooksController',
+        //         idExternal: 'someIdExternalWebhooksController'
+        //     })
+        // );
     });
 
     afterEach(async () => {
-        await clearTestData(prisma, { id: user.id });
+        // await clearTestData(prisma, { id: user.id });
     });
 
     xdescribe('Retrieving all stored events for a repository', () => {});

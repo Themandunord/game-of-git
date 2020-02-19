@@ -1,0 +1,6 @@
+- args:
+    sql: "\n           alter table \"public\".\"commit\"\n           add constraint
+      \"commit_branch_id_fkey\"\n           foreign key (\"branch_id\")\n           references
+      \"public\".\"branch\"\n           (\"id\") on update cascade on delete cascade;\n
+      \     "
+  type: run_sql

@@ -1,0 +1,6 @@
+- args:
+    sql: COMMENT ON COLUMN "public"."games"."owner" IS E''
+  type: run_sql
+- args:
+    sql: alter table "public"."games" rename column "owner" to "owner_id";
+  type: run_sql

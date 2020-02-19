@@ -10,4 +10,9 @@ export class AppResolver {
     hello(@Args('name') name: string): string {
         return `Hello ${name}!`;
     }
+
+    @Query(returns => String)
+    ping(): string {
+        return 'Ok';
+    }
 }

@@ -1,0 +1,11 @@
+- args:
+    sql: ALTER TABLE "public"."commit" ADD COLUMN "branch_id" uuid
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."commit" ALTER COLUMN "branch_id" DROP NOT NULL
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."commit" ADD CONSTRAINT commit_branch_id_fkey FOREIGN
+      KEY (branch_id) REFERENCES "public"."branch" (id) ON DELETE cascade ON UPDATE
+      cascade
+  type: run_sql

@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."issue_labels"
+  type: run_sql

@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."pull_request_assignees"("pull_request_id" uuid NOT
+      NULL, "github_user_id" uuid NOT NULL, PRIMARY KEY ("pull_request_id","github_user_id")
+      , FOREIGN KEY ("github_user_id") REFERENCES "public"."github_user"("id") ON
+      UPDATE cascade ON DELETE cascade, FOREIGN KEY ("pull_request_id") REFERENCES
+      "public"."pull_requests"("id") ON UPDATE cascade ON DELETE cascade);
+  type: run_sql
+- args:
+    name: pull_request_assignees
+    schema: public
+  type: add_existing_table_or_view

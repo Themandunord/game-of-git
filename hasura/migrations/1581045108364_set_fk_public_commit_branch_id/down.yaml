@@ -1,0 +1,4 @@
+- args:
+    sql: "\n          alter table \"public\".\"commit\" drop constraint \"commit_branch_id_fkey\"\n
+      \     "
+  type: run_sql

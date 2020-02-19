@@ -1,0 +1,16 @@
+- args:
+    sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  type: run_sql
+- args:
+    sql: CREATE TABLE "public"."github_webhook_events"("id" uuid NOT NULL DEFAULT
+      gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "repository_id"
+      uuid NOT NULL, "event_type" text NOT NULL, "action" text NOT NULL, "sender"
+      text NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("repository_id") REFERENCES
+      "public"."repositories"("id") ON UPDATE cascade ON DELETE cascade); COMMENT
+      ON TABLE "public"."github_webhook_events" IS E'GitHub Webhook Events core data
+      storage';
+  type: run_sql
+- args:
+    name: github_webhook_events
+    schema: public
+  type: add_existing_table_or_view

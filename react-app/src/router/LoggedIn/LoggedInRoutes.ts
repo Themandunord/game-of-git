@@ -9,7 +9,7 @@ const LOGGED_IN_ROUTES = [
     PATH.GAME,
     PATH.SETTINGS,
     PATH.NOT_FOUND,
-    PATH.ADD_GITHUB_KEY,
+    PATH.ADD_API_KEY,
     PATH.CREATE_GAME,
 ] as const;
 

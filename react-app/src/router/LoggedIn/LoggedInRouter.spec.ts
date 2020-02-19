@@ -1,5 +1,5 @@
-import appKeyUserState from '../../store/user/testUtils/AppKeyUserState';
-import noAppKeyUserState from '../../store/user/testUtils/NoAppKeyUserState';
+import apiKeyUserState from '../../store/user/testUtils/ApiKeyUserState';
+import noApiKeyUserState from '../../store/user/testUtils/NoApiKeyUserState';
 import jestMockTestComponentFactory from '../../testUtils/jestMockFactory';
 import PATH from '../routes';
 import LOGGED_IN_ROUTES from './LoggedInRoutes';
@@ -14,18 +14,16 @@ Object.entries(PATH).map(([key, value]) =>
 );
 
 describe('LoggedInRouter', () => {
-    describe('If the user does not have any app keys, they are redirected to the AddGithubKey page', () => {
+    describe('If the user does not have any api keys, they are redirected to the AddApiKey page', () => {
         describe('For registered routes', () => {
             for (let [key, value] of Object.entries(PATH)) {
                 it(`${key}: "${value.name}"@"${value.path}"`, async () => {
                     const { findByTestId } = LoggedInRouterSetup(
                         value,
-                        noAppKeyUserState,
+                        noApiKeyUserState,
                     );
-                    const addGithubKey = await findByTestId(
-                        PATH.ADD_GITHUB_KEY.name,
-                    );
-                    expect(addGithubKey).toBeDefined();
+                    const addApiKey = await findByTestId(PATH.ADD_API_KEY.name);
+                    expect(addApiKey).toBeDefined();
                 });
             }
         });
@@ -35,30 +33,30 @@ describe('LoggedInRouter', () => {
                 {
                     path: 'something-that-doesnt-exist',
                 },
-                noAppKeyUserState,
+                noApiKeyUserState,
             );
-            const addGithubKey = await getByTestId(PATH.ADD_GITHUB_KEY.name);
-            expect(addGithubKey).toBeDefined();
+            const addApiKey = await getByTestId(PATH.ADD_API_KEY.name);
+            expect(addApiKey).toBeDefined();
         });
     });
 
-    describe('If the user has a registered app key, they do not get redirected and the requested route is rendered', () => {
+    describe('If the user has a registered api key, they do not get redirected and the requested route is rendered', () => {
         describe('For registered routes', () => {
             LOGGED_IN_ROUTES.map(route => {
                 it(`${route.name}@"${route.path}"`, async () => {
                     const { getByTestId, findByTestId } = LoggedInRouterSetup(
                         route,
-                        appKeyUserState,
+                        apiKeyUserState,
                     );
 
                     // assert that the requested page component is rendered (these are mocks so we are ignoring their potential redirects)
                     const pageComponent = await findByTestId(route.name);
-                    if (route.name !== PATH.ADD_GITHUB_KEY.name) {
-                        // explicitly ensure that the route doesn't render for AddGithubKey
+                    if (route.name !== PATH.ADD_API_KEY.name) {
+                        // explicitly ensure that the route doesn't render for AddApiKey
                         expect(() =>
-                            getByTestId(PATH.ADD_GITHUB_KEY.name),
+                            getByTestId(PATH.ADD_API_KEY.name),
                         ).toThrow(
-                            `Unable to find an element by: [data-testid="${PATH.ADD_GITHUB_KEY.name}"]`,
+                            `Unable to find an element by: [data-testid="${PATH.ADD_API_KEY.name}"]`,
                         );
                     }
                 });
@@ -69,13 +67,13 @@ describe('LoggedInRouter', () => {
                 {
                     path: 'something-unknown',
                 },
-                appKeyUserState,
+                apiKeyUserState,
             );
 
             const pageComponent = await findByTestId(PATH.NOT_FOUND.name);
-            // explicitly ensure that the route doesn't render for AddGithubKey
-            expect(() => getByTestId(PATH.ADD_GITHUB_KEY.name)).toThrow(
-                `Unable to find an element by: [data-testid="${PATH.ADD_GITHUB_KEY.name}"]`,
+            // explicitly ensure that the route doesn't render for AddApiKey
+            expect(() => getByTestId(PATH.ADD_API_KEY.name)).toThrow(
+                `Unable to find an element by: [data-testid="${PATH.ADD_API_KEY.name}"]`,
             );
         });
     });
