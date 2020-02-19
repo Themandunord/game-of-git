@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."commit"
+  type: run_sql

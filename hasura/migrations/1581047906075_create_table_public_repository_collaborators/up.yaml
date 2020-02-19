@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."repository_collaborators"("repository_id" uuid NOT
+      NULL, "github_user_id" uuid NOT NULL, PRIMARY KEY ("repository_id","github_user_id")
+      , FOREIGN KEY ("repository_id") REFERENCES "public"."repositories"("id") ON
+      UPDATE cascade ON DELETE cascade, FOREIGN KEY ("github_user_id") REFERENCES
+      "public"."github_user"("id") ON UPDATE cascade ON DELETE cascade);
+  type: run_sql
+- args:
+    name: repository_collaborators
+    schema: public
+  type: add_existing_table_or_view

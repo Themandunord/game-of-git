@@ -10,3 +10,7 @@ yarn-error.log
 node_modules/
 dist/
 coverage/
+common/github/github.schema.public.graphql
+common/generated/**/*
+nest-app/schema.json
+nest-app/schema/schema.graphql

@@ -1,0 +1,216 @@
+- args:
+    relationship: repository
+    table:
+      name: branches
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: comments
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: commits
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: user
+    table:
+      name: games
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: repository
+    table:
+      name: games
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: user
+    table:
+      name: github_keys
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: repositories
+    table:
+      name: github_keys
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: comments
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: commits
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: issues
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: pull_requests
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: pull_request_reviews
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: review_requests
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: review_threads
+    table:
+      name: github_user
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: repository
+    table:
+      name: github_webhook_events
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: issues
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: pull_request_reviews
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: pull_request
+    table:
+      name: pull_request_reviews
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: pull_requests
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: pull_request_reviews
+    table:
+      name: pull_requests
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: review_requests
+    table:
+      name: pull_requests
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: review_threads
+    table:
+      name: pull_requests
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: user
+    table:
+      name: repositories
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_key
+    table:
+      name: repositories
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_webhook_events
+    table:
+      name: repositories
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: games
+    table:
+      name: repositories
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: branches
+    table:
+      name: repositories
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: review_threads
+    table:
+      name: repositories
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: review_requests
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: pull_request
+    table:
+      name: review_requests
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: repository
+    table:
+      name: review_threads
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_user
+    table:
+      name: review_threads
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: pull_request
+    table:
+      name: review_threads
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: github_keys
+    table:
+      name: users
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: repositories
+    table:
+      name: users
+      schema: public
+  type: drop_relationship
+- args:
+    relationship: games
+    table:
+      name: users
+      schema: public
+  type: drop_relationship

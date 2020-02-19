@@ -1,6 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
 import { User } from '../user/user';
-import { AppKey } from './app-key/app-key';
+import { ApiKey } from './api-key/api-key';
 // import { Game } from './game';
 
 @ObjectType()
@@ -44,8 +44,8 @@ export class Repository {
     @Field()
     isTracked: boolean;
 
-    @Field(type => AppKey)
-    appKey: AppKey;
+    @Field(type => ApiKey)
+    apiKey: ApiKey;
 
     @Field()
     isFork: boolean;

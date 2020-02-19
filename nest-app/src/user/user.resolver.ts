@@ -1,10 +1,6 @@
-import { AppKey, User } from '@game-of-git/common';
-import {
-    ExecutionContext,
-    Inject,
-    UseGuards,
-    NotFoundException
-} from '@nestjs/common';
+import { User } from '@game-of-git/common';
+import { ExecutionContext, Inject, UseGuards } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import {
     Context,
     Parent,
@@ -13,53 +9,45 @@ import {
     Resolver,
     Subscription
 } from '@nestjs/graphql';
+import * as camelcaseKeys from 'camelcase-keys';
 import { PubSubEngine } from 'type-graphql';
-import { UserEntity } from '../decorators/user.decorator';
+import { CurrentUser } from '../decorators/user.decorator';
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
-import { PrismaService } from '../prisma/prisma.service';
-import { USER_MUTATED_EVENT_NAME } from './user.internal.resolver';
+import { ApiKeyService } from '../repositories/entities/api-key/api-key.service';
+import { UserService } from './user.service';
+import USER_MUTATED_EVENT_NAME from './USER_MUTATED_EVENT_NAME';
 
 @Resolver(of => User)
-// @UseGuards(GqlAuthGuard)
 export class UserResolver {
     public static USER_NOT_FOUND = 'User Not Found';
 
     constructor(
-        private prisma: PrismaService,
-        @Inject('PUB_SUB') private pubSub: PubSubEngine
+        @Inject('PUB_SUB') private pubSub: PubSubEngine,
+        private readonly userService: UserService,
+        private readonly moduleRef: ModuleRef,
+        private readonly apiKeyService: ApiKeyService
     ) {}
 
-    @Query(returns => User)
     @UseGuards(GqlAuthGuard)
-    async me(@UserEntity() user: User): Promise<User> {
-        let userArgs = {};
+    @Query(returns => User)
+    async me(@CurrentUser() user: User) {
         if (user.id) {
-            userArgs = {
-                id: user.id
-            };
+            return camelcaseKeys(await this.userService.getUserById(user.id));
         } else if (user.email) {
-            userArgs = {
-                email: user.email
-            };
+            return camelcaseKeys(
+                await this.userService.getUserByEmail(user.email)
+            );
         }
-
-        const userData = await this.prisma.client.user(userArgs);
-
-        if (!userData) {
-            throw new NotFoundException(UserResolver.USER_NOT_FOUND);
-        }
-        const keys = await this.prisma.client.user(userArgs).keys();
-        const meData = {
-            ...user,
-            ...userData,
-            appKeys: keys as AppKey[]
-        };
-        return meData as User;
+        return null;
     }
 
-    @ResolveProperty('appKeys')
-    appKeys(@Parent() owner: User): Promise<AppKey[]> {
-        return this.prisma.client.user({ id: owner.id }).keys();
+    @ResolveProperty('apiKeys')
+    async apiKeys(@Parent() user: User) {
+        return await (
+            this.apiKeyService ??
+            (await this.moduleRef.resolve(ApiKeyService)) ??
+            (await this.moduleRef.create(ApiKeyService))
+        ).getApiKeysByUserId(user.id);
     }
 
     @Subscription(() => User, {

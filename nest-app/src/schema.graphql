@@ -3,20 +3,21 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type AppEvent {
-  type: String!
-  data: String!
-}
-
-type AppKey {
+type ApiKey {
   id: String!
   user: User!
   key: String!
   name: String!
+  provider: String!
 }
 
-type AppKeyIsValid {
+type ApiKeyIsValid {
   valid: Boolean!
+}
+
+type AppEvent {
+  type: String!
+  data: String!
 }
 
 type Auth {
@@ -25,9 +26,10 @@ type Auth {
   user: User!
 }
 
-input CreateAppKeyInput {
-  key: String!
+input CreateApiKeyInput {
+  provider: String!
   name: String!
+  key: String!
 }
 
 input CreateGameInput {
@@ -36,22 +38,15 @@ input CreateGameInput {
   repository: String!
 }
 
-"""Date custom scalar type"""
-scalar Date
-
-input Email {
-  email: String!
-}
-
-input EmailOrId {
-  email: String!
-  id: String!
-}
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
 
 type Game {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   repository: Repository!
   title: String!
   owner: User!
@@ -61,8 +56,8 @@ type Game {
 type GitHubBranch {
   id: String!
   repository: GitHubRepository!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   merged: Boolean!
 }
@@ -70,36 +65,36 @@ type GitHubBranch {
 type GitHubComment {
   id: String!
   author: GitHubUser!
-  createdAt: Date!
-  createdAtExternal: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  createdAtExternal: DateTime!
+  updatedAt: DateTime!
   bodyText: String!
   url: String!
 }
 
 type GitHubCommit {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   author: GitHubUser!
   associatedPullRequests: [GitHubPullRequest!]!
   committer: GitHubUser!
   additions: Float!
-  authedDate: Date!
+  authedDate: DateTime!
   changedFiles: Float!
   commitUrl: String!
   deletions: Float!
   message: String!
   messageHeadline: String!
-  pushedDate: Date!
+  pushedDate: DateTime!
   treeUrl: String!
   url: String!
 }
 
 type GitHubFileDiff {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   additions: Float!
   deletions: Float!
   filepath: String!
@@ -107,16 +102,16 @@ type GitHubFileDiff {
 
 type GitHubIssue {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  createdAtExternal: Date!
-  updatedAtExternal: Date!
-  lastEditedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  lastEditedAt: DateTime!
   assignees: [GitHubUser!]!
   author: GitHubUser!
   comments: [GitHubComment!]!
   bodyText: String!
-  closed: Date!
+  closed: DateTime!
   locked: Boolean!
   number: Float!
   state: String!
@@ -126,10 +121,10 @@ type GitHubIssue {
 
 type GitHubLabel {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  createdAtExternal: Date!
-  updatedAtExternal: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
   color: String!
   description: String!
   name: String!
@@ -138,12 +133,12 @@ type GitHubLabel {
 
 type GitHubPullRequest {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  createdAtExternal: Date!
-  publishedAt: Date!
-  closedAt: Date!
-  mergedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdAtExternal: DateTime!
+  publishedAt: DateTime!
+  closedAt: DateTime!
+  mergedAt: DateTime!
   author: GitHubUser!
   mergedBy: GitHubUser!
   number: Float!
@@ -158,13 +153,13 @@ type GitHubPullRequest {
 
 type GitHubPullRequestReview {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  createdAtExternal: Date!
-  updatedAtExternal: Date!
-  submittedAt: Date!
-  lastEditeddAt: Date!
-  publishedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
+  submittedAt: DateTime!
+  lastEditeddAt: DateTime!
+  publishedAt: DateTime!
   author: GitHubUser!
   pullRequest: GitHubPullRequest!
   state: String!
@@ -174,10 +169,10 @@ type GitHubPullRequestReview {
 
 type GitHubRepository {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  createdAtExternal: Date!
-  updatedAtExternal: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdAtExternal: DateTime!
+  updatedAtExternal: DateTime!
   owner: GitHubUser!
   hasBranchRules: Boolean!
   hasContributingGuidelines: Boolean!
@@ -200,16 +195,16 @@ type GitHubRepository {
 
 type GitHubReviewRequest {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   pullRequest: GitHubPullRequest!
   requestedReviewer: GitHubUser!
 }
 
 type GitHubReviewThread {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   pullRequest: GitHubPullRequest!
   repository: GitHubRepository!
   resolvedBy: GitHubUser!
@@ -218,16 +213,16 @@ type GitHubReviewThread {
 
 type GitHubTopic {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
 }
 
 type GitHubUser {
   id: String!
-  createdAt: Date!
-  updatedAt: Date!
-  createdAtExternal: Date!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdAtExternal: DateTime!
   isBountyHunter: Boolean!
   isCampusExpert: Boolean!
   isDeveloperProgramMember: Boolean!
@@ -246,17 +241,11 @@ type GitHubUser {
 
 type GitHubWebhookEvent {
   id: String!
-  createdAt: Date!
+  createdAt: DateTime!
   repository: Repository!
   eventType: String!
   action: String!
   sender: String!
-}
-
-input GitHubWebhookEventInput {
-  repository: ID!
-  eventType: String!
-  sender: String
 }
 
 input LoginInput {
@@ -267,34 +256,24 @@ input LoginInput {
 type Mutation {
   signup(data: SignupInput!): Auth!
   login(data: LoginInput!): Auth!
-  create(gitHubWebhookEvent: GitHubWebhookEventInput!): GitHubWebhookEvent!
-  createGame(data: CreateGameInput!): Game!
-  endGame(data: String!): Game!
-  trackRepository(data: TrackRepositoryInput!): Repository!
-  createAppKey(data: CreateAppKeyInput!): AppKey!
-  deleteAppKey(id: ID, key: String): AppKey!
+  createApiKey(data: CreateApiKeyInput!): ApiKey!
 }
 
 type Query {
-  post(postId: String!): Game!
-  game(postId: String!): Game!
-  repository(repositoryId: String!): Repository!
-  repositoryList(username: String!): [GitHubRepository!]!
+  validateApiKey(provider: String!, key: String!): Boolean!
   me: User!
-  appKey(id: ID, key: String): AppKey!
-  userAppKeys(id: ID, email: String): [AppKey!]!
-  validateAppKey(appKey: String!): AppKeyIsValid!
   helloWorld: String!
   hello(name: String!): String!
+  ping: String!
 }
 
 type Repository {
   id: String!
   idExternal: String!
-  createdAt: Date!
-  createdAtExternal: Date!
-  updatedAt: Date!
-  updatedAtExternal: Date!
+  createdAt: DateTime!
+  createdAtExternal: DateTime!
+  updatedAt: DateTime!
+  updatedAtExternal: DateTime!
   addedBy: User!
   name: String!
   description: String!
@@ -302,7 +281,7 @@ type Repository {
   url: String!
   owner: String!
   isTracked: Boolean!
-  appKey: AppKey!
+  apiKey: ApiKey!
   isFork: Boolean!
   isLocked: Boolean!
   isPrivate: Boolean!
@@ -320,19 +299,12 @@ enum Role {
 input SignupInput {
   email: String!
   password: String!
-  name: String
-  gitLogin: String
+  name: String!
+  gitLogin: String!
 }
 
 type Subscription {
-  repositoryMutated: Repository!
-  userMutated: User!
-  appEvent: AppEvent!
-}
-
-input TrackRepositoryInput {
-  owner: String!
-  repository: String!
+  UserMutatedEvent: User!
 }
 
 type User {
@@ -342,7 +314,7 @@ type User {
   email: String!
   name: String
   role: Role!
-  appKeys: [AppKey!]!
+  apiKeys: [ApiKey!]!
   password: String!
   gitLogin: String!
 }

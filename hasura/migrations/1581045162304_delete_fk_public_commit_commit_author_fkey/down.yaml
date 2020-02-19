@@ -1,0 +1,4 @@
+- args:
+    sql: alter table "public"."commit" add foreign key ("author") references "public"."github_user"("id")
+      on update cascade on delete cascade;
+  type: run_sql

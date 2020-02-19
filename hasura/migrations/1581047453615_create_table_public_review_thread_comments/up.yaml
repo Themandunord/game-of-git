@@ -1,0 +1,14 @@
+- args:
+    sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
+  type: run_sql
+- args:
+    sql: CREATE TABLE "public"."review_thread_comments"("id" uuid NOT NULL DEFAULT
+      gen_random_uuid(), "review_thread_id" uuid NOT NULL, "comment_id" uuid NOT NULL,
+      PRIMARY KEY ("id") , FOREIGN KEY ("review_thread_id") REFERENCES "public"."review_threads"("id")
+      ON UPDATE cascade ON DELETE cascade, FOREIGN KEY ("comment_id") REFERENCES "public"."comments"("id")
+      ON UPDATE cascade ON DELETE cascade);
+  type: run_sql
+- args:
+    name: review_thread_comments
+    schema: public
+  type: add_existing_table_or_view

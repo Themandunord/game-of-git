@@ -6,11 +6,11 @@ import {
     Mutation,
     Subscription
 } from '@nestjs/graphql';
-import { PrismaService } from '../../prisma/prisma.service';
+
 import { GitHubReviewThread } from '@game-of-git/common';
 @Resolver(of => GitHubReviewThread)
 export class ReviewThreadResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     // @Query('gitHubReviewThreads')
     // async getGitHubReviewThreads(

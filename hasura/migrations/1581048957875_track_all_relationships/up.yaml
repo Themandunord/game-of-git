@@ -1,0 +1,780 @@
+- args:
+    name: branch
+    table:
+      name: branch_commits
+      schema: public
+    using:
+      foreign_key_constraint_on: branch_id
+  type: create_object_relationship
+- args:
+    name: commit
+    table:
+      name: branch_commits
+      schema: public
+    using:
+      foreign_key_constraint_on: commit_id
+  type: create_object_relationship
+- args:
+    name: branch_commits
+    table:
+      name: branches
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: branch_id
+        table:
+          name: branch_commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: review_thread_comments
+    table:
+      name: comments
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: comment_id
+        table:
+          name: review_thread_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_review_comments
+    table:
+      name: comments
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: comment_id
+        table:
+          name: pull_request_review_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_comments
+    table:
+      name: comments
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: comment_id
+        table:
+          name: pull_request_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_comments
+    table:
+      name: comments
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: comment_id
+        table:
+          name: issue_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: branch_commits
+    table:
+      name: commits
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: commit_id
+        table:
+          name: branch_commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_review_commits
+    table:
+      name: commits
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: commit_id
+        table:
+          name: pull_request_review_commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_commits
+    table:
+      name: commits
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: commit_id
+        table:
+          name: pull_request_commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: topic_stargazers
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: topic_stargazers
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_watchers
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: watcher_user_id
+        table:
+          name: repository_watchers
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_stargazers
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: github_user_id
+        table:
+          name: repository_stargazers
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_collaborators
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: github_user_id
+        table:
+          name: repository_collaborators
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_assignees
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: github_user_id
+        table:
+          name: pull_request_assignees
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_participants
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: github_user_id
+        table:
+          name: issue_participants
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_assignees
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: github_user_id
+        table:
+          name: issue_assignees
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pullRequestsByCreatedBy
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: created_by
+        table:
+          name: pull_requests
+          schema: public
+  type: create_array_relationship
+- args:
+    name: user
+    table:
+      name: github_user_following
+      schema: public
+    using:
+      foreign_key_constraint_on: following_user_id
+  type: create_object_relationship
+- args:
+    name: userByFollowerUserId
+    table:
+      name: github_user_following
+      schema: public
+    using:
+      foreign_key_constraint_on: follower_user_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: issue_assignees
+      schema: public
+    using:
+      foreign_key_constraint_on: github_user_id
+  type: create_object_relationship
+- args:
+    name: issue
+    table:
+      name: issue_assignees
+      schema: public
+    using:
+      foreign_key_constraint_on: issue_id
+  type: create_object_relationship
+- args:
+    name: comment
+    table:
+      name: issue_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: comment_id
+  type: create_object_relationship
+- args:
+    name: issue
+    table:
+      name: issue_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: issue_id
+  type: create_object_relationship
+- args:
+    name: issue
+    table:
+      name: issue_labels
+      schema: public
+    using:
+      foreign_key_constraint_on: issue_id
+  type: create_object_relationship
+- args:
+    name: label
+    table:
+      name: issue_labels
+      schema: public
+    using:
+      foreign_key_constraint_on: label_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: issue_participants
+      schema: public
+    using:
+      foreign_key_constraint_on: github_user_id
+  type: create_object_relationship
+- args:
+    name: issue
+    table:
+      name: issue_participants
+      schema: public
+    using:
+      foreign_key_constraint_on: issue_id
+  type: create_object_relationship
+- args:
+    name: issue_labels
+    table:
+      name: issues
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: issue_id
+        table:
+          name: issue_labels
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_participants
+    table:
+      name: issues
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: issue_id
+        table:
+          name: issue_participants
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_comments
+    table:
+      name: issues
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: issue_id
+        table:
+          name: issue_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_assignees
+    table:
+      name: issues
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: issue_id
+        table:
+          name: issue_assignees
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_labels
+    table:
+      name: labels
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: label_id
+        table:
+          name: pull_request_labels
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issue_labels
+    table:
+      name: labels
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: label_id
+        table:
+          name: issue_labels
+          schema: public
+  type: create_array_relationship
+- args:
+    name: github_user
+    table:
+      name: pull_request_assignees
+      schema: public
+    using:
+      foreign_key_constraint_on: github_user_id
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: pull_request_assignees
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: comment
+    table:
+      name: pull_request_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: comment_id
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: pull_request_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: commit
+    table:
+      name: pull_request_commits
+      schema: public
+    using:
+      foreign_key_constraint_on: commit_id
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: pull_request_commits
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: label
+    table:
+      name: pull_request_labels
+      schema: public
+    using:
+      foreign_key_constraint_on: label_id
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: pull_request_labels
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: comment
+    table:
+      name: pull_request_review_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: comment_id
+  type: create_object_relationship
+- args:
+    name: pull_request_review
+    table:
+      name: pull_request_review_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_review_id
+  type: create_object_relationship
+- args:
+    name: commit
+    table:
+      name: pull_request_review_commits
+      schema: public
+    using:
+      foreign_key_constraint_on: commit_id
+  type: create_object_relationship
+- args:
+    name: pull_request_review
+    table:
+      name: pull_request_review_commits
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_review_id
+  type: create_object_relationship
+- args:
+    name: pull_request_review_commits
+    table:
+      name: pull_request_reviews
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_review_id
+        table:
+          name: pull_request_review_commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_review_comments
+    table:
+      name: pull_request_reviews
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_review_id
+        table:
+          name: pull_request_review_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: githubUserByCreatedBy
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on: created_by
+  type: create_object_relationship
+- args:
+    name: pull_request_labels
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: pull_request_labels
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_commits
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: pull_request_commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_comments
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: pull_request_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_assignees
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: pull_request_assignees
+          schema: public
+  type: create_array_relationship
+- args:
+    name: topic
+    table:
+      name: related_topics
+      schema: public
+    using:
+      foreign_key_constraint_on: topic_reference_id
+  type: create_object_relationship
+- args:
+    name: topicByTopicId
+    table:
+      name: related_topics
+      schema: public
+    using:
+      foreign_key_constraint_on: topic_id
+  type: create_object_relationship
+- args:
+    name: repository_watchers
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: repository_watchers
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_stargazers
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: repository_stargazers
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_topics
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: repository_topics
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_collaborators
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: repository_collaborators
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository
+    table:
+      name: repository_collaborators
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: repository_collaborators
+      schema: public
+    using:
+      foreign_key_constraint_on: github_user_id
+  type: create_object_relationship
+- args:
+    name: repository
+    table:
+      name: repository_stargazers
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: repository_stargazers
+      schema: public
+    using:
+      foreign_key_constraint_on: github_user_id
+  type: create_object_relationship
+- args:
+    name: repository
+    table:
+      name: repository_topics
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: topic
+    table:
+      name: repository_topics
+      schema: public
+    using:
+      foreign_key_constraint_on: topic_id
+  type: create_object_relationship
+- args:
+    name: repository
+    table:
+      name: repository_watchers
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: repository_watchers
+      schema: public
+    using:
+      foreign_key_constraint_on: watcher_user_id
+  type: create_object_relationship
+- args:
+    name: comment
+    table:
+      name: review_thread_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: comment_id
+  type: create_object_relationship
+- args:
+    name: review_thread
+    table:
+      name: review_thread_comments
+      schema: public
+    using:
+      foreign_key_constraint_on: review_thread_id
+  type: create_object_relationship
+- args:
+    name: review_thread_comments
+    table:
+      name: review_threads
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: review_thread_id
+        table:
+          name: review_thread_comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: github_user
+    table:
+      name: topic_stargazers
+      schema: public
+    using:
+      foreign_key_constraint_on: user_id
+  type: create_object_relationship
+- args:
+    name: topic
+    table:
+      name: topic_stargazers
+      schema: public
+    using:
+      foreign_key_constraint_on: topic_id
+  type: create_object_relationship
+- args:
+    name: related_topics
+    table:
+      name: topics
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: topic_id
+        table:
+          name: related_topics
+          schema: public
+  type: create_array_relationship
+- args:
+    name: relatedTopicsByTopicReferenceId
+    table:
+      name: topics
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: topic_reference_id
+        table:
+          name: related_topics
+          schema: public
+  type: create_array_relationship
+- args:
+    name: topic_stargazers
+    table:
+      name: topics
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: topic_id
+        table:
+          name: topic_stargazers
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository_topics
+    table:
+      name: topics
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: topic_id
+        table:
+          name: repository_topics
+          schema: public
+  type: create_array_relationship
+- args:
+    name: github_user_followings
+    table:
+      name: users
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: follower_user_id
+        table:
+          name: github_user_following
+          schema: public
+  type: create_array_relationship
+- args:
+    name: githubUserFollowingsByFollowingUserId
+    table:
+      name: users
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: following_user_id
+        table:
+          name: github_user_following
+          schema: public
+  type: create_array_relationship

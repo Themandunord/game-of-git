@@ -1,5 +1,3 @@
-import { GitHubWebhookEvent } from '../../../generated/prisma-client';
-import { PrismaService } from '../../../prisma/prisma.service';
 import {
     Query,
     Resolver,
@@ -11,26 +9,30 @@ import {
 import { GitHubWebhookEventInput } from './GitHubWebhookEvent.input';
 import { Arg } from 'type-graphql';
 import { plainToClass } from 'class-transformer';
-import { GitHubWebhookEvent as GitHubWebhookEventModel } from '@game-of-git/common';
+import {
+    GitHubWebhookEvent as GitHubWebhookEventModel,
+    GitHubWebhookEvent
+} from '@game-of-git/common';
 
 @Resolver(of => GitHubWebhookEventModel)
 export class WebhookEventsResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     @Mutation(returns => GitHubWebhookEventModel)
     async create(
         @Arg('gitHubWebhookEvent')
         gitHubWebhookEventInput: GitHubWebhookEventInput
     ): Promise<GitHubWebhookEvent> {
-        return this.prisma.client.createGitHubWebhookEvent({
-            repository: {
-                connect: {
-                    id: gitHubWebhookEventInput.repository
-                }
-            },
-            eventType: gitHubWebhookEventInput.eventType,
-            sender: gitHubWebhookEventInput.sender
-        });
+        throw new Error('Not implemented yet');
+        // return this.prisma.client.createGitHubWebhookEvent({
+        //     repository: {
+        //         connect: {
+        //             id: gitHubWebhookEventInput.repository
+        //         }
+        //     },
+        //     eventType: gitHubWebhookEventInput.eventType,
+        //     sender: gitHubWebhookEventInput.sender
+        // });
     }
 
     // 	  async addRecipe(@Arg("recipe") recipeInput: RecipeInput): Promise<Recipe> {

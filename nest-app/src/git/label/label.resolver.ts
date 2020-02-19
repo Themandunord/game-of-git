@@ -6,12 +6,12 @@ import {
     Mutation,
     Subscription
 } from '@nestjs/graphql';
-import { PrismaService } from '../../prisma/prisma.service';
+
 import { GitHubLabel } from '@game-of-git/common';
 
 @Resolver(of => GitHubLabel)
 export class LabelResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     // @Query('gitHubLabels')
     // async getGitHubLabels(@Args() args, @Info() info): Promise<GitHubLabel[]> {

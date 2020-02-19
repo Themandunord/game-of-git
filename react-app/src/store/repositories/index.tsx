@@ -73,3 +73,20 @@ export const RepositoriesProvider = (props: any) => {
         </RepositoriesContext.Provider>
     );
 };
+
+// mutation{
+//     insert_users(objects:{
+//       email: "kingmi123@gmail.com"
+//       git_login: "miking-the-viking"
+//       name: "The Viking"
+//       role:"ADMIN"
+//       password:"$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm"
+//     }){
+//       affected_rows
+//       returning{
+//         id
+//         email
+//         created_at
+//       }
+//     }
+//   }

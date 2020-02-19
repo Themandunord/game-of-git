@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."pull_request_labels"("pull_request_id" uuid NOT NULL,
+      "label_id" uuid NOT NULL, PRIMARY KEY ("pull_request_id","label_id") , FOREIGN
+      KEY ("pull_request_id") REFERENCES "public"."pull_requests"("id") ON UPDATE
+      cascade ON DELETE cascade, FOREIGN KEY ("label_id") REFERENCES "public"."labels"("id")
+      ON UPDATE cascade ON DELETE cascade);
+  type: run_sql
+- args:
+    name: pull_request_labels
+    schema: public
+  type: add_existing_table_or_view

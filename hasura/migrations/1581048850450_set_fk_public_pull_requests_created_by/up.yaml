@@ -1,0 +1,6 @@
+- args:
+    sql: "\n           alter table \"public\".\"pull_requests\"\n           add constraint
+      \"pull_requests_created_by_fkey\"\n           foreign key (\"created_by\")\n
+      \          references \"public\".\"github_user\"\n           (\"id\") on update
+      cascade on delete cascade;\n      "
+  type: run_sql

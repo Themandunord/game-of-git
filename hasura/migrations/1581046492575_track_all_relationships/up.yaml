@@ -1,0 +1,360 @@
+- args:
+    name: repository
+    table:
+      name: branches
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: comments
+      schema: public
+    using:
+      foreign_key_constraint_on: author
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: commits
+      schema: public
+    using:
+      foreign_key_constraint_on: committer
+  type: create_object_relationship
+- args:
+    name: user
+    table:
+      name: games
+      schema: public
+    using:
+      foreign_key_constraint_on: owner
+  type: create_object_relationship
+- args:
+    name: repository
+    table:
+      name: games
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: user
+    table:
+      name: github_keys
+      schema: public
+    using:
+      foreign_key_constraint_on: user_id
+  type: create_object_relationship
+- args:
+    name: repositories
+    table:
+      name: github_keys
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: github_key_id
+        table:
+          name: repositories
+          schema: public
+  type: create_array_relationship
+- args:
+    name: comments
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: author
+        table:
+          name: comments
+          schema: public
+  type: create_array_relationship
+- args:
+    name: commits
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: committer
+        table:
+          name: commits
+          schema: public
+  type: create_array_relationship
+- args:
+    name: issues
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: author_id
+        table:
+          name: issues
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_requests
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: merged_by
+        table:
+          name: pull_requests
+          schema: public
+  type: create_array_relationship
+- args:
+    name: pull_request_reviews
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: author_id
+        table:
+          name: pull_request_reviews
+          schema: public
+  type: create_array_relationship
+- args:
+    name: review_requests
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: requested_reviewer_id
+        table:
+          name: review_requests
+          schema: public
+  type: create_array_relationship
+- args:
+    name: review_threads
+    table:
+      name: github_user
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: resolved_by
+        table:
+          name: review_threads
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repository
+    table:
+      name: github_webhook_events
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: issues
+      schema: public
+    using:
+      foreign_key_constraint_on: author_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: pull_request_reviews
+      schema: public
+    using:
+      foreign_key_constraint_on: author_id
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: pull_request_reviews
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on: merged_by
+  type: create_object_relationship
+- args:
+    name: pull_request_reviews
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: pull_request_reviews
+          schema: public
+  type: create_array_relationship
+- args:
+    name: review_requests
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: review_requests
+          schema: public
+  type: create_array_relationship
+- args:
+    name: review_threads
+    table:
+      name: pull_requests
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: pull_request_id
+        table:
+          name: review_threads
+          schema: public
+  type: create_array_relationship
+- args:
+    name: user
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on: added_by
+  type: create_object_relationship
+- args:
+    name: github_key
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on: github_key_id
+  type: create_object_relationship
+- args:
+    name: github_webhook_events
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: github_webhook_events
+          schema: public
+  type: create_array_relationship
+- args:
+    name: games
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: games
+          schema: public
+  type: create_array_relationship
+- args:
+    name: branches
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: branches
+          schema: public
+  type: create_array_relationship
+- args:
+    name: review_threads
+    table:
+      name: repositories
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: repository_id
+        table:
+          name: review_threads
+          schema: public
+  type: create_array_relationship
+- args:
+    name: github_user
+    table:
+      name: review_requests
+      schema: public
+    using:
+      foreign_key_constraint_on: requested_reviewer_id
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: review_requests
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: repository
+    table:
+      name: review_threads
+      schema: public
+    using:
+      foreign_key_constraint_on: repository_id
+  type: create_object_relationship
+- args:
+    name: github_user
+    table:
+      name: review_threads
+      schema: public
+    using:
+      foreign_key_constraint_on: resolved_by
+  type: create_object_relationship
+- args:
+    name: pull_request
+    table:
+      name: review_threads
+      schema: public
+    using:
+      foreign_key_constraint_on: pull_request_id
+  type: create_object_relationship
+- args:
+    name: github_keys
+    table:
+      name: users
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: github_keys
+          schema: public
+  type: create_array_relationship
+- args:
+    name: repositories
+    table:
+      name: users
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: added_by
+        table:
+          name: repositories
+          schema: public
+  type: create_array_relationship
+- args:
+    name: games
+    table:
+      name: users
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: owner
+        table:
+          name: games
+          schema: public
+  type: create_array_relationship

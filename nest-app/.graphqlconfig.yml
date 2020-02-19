@@ -1,0 +1,12 @@
+projects:
+    game-of-git:
+        schemaPath: schema/schema.graphql
+        extensions:
+            endpoints:
+                default: http://localhost:8081/v1/graphql
+            codegen:
+                - generator: graphql-binding
+                  language: typescript
+                  input: ../common/generated/hasura/graphql.ts
+                  output:
+                      binding: mybinding.ts

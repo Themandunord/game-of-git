@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    AddGithubKey,
+    AddApiKey,
     NotFound,
     Dashboard,
     Game,
@@ -11,7 +11,7 @@ import {
 } from '.';
 
 export default {
-    'Add GitHub Key': <AddGithubKey />,
+    'Add GitHub Key': <AddApiKey />,
     'Create Game': <CreateGame />,
     Dashboard: <Dashboard />,
     Game: <Game />,

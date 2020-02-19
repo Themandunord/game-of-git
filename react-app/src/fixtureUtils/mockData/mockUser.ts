@@ -1,9 +1,12 @@
-import { LoginUserData } from '../../components/forms/LoginForm/types';
+import { MeQuery } from '@game-of-git/graphql-nest';
+import { RepositoryProviders } from '@game-of-git/common';
 
-const mockUser: LoginUserData = {
-    appKeys: [
+const mockUser: MeQuery['me'] = {
+    apiKeys: [
         {
             id: 'abc123',
+            name: 'testkey',
+            provider: RepositoryProviders.Sample,
         },
     ],
     createdAt: new Date().toISOString(),
@@ -11,7 +14,7 @@ const mockUser: LoginUserData = {
     gitLogin: 'my-github-user',
     id: 'abc123',
     name: 'some user',
-    role: 'ADMIN',
+    role: 'ADMIN' as any,
     updatedAt: new Date().toISOString(),
 };
 

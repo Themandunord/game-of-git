@@ -1,0 +1,7 @@
+- args:
+    name: api_keys
+    new_name: github_keys
+    table:
+      name: users
+      schema: public
+  type: rename_relationship

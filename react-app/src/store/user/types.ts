@@ -1,4 +1,4 @@
-type AppKey = {
+type ApiKey = {
     id: string;
     name: string;
 };
@@ -6,7 +6,7 @@ type AppKey = {
 export interface User {
     id: string;
     name: string;
-    appKeys: AppKey[];
+    apiKeys: ApiKey[];
 }
 
 export interface UserState {

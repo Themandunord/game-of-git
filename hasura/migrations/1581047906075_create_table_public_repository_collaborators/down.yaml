@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."repository_collaborators"
+  type: run_sql

@@ -6,12 +6,12 @@ import {
     Mutation,
     Subscription
 } from '@nestjs/graphql';
-import { PrismaService } from '../../prisma/prisma.service';
+
 import { GitHubFileDiff } from '@game-of-git/common';
 
 @Resolver(of => GitHubFileDiff)
 export class FileDiffResolver {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor() {}
 
     // @Query('gitHubFileDiffs')
     // async getGitHubFileDiffs(

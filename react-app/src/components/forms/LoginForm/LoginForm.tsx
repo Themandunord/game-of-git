@@ -20,26 +20,17 @@ import { setToken } from '../../../store/user/token';
 import { setUserData } from '../../../store/user/userData';
 import { EmailInput } from '../../inputs/text/email/EmailInput';
 import { PasswordInput } from '../../inputs/text/password/PasswordInput';
-import { LoginFormData, LoginResponse } from './types';
+import { LoginFormData } from './types';
+import { useLoginMutation } from '@game-of-git/graphql-nest';
+import client from '../../../gql/apolloClient';
 
-const LOGIN = gql`
-    mutation($email: String!, $password: String!) {
-        login(data: { email: $email, password: $password }) {
-            token
-            user {
-                id
-                email
-                gitLogin
-                name
-                createdAt
-                updatedAt
-                appKeys {
-                    id
-                }
-            }
-        }
-    }
-`;
+// const LOGIN = gql`
+//     mutation($email: String!, $password: String!) {
+//         login(data: { email: $email, password: $password }) {
+//             token
+//         }
+//     }
+// `;
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -77,7 +68,7 @@ const LoginForm: React.FC = () => {
         }),
     });
 
-    const [login] = useMutation<LoginResponse, LoginFormData>(LOGIN);
+    const [login] = useLoginMutation({ client: client as any });
 
     const handleSubmit = useCallback(
         async (value: LoginFormData) => {
@@ -92,9 +83,9 @@ const LoginForm: React.FC = () => {
                 });
 
                 const token = user.data?.login.token || null;
-                const userData = user.data?.login.user || null;
+                // const userData = user.data?.login.user || null;
 
-                dispatchUser(setUserData(userData));
+                // dispatchUser(setUserData(userData));
                 dispatchUser(setToken(token));
                 dispatchUser(token ? setIsLoggedIn() : setNotLoggedIn());
             } catch (e) {

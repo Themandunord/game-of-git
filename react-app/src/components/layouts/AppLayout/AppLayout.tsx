@@ -37,7 +37,7 @@ const AppLayout: React.FC = ({ children }) => {
     const logout = () => {
         setUser(null);
         dispatchUser(setToken(null));
-        dispatchUser(setUserData(null));
+        dispatchUser(setUserData());
         dispatchUser(setNotLoggedIn());
     };
 

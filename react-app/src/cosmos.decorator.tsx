@@ -3,10 +3,12 @@ import { MuiThemeProvider } from '@material-ui/core';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import LoadingBar from './components/system/LoadingBar/LoadingBar';
-import ME from './gql/queries/Me.gql';
+
 import CoreContextProvider from './store/CoreContextProvider';
 import theme from './theme';
 import ThemeProvider from './theme/ThemeProvider';
+import gql from './gql/apolloClient';
+
 const me = {
     id: 'abc123',
     email: 'abc123',
@@ -15,7 +17,7 @@ const me = {
     role: 'ADMIN',
     createdAt: Date.now(),
     updatedAt: Date.now(),
-    appKeys: [
+    apiKeys: [
         {
             id: 'abc123',
             name: 'some key',
@@ -25,7 +27,7 @@ const me = {
 
 const mock: MockedResponse = {
     request: {
-        query: ME,
+        query: '' as any,
         operationName: 'me',
     },
     result: {

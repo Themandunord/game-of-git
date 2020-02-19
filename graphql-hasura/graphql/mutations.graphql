@@ -1,0 +1,103 @@
+mutation CreateUser(
+    $email: String!
+    $gitLogin: String!
+    $name: String!
+    $role: String!
+    $password: String!
+) {
+    insert_users(
+        objects: {
+            email: $email
+            git_login: $gitLogin
+            name: $name
+            role: $role
+            password: $password
+        }
+    ) {
+        affected_rows
+        returning {
+            id
+            email
+            created_at
+        }
+    }
+}
+
+mutation DeleteUserById($id: uuid!) {
+    delete_users(where: { id: { _eq: $id } }) {
+        affected_rows
+        returning {
+            email
+            created_at
+            git_login
+            updated_at
+            role
+            name
+            id
+        }
+    }
+}
+
+mutation DeleteUserByEmail($email: String!) {
+    delete_users(where: { email: { _eq: $email } }) {
+        affected_rows
+        returning {
+            email
+            created_at
+            git_login
+            updated_at
+            role
+            name
+            id
+        }
+    }
+}
+
+mutation CreateApiKey(
+    $key: String!
+    $name: String!
+    $provider: String!
+    $userId: uuid!
+) {
+    __typename
+    insert_repository_api_keys(
+        objects: {
+            key: $key
+            name: $name
+            provider: $provider
+            user_id: $userId
+        }
+    ) {
+        affected_rows
+        returning {
+            created_at
+            id
+            key
+            name
+            provider
+            user_id
+        }
+    }
+}
+
+mutation DeleteApiKeyById($id: uuid!) {
+    delete_repository_api_keys(where: { id: { _eq: $id } }) {
+        affected_rows
+        returning {
+            created_at
+            name
+            id
+        }
+    }
+}
+
+mutation DeleteApiKeyByKey($key: String!) {
+    delete_repository_api_keys(where: { key: { _eq: $key } }) {
+        affected_rows
+        returning {
+            created_at
+            name
+            id
+        }
+    }
+}

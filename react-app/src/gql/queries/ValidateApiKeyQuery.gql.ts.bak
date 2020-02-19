@@ -1,0 +1,9 @@
+import gql from 'graphql-tag';
+
+const ValidateApiKeyQuery = gql`
+    query ValidateApiKey($provider: String!, $key: String!) {
+        validateApiKey(provider: $provider, key: $key)
+    }
+`;
+
+export default ValidateApiKeyQuery;

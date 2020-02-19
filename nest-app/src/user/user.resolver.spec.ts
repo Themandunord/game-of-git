@@ -1,65 +1,48 @@
 import { User } from '@game-of-git/common';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaModule } from '../prisma/prisma.module';
-import { PrismaService } from '../prisma/prisma.service';
+import * as faker from 'faker';
 import ps from '../pubsub';
-import {
-    createOrRetrieveUser,
-    clearUser
-} from '../utilities/testing/user.prisma';
 import { UserResolver } from './user.resolver';
-import { USER_MUTATED_EVENT_NAME } from './user.internal.resolver';
+import { UserService } from './user.service';
+import { AuthModule } from '../auth/auth.module';
+import * as camelcasekeys from 'camelcase-keys';
+import { ApiKeyModule } from '../repositories/entities/api-key/api-key.module';
 
-type Me = {
-    name: string | null;
-    updatedAt: string;
-    email: string;
-    role: string;
-    id: string;
-    createdAt: string;
-    gitLogin: string;
-    password: string;
-    appKeys: any[];
-};
+const userServiceMock = jest.genMockFromModule<UserService>('./user.service');
 
-const sampleMe: Me = {
-    name: null,
-    updatedAt: '2020-01-01T17:53:34.608Z',
-    email: 'someTestEmail@gmail.com',
-    role: 'ADMIN',
-    id: 'ck4vln5ao03vz0759tu7akjw6',
-    createdAt: '2020-01-01T17:53:34.608Z',
-    gitLogin: 'test',
-    password: '$2b$10$MhgPoOhrJwurVTfyfYYA3.tPMhhfYAtj9B0F1q7eAeTVDmIQH5MSC',
-    appKeys: []
+const fakeUserResult = {
+    id: faker.random.uuid(),
+    name: faker.name.firstName(),
+    git_login: faker.internet.userName(),
+    email: faker.internet.email(),
+    password: faker.random.word(),
+    role: faker.random.arrayElement(['ADMIN', 'USER']),
+    api_keys: [],
+    games: []
 };
 
 describe('UserResolver', () => {
     let resolver: UserResolver;
-    let prisma: PrismaService;
     let user = null;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [PrismaModule],
+            imports: [AuthModule, ApiKeyModule],
             providers: [
                 UserResolver,
                 {
                     provide: 'PUB_SUB',
                     useValue: ps
-                }
+                },
+                UserService
             ]
-        }).compile();
+        })
+            .overrideProvider(UserService)
+            .useValue(userServiceMock)
+            .compile();
 
         resolver = module.get<UserResolver>(UserResolver);
-        prisma = module.get<PrismaService>(PrismaService);
-
-        user = await createOrRetrieveUser(prisma);
-    });
-
-    afterAll(async () => {
-        await clearUser(prisma, { id: user.id });
     });
 
     it('should be defined', () => {
@@ -67,33 +50,39 @@ describe('UserResolver', () => {
     });
 
     describe('METHOD: me', () => {
-        // TODO: E2E Auth Guard Tests
         let matchingScenarios;
 
         describe('Returns a user that matches', () => {
             const CASES = [
                 {
                     it: 'on id',
-                    data: user => ({ id: user.id })
+                    data: user => ({ id: user.id }),
+                    op: 'getUserById'
                 },
                 {
                     it: 'on email',
-                    data: user => ({ email: user.email })
+                    data: user => ({ email: user.email }),
+                    op: 'getUserByEmail'
                 }
             ];
 
             CASES.map(scenario =>
                 it(scenario.it, async () => {
-                    const userData = scenario.data(user) as User;
+                    const userData = scenario.data(fakeUserResult) as User;
+
+                    userServiceMock.createUser = jest.fn(
+                        async () => fakeUserResult as any
+                    );
+
+                    userServiceMock[scenario.op] = jest.fn(
+                        async () => fakeUserResult as any
+                    );
+
                     const userReturned = await resolver.me(userData);
 
-                    expect(userReturned).toMatchObject<Me>({
-                        ...sampleMe,
-                        createdAt: user.createdAt,
-                        updatedAt: user.updatedAt,
-                        password: user.password,
-                        id: user.id
-                    });
+                    expect(userReturned).toMatchObject(
+                        camelcasekeys(fakeUserResult)
+                    );
                 })
             );
         });
@@ -102,6 +91,10 @@ describe('UserResolver', () => {
             const userData = {
                 id: 'asdfasdfasdferwerwer'
             } as User;
+
+            userServiceMock.getUserById = jest.fn(async () => {
+                throw new NotFoundException();
+            });
 
             await expect(resolver.me(userData)).rejects.toThrowError(
                 NotFoundException

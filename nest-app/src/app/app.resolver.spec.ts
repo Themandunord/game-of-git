@@ -26,4 +26,9 @@ describe('AppResolver', () => {
             expect(appResolver.hello(name)).toBe(`Hello ${name}!`);
         });
     });
+    describe('ping', () => {
+        it('should return "Ok"', () => {
+            expect(appResolver.ping()).toEqual('Ok');
+        });
+    });
 });

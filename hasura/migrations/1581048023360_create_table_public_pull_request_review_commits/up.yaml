@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."pull_request_review_commits"("pull_request_review_id"
+      uuid NOT NULL, "commit_id" uuid NOT NULL, PRIMARY KEY ("pull_request_review_id","commit_id")
+      , FOREIGN KEY ("pull_request_review_id") REFERENCES "public"."pull_request_reviews"("id")
+      ON UPDATE cascade ON DELETE cascade, FOREIGN KEY ("commit_id") REFERENCES "public"."commits"("id")
+      ON UPDATE cascade ON DELETE cascade);
+  type: run_sql
+- args:
+    name: pull_request_review_commits
+    schema: public
+  type: add_existing_table_or_view

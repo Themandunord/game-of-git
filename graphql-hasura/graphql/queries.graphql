@@ -1,0 +1,67 @@
+query AllUsers {
+    __typename
+    users {
+        updated_at
+        role
+        password
+        name
+        id
+        git_login
+        email
+        created_at
+    }
+}
+
+query UserByEmail($email: String!) {
+    users(distinct_on: email, limit: 1, where: { email: { _eq: $email } }) {
+        created_at
+        email
+        games {
+            id
+            title
+            type
+        }
+        git_login
+        api_keys {
+            id
+            name
+        }
+        id
+        name
+        password
+        role
+        updated_at
+    }
+}
+
+query UserById($id: uuid!) {
+    users(distinct_on: email, limit: 1, where: { id: { _eq: $id } }) {
+        created_at
+        email
+        games {
+            id
+            title
+            type
+        }
+        git_login
+        api_keys {
+            id
+            name
+        }
+        id
+        name
+        password
+        role
+        updated_at
+    }
+}
+
+query UserRepositoryApiKeys($userId: uuid!) {
+    repository_api_keys(where: { user_id: { _eq: $userId } }) {
+        created_at
+        id
+        name
+        provider
+        user_id
+    }
+}
