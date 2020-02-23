@@ -11,7 +11,22 @@ const RepositoryTests = repositoryClientConfig => {
         });
 
         describe('search', () => {
-            describe('invalid scenarios', () => {
+            const search = Repository.search;
+            describe('invalid params', () => {
+                it('stubs', () => {
+                    expect(true).toBeTruthy();
+                });
+            });
+            describe('valid scenarios', () => {
+                it('stubs', () => {
+                    expect(true).toBeTruthy();
+                });
+            });
+        });
+        describe('getBy', () => {
+            const getBy = Repository.getBy;
+
+            describe('invalid params', () => {
                 it('stubs', () => {
                     expect(true).toBeTruthy();
                 });

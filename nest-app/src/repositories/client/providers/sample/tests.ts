@@ -23,6 +23,27 @@ const SampleRepositoryTestConfig: RepositoryTestConfig = {
                     val: 'asdfjas;lkdjflaskjdf'
                 }
             ]
+        },
+        Repository: {
+            search: {
+                invalidScenarios: [
+                    // {
+                    //     it: 'Returns false when app key is false',
+                    //     val: 'false'
+                    // }
+                ],
+                validScenarios: [
+                    // {
+                    //     it: 'Returns true when the app key is true',
+                    //     val: 'true'
+                    // },
+                    // {
+                    //     it: 'Returns true when the app key is any string',
+                    //     val: 'asdfjas;lkdjflaskjdf'
+                    // }
+                ]
+            },
+            getBy: {}
         }
     }
 };

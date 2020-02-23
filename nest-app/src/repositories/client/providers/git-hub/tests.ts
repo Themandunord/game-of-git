@@ -23,6 +23,27 @@ const GitHubRepositoryTestConfig: RepositoryTestConfig = {
                     val: process.env.GIT_TESTING_TOKEN
                 }
             ]
+        },
+        Repository: {
+            search: {
+                invalidScenarios: [
+                    // {
+                    //     it: 'Returns false when app key is false',
+                    //     val: 'false'
+                    // }
+                ],
+                validScenarios: [
+                    // {
+                    //     it: 'Returns true when the app key is true',
+                    //     val:
+                    // },
+                    // {
+                    //     it: 'Returns true when the app key is any string',
+                    //     val: 'asdfjas;lkdjflaskjdf'
+                    // }
+                ]
+            },
+            getBy: {}
         }
     }
 };

@@ -15,5 +15,9 @@ export interface RepositoryTestConfig {
                 val: any;
             }[];
         };
+        Repository: {
+            search: any;
+            getBy: any;
+        };
     };
 }

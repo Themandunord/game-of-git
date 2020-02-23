@@ -5,7 +5,10 @@ type SampleRepositorySearchParams = {};
 
 type GetByParams = {};
 
+const repositories = [];
+
 export class SampleRepository extends Repository {
+    private repositories = repositories;
     private readonly logger = new Logger('SampleRepositoryClient');
     constructor() {
         super();
@@ -14,10 +17,10 @@ export class SampleRepository extends Repository {
     public async search<SampleRepositorySearchParams>(
         searchParams
     ): Promise<any[]> {
-        throw new Error('Method not implemented.');
+        return this.repositories;
     }
 
-    public getBy<GetByParams>(getByParams: GetByParams): Promise<any[]> {
-        throw new Error('Method not implemented.');
+    public async getBy<GetByParams>(getByParams: GetByParams): Promise<any[]> {
+        return this.repositories;
     }
 }
